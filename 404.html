@@ -1,0 +1,69 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="theme-color" content="#f5efe4"/><meta name="description" content="Broski — a playful dog-treat shop. Explore biscuits, little rewards and discovery boxes in an interactive 3D storefront."/><title>Broski — Treats for your best bro.</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Gaegu:wght@400;700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet"/><script>
+(function() {
+  const originalFetch = window.fetch;
+  const products = [
+    { id: 'peanut', name: 'Peanut Butter Crunch', price: 34900, weight: '200g', category: 'biscuits' },
+    { id: 'pumpkin', name: 'Pumpkin Little Bites', price: 32900, weight: '180g', category: 'biscuits' },
+    { id: 'chicken', name: 'Chicken Sunday Bites', price: 39900, weight: '200g', category: 'biscuits' },
+    { id: 'banana', name: 'Banana Oat Cookies', price: 34900, weight: '200g', category: 'biscuits' },
+    { id: 'training', name: 'Tiny Training Stars', price: 24900, weight: '100g', category: 'training' },
+    { id: 'discovery', name: 'The Discovery Box', price: 89900, weight: '3x100g', category: 'bundles' }
+  ];
+  window.fetch = async function(url, options = {}) {
+    const u = typeof url === 'string' ? url : (url && url.url ? url.url : '');
+    if (u === '/api/products') {
+      return new Response(JSON.stringify({ products }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+      });
+    }
+    if (u === '/api/health') {
+      return new Response(JSON.stringify({ status: 'ok', mode: 'demo' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+      });
+    }
+    if (u === '/api/newsletter' && (options.method || '').toUpperCase() === 'POST') {
+      return new Response(JSON.stringify({ status: 'demo', message: 'Demo complete. Your email was not stored or subscribed.' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+      });
+    }
+    if (u === '/api/orders' && (options.method || '').toUpperCase() === 'POST') {
+      try {
+        const body = JSON.parse(options.body || '{}');
+        const items = (body.items || []).map(i => {
+          const p = products.find(x => x.id === i.id) || i;
+          return { ...p, quantity: i.quantity, lineTotal: (p.price || 34900) * i.quantity };
+        });
+        const subtotal = items.reduce((s, i) => s + i.lineTotal, 0);
+        const coupon = (body.coupon || '').trim().toUpperCase();
+        const discount = coupon === 'WELCOME10' ? Math.round(subtotal * 0.1) : 0;
+        const shipping = subtotal - discount >= 79900 ? 0 : 5900;
+        const order = {
+          id: 'DEMO-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+          subtotal,
+          discount,
+          shipping,
+          total: subtotal - discount + shipping,
+          status: 'demo',
+          items,
+          date: new Date().toISOString()
+        };
+        return new Response(JSON.stringify(order), {
+          status: 201,
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid order data.' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        });
+      }
+    }
+    return originalFetch.apply(this, arguments);
+  };
+})();
+</script>  <script type="module" crossorigin src="/assets/index-BvQ8i5hF.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CW91Naba.css">
+</head><body><div id="root"></div></body></html>
