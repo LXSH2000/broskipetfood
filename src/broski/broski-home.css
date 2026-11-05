@@ -1,0 +1,40 @@
+/* Styles for BroskiHome.jsx – uses the site's palette; scoped with bk- prefixes */
+:root { --bk-cream:#f5efe4; --bk-paper:#fbf7ef; --bk-brown:#352016; --bk-brown-2:#5a4033; --bk-rust:#b8452b; --bk-mustard:#e2a72e; --bk-line:#e6dccb; --bk-wa:#1f8f4e; }
+
+.bk-banner { background: var(--bk-mustard); color: var(--bk-brown); display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 16px; }
+.bk-banner p { margin: 0; flex: 1; font-size: 14px; line-height: 1.35; font-weight: 600; text-align: center; }
+.bk-banner__close { flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: var(--bk-brown); font-size: 26px; line-height: 1; cursor: pointer; border-radius: 50%; }
+
+.bk-h-btn { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 20px; border-radius: 999px; font: 700 16px/1.2 "Outfit", sans-serif; text-decoration: none; text-align: center; }
+.bk-h-btn--wa { background: var(--bk-wa); color: #fff; }
+.bk-h-btn:focus-visible { outline: 3px solid var(--bk-brown); outline-offset: 2px; }
+
+.bk-shop { padding: 48px 18px; max-width: 1180px; margin: 0 auto; }
+.bk-shop__title { font: 800 clamp(26px, 6vw, 40px)/1.15 "Outfit", sans-serif; color: var(--bk-brown); margin: 0 0 22px; }
+.bk-shop__grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .bk-shop__grid { grid-template-columns: repeat(3, 1fr); } }
+.bk-pcard { background: var(--bk-paper); border: 1px solid var(--bk-line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; }
+.bk-pcard--combo { border: 2px solid var(--bk-mustard); }
+.bk-pcard__img { position: relative; aspect-ratio: 1 / 1; background: var(--bk-cream); }
+.bk-pcard__img > img { width: 100%; height: 100%; object-fit: cover; }
+.bk-pcard__duo { display: grid; grid-template-columns: 1fr 1fr; height: 100%; }
+.bk-pcard__duo img { width: 100%; height: 100%; object-fit: cover; }
+.bk-pcard__save { position: absolute; top: 12px; left: 12px; background: var(--bk-rust); color: #fff; font: 700 14px/1 "Outfit", sans-serif; padding: 8px 12px; border-radius: 999px; }
+.bk-pcard__body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.bk-pcard__body h3 { margin: 0; font: 700 21px/1.2 "Outfit", sans-serif; color: var(--bk-brown); }
+.bk-pcard__note { margin: 0; font-size: 15px; color: var(--bk-brown-2); }
+.bk-pcard__price { margin: 4px 0 10px; font-size: 14px; color: var(--bk-brown-2); }
+.bk-pcard__price strong { font: 800 26px/1 "Outfit", sans-serif; color: var(--bk-brown); margin-right: 6px; }
+.bk-pcard .bk-h-btn { margin-top: auto; }
+.bk-shop__unit { font-size: 14px; color: var(--bk-brown-2); margin: 16px 0 0; line-height: 1.5; }
+
+.bk-partner { max-width: 720px; margin: 24px auto; padding: 28px 20px; background: var(--bk-paper); border: 1px solid var(--bk-line); border-radius: 22px; }
+.bk-partner h2 { font: 800 clamp(24px, 6vw, 32px)/1.15 "Outfit", sans-serif; margin: 0 0 12px; color: var(--bk-brown); }
+.bk-partner ul { padding-left: 20px; margin: 0 0 18px; font-size: 17px; line-height: 1.6; }
+.bk-partner__small { font-size: 14px; color: var(--bk-brown-2); margin: 10px 0 0; }
+
+.bk-h-foot { border-top: 1px solid var(--bk-line); padding: 22px 18px 34px; font-size: 14px; color: var(--bk-brown-2); max-width: 1180px; margin: 32px auto 0; }
+.bk-h-foot nav { display: flex; flex-wrap: wrap; gap: 2px 6px; margin-bottom: 10px; }
+.bk-h-foot nav a { color: var(--bk-brown); padding: 11px 6px; min-height: 44px; display: inline-flex; align-items: center; font-size: 15px; }
+.bk-h-foot p { margin: 0; line-height: 1.6; }
+.bk-h-foot p a { display: inline-block; padding: 13px 2px; margin: -13px 0; color: var(--bk-brown); } /* 44px tap area */

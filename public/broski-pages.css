@@ -1,0 +1,64 @@
+/* BROSKI static pages: matches the site's cream / brown / rust / mustard look. ~4 KB */
+:root {
+  --cream: #f5efe4; --paper: #fbf7ef; --brown: #352016; --brown-2: #5a4033;
+  --rust: #b8452b; --rust-dark: #9a3620; --mustard: #e2a72e; --line: #e6dccb;
+  --wa: #1f8f4e; --radius: 18px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--cream); color: var(--brown);
+  font: 400 17px/1.55 "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--rust-dark); }
+.bk-wrap { max-width: 720px; margin: 0 auto; padding: 0 18px; }
+
+/* launch banner */
+.bk-banner { background: var(--mustard); color: var(--brown); display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 16px; }
+.bk-banner p { margin: 0; flex: 1; font-size: 14px; line-height: 1.35; font-weight: 600; }
+.bk-banner__close { flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: var(--brown); font-size: 26px; line-height: 1; cursor: pointer; border-radius: 50%; }
+.bk-banner__close:focus-visible, .bk-btn:focus-visible, a:focus-visible { outline: 3px solid var(--brown); outline-offset: 2px; }
+
+/* header */
+.bk-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+.bk-logo { font: 700 26px/1 "Gaegu", "Outfit", sans-serif; color: var(--brown); text-decoration: none; letter-spacing: .02em; min-height: 44px; display: inline-flex; align-items: center; }
+.bk-nav { display: flex; gap: 4px; }
+.bk-nav a { font-size: 15px; color: var(--brown); text-decoration: none; padding: 12px 10px; min-height: 44px; display: inline-flex; align-items: center; }
+
+/* type */
+.bk-eyebrow { font: 600 13px/1.3 "Outfit", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--brown-2); margin: 28px 0 6px; }
+h1, h2, h3 { font-family: "Outfit", sans-serif; line-height: 1.15; margin: 0 0 10px; }
+h1 { font-size: clamp(30px, 8vw, 44px); font-weight: 800; }
+h2 { font-size: clamp(22px, 6vw, 28px); font-weight: 700; margin-top: 36px; }
+h3 { font-size: 20px; font-weight: 700; }
+.bk-lead { font-size: 18px; color: var(--brown-2); margin: 0 0 22px; }
+.bk-small { font-size: 14px; color: var(--brown-2); }
+
+/* buttons */
+.bk-btn { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 14px 22px; border-radius: 999px; font: 700 17px/1.2 "Outfit", sans-serif; text-decoration: none; text-align: center; border: 0; cursor: pointer; }
+.bk-btn--primary { background: var(--brown); color: #fff7e9; }
+.bk-btn--wa { background: var(--wa); color: #fff; }
+.bk-btn--ghost { background: transparent; color: var(--brown); border: 2px solid var(--brown); }
+.bk-btn--big { min-height: 60px; font-size: 19px; }
+.bk-btn + .bk-btn { margin-top: 10px; }
+
+/* cards */
+.bk-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin: 14px 0; }
+.bk-card h3 { display: flex; align-items: center; gap: 10px; }
+.bk-card .bk-num { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--cream); border: 1px solid var(--line); display: inline-flex; align-items: center; justify-content: center; font-size: 15px; }
+.bk-card p { margin: 0 0 12px; }
+.bk-terms { font-size: 14px; color: var(--brown-2); border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 4px !important; }
+.bk-reward { background: #fff3d6; border: 2px solid var(--mustard); border-radius: var(--radius); padding: 18px 20px; margin: 20px 0; font-size: 17px; }
+.bk-steps { padding-left: 22px; margin: 8px 0 16px; }
+.bk-steps li { margin: 0 0 10px; padding-left: 4px; }
+
+/* footer */
+.bk-foot { border-top: 1px solid var(--line); margin-top: 44px; padding: 22px 0 34px; font-size: 14px; color: var(--brown-2); }
+.bk-foot nav { display: flex; flex-wrap: wrap; gap: 2px 6px; margin-bottom: 10px; }
+.bk-foot nav a { color: var(--brown); padding: 11px 6px; min-height: 44px; display: inline-flex; align-items: center; font-size: 15px; }
+.bk-foot p { margin: 0; }
+
+/* 44px tap area for inline links without changing the layout */
+.bk-foot p a, .bk-small a { display: inline-block; padding: 13px 2px; margin: -13px 0; }

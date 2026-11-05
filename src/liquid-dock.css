@@ -274,18 +274,41 @@
 
 @media (max-width: 768px){
   .broski-dock-wrap{
-    display:none; /* Handled by mobile-shop-dock */
+    bottom: 12px;
+    width: auto;
+    max-width: calc(100vw - 20px);
+  }
+  .broski-dock{
+    gap: 4px;
+    height: 46px;
+    padding: 4px 8px;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .broski-dock::-webkit-scrollbar{
+    display: none;
+  }
+  .dock-item{
+    height: 38px;
+    padding: 0 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  .dock-mark{
+    width: 38px;
+    height: 38px;
   }
   .whatsapp-float{
-    bottom:85px;
-    right:14px;
-    padding:10px 14px;
-    font-size:12px;
-    min-width:48px;
-    min-height:48px;
+    bottom: 68px;
+    right: 14px;
+    padding: 10px 14px;
+    font-size: 12px;
+    min-width: 44px;
+    min-height: 44px;
   }
   .whatsapp-float span{
-    display:none;
+    display: none;
   }
 }
 

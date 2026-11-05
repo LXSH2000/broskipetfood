@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function BroskiDock({ count = 0, onOpenCart, onOpenPreview }) {
+export default function BroskiDock() {
   const dockRef = useRef(null);
   const [activeItem, setActiveItem] = useState('shop');
   const [specState, setSpecState] = useState({ angle: '2.4rad', bright: 0 });
@@ -22,14 +22,13 @@ export default function BroskiDock({ count = 0, onOpenCart, onOpenPreview }) {
     if (!media.matches) return;
 
     const items = Array.from(dock.querySelectorAll('[data-dock]'));
-    let aimX = 0, aimY = 0, inside = false;
+    let aimX = 0, aimY = 0;
 
     const onMove = e => {
       aimX = e.clientX;
       aimY = e.clientY;
       const r = dock.getBoundingClientRect();
       const inCatch = aimX > r.left - 50 && aimX < r.right + 50 && aimY > r.top - 40 && aimY < r.bottom + 80;
-      inside = inCatch;
 
       if (inCatch) {
         items.forEach(el => {
@@ -59,7 +58,6 @@ export default function BroskiDock({ count = 0, onOpenCart, onOpenPreview }) {
     };
 
     const onLeave = () => {
-      inside = false;
       items.forEach(el => {
         el.style.transform = '';
         el.dataset.near = 'false';
@@ -110,7 +108,7 @@ export default function BroskiDock({ count = 0, onOpenCart, onOpenPreview }) {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           aria-label="Broski home top"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <ellipse cx="12" cy="16" rx="5" ry="4" />
             <ellipse cx="5" cy="10" rx="2" ry="3" transform="rotate(-25 5 10)" />
             <ellipse cx="10" cy="6" rx="2" ry="3" />
@@ -119,11 +117,11 @@ export default function BroskiDock({ count = 0, onOpenCart, onOpenPreview }) {
           </svg>
         </button>
 
-        <button
-          type="button"
+        <a
+          href="#shop"
           data-dock
           className={`dock-item ${activeItem === 'shop' ? 'is-active' : ''}`}
-          onClick={() => scrollTo('#shop', 'shop')}
+          onClick={(e) => { e.preventDefault(); scrollTo('#shop', 'shop'); }}
         >
           <span className="glyph" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -131,15 +129,44 @@ export default function BroskiDock({ count = 0, onOpenCart, onOpenPreview }) {
               <path d="M8 8V6a4 4 0 0 1 8 0v2" />
             </svg>
           </span>
-          <span>Treat Shop</span>
-        </button>
+          <span>Shop</span>
+        </a>
 
+        <a
+          href="/offers/"
+          data-dock
+          className="dock-item"
+        >
+          <span className="glyph" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+              <path d="M20 12v10H4V12" />
+              <path d="M2 7h20v5H2z" />
+              <path d="M12 22V7" />
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+            </svg>
+          </span>
+          <span>Bro Perks</span>
+        </a>
 
-        <button
-          type="button"
+        <a
+          href="/r/"
+          data-dock
+          className="dock-item"
+        >
+          <span className="glyph" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+          </span>
+          <span>Feedback</span>
+        </a>
+
+        <a
+          href="#story"
           data-dock
           className={`dock-item ${activeItem === 'story' ? 'is-active' : ''}`}
-          onClick={() => scrollTo('#story', 'story')}
+          onClick={(e) => { e.preventDefault(); scrollTo('#story', 'story'); }}
         >
           <span className="glyph" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -147,14 +174,14 @@ export default function BroskiDock({ count = 0, onOpenCart, onOpenPreview }) {
               <path d="M6 6h10M6 10h10" />
             </svg>
           </span>
-          <span>Our Story</span>
-        </button>
+          <span>Our story</span>
+        </a>
 
-        <button
-          type="button"
+        <a
+          href="#faq"
           data-dock
           className={`dock-item ${activeItem === 'faq' ? 'is-active' : ''}`}
-          onClick={() => scrollTo('#faq', 'faq')}
+          onClick={(e) => { e.preventDefault(); scrollTo('#faq', 'faq'); }}
         >
           <span className="glyph" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -162,25 +189,8 @@ export default function BroskiDock({ count = 0, onOpenCart, onOpenPreview }) {
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" />
             </svg>
           </span>
-          <span>Good to Know</span>
-        </button>
-
-        <button
-          type="button"
-          data-dock
-          className="dock-item dock-item--bag"
-          onClick={onOpenCart}
-          aria-label={`Open treat bag, ${count} items`}
-        >
-          <span className="glyph" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-              <path d="M5 7h14l1 14H4L5 7Z" />
-              <path d="M8 8V6a4 4 0 0 1 8 0v2" />
-            </svg>
-          </span>
-          <span>Bag</span>
-          <b className="dock-count">{count}</b>
-        </button>
+          <span>Good to know</span>
+        </a>
       </nav>
     </div>
   );
