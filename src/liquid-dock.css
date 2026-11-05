@@ -82,13 +82,35 @@
 /* Proximity Interactive Dock */
 .broski-dock-wrap{
   position:fixed;
-  bottom:26px;
-  left:0;
-  right:0;
+  bottom:24px;
+  left:50%;
+  transform:translate(-50%, 20px);
+  opacity:0;
+  pointer-events:none;
+  z-index:90;
   display:flex;
   justify-content:center;
-  z-index:90;
-  pointer-events:none;
+  align-items:center;
+  width:max-content;
+  max-width:calc(100vw - 20px);
+  margin:0;
+  transition:opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.broski-dock-wrap.visible{
+  opacity:1;
+  pointer-events:auto;
+  transform:translate(-50%, 0);
+}
+.dock-txt-mob{
+  display:none;
+}
+@media (max-width: 540px){
+  .dock-txt-desk{
+    display:none;
+  }
+  .dock-txt-mob{
+    display:inline;
+  }
 }
 .broski-dock{
   pointer-events:auto;
@@ -273,35 +295,72 @@
 }
 
 @media (max-width: 768px){
+  header {
+    height: 70px !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  .logo {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 24px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+  .logo svg {
+    width: 25px !important;
+    height: 25px !important;
+    flex-shrink: 0 !important;
+  }
+  .nav-actions {
+    display: flex !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+  }
   .broski-dock-wrap{
     bottom: 12px;
-    width: auto;
-    max-width: calc(100vw - 20px);
+    max-width: calc(100vw - 16px);
   }
   .broski-dock{
-    gap: 4px;
-    height: 46px;
-    padding: 4px 8px;
+    gap: 3px;
+    height: 44px;
+    padding: 3px 6px;
     max-width: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
   .broski-dock::-webkit-scrollbar{
     display: none;
   }
   .dock-item{
-    height: 38px;
-    padding: 0 8px;
-    font-size: 11px;
-    gap: 4px;
+    height: 36px;
+    padding: 0 6px;
+    font-size: 10.5px;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .dock-item .glyph svg{
+    width: 15px;
+    height: 15px;
   }
   .dock-mark{
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
+    padding: 0 !important;
+    flex-shrink: 0;
+  }
+  .dock-mark svg{
+    width: 18px;
+    height: 18px;
   }
   .whatsapp-float{
-    bottom: 68px;
-    right: 14px;
+    bottom: 66px;
+    right: 12px;
     padding: 10px 14px;
     font-size: 12px;
     min-width: 44px;

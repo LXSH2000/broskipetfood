@@ -83,15 +83,7 @@ export default function BroskiDock() {
   };
 
   return (
-    <div
-      className={`broski-dock-wrap ${visible ? 'visible' : ''}`}
-      style={{
-        opacity: visible ? 1 : 0,
-        pointerEvents: visible ? 'auto' : 'none',
-        transform: visible ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(20px)',
-        transition: 'opacity 0.28s ease, transform 0.28s ease'
-      }}
-    >
+    <div className={`broski-dock-wrap ${visible ? 'visible' : ''}`}>
       <nav
         ref={dockRef}
         className="broski-dock"
@@ -146,7 +138,8 @@ export default function BroskiDock() {
               <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
             </svg>
           </span>
-          <span>Bro Perks</span>
+          <span className="dock-txt-desk">Bro Perks</span>
+          <span className="dock-txt-mob">Perks</span>
         </a>
 
         <a
@@ -174,7 +167,8 @@ export default function BroskiDock() {
               <path d="M6 6h10M6 10h10" />
             </svg>
           </span>
-          <span>Our story</span>
+          <span className="dock-txt-desk">Our story</span>
+          <span className="dock-txt-mob">Story</span>
         </a>
 
         <a
@@ -189,7 +183,8 @@ export default function BroskiDock() {
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" />
             </svg>
           </span>
-          <span>Good to know</span>
+          <span className="dock-txt-desk">Good to know</span>
+          <span className="dock-txt-mob">FAQ</span>
         </a>
       </nav>
     </div>
