@@ -8,7 +8,7 @@
      <PartnerSection />          // just before the footer
      <SiteFooter />              // replaces the old footer
 */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const C = () => window.BROSKI_CONFIG || {};
 export const waLink = (text) =>
