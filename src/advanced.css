@@ -1,0 +1,149 @@
+/* Final Broski editorial layer. Experience and scene internals remain isolated. */
+body{--bro-cocoa:#352016;--bro-paper:#fff9ed;--bro-rust:#88442b;--bro-rule:#62442c30}
+body .announcement{border-bottom:1px solid var(--bro-rule);letter-spacing:.06em}
+body .announcement button{min-height:44px;padding-inline:12px;text-underline-offset:4px}
+body header{border-bottom:1px solid var(--bro-rule);max-width:1320px}
+body header>.logo{font-size:30px;letter-spacing:-1.7px}
+body header>nav a{position:relative;min-height:44px;display:inline-flex;align-items:center;text-underline-offset:7px;text-decoration-thickness:1px}
+body header>nav a:hover{text-decoration:underline}
+body .bag-button{min-height:46px;border-radius:8px;box-shadow:0 5px 15px #35201615}
+body .hero.hero-v2{padding-top:38px}
+body .hero-v2 .hero-title{color:var(--bro-cocoa);text-shadow:0 5px 0 #fff8e87a}
+body .hero-v2 .hero-description{color:#604735;max-width:390px;margin-inline:auto}
+body .hero-cta .button{min-height:52px;padding-inline:24px;border-radius:9px}
+body .cinema-window{border-color:#fffbf0c2;box-shadow:0 22px 55px #49301c1a}
+body .hero-end{color:#664b36;border-bottom:1px solid var(--bro-rule);padding-bottom:22px}
+body .hero-end a{min-height:44px;display:inline-flex;align-items:center}
+body .shop.section{padding-block:100px}
+body .shop .section-heading{gap:32px}
+body .shop .section-heading>p{border-left:1px solid #987e614d;padding-left:22px}
+body .ritual-picker{background:linear-gradient(110deg,#e6ddc9,#f4ecde);box-shadow:inset 0 1px #fff9ec}
+body .ritual-picker-buttons button{border-radius:24px;min-height:52px}
+body .filters button{border:1px solid #b09b8266;box-shadow:none}
+body .filters button.active{background:var(--bro-cocoa);color:var(--bro-paper);border-color:var(--bro-cocoa)}
+body .shop-tools .search{border-color:#b09b8280}
+body .broski-sort select{border-color:#b09b8280}
+body .shop-results{color:#5b4533;line-height:1.5}
+body .product-grid{align-items:stretch;gap:40px 24px}
+body .product-card{min-width:0;display:flex;flex-direction:column}
+body .product-visual{border:6px solid #fffaf0;border-radius:20px;box-shadow:0 6px 22px #51351f0c;transition:box-shadow .3s ease,border-color .3s ease}
+body .product-tag{font-family:'DM Sans',sans-serif;font-size:10.5px;color:#3e291b;background:#fff9edf2;backdrop-filter:none;max-width:calc(100% - 28px);line-height:1.4}
+body .product-meta{color:#624b37;gap:12px;line-height:1.55}
+body .product-meta>span:last-child{color:var(--bro-cocoa);white-space:nowrap}
+body .product-card h3{font-size:27px;line-height:1.12;margin:5px 0 9px}
+body .product-card h3 button{font:inherit;color:var(--bro-cocoa);max-width:100%;overflow-wrap:anywhere;padding-block:5px}
+body .product-bottom{margin-top:auto;gap:12px;padding-bottom:18px;border-color:var(--bro-rule)}
+body .product-bottom p{color:#614b3a}
+body .product-bottom .add-button{min-height:46px;padding:10px 15px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+body .product-bottom .add-button span{background:transparent;box-shadow:none;font-size:21px;color:inherit}
+body .story.section{padding-block:105px;gap:7%;align-items:center}
+body .story-photo{border-radius:28px;border-color:#fffaf0;box-shadow:0 20px 48px #35201616}
+body .story-copy{min-width:0}
+body .story-copy .eyebrow{color:var(--bro-rust)}
+body .story-copy p{color:#614b3a;max-width:470px}
+body .story-copy .button{margin-top:12px;border:1px solid #ae957466;min-height:52px}
+body .ritual-grid article{border-top:1px solid var(--bro-rule);padding-top:24px}
+body .ritual-grid article:nth-child(2){padding-top:24px}
+body .ritual-grid article:nth-child(3){padding-top:24px}
+body .ritual-icon{color:var(--bro-rust)}
+body .ritual-grid .text-link{min-height:44px;display:inline-flex;align-items:center;font-size:12px;text-underline-offset:5px}
+body .everyday-editorial{box-shadow:0 12px 35px #35201612}
+body .bro-notes.section{border-block:1px solid var(--bro-rule)}
+body .sample-reviews-label{line-height:1.6;color:#4c3524}
+body .bro-note{border-radius:12px;box-shadow:0 10px 24px #49301c09}
+body .faq.section{border:1px solid #b59d7c3d;border-radius:26px;background:#ede5d7;padding-block:75px}
+body .questions details{border-color:#8b705749}
+body .questions summary{min-height:72px;padding:22px 4px;line-height:1.5;color:var(--bro-cocoa)}
+body .questions details[open]{background:#fff9ee65;border-radius:8px}
+body .questions details[open] summary{padding-inline:14px}
+body .questions details p{padding:0 14px 18px;color:#5f4935;margin:0}
+body .newsletter{padding-block:76px}
+body .newsletter small{color:#654b36;line-height:1.6;display:block}
+body .email-field{border:1px solid #a48b6d;border-radius:10px;background:#fff9ed;padding:3px 7px 3px 16px}
+body .email-field button{flex-shrink:0;min-width:46px;min-height:46px;background:var(--bro-cocoa);color:var(--bro-paper);border-radius:7px;margin:3px}
+body .email-field input::placeholder{color:#715940}
+body footer{border-top:1px solid #b19a7b66;background:linear-gradient(145deg,#e6dccb,#d8cbb7)}
+body .footer-top a:not(.logo),body .footer-top button{min-height:44px;display:inline-flex;align-items:center;padding-block:10px}
+body .footer-bottom span,body .footer-bottom a,body footer a,body footer button{min-height:32px;display:inline-flex;align-items:center}
+body .footer-top p,body .footer-bottom{color:#624a34}
+body .footer-word{border-bottom:1px solid #9d836453;padding-bottom:14px}
+body .footer-bottom{border-top:0;margin-top:0}
+body .modal .button{min-height:48px;border-radius:8px}
+body .modal .button:disabled{opacity:.65;cursor:wait}
+body .quantity button:disabled{opacity:.5;cursor:not-allowed}
+body .modal .back{min-height:44px;display:inline-flex;align-items:center}
+body .modal input{border-color:#a88d7080}
+body .modal .coupon input{min-height:46px}
+body .modal .cart-info{min-width:0}
+body .modal .cart-info h3{overflow-wrap:anywhere}
+body .modal .totals{background:#eee5d5;border-radius:10px;padding:10px 16px}
+body .shop :is(button,input,select):focus-visible,body header :is(a,button):focus-visible,body .questions summary:focus-visible,body footer :is(a,button):focus-visible{outline:3px solid #88442b;outline-offset:4px}
+@media(hover:hover) and (pointer:fine){
+  body .product-visual:hover{box-shadow:0 17px 34px #51351f22;border-color:#fffef6}
+  body .product-visual:hover .broski-pack-art{transform:scale(1.055)}
+  body .product-visual:focus-visible .view-product{opacity:1;transform:none}
+  body .product-bottom .add-button:hover{background:#78422a;border-color:#78422a}
+}
+@media(min-width:761px) and (max-width:1050px){
+  body .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body .story.section{gap:5%;padding-inline:5%}
+  body .story-copy h2{font-size:48px}
+  body .story-photo{height:440px;transform:rotate(-1deg)}
+  body .faq.section{gap:5%;margin-inline:3%}
+}
+@media(max-width:760px){
+  body header{height:80px}
+  body .announcement{padding-block:0;gap:8px}
+  body .announcement button{padding-inline:4px;font-size:10.5px}
+  body .hero.hero-v2{padding-top:24px}
+  body .hero-cta .button{padding-inline:20px}
+  body .hero-end{gap:12px;padding-bottom:14px}
+  body .shop.section,body .story.section{padding-block:62px}
+  body .shop .section-heading>p{border-left:0;padding-left:0}
+  body .ritual-picker-buttons button{border-radius:12px}
+  body .product-grid{gap:28px 14px}
+  body .product-visual{border-width:4px;border-radius:14px}
+  body .product-tag{font-size:10.5px;padding:5px 7px;max-width:calc(100% - 16px);left:8px;top:8px}
+  body .product-card h3{font-size:23px;line-height:1.13}
+  body .product-bottom{gap:8px;padding-bottom:14px}
+  body .product-bottom .add-button{width:100%;min-height:46px;padding-inline:12px}
+  body .product-meta{gap:5px;font-size:10.5px}
+  body .story-photo{transform:none;max-width:500px;height:auto;aspect-ratio:1}
+  body .story-copy .button{max-width:100%;white-space:normal;text-align:left}
+  body .ritual-grid{grid-template-columns:1fr;gap:25px}
+  body .ritual-grid article{display:grid;grid-template-columns:44px minmax(0,1fr);column-gap:18px;padding-top:22px}
+  body .ritual-grid .ritual-icon{grid-row:1/4;display:flex;flex-direction:column;gap:14px;margin:0}
+  body .ritual-grid h3{font-size:27px;margin:0 0 10px}
+  body .ritual-grid p{max-width:none;margin:0}
+  body .ritual-grid .text-link{grid-column:2;margin-top:6px}
+  body .faq.section{margin-inline:4%;padding:42px 6%;border-radius:18px}
+  body .questions summary{padding-block:20px;gap:16px}
+  body .newsletter{padding-block:55px}
+  body .footer-top{gap:16px 24px}
+  body .footer-top>div{gap:4px}
+  body .footer-word{margin-top:24px}
+  body .mobile-shop-dock{border-color:#ac94794d;box-shadow:0 6px 25px #35201624}
+  body .mobile-shop-dock button{min-height:50px}
+}
+@media(max-width:390px){
+  body .hero-cta{display:grid;grid-template-columns:1fr;width:100%;max-width:290px;margin-inline:auto}
+  body .hero-cta .button{width:100%;justify-content:center}
+  body .product-grid{grid-template-columns:1fr;gap:32px}
+  body .product-visual{max-height:none}
+  body .product-card h3{font-size:29px}
+  body .product-meta{font-size:12px}
+  body .product-meta>span:last-child{font-size:18px}
+  body .product-tag{font-size:11px;padding:6px 10px}
+  body .product-bottom p{font-size:13px;min-height:0}
+  body .product-bottom .add-button{font-size:13px}
+  body .hero-end>span:first-child{max-width:88px;line-height:1.6}
+  body .shop-results{flex-wrap:wrap}
+  body .shop-results>span:last-child{max-width:none;text-align:left}
+  body .ritual-picker-buttons{grid-template-columns:1fr}
+  body .ritual-picker-buttons button{flex-direction:row;justify-content:flex-start;padding:10px 16px;min-height:48px;font-size:12px;gap:12px}
+  body .footer-bottom{font-size:10.5px}
+}
+@media(prefers-reduced-motion:reduce){
+  body .product-visual,body .product-visual .broski-pack-art{transition:none}
+  body .product-visual:hover .broski-pack-art{transform:none}
+}

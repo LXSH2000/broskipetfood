@@ -1,0 +1,52 @@
+{
+  "budget": {
+    "Samples, discovery and sample courier": 12000,
+    "Qualified formulation review + lab/QA": 22000,
+    "Accounting, classification, label/legal review": 15000,
+    "Artwork and actual product photography": 10000,
+    "Store, domain/hosting and payment setup": 8000,
+    "Scoped part-time pilot operations help": 10000,
+    "500 accepted packs \u00d7 \u20b985 landed": 42500,
+    "Outbound courier working float": 22500,
+    "Outer shipping material allowance": 4500,
+    "Payment fee allowance": 3500,
+    "Damage/refund/replacement allowance": 5000,
+    "Acquisition experiments": 15000,
+    "Uncommitted contingency": 30000
+  },
+  "budget_total": 200000,
+  "tax_assumption": 0.18,
+  "gateway_gross_rate": 0.0236,
+  "landed_pack_cost": 85,
+  "blended_order_gross": 480.8,
+  "blended_pre_acquisition_contribution": 108.6107471186441,
+  "scenarios": [
+    [
+      "Slow",
+      40,
+      84,
+      "\u20b919,232",
+      "\u20b9-456",
+      "\u20b9-81,706",
+      "\u20b987,184"
+    ],
+    [
+      "Working",
+      100,
+      210,
+      "\u20b948,080",
+      "\u20b92,861",
+      "\u20b9-78,389",
+      "\u20b9101,211"
+    ],
+    [
+      "Strong",
+      200,
+      420,
+      "\u20b996,160",
+      "\u20b910,722",
+      "\u20b9-70,528",
+      "\u20b9126,922"
+    ]
+  ]
+}

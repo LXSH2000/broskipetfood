@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="theme-color" content="#f5efe4"/><meta name="description" content="Broski – crunchy dog biscuits packed in Nangloi, West Delhi. Non-Veg and Mix in a 400 g zip pouch. Launching in West Delhi pet shops, November 2026."/><title>Broski — Treats for your best bro.</title><link rel="canonical" href="https://broskipetfood.com/"/><meta property="og:type" content="website"/><meta property="og:title" content="Broski — Treats for your best bro."/><meta property="og:description" content="Broski – crunchy dog biscuits packed in Nangloi, West Delhi. Non-Veg and Mix in a 400 g zip pouch. Launching in West Delhi pet shops, November 2026."/><meta property="og:url" content="https://broskipetfood.com/"/><meta property="og:image" content="https://broskipetfood.com/og.jpg"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Gaegu:wght@400;700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet"/><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Broski",
+  "url": "https://broskipetfood.com/",
+  "logo": "https://broskipetfood.com/og.jpg",
+  "description": "Broski – crunchy dog biscuits packed in Nangloi, West Delhi. Non-Veg and Mix in a 400 g zip pouch. Launching in West Delhi pet shops, November 2026.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Nangloi",
+    "addressLocality": "West Delhi",
+    "addressRegion": "Delhi",
+    "postalCode": "110041",
+    "addressCountry": "IN"
+  },
+  "identifier": "UDYAM-DL-11-0177908",
+  "email": "support@broskipetfood.com"
+}
+</script><script>
+(function() {
+  const originalFetch = window.fetch;
+  const products = [
+    { id: 'peanut', name: 'Non-Veg Dog Biscuits', price: 14900, weight: '400g', category: 'biscuits' },
+    { id: 'pumpkin', name: 'Mix Dog Biscuits', price: 14900, weight: '400g', category: 'training' }
+  ];
+  window.fetch = async function(url, options = {}) {
+    const u = typeof url === 'string' ? url : (url && url.url ? url.url : '');
+    if (u === '/api/products') {
+      return new Response(JSON.stringify({ products }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+      });
+    }
+    if (u === '/api/health') {
+      return new Response(JSON.stringify({ status: 'ok', brand: 'Broski', location: 'Nangloi, West Delhi' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+      });
+    }
+    return originalFetch.apply(this, arguments);
+  };
+})();
+</script>  <!-- Self-heal guard for GitHub Pages cache -->
+  <script>
+  window.addEventListener('error', function (e) {
+    var t = e.target;
+    if (t && (t.tagName === 'SCRIPT' || t.tagName === 'LINK') && !sessionStorage.getItem('bk-reloaded')) {
+      sessionStorage.setItem('bk-reloaded', '1');
+      location.replace(location.pathname + '?v=' + Date.now());
+    }
+  }, true);
+  window.addEventListener('vite:preloadError', function () { location.reload(); });
+  </script>
+</head><body><noscript><div style="padding:24px;text-align:center;font-family:sans-serif;background:#f5efe4;color:#352016;"><h1>Broski — Treats for your best bro.</h1><p>Crunchy dog biscuits packed by hand in Nangloi, West Delhi (110041). Non-Veg and Mix in a 400 g zip pouch.</p><p>Launching in West Delhi pet shops in November 2026.</p><p>Contact or pre-launch orders: <a href="mailto:support@broskipetfood.com">support@broskipetfood.com</a></p></div></noscript><div id="root"></div><script type="module" src="/src/main.jsx"></script></body></html>
