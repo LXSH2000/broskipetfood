@@ -1,0 +1,1233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BROSKI | Professional GST Bill of Supply Generator</title>
+<meta name="description" content="Official GST Composition Scheme Bill of Supply Generator for BROSKI Pet Food.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #352016;
+  --primary-light: #523425;
+  --accent: #b8452b;
+  --accent-soft: rgba(184, 69, 43, 0.08);
+  --cream: #fff8ed;
+  --surface: #ffffff;
+  --card-bg: #faf6f0;
+  --border: #e6dcce;
+  --text: #221c18;
+  --text-muted: #6f6259;
+  --green: #15803d;
+  --green-bg: #dcfce7;
+  --amber: #b45309;
+  --amber-bg: #fef3c7;
+  --font-main: 'DM Sans', -apple-system, sans-serif;
+  --font-display: 'Outfit', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-main);
+  background: #ede6dc;
+  color: var(--text);
+  line-height: 1.45;
+  padding: 24px 16px 80px;
+}
+
+.app-container {
+  max-width: 1380px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* Control Panel (Sidebar) */
+.control-panel {
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(53, 32, 22, 0.06);
+  padding: 22px;
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.panel-header h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-section {
+  margin-bottom: 22px;
+}
+
+.section-label {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-group {
+  margin-bottom: 12px;
+}
+
+.field-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.input, select, textarea {
+  width: 100%;
+  padding: 9px 12px;
+  font-family: var(--font-main);
+  font-size: 13.5px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text);
+  transition: all 0.15s ease;
+}
+
+.input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.preset-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.preset-pill {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset-pill:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 9px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: var(--accent);
+  box-shadow: 0 4px 12px rgba(184, 69, 43, 0.25);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 1.5px solid var(--border);
+  width: 100%;
+}
+
+.btn-outline:hover {
+  border-color: var(--primary);
+  background: var(--card-bg);
+}
+
+.btn-action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Invoice Preview Canvas */
+.preview-canvas {
+  background: var(--surface);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(53, 32, 22, 0.08);
+  border: 1px solid var(--border);
+  padding: 40px;
+  min-height: 960px;
+  position: relative;
+  font-size: 13px;
+  color: #1a1a1a;
+}
+
+/* Official Bill of Supply Styling */
+.inv-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.brand-block h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--primary);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-block .tagline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 4px;
+}
+
+.brand-details {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.45;
+}
+
+.bill-badge-block {
+  text-align: right;
+}
+
+.bill-heading {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.statutory-composition-pill {
+  display: inline-block;
+  background: var(--card-bg);
+  border: 1px solid #d4c5b1;
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-top: 6px;
+  text-align: right;
+  max-width: 300px;
+  line-height: 1.35;
+}
+
+.inv-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.meta-col p {
+  font-size: 12px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.meta-col p strong {
+  color: var(--primary);
+}
+
+.parties-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.party-box {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.party-box h4 {
+  font-family: var(--font-display);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  margin-bottom: 8px;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 4px;
+}
+
+.party-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.party-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* Items Table */
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  font-size: 12px;
+}
+
+.items-table th {
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 10px 8px;
+  text-align: left;
+}
+
+.items-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.items-table tr:nth-child(even) td {
+  background: #fdfaf6;
+}
+
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+
+.item-title {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.item-sub {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.scheme-tag {
+  display: inline-block;
+  background: var(--green-bg);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-top: 2px;
+}
+
+/* Totals Area */
+.totals-area {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+
+.amount-words-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.amount-words-box h5 {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.amount-words-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  font-style: italic;
+}
+
+.upi-scan-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+
+.qr-code-holder {
+  width: 90px;
+  height: 90px;
+  background: #fff;
+  border: 1px solid #d4c5b1;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.qr-code-holder img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.upi-info {
+  font-size: 11px;
+}
+
+.upi-info strong {
+  display: block;
+  font-size: 12px;
+  color: var(--primary);
+}
+
+.totals-table {
+  width: 100%;
+  font-size: 12.5px;
+}
+
+.totals-table tr td {
+  padding: 6px 4px;
+}
+
+.totals-table tr.grand-total td {
+  border-top: 2px solid var(--primary);
+  border-bottom: 2px solid var(--primary);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--primary);
+  padding: 10px 4px;
+}
+
+/* Terms & Signatures */
+.footer-declarations {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.declarations-list {
+  padding-left: 14px;
+  line-height: 1.5;
+}
+
+.signature-box {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  min-height: 90px;
+}
+
+.signature-line {
+  margin-top: 40px;
+  border-top: 1px solid #444;
+  padding-top: 4px;
+  width: 180px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Navigation bar back to main site */
+.top-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+.badge-mode {
+  background: var(--primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* Print Rules */
+@media print {
+  body {
+    background: #fff;
+    padding: 0;
+  }
+  .control-panel, .top-nav-bar, .no-print {
+    display: none !important;
+  }
+  .app-container {
+    display: block;
+  }
+  .preview-canvas {
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 980px) {
+  .app-container {
+    grid-template-columns: 1fr;
+  }
+  .control-panel {
+    position: static;
+    max-height: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- Sidebar Form Controls -->
+  <aside class="control-panel no-print">
+    <div class="panel-header">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Broski GST Billing Hub
+      </h2>
+      <span class="badge-mode">Composition 1%</span>
+    </div>
+
+    <!-- Quick Preset Buttons -->
+    <div class="panel-section">
+      <div class="section-label">⚡ Fast Billing Presets</div>
+      <div class="preset-pills">
+        <button type="button" class="preset-pill" onclick="loadPreset('11plus1')">🔥 11+1 Bro Counter Box (Shop)</button>
+        <button type="button" class="preset-pill" onclick="loadPreset('wholesale20')">📦 20-Pack Pet Shop Order</button>
+        <button type="button" class="preset-pill" onclick="loadPreset('d2ccombo')">🐾 D2C Bro Combo (Online)</button>
+        <button type="button" class="preset-pill" onclick="loadPreset('samplejar')">🫙 Display Sample Jar Drop</button>
+      </div>
+    </div>
+
+    <!-- Invoice Header Details -->
+    <div class="panel-section">
+      <div class="section-label">📋 Bill Parameters</div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label>Bill of Supply No.</label>
+          <input type="text" id="billNo" class="input" value="BRS/26-27/001" oninput="renderInvoice()">
+        </div>
+        <div class="field-group">
+          <label>Date of Supply</label>
+          <input type="date" id="billDate" class="input" onchange="renderInvoice()">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label>Payment Mode</label>
+          <select id="paymentMode" class="input" onchange="renderInvoice()">
+            <option value="UPI / Online Transfer">UPI / Instant QR</option>
+            <option value="Cash on Delivery">Cash on Delivery</option>
+            <option value="Cheque / NEFT">Cheque / Bank NEFT</option>
+            <option value="15-Day Credit (Shop Scheme)">15-Day Credit Scheme</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Payment Status</label>
+          <select id="paymentStatus" class="input" onchange="renderInvoice()">
+            <option value="PAID">PAID (Clear)</option>
+            <option value="PENDING / COD">PENDING / COD</option>
+            <option value="15-DAY CREDIT">15-DAY CREDIT</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipient / Buyer Details -->
+    <div class="panel-section">
+      <div class="section-label">🏬 Buyer / Pet Shop Details</div>
+      <div class="preset-pills">
+        <button type="button" class="preset-pill" onclick="selectShop('Pet Zone, Paschim Vihar')">Pet Zone (PV)</button>
+        <button type="button" class="preset-pill" onclick="selectShop('Paws & Tails, Rajouri Garden')">Paws & Tails (Rajouri)</button>
+        <button type="button" class="preset-pill" onclick="selectShop('Bark Club, Punjabi Bagh')">Bark Club (PB)</button>
+        <button type="button" class="preset-pill" onclick="selectShop('Walk-in Customer / Society')">Retail Pet Parent</button>
+      </div>
+      <div class="field-group">
+        <label>Buyer Name / Shop Legal Name</label>
+        <input type="text" id="buyerName" class="input" value="Pet Zone (Paschim Vihar)" oninput="renderInvoice()">
+      </div>
+      <div class="field-group">
+        <label>Address & Locality</label>
+        <input type="text" id="buyerAddress" class="input" value="Shop No. 4, Block B Market, Paschim Vihar, New Delhi - 110063" oninput="renderInvoice()">
+      </div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label>Phone / Contact</label>
+          <input type="text" id="buyerPhone" class="input" value="+91 98110 XXXXX" oninput="renderInvoice()">
+        </div>
+        <div class="field-group">
+          <label>GSTIN (Optional if B2C)</label>
+          <input type="text" id="buyerGstin" class="input" value="07AABCP9876Q1Z2" oninput="renderInvoice()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Items Configuration -->
+    <div class="panel-section">
+      <div class="section-label">🦴 Line Items & Schemes</div>
+      <div id="itemsContainer"></div>
+      <button type="button" class="btn btn-outline" style="margin-top:8px;" onclick="addItemRow()">+ Add Another Item</button>
+    </div>
+
+    <!-- Extra Charges / Notes -->
+    <div class="panel-section">
+      <div class="grid-2">
+        <div class="field-group">
+          <label>Delivery / Freight (₹)</label>
+          <input type="number" id="freight" class="input" value="0" min="0" oninput="renderInvoice()">
+        </div>
+        <div class="field-group">
+          <label>Special Discount (₹)</label>
+          <input type="number" id="extraDiscount" class="input" value="0" min="0" oninput="renderInvoice()">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Remarks / Scheme Note</label>
+        <input type="text" id="billNotes" class="input" value="Introductory 11+1 carton offer with complimentary acrylic counter tasting jar." oninput="renderInvoice()">
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="panel-section">
+      <button type="button" class="btn btn-primary" onclick="window.print()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        Print / Save A4 PDF Bill
+      </button>
+
+      <div class="btn-action-row">
+        <button type="button" class="btn btn-outline" onclick="copyWhatsAppSummary()">
+          📲 Copy WhatsApp Bill
+        </button>
+        <button type="button" class="btn btn-outline" onclick="resetForm()">
+          🔄 Reset Form
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Bill of Supply Printable Sheet -->
+  <main>
+    <div class="top-nav-bar no-print">
+      <a href="/" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Back to Broski Store
+      </a>
+      <span style="font-size:12px; color:var(--text-muted);">Delhi Composition Rule 49 · HSN 2309 10 00</span>
+    </div>
+
+    <div class="preview-canvas" id="invoiceCanvas">
+      <!-- Injected via JavaScript renderInvoice() -->
+    </div>
+  </main>
+
+</div>
+
+<script>
+// Default Items State
+let items = [
+  {
+    desc: "Broski Non-Veg Crunchy Dog Biscuits (400g Pouch)",
+    hsn: "2309 10 00",
+    batch: "BRS-NV-261115",
+    qty: 11,
+    freeQty: 1,
+    mrp: 149,
+    rate: 100,
+    scheme: "11+1 Free Box Scheme"
+  }
+];
+
+// Set today's date
+document.getElementById('billDate').value = new Date().toISOString().split('T')[0];
+
+function selectShop(name) {
+  const shopData = {
+    'Pet Zone, Paschim Vihar': {
+      address: 'Shop No. 4, Block B Market, Paschim Vihar, New Delhi - 110063',
+      phone: '+91 98110 44521',
+      gstin: '07AABCP9876Q1Z2'
+    },
+    'Paws & Tails, Rajouri Garden': {
+      address: 'Main Ring Road, Near Metro Pillar 384, Rajouri Garden, New Delhi - 110027',
+      phone: '+91 99102 77810',
+      gstin: '07BBDPQ1122R1Z8'
+    },
+    'Bark Club, Punjabi Bagh': {
+      address: 'Shop 12, Club Road Market, Punjabi Bagh West, New Delhi - 110026',
+      phone: '+91 98731 55620',
+      gstin: '07CCXPL3344M1Z5'
+    },
+    'Walk-in Customer / Society': {
+      address: 'Direct Delivery, Dharam Colony / Paschim Vihar, Delhi',
+      phone: '+91 99999 XXXXX',
+      gstin: 'URP (Unregistered Consumer)'
+    }
+  };
+
+  document.getElementById('buyerName').value = name;
+  if (shopData[name]) {
+    document.getElementById('buyerAddress').value = shopData[name].address;
+    document.getElementById('buyerPhone').value = shopData[name].phone;
+    document.getElementById('buyerGstin').value = shopData[name].gstin;
+  }
+  renderInvoice();
+}
+
+function loadPreset(type) {
+  if (type === '11plus1') {
+    items = [
+      {
+        desc: "Broski Non-Veg Crunchy Dog Biscuits (400g)",
+        hsn: "2309 10 00",
+        batch: "BRS-NV-261115",
+        qty: 6,
+        freeQty: 1,
+        mrp: 149,
+        rate: 100,
+        scheme: "11+1 Scheme (1 Pk Free)"
+      },
+      {
+        desc: "Broski Mix Flavoured Dog Biscuits (400g)",
+        hsn: "2309 10 00",
+        batch: "BRS-MX-261115",
+        qty: 5,
+        freeQty: 0,
+        mrp: 179,
+        rate: 100,
+        scheme: "Introductory Carton Deal"
+      },
+      {
+        desc: "Broski Acrylic Counter Tasting Jar (Complimentary 20 Bones)",
+        hsn: "3926 90 99",
+        batch: "BRS-JAR-01",
+        qty: 1,
+        freeQty: 0,
+        mrp: 0,
+        rate: 0,
+        scheme: "100% Free Display Promo"
+      }
+    ];
+    document.getElementById('billNotes').value = "11+1 Bro Counter Box: Pay for 11 packs, get 12th pack free + complimentary tasting jar. 15-day 100% buyback guarantee.";
+  } else if (type === 'wholesale20') {
+    items = [
+      {
+        desc: "Broski Non-Veg Crunchy Dog Biscuits (400g)",
+        hsn: "2309 10 00",
+        batch: "BRS-NV-261115",
+        qty: 10,
+        freeQty: 1,
+        mrp: 149,
+        rate: 100,
+        scheme: "Bulk Trade Margin"
+      },
+      {
+        desc: "Broski Mix Flavoured Dog Biscuits (400g)",
+        hsn: "2309 10 00",
+        batch: "BRS-MX-261115",
+        qty: 10,
+        freeQty: 1,
+        mrp: 179,
+        rate: 100,
+        scheme: "Bulk Trade Margin"
+      }
+    ];
+    document.getElementById('billNotes').value = "Wholesale dispatch for West Delhi retail stockists. Standard payment terms: Immediate on delivery.";
+  } else if (type === 'd2ccombo') {
+    items = [
+      {
+        desc: "Broski Bro Combo (Non-Veg 400g + Mix 400g Duo)",
+        hsn: "2309 10 00",
+        batch: "BRS-CMB-261115",
+        qty: 1,
+        freeQty: 0,
+        mrp: 328,
+        rate: 299,
+        scheme: "Bro Combo Deal (Save ₹29)"
+      },
+      {
+        desc: "Broski Pocket Bone Sampler (50g)",
+        hsn: "2309 10 00",
+        batch: "BRS-SMP-01",
+        qty: 1,
+        freeQty: 0,
+        mrp: 0,
+        rate: 0,
+        scheme: "Free Welcome Gift"
+      }
+    ];
+    document.getElementById('billNotes').value = "D2C Direct Home Delivery. Free West Delhi shipping applied.";
+  } else if (type === 'samplejar') {
+    items = [
+      {
+        desc: "Broski Acrylic Counter Sample Jar + 20 Fresh Trial Biscuits",
+        hsn: "3926 / 2309",
+        batch: "BRS-SAMPLE-JAR",
+        qty: 1,
+        freeQty: 0,
+        mrp: 0,
+        rate: 0,
+        scheme: "Zero Charge - Retail Pilot Display"
+      }
+    ];
+    document.getElementById('billNotes').value = "No commercial value. Counter display tasting jar for retail pet dog taste test.";
+  }
+  renderFormItems();
+  renderInvoice();
+}
+
+function renderFormItems() {
+  const container = document.getElementById('itemsContainer');
+  container.innerHTML = '';
+  items.forEach((it, idx) => {
+    const div = document.createElement('div');
+    div.style.background = '#faf6f0';
+    div.style.border = '1px solid #e6dcce';
+    div.style.padding = '10px';
+    div.style.borderRadius = '8px';
+    div.style.marginBottom = '10px';
+    div.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <strong style="font-size:12px; color:#352016;">Item #${idx + 1}</strong>
+        ${items.length > 1 ? `<button type="button" onclick="removeItem(${idx})" style="background:none; border:none; color:#b8452b; font-size:11px; cursor:pointer; font-weight:700;">✕ Remove</button>` : ''}
+      </div>
+      <input type="text" class="input" style="margin-bottom:6px; font-size:12px;" value="${it.desc}" oninput="items[${idx}].desc = this.value; renderInvoice();" placeholder="Item Name">
+      <div class="grid-2" style="margin-bottom:6px;">
+        <div>
+          <label style="font-size:10px; color:#6f6259;">Billed Qty</label>
+          <input type="number" class="input" style="font-size:12px;" value="${it.qty}" min="0" oninput="items[${idx}].qty = parseFloat(this.value)||0; renderInvoice();">
+        </div>
+        <div>
+          <label style="font-size:10px; color:#6f6259;">Free Qty (Scheme)</label>
+          <input type="number" class="input" style="font-size:12px;" value="${it.freeQty || 0}" min="0" oninput="items[${idx}].freeQty = parseFloat(this.value)||0; renderInvoice();">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label style="font-size:10px; color:#6f6259;">Rate (₹/Unit)</label>
+          <input type="number" class="input" style="font-size:12px;" value="${it.rate}" min="0" oninput="items[${idx}].rate = parseFloat(this.value)||0; renderInvoice();">
+        </div>
+        <div>
+          <label style="font-size:10px; color:#6f6259;">MRP (₹)</label>
+          <input type="number" class="input" style="font-size:12px;" value="${it.mrp}" min="0" oninput="items[${idx}].mrp = parseFloat(this.value)||0; renderInvoice();">
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function addItemRow() {
+  items.push({
+    desc: "Broski Mix Flavoured Dog Biscuits (400g Pouch)",
+    hsn: "2309 10 00",
+    batch: "BRS-MX-261115",
+    qty: 5,
+    freeQty: 0,
+    mrp: 179,
+    rate: 100,
+    scheme: "Standard Trade"
+  });
+  renderFormItems();
+  renderInvoice();
+}
+
+function removeItem(idx) {
+  items.splice(idx, 1);
+  renderFormItems();
+  renderInvoice();
+}
+
+function numberToWords(num) {
+  const a = ['','One ','Two ','Three ','Four ','Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
+  const b = ['', '', 'Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+
+  function inWords(n) {
+    if ((n = n.toString()).length > 9) return 'overflow';
+    let n_arr = ('000000000' + n).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    if (!n_arr) return '';
+    let str = '';
+    str += (Number(n_arr[1]) != 0) ? (a[Number(n_arr[1])] || b[n_arr[1][0]] + ' ' + a[n_arr[1][1]]) + 'Crore ' : '';
+    str += (Number(n_arr[2]) != 0) ? (a[Number(n_arr[2])] || b[n_arr[2][0]] + ' ' + a[n_arr[2][1]]) + 'Lakh ' : '';
+    str += (Number(n_arr[3]) != 0) ? (a[Number(n_arr[3])] || b[n_arr[3][0]] + ' ' + a[n_arr[3][1]]) + 'Thousand ' : '';
+    str += (Number(n_arr[4]) != 0) ? (a[Number(n_arr[4])] || b[n_arr[4][0]] + ' ' + a[n_arr[4][1]]) + 'Hundred ' : '';
+    str += (Number(n_arr[5]) != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n_arr[5])] || b[n_arr[5][0]] + ' ' + a[n_arr[5][1]]) : '';
+    return str.trim();
+  }
+  const clean = Math.round(num);
+  if (clean === 0) return "Zero Rupees Only";
+  return "Rupees " + inWords(clean) + " Only";
+}
+
+function renderInvoice() {
+  const billNo = document.getElementById('billNo').value || 'BRS/26-27/001';
+  const billDate = document.getElementById('billDate').value || new Date().toISOString().split('T')[0];
+  const paymentMode = document.getElementById('paymentMode').value;
+  const paymentStatus = document.getElementById('paymentStatus').value;
+  const buyerName = document.getElementById('buyerName').value || 'Cash Customer';
+  const buyerAddress = document.getElementById('buyerAddress').value || 'Delhi, India';
+  const buyerPhone = document.getElementById('buyerPhone').value || '-';
+  const buyerGstin = document.getElementById('buyerGstin').value || 'Unregistered';
+  const freight = parseFloat(document.getElementById('freight').value) || 0;
+  const extraDiscount = parseFloat(document.getElementById('extraDiscount').value) || 0;
+  const notes = document.getElementById('billNotes').value || '';
+
+  let totalBilledUnits = 0;
+  let totalFreeUnits = 0;
+  let grossTotal = 0;
+
+  const itemRowsHtml = items.map((it, idx) => {
+    const lineTotal = (it.qty || 0) * (it.rate || 0);
+    totalBilledUnits += (it.qty || 0);
+    totalFreeUnits += (it.freeQty || 0);
+    grossTotal += lineTotal;
+
+    return `
+      <tr>
+        <td class="text-center">${idx + 1}</td>
+        <td>
+          <div class="item-title">${it.desc}</div>
+          <div class="item-sub">HSN: ${it.hsn} · Batch: ${it.batch}</div>
+          ${it.freeQty > 0 ? `<span class="scheme-tag">+${it.freeQty} Unit FREE (${it.scheme})</span>` : ''}
+        </td>
+        <td class="text-center font-mono">${it.qty}</td>
+        <td class="text-center font-mono">${it.freeQty || 0}</td>
+        <td class="text-right font-mono">₹${it.mrp}</td>
+        <td class="text-right font-mono">₹${it.rate.toFixed(2)}</td>
+        <td class="text-right font-mono" style="font-weight:700;">₹${lineTotal.toFixed(2)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  const grandTotal = Math.max(0, grossTotal + freight - extraDiscount);
+  const words = numberToWords(grandTotal);
+
+  // Dynamic UPI string
+  const upiLink = `upi://pay?pa=9999000000@paytm&pn=BROSKI&am=${grandTotal}&cu=INR&tn=Bill-${billNo}`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiLink)}`;
+
+  const canvas = document.getElementById('invoiceCanvas');
+  canvas.innerHTML = `
+    <!-- Top Header -->
+    <div class="inv-top-bar">
+      <div class="brand-block">
+        <h1>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" style="color:var(--accent);">
+            <ellipse cx="12" cy="16" rx="5" ry="4"/>
+            <ellipse cx="5" cy="10" rx="2" ry="3" transform="rotate(-25 5 10)"/>
+            <ellipse cx="10" cy="6" rx="2" ry="3"/>
+            <ellipse cx="16" cy="6" rx="2" ry="3"/>
+            <ellipse cx="20" cy="11" rx="2" ry="3" transform="rotate(25 20 11)"/>
+          </svg>
+          BROSKI
+        </h1>
+        <div class="tagline">For Your Favourite Kind of Company</div>
+        <div class="brand-details">
+          <strong>BROSKI (Prop. Lakshay)</strong><br>
+          12A/3, Dharam Colony, Nangloi, West Delhi, New Delhi - 110041<br>
+          UDYAM Reg: <strong>UDYAM-DL-11-0177908</strong> | State Code: <strong>07 (Delhi)</strong><br>
+          Email: support@broskipetfood.com | Web: broskipetfood.com
+        </div>
+      </div>
+
+      <div class="bill-badge-block">
+        <div class="bill-heading">BILL OF SUPPLY</div>
+        <div class="statutory-composition-pill">
+          <strong>COMPOSITION TAXABLE PERSON</strong><br>
+          NOT ELIGIBLE TO COLLECT TAX ON SUPPLIES<br>
+          <span style="font-size:9px; color:#6f6259;">(Issued under Section 10 & Rule 49 of CGST Rules, 2017)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meta Details Grid -->
+    <div class="inv-meta-grid">
+      <div class="meta-col">
+        <p><span>Bill Number:</span> <strong>${billNo}</strong></p>
+        <p><span>Date of Issue:</span> <strong>${billDate}</strong></p>
+        <p><span>Place of Supply:</span> <strong>Delhi (State Code: 07)</strong></p>
+      </div>
+      <div class="meta-col">
+        <p><span>Payment Mode:</span> <strong>${paymentMode}</strong></p>
+        <p><span>Payment Status:</span> <strong style="color:${paymentStatus.includes('PAID') ? 'var(--green)' : 'var(--accent)'};">${paymentStatus}</strong></p>
+        <p><span>Jurisdiction:</span> <strong>Delhi NCT Courts</strong></p>
+      </div>
+    </div>
+
+    <!-- Parties Grid -->
+    <div class="parties-grid">
+      <div class="party-box">
+        <h4>Billed By (Supplier)</h4>
+        <div class="party-name">BROSKI (Lakshay)</div>
+        <div class="party-desc">
+          12A/3, Dharam Colony, Nangloi, New Delhi - 110041<br>
+          West Delhi, Delhi, PIN: 110041<br>
+          State: Delhi (07) | MSME: UDYAM-DL-11-0177908
+        </div>
+      </div>
+      <div class="party-box">
+        <h4>Billed To (Recipient / Retailer)</h4>
+        <div class="party-name">${buyerName}</div>
+        <div class="party-desc">
+          ${buyerAddress}<br>
+          Phone: <strong>${buyerPhone}</strong><br>
+          GSTIN: <strong>${buyerGstin}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th style="width:36px;" class="text-center">#</th>
+          <th>Description of Goods / Scheme</th>
+          <th style="width:65px;" class="text-center">Qty</th>
+          <th style="width:65px;" class="text-center">Free</th>
+          <th style="width:75px;" class="text-right">MRP</th>
+          <th style="width:85px;" class="text-right">Unit Rate</th>
+          <th style="width:95px;" class="text-right">Amount (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemRowsHtml}
+      </tbody>
+    </table>
+
+    <!-- Totals & Payment Summary -->
+    <div class="totals-area">
+      <div>
+        <div class="amount-words-box">
+          <h5>Total in Words:</h5>
+          <div class="amount-words-text">${words}</div>
+        </div>
+
+        <div class="upi-scan-card">
+          <div class="qr-code-holder">
+            <img src="${qrUrl}" alt="Scan UPI to Pay">
+          </div>
+          <div class="upi-info">
+            <strong>Scan to Pay via UPI</strong>
+            <div>GPay · PhonePe · Paytm · BHIM</div>
+            <div style="font-family:var(--font-mono); font-size:10px; margin-top:3px; color:var(--text-muted);">UPI ID: 9999000000@paytm</div>
+            <div style="font-size:10px; color:var(--accent); margin-top:2px;">(Exact amount ₹${grandTotal} preloaded)</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <table class="totals-table">
+          <tr>
+            <td>Total Billed Packs:</td>
+            <td class="text-right font-mono"><strong>${totalBilledUnits} pcs</strong></td>
+          </tr>
+          ${totalFreeUnits > 0 ? `
+          <tr>
+            <td style="color:var(--green);">Complimentary Scheme Packs:</td>
+            <td class="text-right font-mono" style="color:var(--green);"><strong>+${totalFreeUnits} pcs FREE</strong></td>
+          </tr>` : ''}
+          <tr>
+            <td>Subtotal (Gross):</td>
+            <td class="text-right font-mono">₹${grossTotal.toFixed(2)}</td>
+          </tr>
+          ${extraDiscount > 0 ? `
+          <tr>
+            <td style="color:var(--accent);">Trade Scheme Discount:</td>
+            <td class="text-right font-mono" style="color:var(--accent);">-₹${extraDiscount.toFixed(2)}</td>
+          </tr>` : ''}
+          <tr>
+            <td>Delivery / Transport:</td>
+            <td class="text-right font-mono">${freight > 0 ? '₹' + freight.toFixed(2) : 'FREE'}</td>
+          </tr>
+          <tr class="grand-total">
+            <td>TOTAL AMOUNT:</td>
+            <td class="text-right font-mono">₹${grandTotal.toFixed(2)}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Notes if any -->
+    ${notes ? `
+    <div style="background:var(--card-bg); border-left:3px solid var(--accent); padding:8px 12px; margin-bottom:18px; font-size:11.5px;">
+      <strong>Note / Scheme:</strong> ${notes}
+    </div>` : ''}
+
+    <!-- Footer Terms & Signature -->
+    <div class="footer-declarations">
+      <div>
+        <strong>Terms & Conditions:</strong>
+        <ol class="declarations-list">
+          <li>Composition taxable person; no GST is charged or collected on this supply as per Section 10 of CGST Act.</li>
+          <li><strong>15-Day Freshness & Reorder Guarantee:</strong> Unopened packs in original condition are eligible for 100% buyback/replacement within 15 days of supply.</li>
+          <li>Goods once accepted without notice shall be deemed in fresh, crunchy condition.</li>
+          <li>Subject to Delhi Jurisdiction only.</li>
+        </ol>
+      </div>
+
+      <div class="signature-box">
+        <div style="font-weight:700; color:var(--primary);">For BROSKI</div>
+        <div class="signature-line">
+          Lakshay<br>
+          <span style="font-size:10px; font-weight:400; color:var(--text-muted);">Proprietor / Authorized Signatory</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function copyWhatsAppSummary() {
+  const billNo = document.getElementById('billNo').value;
+  const buyerName = document.getElementById('buyerName').value;
+  let totalBilledUnits = 0;
+  let totalFreeUnits = 0;
+  let grossTotal = 0;
+  items.forEach(it => {
+    totalBilledUnits += it.qty;
+    totalFreeUnits += (it.freeQty || 0);
+    grossTotal += it.qty * it.rate;
+  });
+  const extraDiscount = parseFloat(document.getElementById('extraDiscount').value) || 0;
+  const freight = parseFloat(document.getElementById('freight').value) || 0;
+  const grandTotal = Math.max(0, grossTotal + freight - extraDiscount);
+
+  const text = `🐾 *BROSKI PET FOOD — BILL OF SUPPLY*\n` +
+    `📄 *Bill No:* ${billNo}\n` +
+    `🏬 *Billed To:* ${buyerName}\n` +
+    `📦 *Order:* ${totalBilledUnits} Packs (+${totalFreeUnits} Free Scheme Packs)\n` +
+    `💰 *Total Amount Payable:* ₹${grandTotal.toFixed(2)}\n` +
+    `⚡ *Payment:* UPI / Cash on Delivery\n` +
+    `📍 *Freshness Guarantee:* 15-day 100% Buyback\n\n` +
+    `Thank you for stocking BROSKI — Treats for your best bro! 🐕`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    alert("✅ WhatsApp Bill Summary copied to clipboard! Paste it to the shopkeeper.");
+  });
+}
+
+function resetForm() {
+  document.getElementById('billNo').value = "BRS/26-27/00" + Math.floor(Math.random() * 90 + 10);
+  document.getElementById('billDate').value = new Date().toISOString().split('T')[0];
+  loadPreset('11plus1');
+}
+
+// Initial Render
+renderFormItems();
+renderInvoice();
+</script>
+
+</body>
+</html>
