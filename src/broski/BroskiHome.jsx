@@ -227,13 +227,19 @@ export function PartnerSection() {
     <section className="bk-partner" aria-labelledby="partner-h">
       <h2 id="partner-h">Become a BROSKI Launch Partner</h2>
       <ul>
-        <li>11 + 1 free on your first order</li>
+        <li>11 + 1 free on your first order (The Bro Counter Box)</li>
         <li>Free sample jar + counter card</li>
         <li>5 free taste packs for your customers</li>
+        <li>15-day 100% buyback guarantee if unsold</li>
         <li>Delivery from 15 Nov in West Delhi</li>
       </ul>
-      <WaButton text={MSG.shop}>WhatsApp us for shop rates</WaButton>
-      <p className="bk-partner__small">First 20 shops only.</p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center', marginTop: '16px' }}>
+        <WaButton text={MSG.shop}>WhatsApp us for shop rates</WaButton>
+        <a className="bk-h-btn" href="/billing/" style={{ background: '#352016', color: '#fff8ed', border: '1px solid #fff8ed' }}>
+          Official GST Bill Portal →
+        </a>
+      </div>
+      <p className="bk-partner__small">First 20 shops only · 38.5% effective retailer margin.</p>
     </section>
   );
 }
@@ -244,11 +250,11 @@ export function SiteFooter() {
   return (
     <footer className="bk-h-foot">
       <nav aria-label="Footer">
-        <a href="/">Home</a><a href="/offers/">Bro Perks</a><a href="/r/">Feedback</a><a href="/privacy/">Privacy</a>
+        <a href="/">Home</a><a href="/offers/">Bro Perks</a><a href="/r/">Feedback</a><a href="/billing/">Billing Portal</a><a href="/privacy/">Privacy</a>
       </nav>
       <p>
         BROSKI · Nangloi, Delhi 110041 · <a href={`mailto:${EMAIL}`}>{EMAIL}</a> ·{' '}
-        <a href={waLink(MSG.hello)} target="_blank" rel="noopener">WhatsApp</a> · Udyam: UDYAM-DL-11-0177908 · GSTIN: (coming soon)
+        <a href={waLink(MSG.hello)} target="_blank" rel="noopener">WhatsApp</a> · Udyam: UDYAM-DL-11-0177908 · GST: Composition Scheme (07)
       </p>
     </footer>
   );

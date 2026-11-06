@@ -107,6 +107,7 @@ function App() {
           <a href="/r/" onClick={() => setMenu(false)}>Feedback</a>
           <a href="#story" onClick={() => setMenu(false)}>Our story</a>
           <a href="#faq" onClick={() => setMenu(false)}>Good to know</a>
+          <a href="/billing/" onClick={() => setMenu(false)}>Billing Portal</a>
           <a href="/?intro=1" onClick={() => { try { sessionStorage.removeItem('broski-intro-seen'); } catch {} }}>Watch intro ↺</a>
         </nav>
         <div className="nav-actions">
