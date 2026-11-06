@@ -1,14 +1,9 @@
 /* BROSKI home-page pieces for the existing React app.
    Reads window.BROSKI_CONFIG (load /config.js in index.html before the app bundle).
-   Usage in App.jsx:
-     import { LaunchBanner, ProductCards, PartnerSection, SiteFooter } from './broski/BroskiHome';
-     import './broski/broski-home.css';
-     <LaunchBanner />            // very top, above the header
-     <ProductCards />            // replaces the old shop grid and order flow
-     <PartnerSection />          // just before the footer
-     <SiteFooter />              // replaces the old footer
 */
 import React, { useEffect, useState } from 'react';
+import BroskiCheckoutGateway from './BroskiCheckoutGateway';
+import './broski-checkout.css';
 
 const C = () => window.BROSKI_CONFIG || {};
 export const waLink = (text) =>
@@ -44,14 +39,33 @@ export function LaunchBanner() {
   );
 }
 
-/* 1. Exactly three product cards, WhatsApp ordering only */
+/* 1. Exactly three product cards with Professional Online Checkout Gateway */
 export function ProductCards() {
   const { PRODUCTS = [], UNIT_PRICE_LINE } = C();
   const nv = PRODUCTS.find((p) => p.id === 'non-veg');
   const mx = PRODUCTS.find((p) => p.id === 'mix');
+  const [activeGatewayProduct, setActiveGatewayProduct] = useState(null);
+  const [activeTab, setActiveTab] = useState('nutrition');
+
   return (
     <section id="shop" className="bk-shop" aria-labelledby="shop-h">
-      <h2 id="shop-h" className="bk-shop__title">Pick your Bro's crunch</h2>
+      <div className="bk-shop-head">
+        <div>
+          <span className="bk-shop-eyebrow">D2C DIRECT STORE</span>
+          <h2 id="shop-h" className="bk-shop__title">Pick your Bro's crunch</h2>
+        </div>
+        <button
+          type="button"
+          className="bk-gateway-trigger-btn"
+          onClick={() => setActiveGatewayProduct('combo')}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          Direct Order Gateway
+        </button>
+      </div>
+
       <div className="bk-shop__grid">
         {PRODUCTS.map((p) => (
           <article key={p.id} className={`bk-pcard ${p.id === 'combo' ? 'bk-pcard--combo' : ''}`}>
@@ -72,12 +86,136 @@ export function ProductCards() {
               <p className="bk-pcard__price">
                 <strong>₹{p.price}</strong> <span>MRP incl. of all taxes</span>
               </p>
-              <WaButton text={p.msg}>{p.button}</WaButton>
+
+              <div className="bk-card-cta-group">
+                <button
+                  type="button"
+                  className="bk-h-btn bk-h-btn--order"
+                  onClick={() => setActiveGatewayProduct(p.id)}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginRight: '6px'}}>
+                    <path d="M5 7h14l1 14H4L5 7Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/>
+                  </svg>
+                  Order Online (₹{p.price})
+                </button>
+                <a
+                  className="bk-card-wa-link"
+                  href={waLink(p.msg)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>Or order via WhatsApp →</span>
+                </a>
+              </div>
             </div>
           </article>
         ))}
       </div>
       {UNIT_PRICE_LINE && <p className="bk-shop__unit">{UNIT_PRICE_LINE}</p>}
+
+      {/* Pro Pet Industry Standard: Nutrition, Feeding Guide & Freshness Transparency */}
+      <div className="bk-transparency-card">
+        <div className="bk-transparency-tabs">
+          <button
+            type="button"
+            className={activeTab === 'nutrition' ? 'active' : ''}
+            onClick={() => setActiveTab('nutrition')}
+          >
+            Guaranteed Nutrition
+          </button>
+          <button
+            type="button"
+            className={activeTab === 'feeding' ? 'active' : ''}
+            onClick={() => setActiveTab('feeding')}
+          >
+            Daily Feeding Guide
+          </button>
+          <button
+            type="button"
+            className={activeTab === 'freshness' ? 'active' : ''}
+            onClick={() => setActiveTab('freshness')}
+          >
+            Freshness Standards
+          </button>
+        </div>
+
+        <div className="bk-transparency-content">
+          {activeTab === 'nutrition' && (
+            <div className="bk-nutrition-grid">
+              <div className="bk-nutri-box">
+                <span className="bk-nutri-val">≥ 20%</span>
+                <span className="bk-nutri-lbl">Crude Protein (Non-Veg)</span>
+                <small>≥ 18% in Mix pack</small>
+              </div>
+              <div className="bk-nutri-box">
+                <span className="bk-nutri-val">≥ 8%</span>
+                <span className="bk-nutri-lbl">Crude Fat</span>
+                <small>Wholesome poultry lipids</small>
+              </div>
+              <div className="bk-nutri-box">
+                <span className="bk-nutri-val">≤ 4%</span>
+                <span className="bk-nutri-lbl">Crude Fibre</span>
+                <small>Easy digestion profile</small>
+              </div>
+              <div className="bk-nutri-box">
+                <span className="bk-nutri-val">≤ 10%</span>
+                <span className="bk-nutri-lbl">Moisture</span>
+                <small>Crisp oven baked texture</small>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'feeding' && (
+            <div className="bk-feeding-list">
+              <div className="bk-feeding-item">
+                <strong>Small Dogs (&lt; 10 kg)</strong>
+                <span>Pug, Shih Tzu, Pomeranian, Indie Pups: <strong>2 – 4 biscuits / day</strong></span>
+              </div>
+              <div className="bk-feeding-item">
+                <strong>Medium Dogs (10 – 25 kg)</strong>
+                <span>Beagle, Cocker Spaniel, Indie Adult: <strong>4 – 8 biscuits / day</strong></span>
+              </div>
+              <div className="bk-feeding-item">
+                <strong>Large Dogs (&gt; 25 kg)</strong>
+                <span>Labrador, Golden Retriever, German Shepherd: <strong>8 – 12 biscuits / day</strong></span>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'freshness' && (
+            <div className="bk-freshness-grid">
+              <div className="bk-fresh-item">
+                <span className="bk-fresh-icon">🌾</span>
+                <strong>Whole Wheat Base</strong>
+                <p>Pure cereal flour base with wholesome minerals. No sawdust fillers.</p>
+              </div>
+              <div className="bk-fresh-item">
+                <span className="bk-fresh-icon">🔥</span>
+                <strong>Oven-Baked Crisp</strong>
+                <p>Double-baked in Shalimar Bagh for that loud, satisfying bone crunch.</p>
+              </div>
+              <div className="bk-fresh-item">
+                <span className="bk-fresh-icon">🔍</span>
+                <strong>Clear Window Pouch</strong>
+                <p>You see the biscuits before you buy. Nothing hidden inside foil.</p>
+              </div>
+              <div className="bk-fresh-item">
+                <span className="bk-fresh-icon">📍</span>
+                <strong>Nangloi Local Dispatch</strong>
+                <p>Dispatched direct from West Delhi. No 6-month distributor warehouse dust.</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* The D2C Direct Checkout Gateway */}
+      {activeGatewayProduct && (
+        <BroskiCheckoutGateway
+          initialProduct={activeGatewayProduct}
+          onClose={() => setActiveGatewayProduct(null)}
+        />
+      )}
     </section>
   );
 }
