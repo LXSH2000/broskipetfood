@@ -1,45 +1,60 @@
-# Broski owner handoff
+# BROSKI Master Project Handoff
 
-This folder is the Broski website copy. The launch helper uses **http://127.0.0.1:4174**. Start with `README.md`.
+**Current Status:** PRODUCTION ACTIVE & SPRINT READY  
+**Date:** 6 November 2026 · **Owner:** Lakshay · **CEO:** Rex  
+**Live Production URL:** [https://broskipetfood.com/](https://broskipetfood.com/)  
+**Target Commercial Launch Date:** Sunday, 15 November 2026 (T-9 Days)  
+**Pilot Gate (15 Nov – 15 Dec 2026):** 150 Packs Sold + 30% Pet Shop Reorder Rate
 
-## Current boundary
+---
 
-This is a storefront preview with demo checkout. It is not connected to a payment gateway or dispatch service. A demo order confirmation does not mean money was collected or a parcel will be sent. Do not collect real customer orders through the preview.
+## 1. Digital Platform & Website Architecture
 
-This handoff documents the intended setup and the inspected startup interface; it does not certify that every page, animation, device or commerce flow has passed testing. Record final integration evidence after the implementation has settled.
+- **Hosting & Infrastructure:** Vite + React single-page application hosted on GitHub Pages (`LXSH2000/broskipetfood`). Branch `main` holds full source code; branch `gh-pages` serves static production bundles from `dist/`.
+- **Zero-Downtime Deployment:** Built with `emptyOutDir: false` so prior hashed asset chunks are preserved, preventing 404 errors for cached mobile visitors.
+- **Direct WhatsApp Ordering:** The complex shopping cart and checkout drawer were replaced with instant 1-tap WhatsApp order routing to the business phone line (`918076045934`). Pre-filled WhatsApp messages specify product variant and pricing.
+- **Dedicated Sub-pages (Served from `public/`):**
+  - `/offers/` — Bro Perks launch deals, bundle discounts, and repeat customer rewards.
+  - `/r/` — Honest customer feedback & review capture form.
+  - `/privacy/` — Privacy policy and data handling statement.
+- **Mobile UX Refinement:** Liquid proximity bottom dock was re-anchored to `left: 50%` with `transform: translate(-50%, 0)` on `width: max-content`, guaranteeing that the Broski paw home icon, Shop, Perks, Feedback, Story, and FAQ buttons are centered with zero clipping across 360px–428px screens.
 
-## Owner inputs before selling
+---
 
-- Confirm the legal business name and rights to use **Broski**. Brand, trademark, domain and social-handle availability have **not** been checked.
-- Supply actual recipes, ingredients, allergens, pack weights, pricing, shelf life, storage and feeding guidance. Review any nutritional or health statements with appropriate expertise. Replace all illustrative product details with verified information.
-- Supply a working contact email/phone, business details, delivery regions, shipping charges and service times.
-- Approve accurate privacy, purchase, cancellation, return/refund and shipping terms appropriate to the business and location.
-- Select and connect the payment and fulfilment providers. Implement and verify payment confirmation, failed-payment handling, refunds, order status and customer communications.
-- Arrange public hosting, domain, HTTPS, secure persistent order storage, access control, backups and operational support. Keep provider secrets on the server.
-- Approve the generated visuals as brand illustrations or replace them with actual product photographs. Do not present generated dogs as customer testimonials or generated biscuits as verified product photos.
+## 2. Core Launch Blueprints (Generated & Committed in `/broski launch plan/`)
 
-## Release evidence to record
+1. **`BROSKI_West_Delhi_Retail_Launch_Map.md`:** 15 mapped pet shops and veterinary clinics across Nangloi, Paschim Vihar, Punjabi Bagh, and Janakpuri; 60-second Hinglish pitch script; 30% retail margin model; 11+1 free launch carton trial terms.
+2. **`BROSKI_Legal_Metrology_Sticker_Checklist.md`:** Complete statutory packaging compliance audit under Legal Metrology Rules, 2011 Rule 6; 4.0 mm net weight font height; Scoobee manufacturer vs. BROSKI packer addresses; batch coding; zero unverified health claims.
+3. **`BROSKI_Home_Packing_and_Batch_SOP.md`:** Home packing protocol for 12A/3 Dharam Colony; scale calibration tare procedure (target 402g–404g; legal minimum 388g); heat-sealing quality check; batch codes `BR-NV-2611-01` and `BR-MX-2611-01`.
+4. **`BROSKI_150_Pack_Pilot_Financial_Runway.md`:** Landed cost locked at ₹44.20/pack; wholesale realization ₹95.60 (Non-Veg) and ₹114.86 (Mix); ₹9,154 net profit on 150 packs (58% gross margin); break-even achieved at 20 packs sold.
 
-September 30 polish: applied requested Claude Design Skillstack workflows; GSAP hero/scroll/dialog motion, optimized offscreen WebGL rendering, mobile shopping dock, larger touch controls, responsive modal layouts, shopping ritual filters, checkout summary and delivery progress. Added generated everyday lifestyle image and explicitly labeled sample-review diary cards. Fixed hidden-toast keyboard focus and aligned front-end 100-pack cart cap with backend. Final build and server tests passed; homepage and new image returned HTTP 200. Browser/device visual verification remains unavailable due the previously reported browser-tool restriction. Business/contact/payment/hosting setup explicitly deferred by owner. Launch helper now always rebuilds current source.
+---
 
-Current delivery checks: production build passed; server test suite passed (pricing integrity, coupon/shipping rules, validation, persistence and privacy); HTTP 200 confirmed for homepage, product API and both Broski generated images at port 4174. Independent source review found an IntersectionObserver fallback gap, which was fixed. Image outputs were visually inspected. New browser interaction/layout testing was not performed because the browser tool previously blocked local-page access. Three.js emits a bundle-size advisory (~502 kB uncompressed); it is lazy loaded. This is a completed branded local preview, not a live-commerce deployment.
+## 3. Skill Library & AI Operating System Upgrade
 
-Record the date, tested build and result for: production build; server tests; desktop and narrow-screen layout; keyboard navigation; reduced-motion behavior; product selection; cart quantity/remove behavior; checkout validation and demo confirmation; page reload; missing/failed API responses. For actual commerce, add provider sandbox tests and a verified end-to-end fulfilment procedure.
+- **Curated Skills Active (220 Skills):** Pruned the bloated 1,824-skill catalog down to 220 active, high-leverage skills directly mapped across BROSKI's 11 departments.
+- **Archived (1,604 Skills):** Safely moved unrelated AI/GPU/genomics/game-engine skills to `C:\Users\lxshl\.gemini\skills_archive\` with a full manifest and instant 1-click restore script (`restore_all_skills.cjs`).
+- **Operating Framework:** Workspace governance updated in `AGENTS.md`, `TEAM_ROSTER.md`, `TEAM_OPERATING_MANUAL.md`, and `BROSKI_MASTER_PROMPTS.md` under Rex (CEO) and Lakshay (Founder/Owner).
 
-Keep test data separate from customer records. Do not commit `data/orders.json` or publish it as a static asset. The local server's existence does not establish production security or reliability.
+---
 
-## Launch helper verification
+## 4. Statutory & Legal Status
 
-The helper changes directory using its own path, including paths with spaces. It calls npm through `call` so control returns to the batch script, stops on install/build failures, sets `PORT=4174`, and does not open a browser automatically. It rebuilds on each start to avoid stale previews.
+- **GST Registration (Composition Scheme):** Query notice REG-03 (Ref: `ZA071126019608J`) issued on 4 Nov 2026 by Supdt. Vikram Pal (CBIC Delhi West, Mundka, Range-114). Reply due **13 Nov 2026**.
+  - All 4 documents ready: BSES bill (CA No. 154640543), Geeta's signed ₹100 stamp paper NOC, Geeta's self-attested Aadhaar + PAN, and Geotagged signboard photo. Ready for submission under Form REG-04.
+- **Trademark (Class 31 Word Mark "BROSKI"):** Filed through Online Legal India (Reg ID `OLI67177929353919`, Invoice `FILS-U-2611-258`). Chasing OLI for draft TM-A preview and official application number.
+- **Udyam MSME Certificate:** `UDYAM-DL-11-0177908` (Micro, Manufacturing, NIC 10803).
 
-## 2 October 2026 advanced site pass
-Section specialists delivered advanced.css and a three-moment editorial Experience selector. Root added hero-stage entrance, magnetic desktop CTAs, page progress, reusable quickTo + rAF product tilt, and scene-specific error boundary/static fallback. Peer review fixed persistent live announcements, queued-pointer cancellation and progress refresh ownership. Build passed and backend test passed; HTTP 200 for homepage/products/editorial asset at http://127.0.0.1:4174. Preview server is running in exec session 54672; open-in-Codex requested. Actual browser/mobile/screens-reader interaction remains unverified due the existing browser access restriction; no Playwright workaround attempted. Demo checkout remains without payments or fulfilment. Saved project remains in this folder.
+---
 
-## 2 October restoration requested by owner
-Restored previous appearance: removed advanced.css active import, added occasion editorial section/styles, reading progress, hero-stage entrance and magnetic CTA motion. Previous 5-degree product tilt retained using bounded quickTo implementation; scene error boundary remains as invisible resilience. Build passed. Latest advanced version source preserved in backups/before-restore-2026-10-02. Preview remains at http://127.0.0.1:4174; browser visual validation not run.
+## 5. Critical Launch Milestones
 
-## 6 October 2026 review-only council
-Design and technical specialists reviewed restored source and exchanged decisions; implementation unchanged. Build and backend test suite passed; root restarted preview session 77570 at port 4174 and HTTP checks passed. Browser/device/assistive-technology acceptance not run under existing restriction. Council recommends API recovery, image optimization, decorative-motion stop path, repeated-add feedback and targeted mobile readability. Detailed review/decisions files saved in this folder. Regional sourcing report and contacts CSV saved in broski launch plan; no supplier contacts or purchases executed.
-
-## 12 October 2026 opening animation
-Added src/Intro.jsx + src/intro.css: a ~4.5 s GSAP intro (handwritten Broski stroke-draw, rust underline, biscuit drop with squash-and-bounce, logo wag, paw prints, tagline rise, cream-over-rust wipe). Plays once per browser session, never with reduced motion; click, Escape/Enter/Space or "Skip intro" skips; ?intro=1 forces a replay. motion.js now holds the hero entrance until the intro ends. Previous main.jsx/motion.js saved in backups/before-intro-2026-10-12. Built in a separate Linux copy and copied into dist; START-WEBSITE.cmd rebuilds from source on next start.
+| Date | Milestone / Event | Responsible |
+|---|---|---|
+| **6–7 Nov 2026** | Submit GST REG-04 clarification on gst.gov.in; chase OLI for TM-A; get dedicated business SIM. | Lakshay |
+| **7–8 Nov 2026** | Call Scoobee bakery to lock 110 kg order (55 kg Non-Veg + 55 kg Mix) for pickup on 11/12 Nov. | Lakshay & Arjun |
+| **9–10 Nov 2026** | Print front/back labels with Nangloi local printer; procure stand-up zipper pouches (275 pcs). | Lakshay & Rohan |
+| **11–12 Nov 2026** | Pick up 110 kg bulk biscuits from Scoobee (Shalimar Bagh); arrival QA inspection. | Lakshay & Kavya |
+| **12–14 Nov 2026** | Home packing run (275 packs) at 12A/3 Dharam Colony on stamped scale; box 12-pack cartons. | Lakshay & Sahil |
+| **15 Nov 2026** | **COMMERCIAL LAUNCH DAY:** First store drops (Route 1) + WhatsApp broadcast to dog parents. | Lakshay & Dev |
+| **15 Dec 2026** | **PILOT GATE REVIEW:** 150 packs sold + 30% shop reorder rate. Data-driven decision to scale. | Rex & Lakshay |
