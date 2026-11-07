@@ -3,56 +3,737 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<meta name="theme-color" content="#f5efe4">
-<title>Tell us what your Bro thinks – BROSKI</title>
-<meta name="description" content="Scanned the QR on your BROSKI pack? Give feedback in a minute and get a free 50 g taste pack on your next order.">
+<title>BROSKI · Bro Voice & Review Portal | Free 50g Sample Reward</title>
+<meta name="description" content="Share your dog's honest review via voice or text. Get a free 50g sample pouch of crunchy Broski biscuits on your next order.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="stylesheet" href="/broski-pages.css">
-<script src="/config.js" defer></script>
-<script src="/broski.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@400;600&family=Gaegu:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #352016;
+  --primary-light: #523425;
+  --accent: #b8452b;
+  --accent-soft: rgba(184, 69, 43, 0.1);
+  --cream: #fff8ed;
+  --cream-dark: #f5efe4;
+  --surface: #ffffff;
+  --border: #e6dcce;
+  --text: #221c18;
+  --text-muted: #6f6259;
+  --green: #15803d;
+  --green-bg: #dcfce7;
+  --amber: #b45309;
+  --amber-bg: #fef3c7;
+  --font-main: 'DM Sans', -apple-system, sans-serif;
+  --font-display: 'Outfit', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-hand: 'Gaegu', cursive;
+  --spring-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-main);
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.5;
+  padding: 20px 16px 80px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.portal-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* Header */
+.portal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.portal-logo {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* Main Feedback Card */
+.feedback-card {
+  background: var(--surface);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 40px rgba(53, 32, 22, 0.08);
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cream-dark);
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.card-lead {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* Reward Callout Banner */
+.reward-banner {
+  background: #fdfaf6;
+  border: 1.5px dashed var(--accent);
+  border-radius: 16px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.reward-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.reward-text strong {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.reward-text p {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* 5-Paw Interactive Rating */
+.rating-section {
+  text-align: center;
+  margin-bottom: 28px;
+  background: var(--cream);
+  padding: 20px;
+  border-radius: 18px;
+}
+
+.rating-label {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.paws-row {
+  display: inline-flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.paw-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 0.2s var(--spring-bounce);
+  color: #d1c4b2;
+}
+
+.paw-btn svg {
+  width: 38px;
+  height: 38px;
+  fill: currentColor;
+  transition: fill 0.2s ease, transform 0.2s ease;
+}
+
+.paw-btn.active, .paw-btn.hover {
+  color: #eab308;
+  transform: scale(1.15);
+}
+
+.rating-caption {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 8px;
+  min-height: 18px;
+  font-family: var(--font-mono);
+}
+
+/* Mode Switcher Tabs */
+.mode-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--cream-dark);
+  padding: 4px;
+  border-radius: 14px;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+
+.mode-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.mode-tab-btn.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: 0 2px 10px rgba(53, 32, 22, 0.08);
+}
+
+/* Voice Recording Box */
+.voice-box {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 22px;
+  background: #faf6f0;
+}
+
+.record-mic-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 24px rgba(53, 32, 22, 0.2);
+  transition: all 0.25s var(--spring-bounce);
+}
+
+.record-mic-btn:hover {
+  transform: scale(1.08);
+  background: var(--accent);
+}
+
+.record-mic-btn.recording {
+  background: #dc2626;
+  animation: pulse-mic 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-mic {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+  50% { transform: scale(1.1); box-shadow: 0 0 0 16px rgba(220, 38, 38, 0); }
+}
+
+.waveform-anim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 24px;
+  margin: 10px 0;
+}
+
+.wave-bar {
+  width: 4px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: height 0.15s ease;
+}
+
+.recording .wave-bar {
+  animation: wave-bounce 0.8s infinite ease-in-out alternate;
+}
+.recording .wave-bar:nth-child(2) { animation-delay: 0.15s; }
+.recording .wave-bar:nth-child(3) { animation-delay: 0.3s; }
+.recording .wave-bar:nth-child(4) { animation-delay: 0.45s; }
+.recording .wave-bar:nth-child(5) { animation-delay: 0.2s; }
+
+@keyframes wave-bounce {
+  0% { height: 6px; }
+  100% { height: 24px; }
+}
+
+/* Audio Player Preview */
+.audio-preview-player {
+  margin-top: 14px;
+  width: 100%;
+  display: none;
+}
+
+/* Form Inputs */
+.field-row {
+  margin-bottom: 16px;
+}
+
+.field-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.input-box, .textarea-box {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-main);
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #faf6f0;
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.input-box:focus, .textarea-box:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.textarea-box {
+  resize: vertical;
+  min-height: 95px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Submit Button */
+.submit-review-btn {
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 10px 24px rgba(53, 32, 22, 0.2);
+  transition: all 0.25s var(--spring-snappy);
+}
+
+.submit-review-btn:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(184, 69, 43, 0.3);
+}
+
+/* Reward Success Screen */
+.success-screen {
+  display: none;
+  text-align: center;
+  padding: 20px 0;
+  animation: fadeIn 0.4s var(--spring-snappy);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.voucher-card {
+  background: #20130d;
+  color: var(--cream);
+  border-radius: 20px;
+  padding: 24px;
+  margin: 20px 0;
+  border: 1px solid rgba(255, 248, 237, 0.2);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.voucher-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: #d4a373;
+}
+
+.voucher-code {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px 18px;
+  border-radius: 10px;
+  display: inline-block;
+  margin: 14px 0;
+  letter-spacing: 2px;
+  color: #fef08a;
+  border: 1px dashed rgba(254, 240, 138, 0.4);
+}
+
+.claim-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #25d366;
+  color: #fff;
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: 30px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  margin-top: 10px;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+}
+
+/* Back Sticker QR Inspector Section */
+.qr-preview-section {
+  margin-top: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+}
+
+.qr-preview-section h4 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.qr-holder {
+  display: inline-block;
+  background: #fff;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin: 10px 0;
+}
+
+.qr-holder img {
+  width: 140px;
+  height: 140px;
+  display: block;
+}
+
+@media (max-width: 500px) {
+  .feedback-card { padding: 24px 18px; }
+  .grid-2 { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
-<div class="bk-wrap">
-  <header class="bk-head">
-    <a class="bk-logo" href="/">broski</a>
-    <nav class="bk-nav" aria-label="Main"><a href="/offers/">Bro Perks</a></nav>
+
+<div class="portal-wrap">
+
+  <header class="portal-head">
+    <a href="/" class="portal-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <ellipse cx="12" cy="16" rx="5" ry="4"/>
+        <ellipse cx="5" cy="10" rx="2" ry="3" transform="rotate(-25 5 10)"/>
+        <ellipse cx="10" cy="6" rx="2" ry="3"/>
+        <ellipse cx="16" cy="6" rx="2" ry="3"/>
+        <ellipse cx="20" cy="11" rx="2" ry="3" transform="rotate(25 20 11)"/>
+      </svg>
+      BROSKI
+    </a>
+    <a href="/offers/" class="nav-link">Bro Perks →</a>
   </header>
 
-  <main>
-    <h1>Tell us what your Bro thinks</h1>
-    <p class="bk-lead">Good or bad – both help us. Takes about a minute.</p>
+  <main class="feedback-card">
+    <span class="card-badge">✨ Bro Feedback Loop</span>
+    <h1 class="card-title">How was the crunch?</h1>
+    <p class="card-lead">Tell us honestly what your best bro thought of Broski biscuits. Good or bad—it shapes our next bake.</p>
 
-    <a class="bk-btn bk-btn--primary bk-btn--big" data-tally href="#">Give feedback (1 min)</a>
-
-    <div class="bk-reward">
-      🎁 Every completed feedback = a <strong>FREE 50 g taste pack</strong> of our other flavour on your next order.
-      Just WhatsApp us <strong>FREE TASTE</strong> when you order.
+    <!-- Reward Callout -->
+    <div class="reward-banner">
+      <div class="reward-icon">🎁</div>
+      <div class="reward-text">
+        <strong>Instant Reward: FREE 50 g Sample Pouch</strong>
+        <p>Complete this 60-second review and instantly unlock a free 50g trial pack with your next order.</p>
+      </div>
     </div>
 
-    <section id="video" aria-labelledby="video-h">
-      <h2 id="video-h">Want to send a video instead? (bigger reward)</h2>
-      <p>Send a 10–20 second video on WhatsApp of your dog eating BROSKI. You get the free taste pack <strong>and</strong> an entry to Bro of the Month.</p>
+    <!-- Active Form View -->
+    <div id="formSection">
+      <!-- 5-Paw Interactive Rating -->
+      <div class="rating-section">
+        <label class="rating-label">Rate Your Dog's Excitement</label>
+        <div class="paws-row" id="pawsRow">
+          <button type="button" class="paw-btn" data-val="1" onclick="setRating(1)">
+            <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+          </button>
+          <button type="button" class="paw-btn" data-val="2" onclick="setRating(2)">
+            <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+          </button>
+          <button type="button" class="paw-btn" data-val="3" onclick="setRating(3)">
+            <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+          </button>
+          <button type="button" class="paw-btn" data-val="4" onclick="setRating(4)">
+            <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+          </button>
+          <button type="button" class="paw-btn active" data-val="5" onclick="setRating(5)">
+            <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+          </button>
+        </div>
+        <div class="rating-caption" id="ratingCaption">5 / 5 — "Loud Crunch, Empty Bowl!" 🐾</div>
+      </div>
 
-      <h3>How to send your video</h3>
-      <ol class="bk-steps">
-        <li>Show your BROSKI pack with the <strong>batch number / baked-on date</strong> on the back sticker.</li>
-        <li>Ordered from us directly? Say your <strong>Bro word</strong> (it's in your order confirmation message).</li>
-        <li>One take, no filters or edits – a real dog, a real reaction (even a sniff-and-walk-away counts).</li>
-        <li>Please keep children's faces out of the video.</li>
-      </ol>
+      <!-- Mode Selector -->
+      <div class="mode-tabs">
+        <button type="button" class="mode-tab-btn active" id="tabVoice" onclick="switchMode('voice')">
+          🎙️ Voice Review Mode
+        </button>
+        <button type="button" class="mode-tab-btn" id="tabText" onclick="switchMode('text')">
+          ✍️ Written Review Mode
+        </button>
+      </div>
 
-      <a class="bk-btn bk-btn--wa" data-wa="video" href="#">Send video on WhatsApp</a>
-      <p class="bk-small" style="margin-top:12px">We'll only post your video if you reply 'Yes, BROSKI can post my video'. Posted videos say 'got a free taste pack for sharing'.</p>
-    </section>
+      <!-- Mode A: Voice Review Box -->
+      <div class="voice-box" id="voiceBox">
+        <button type="button" class="record-mic-btn" id="recordBtn" onclick="toggleRecording()">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
+          </svg>
+        </button>
+        <div style="font-size:13px; font-weight:700; color:var(--primary);" id="voiceStatusText">
+          Tap Mic to Record Your Voice Note
+        </div>
+        <div class="waveform-anim" id="waveformAnim">
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted);">
+          Speak about your dog's reaction, crunchiness, or favourite flavour.
+        </div>
+        <audio controls class="audio-preview-player" id="audioPlayer"></audio>
+      </div>
 
-    <p class="bk-small" style="margin-top:28px">Form not opening? Email us at <a data-email href="#"></a>.</p>
+      <!-- Mode B: Written Review Box -->
+      <div class="field-row" id="textBox" style="display:none;">
+        <label class="field-label">Written Feedback</label>
+        <textarea id="writtenReview" class="textarea-box" placeholder="e.g. My Labrador heard the crunch from the other room and rushed over. Loved the bone shape..."></textarea>
+      </div>
+
+      <!-- Dog & Pet Parent Details -->
+      <div class="grid-2">
+        <div class="field-row">
+          <label class="field-label">Dog's Name</label>
+          <input type="text" id="dogName" class="input-box" placeholder="e.g. Bruno / Bella" required>
+        </div>
+        <div class="field-row">
+          <label class="field-label">Breed / Age</label>
+          <input type="text" id="dogBreed" class="input-box" placeholder="e.g. Golden Retriever, 2 yrs">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">Your WhatsApp Number (to deliver 50g Voucher)</label>
+        <input type="tel" id="userPhone" class="input-box" placeholder="e.g. 98110XXXXX" required>
+      </div>
+
+      <button type="button" class="submit-review-btn" onclick="submitFeedback()">
+        <span>Submit & Claim Free 50g Sample</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Success Screen (Unlocked Reward) -->
+    <div class="success-screen" id="successSection">
+      <div style="font-size:44px; margin-bottom:10px;">🎉</div>
+      <h2 style="font-family:var(--font-display); font-size:28px; color:var(--primary); font-weight:800;">
+        Thank You, Bro!
+      </h2>
+      <p style="color:var(--text-muted); font-size:14px; max-width:420px; margin:0 auto;">
+        Your feedback has been received. Your furry friend has officially unlocked a complimentary 50g sample pack!
+      </p>
+
+      <div class="voucher-card">
+        <div class="voucher-title">FREE 50G SAMPLE VOUCHER</div>
+        <div class="voucher-code" id="voucherCodeDisplay">BRO50-TREAT-8942</div>
+        <p style="font-size:12px; color:#aaa;">Valid on your next WhatsApp or website order across West Delhi.</p>
+      </div>
+
+      <a href="#" class="claim-wa-btn" id="claimWaBtn" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+        Claim Free Sample on WhatsApp →
+      </a>
+    </div>
   </main>
 
-  <footer class="bk-foot">
-    <nav aria-label="Footer"><a href="/">Home</a><a href="/offers/">Bro Perks</a><a href="/r/">Feedback</a><a href="/privacy/">Privacy</a></nav>
-    <p>BROSKI · Nangloi, Delhi 110041 · <a data-email href="#"></a> · <a data-wa="hello" href="#">WhatsApp</a> · Udyam: UDYAM-DL-11-0177908 · GSTIN: (coming soon)</p>
-  </footer>
+  <!-- Back Sticker QR Preview Generator -->
+  <section class="qr-preview-section">
+    <h4>Packaging Back Sticker QR Target</h4>
+    <p style="font-size:12px; color:var(--text-muted);">This QR code links directly to this page (<code>broskipetfood.com/r/</code>) for printing on our A6 compliance label.</p>
+    <div class="qr-holder">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fbroskipetfood.com%2Fr%2F" alt="Scan to Review Broski">
+    </div>
+    <div style="font-size:11px; font-weight:700; color:var(--accent);">
+      "Scan to review your Bro's crunch & claim a FREE 50g sample"
+    </div>
+  </section>
+
 </div>
+
+<script>
+let currentRating = 5;
+let currentMode = 'voice';
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+
+const ratingTexts = {
+  1: '1 / 5 — "Needs More Crunch"',
+  2: '2 / 5 — "Took a Few Sniffs"',
+  3: '3 / 5 — "Good Everyday Chew"',
+  4: '4 / 5 — "Tail Wagging Fast!"',
+  5: '5 / 5 — "Loud Crunch, Empty Bowl!" 🐾'
+};
+
+function setRating(val) {
+  currentRating = val;
+  const btns = document.querySelectorAll('.paw-btn');
+  btns.forEach((btn, idx) => {
+    btn.classList.toggle('active', idx < val);
+  });
+  document.getElementById('ratingCaption').innerText = ratingTexts[val] || '';
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById('tabVoice').classList.toggle('active', mode === 'voice');
+  document.getElementById('tabText').classList.toggle('active', mode === 'text');
+  document.getElementById('voiceBox').style.display = mode === 'voice' ? 'block' : 'none';
+  document.getElementById('textBox').style.display = mode === 'text' ? 'block' : 'none';
+}
+
+async function toggleRecording() {
+  const btn = document.getElementById('recordBtn');
+  const status = document.getElementById('voiceStatusText');
+  const waveform = document.getElementById('waveformAnim');
+  const player = document.getElementById('audioPlayer');
+
+  if (!isRecording) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+
+      mediaRecorder.ondataavailable = e => {
+        if (e.data.size > 0) audioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        player.src = audioUrl;
+        player.style.display = 'block';
+        status.innerText = "Voice Note Recorded! (Tap to re-record)";
+      };
+
+      mediaRecorder.start();
+      isRecording = true;
+      btn.classList.add('recording');
+      waveform.classList.add('recording');
+      status.innerText = "Recording... Speak now (Tap to stop)";
+    } catch (err) {
+      alert("Microphone permission denied or not supported. You can switch to Written Review Mode!");
+      switchMode('text');
+    }
+  } else {
+    mediaRecorder.stop();
+    isRecording = false;
+    btn.classList.remove('recording');
+    waveform.classList.remove('recording');
+  }
+}
+
+function submitFeedback() {
+  const dogName = document.getElementById('dogName').value.trim();
+  const phone = document.getElementById('userPhone').value.trim();
+  const breed = document.getElementById('dogBreed').value.trim();
+  const written = document.getElementById('writtenReview').value.trim();
+
+  if (!dogName || !phone) {
+    alert("Please enter your dog's name and your WhatsApp number so we can send your 50g voucher!");
+    return;
+  }
+
+  // Generate unique voucher code
+  const code = 'BRO50-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+  document.getElementById('voucherCodeDisplay').innerText = code;
+
+  // Pre-fill WhatsApp claim link
+  const waMsg = `Hi BROSKI! My dog ${dogName} (${breed || 'our bro'}) tried your biscuits! Rating: ${currentRating}/5 paws. Here is my 50g sample voucher: ${code}. Please add it to my next delivery!`;
+  const waUrl = `https://wa.me/918076045934?text=${encodeURIComponent(waMsg)}`;
+  document.getElementById('claimWaBtn').href = waUrl;
+
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('successSection').style.display = 'block';
+}
+</script>
 </body>
 </html>
