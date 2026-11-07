@@ -1,19 +1,17 @@
 """
-BROSKI Premium Packaging & Sticker Print PDF Generator
-Fully compliant with Legal Metrology (Packaged Commodities) Rules, 2011 Rule 6
-Includes:
-- Job Sheet for Printer
-- 1:1 Scale Front Top Mascot Stickers (Peek-a-Bro Dog + Stash Pointer)
-- 1:1 Scale Front Bottom Flavor Badges (Chicken, Mix, Peanut Butter)
-- 1:1 Scale Back Compliance Labels (Chicken, Mix, Peanut Butter) with 1.0mm Scoobee Footnote & Live QR Code
-- A3 Print Imposition Sheets for local Nangloi digital press (Front, Back, and 50g Sampler)
+BROSKI Premium Packaging & Sticker Print PDF Generator (V7.0 - Bone & Winking Dog Edition)
+Faithfully recreates the exact design from user photo:
+- Top Sticker: Winking Dog Mascot + White Bone Banner + "BROSKI" (paw in O) + "— Good Boy Snacks —" + Paws
+- Bottom Badge: Cream Pill Badge + Flavor Title + Dark Brown "Net Qty. 400 g" Sub-Pill + Dog Paw Print
+- Back Labels: Fully compliant with Legal Metrology Rule 6, 1.0mm Scoobee Footnote & Live QR Code
+- A3 Print Imposition Sheets for local Nangloi press
 """
 
 import os
 import sys
 from pathlib import Path
 import qrcode
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, A3
@@ -33,11 +31,11 @@ pdfmetrics.registerFont(TTFont("Arial-Bold", str(FONTS_DIR / "arialbd.ttf")))
 pdfmetrics.registerFont(TTFont("SegoeUI-Bold", str(FONTS_DIR / "segoeuib.ttf")))
 
 # 1. Colors
-C_BROWN = colors.HexColor("#4A2E1B")       # Rich Chocolate Brown
-C_CREAM = colors.HexColor("#FBF8F2")       # Warm Cream
-C_GOLD = colors.HexColor("#E5A93C")        # Bakery Gold
+C_BROWN = colors.HexColor("#49250B")       # Dark Chocolate Brown (matching photo outline)
+C_CREAM = colors.HexColor("#FFFDF8")       # Bone Cream (matching photo background)
+C_GOLD = colors.HexColor("#E2933C")        # Warm Amber / Peanut / Biscuit Gold
 C_DARK = colors.HexColor("#221C18")        # Deep Charcoal
-C_LIGHT_BG = colors.HexColor("#F4EFE6")    # Soft Oatmeal
+C_LIGHT_BG = colors.HexColor("#FAF6EE")    # Soft Off-White
 C_MAGENTA = colors.HexColor("#EC008C")     # Spot CutContour
 
 # 2. Generate Live QR Code
@@ -46,100 +44,97 @@ def make_qr_code():
     qr = qrcode.QRCode(box_size=12, border=1)
     qr.add_data("https://broskipetfood.com/r/")
     qr.make(fit=True)
-    img = qr.make_image(fill_color="#4A2E1B", back_color="white")
+    img = qr.make_image(fill_color="#49250B", back_color="white")
     img.save(str(qr_path))
     return str(qr_path)
 
-# 3. Generate High-Res Front Bottom Badges (300 DPI)
-def make_bottom_badges():
-    f_impact = ImageFont.truetype(str(FONTS_DIR / "impact.ttf"), 68)
-    f_segoe_b = ImageFont.truetype(str(FONTS_DIR / "segoeuib.ttf"), 30)
-    f_segoe_icon = ImageFont.truetype(str(FONTS_DIR / "segoeuib.ttf"), 24)
-    f_net_qty = ImageFont.truetype(str(FONTS_DIR / "segoeuib.ttf"), 40)
-    
-    variants = [
-        ("Chicken", "CHICKEN BONE", "BISCUITS", "OVEN-BAKED", False),
-        ("Mix", "MIX FLAVOUR", "BISCUITS", "OVEN-BAKED", False),
-        ("PB", "PEANUT BUTTER", "BISCUITS", "WHEAT FREE", True),
-    ]
+# 3. Prepare High-Res Top Bone Mascot Sticker
+def prepare_top_mascot():
+    top_path = BRAIN / "hires_top_bone_sticker.png"
+    if not top_path.exists():
+        im_top = Image.open(BRAIN / "tight_top_sticker.png")
+        target_w = 1400
+        scale = target_w / im_top.width
+        target_h = int(im_top.height * scale)
+        up_top = im_top.resize((target_w, target_h), Image.Resampling.LANCZOS)
+        up_top = up_top.filter(ImageFilter.UnsharpMask(radius=2, percent=130, threshold=3))
+        up_top.save(str(top_path))
+    return str(top_path)
+
+# 4. Generate High-Res Bottom Pill Badges (300 DPI)
+def make_pill_badges():
+    f_title = ImageFont.truetype(str(FONTS_DIR / "arialbd.ttf"), 56)
+    f_qty = ImageFont.truetype(str(FONTS_DIR / "arialbd.ttf"), 34)
     
     badge_files = {}
-    w, h = 1600, 950 # 115mm x 68mm at 350 DPI
+    variants = [
+        ("Chicken", "Chicken Bone", "chicken"),
+        ("Mix", "Mix Flavour", "mix"),
+        ("PB", "Peanut Butter", "peanut"),
+    ]
     
-    for key, line1, line2, icon1_lbl, slashed in variants:
+    w, h = 1400, 380
+    c_cream = (255, 253, 248)
+    c_brown = (73, 37, 11)
+    c_peanut = (226, 147, 60)
+    
+    for key, flavor_name, icon_type in variants:
         img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
         d = ImageDraw.Draw(img)
         
-        # Outer chocolate brown container
-        d.rounded_rectangle([(15, 15), (w-15, h-15)], radius=60, fill=(74, 46, 27))
-        # Inner fine double border
-        d.rounded_rectangle([(40, 40), (w-40, h-40)], radius=45, outline=(245, 238, 226), width=3)
+        # Main rounded pill container with dark brown border
+        d.rounded_rectangle([(15, 15), (w-15, h-15)], radius=120, fill=c_cream, outline=c_brown, width=12)
         
-        # Subtitle: NATURAL DOG TREATS
-        top_txt = "NATURAL DOG TREATS"
-        tb = d.textbbox((0, 0), top_txt, font=f_segoe_b)
-        d.text(((w - (tb[2]-tb[0]))//2, 70), top_txt, font=f_segoe_b, fill=(245, 238, 226))
+        # Title text
+        tb = d.textbbox((0, 0), flavor_name, font=f_title)
+        t_w = tb[2] - tb[0]
+        t_x = (w - t_w) // 2
+        t_y = 65
+        d.text((t_x, t_y), flavor_name, font=f_title, fill=c_brown)
         
-        # Main Title (Line 1 & Line 2)
-        tb1 = d.textbbox((0, 0), line1, font=f_impact)
-        d.text(((w - (tb1[2]-tb1[0]))//2, 135), line1, font=f_impact, fill=(255, 252, 245))
+        # Sub-pill for "Net Qty. 400 g"
+        q_str = "Net Qty. 400 g"
+        qb = d.textbbox((0, 0), q_str, font=f_qty)
+        q_w = qb[2] - qb[0]
+        pill_w = q_w + 64
+        pill_h = 62
+        pill_x = (w - pill_w) // 2
+        pill_y = 230
+        d.rounded_rectangle([(pill_x, pill_y), (pill_x + pill_w, pill_y + pill_h)], radius=31, fill=c_brown)
+        d.text((pill_x + 32, pill_y + 12), q_str, font=f_qty, fill=(255, 255, 255))
         
-        tb2 = d.textbbox((0, 0), line2, font=f_impact)
-        d.text(((w - (tb2[2]-tb2[0]))//2, 225), line2, font=f_impact, fill=(255, 252, 245))
+        # Right paw print at cx = 1240, cy = 200
+        paw_cx, paw_cy = 1240, 200
+        d.ellipse([(paw_cx - 24, paw_cy - 12), (paw_cx + 24, paw_cy + 24)], fill=c_brown)
+        d.ellipse([(paw_cx - 28, paw_cy - 34), (paw_cx - 14, paw_cy - 16)], fill=c_brown)
+        d.ellipse([(paw_cx - 10, paw_cy - 44), (paw_cx + 4, paw_cy - 24)], fill=c_brown)
+        d.ellipse([(paw_cx + 10, paw_cy - 44), (paw_cx + 24, paw_cy - 24)], fill=c_brown)
+        d.ellipse([(paw_cx + 22, paw_cy - 34), (paw_cx + 36, paw_cy - 16)], fill=c_brown)
         
-        # Thin Divider Line
-        d.line([(120, 335), (w-120, 335)], fill=(245, 238, 226), width=2)
-        
-        # 3 Icons
-        # Icon 1 (Wheat / Grain) at cx = 330, cy = 460
-        cx1, cy1 = 330, 460
-        d.line([(cx1, cy1+40), (cx1, cy1-40)], fill=(255, 252, 245), width=4)
-        for dy, dx in [(-25, 20), (0, 24), (25, 20)]:
-            d.ellipse([(cx1+3, cy1+dy-10), (cx1+dx, cy1+dy+10)], outline=(255, 252, 245), width=3)
-            d.ellipse([(cx1-dx, cy1+dy-10), (cx1-3, cy1+dy+10)], outline=(255, 252, 245), width=3)
-        if slashed:
-            d.line([(cx1-35, cy1+35), (cx1+35, cy1-35)], fill=(255, 252, 245), width=5)
-        tb_i1 = d.textbbox((0, 0), icon1_lbl, font=f_segoe_icon)
-        d.text((cx1 - (tb_i1[2]-tb_i1[0])//2, cy1+55), icon1_lbl, font=f_segoe_icon, fill=(245, 238, 226))
-        
-        # Icon 2 (100% Natural Leaves) at cx = 800, cy = 460
-        cx2, cy2 = 800, 460
-        d.arc([(cx2-35, cy2-30), (cx2+10, cy2+30)], 90, 270, fill=(255, 252, 245), width=4)
-        d.arc([(cx2-35, cy2-30), (cx2+10, cy2+30)], 270, 90, fill=(255, 252, 245), width=4)
-        d.arc([(cx2-10, cy2-35), (cx2+35, cy2+25)], 90, 270, fill=(255, 252, 245), width=4)
-        d.arc([(cx2-10, cy2-35), (cx2+35, cy2+25)], 270, 90, fill=(255, 252, 245), width=4)
-        d.line([(cx2, cy2+35), (cx2-5, cy2+10)], fill=(255, 252, 245), width=4)
-        lbl2 = "100% NATURAL"
-        tb_i2 = d.textbbox((0, 0), lbl2, font=f_segoe_icon)
-        d.text((cx2 - (tb_i2[2]-tb_i2[0])//2, cy2+55), lbl2, font=f_segoe_icon, fill=(245, 238, 226))
-        
-        # Icon 3 (Baked with Love - Heart in hand) at cx = 1270, cy = 460
-        cx3, cy3 = 1270, 460
-        r_h = 14
-        h_top = cy3 - 20
-        d.ellipse([(cx3 - r_h*1.6, h_top - r_h), (cx3, h_top + r_h)], fill=(255, 252, 245))
-        d.ellipse([(cx3, h_top - r_h), (cx3 + r_h*1.6, h_top + r_h)], fill=(255, 252, 245))
-        d.polygon([(cx3 - r_h*1.55, h_top + r_h*0.3), (cx3 + r_h*1.55, h_top + r_h*0.3), (cx3, h_top + r_h*1.8)], fill=(255, 252, 245))
-        d.arc([(cx3 - 35, cy3 + 5), (cx3 + 35, cy3 + 35)], 0, 180, fill=(255, 252, 245), width=4)
-        lbl3 = "BAKED WITH LOVE"
-        tb_i3 = d.textbbox((0, 0), lbl3, font=f_segoe_icon)
-        d.text((cx3 - (tb_i3[2]-tb_i3[0])//2, cy3+55), lbl3, font=f_segoe_icon, fill=(245, 238, 226))
-        
-        # Thin Divider Line 2
-        d.line([(120, 680), (w-120, 680)], fill=(245, 238, 226), width=2)
-        
-        # Bottom Line: NET QTY: 400g
-        net_str = "NET QTY: 400g"
-        tb_net = d.textbbox((0, 0), net_str, font=f_net_qty)
-        d.text(((w - (tb_net[2]-tb_net[0]))//2, 740), net_str, font=f_net_qty, fill=(255, 252, 245))
-        
-        out_p = BRAIN / f"badge_{key}_350dpi.png"
+        # Left icon at cx = 160, cy = 200
+        ic_cx, ic_cy = 160, 200
+        if icon_type == "peanut":
+            d.ellipse([(ic_cx - 50, ic_cy - 40), (ic_cx + 5, ic_cy + 40)], fill=c_peanut, outline=c_brown, width=8)
+            d.ellipse([(ic_cx - 15, ic_cy - 10), (ic_cx + 55, ic_cy + 60)], fill=c_peanut, outline=c_brown, width=8)
+        elif icon_type == "chicken":
+            d.ellipse([(ic_cx - 25, ic_cy - 50), (ic_cx + 45, ic_cy + 20)], fill=c_peanut, outline=c_brown, width=8)
+            d.line([(ic_cx - 10, ic_cy + 10), (ic_cx - 35, ic_cy + 45)], fill=(255, 255, 255), width=14)
+            d.ellipse([(ic_cx - 48, ic_cy + 38), (ic_cx - 28, ic_cy + 58)], fill=(255, 255, 255))
+            d.ellipse([(ic_cx - 38, ic_cy + 48), (ic_cx - 18, ic_cy + 68)], fill=(255, 255, 255))
+        else: # mix
+            d.rounded_rectangle([(ic_cx - 40, ic_cy - 15), (ic_cx + 40, ic_cy + 15)], radius=15, fill=c_peanut, outline=c_brown, width=6)
+            d.ellipse([(ic_cx - 50, ic_cy - 25), (ic_cx - 25, ic_cy)], fill=c_peanut, outline=c_brown, width=6)
+            d.ellipse([(ic_cx - 50, ic_cy), (ic_cx - 25, ic_cy + 25)], fill=c_peanut, outline=c_brown, width=6)
+            d.ellipse([(ic_cx + 25, ic_cy - 25), (ic_cx + 50, ic_cy)], fill=c_peanut, outline=c_brown, width=6)
+            d.ellipse([(ic_cx + 25, ic_cy), (ic_cx + 50, ic_cy + 25)], fill=c_peanut, outline=c_brown, width=6)
+            
+        out_p = BRAIN / f"pill_badge_{key}.png"
         img.save(str(out_p))
         badge_files[key] = str(out_p)
         
     return badge_files
 
-# 4. Draw Back Compliance Label in Vector ReportLab
+# 5. Draw Back Compliance Label in Vector ReportLab
 def draw_back_label(c, x, y, width, height, variant_name, flavor_title, mrp_str, usp_str, batch_str, qr_path):
     c.saveState()
     
@@ -159,13 +154,13 @@ def draw_back_label(c, x, y, width, height, variant_name, flavor_title, mrp_str,
     c.roundRect(x + 4*mm, y + height - 16*mm, width - 8*mm, 12*mm, 2*mm, fill=1, stroke=0)
     
     c.setFillColor(C_CREAM)
-    c.setFont("Arial-Bold", 14)
+    c.setFont("Arial-Bold", 13)
     c.drawString(x + 8*mm, y + height - 11.5*mm, "B R O S K I")
     
-    c.setFont("Arial-Bold", 9)
+    c.setFont("Arial-Bold", 8.5)
     c.drawRightString(x + width - 8*mm, y + height - 10*mm, flavor_title.upper())
-    c.setFont("Arial", 6.5)
-    c.drawRightString(x + width - 8*mm, y + height - 14*mm, "Treats for your best bro.")
+    c.setFont("Arial", 6.2)
+    c.drawRightString(x + width - 8*mm, y + height - 14*mm, "— Good Boy Snacks —")
     
     cur_y = y + height - 20*mm
     left_x = x + 5*mm
@@ -217,7 +212,7 @@ def draw_back_label(c, x, y, width, height, variant_name, flavor_title, mrp_str,
     
     # Statutory Grid (Legal Metrology Rule 6)
     # Net Quantity Box (HIGH PROMINENCE >= 4mm numeral)
-    c.setFillColor(colors.HexColor("#4A2E1B"))
+    c.setFillColor(C_BROWN)
     c.roundRect(left_x, cur_y - 9.5*mm, 30*mm, 9*mm, 1.5*mm, fill=1, stroke=0)
     c.setFillColor(C_CREAM)
     c.setFont("Arial-Bold", 6)
@@ -287,13 +282,12 @@ def draw_back_label(c, x, y, width, height, variant_name, flavor_title, mrp_str,
     
     c.restoreState()
 
-# 5. Build Master Multi-Page PDF
+# 6. Build Master Multi-Page PDF
 def build_master_pdf():
     out_pdf_path = ROOT / "Broski_PRINT_READY_Stickers_2026.pdf"
     qr_img_path = make_qr_code()
-    badges = make_bottom_badges()
-    
-    mascot_img_path = str(BRAIN / "compact_mascot_sticker.png")
+    top_mascot_img = prepare_top_mascot()
+    badges = make_pill_badges()
     
     c = canvas.Canvas(str(out_pdf_path), pagesize=A4)
     
@@ -303,18 +297,16 @@ def build_master_pdf():
     c.setTitle("BROSKI · Print-Ready Packaging Stickers (Final Release 2026)")
     c.setAuthor("BROSKI AI Executive Team")
     
-    # Header Banner
     c.setFillColor(C_BROWN)
     c.rect(0, 260*mm, 210*mm, 37*mm, fill=1, stroke=0)
     c.setFillColor(C_CREAM)
     c.setFont("Arial-Bold", 22)
     c.drawString(15*mm, 280*mm, "B R O S K I")
     c.setFont("Arial-Bold", 11)
-    c.drawString(15*mm, 273*mm, "COMMERCIAL PACKAGING STICKERS · PRINTER JOB SHEET")
+    c.drawString(15*mm, 273*mm, "COMMERCIAL PACKAGING STICKERS · BONE & WINKING DOG EDITION")
     c.setFont("Arial", 8)
     c.drawString(15*mm, 266*mm, "Release Date: 7 November 2026 · Target Commercial Launch: 15 November 2026 · Nangloi Press Ready")
     
-    # Specs Table
     y = 245*mm
     c.setFillColor(C_DARK)
     c.setFont("Arial-Bold", 10)
@@ -326,8 +318,8 @@ def build_master_pdf():
         ("Lamination / Finish", "Premium Soft-Touch Matte Lamination (Water-resistant, scratch-proof, anti-smudge)"),
         ("Printing Technology", "4-Color CMYK Digital Press (Konica Minolta AccurioPress / Xerox Versant / HP Indigo)"),
         ("Cutting & Finishing", "Precision Digital Kiss-Cut / Plotter Die-Cut along CutContour (Magenta line) on A3 sheets"),
-        ("Front Top Mascot Size", "115 mm (Width) × 105 mm (Height) — Die-cut dog outline, sits centered above pouch window"),
-        ("Front Bottom Badge Size", "115 mm (Width) × 68 mm (Height) — Rounded rectangle (R=6mm), sits below pouch window"),
+        ("Front Top Mascot Size", "115 mm (Width) × 80 mm (Height) — White Bone + Winking Dog, sits centered above window"),
+        ("Front Bottom Pill Size", "115 mm (Width) × 32 mm (Height) — Cream Pill Badge + Net Qty 400g, sits below window"),
         ("Back Compliance Label Size", "100 mm (Width) × 140 mm (Height) — Standard A6 format with 6mm rounded corners"),
         ("50g Sampler Label Size", "50 mm (Width) × 70 mm (Height) — Small pocket bone sampler for 4x6 inch pouches"),
         ("Bleed & Safe Margin", "2.0 mm bleed included on all borders; 3.0 mm inner safe zone respected for all critical text")
@@ -355,16 +347,16 @@ def build_master_pdf():
     
     y -= 6*mm
     quantities = [
-        ("Front Mascot Sticker (Dog Banner)", "300 pcs total", "150 Non-Veg + 150 Mix Bone (Fits above pouch window)"),
-        ("Front Bottom Badge: Chicken Bone", "150 pcs", "Dark brown card, Net Qty 400g, 3 icons, fits below window"),
-        ("Front Bottom Badge: Mix Flavour", "150 pcs", "Dark brown card, Net Qty 400g, 3 icons, fits below window"),
+        ("Front Mascot Sticker (Bone + Dog)", "300 pcs total", "Winking Dog + BROSKI + 'Good Boy Snacks' (Above window)"),
+        ("Front Bottom Pill: Chicken Bone", "150 pcs", "Cream pill, Chicken icon, Net Qty 400g, fits below window"),
+        ("Front Bottom Pill: Mix Flavour", "150 pcs", "Cream pill, Twin bone icon, Net Qty 400g, fits below window"),
         ("Back Compliance Label: Chicken", "150 pcs", "A6 size, MRP ₹149, USP ₹0.37/g, Batch BR-NV-2611-01, QR Code"),
         ("Back Compliance Label: Mix", "150 pcs", "A6 size, MRP ₹179, USP ₹0.45/g, Batch BR-MX-2611-01, QR Code"),
         ("50g Sample Pocket Bone Stickers", "300 pcs", "Small 50x70mm labels for sampling pouches (12 A3 sheets)")
     ]
     
     for item, qty, note in quantities:
-        c.setFillColor(colors.HexColor("#332218") if "A6" in note else colors.HexColor("#54331C"))
+        c.setFillColor(colors.HexColor("#332218") if "A6" in note else colors.HexColor("#49250B"))
         c.rect(15*mm, y - 1.5*mm, 60*mm, 5*mm, fill=1, stroke=0)
         c.setFillColor(C_CREAM)
         c.setFont("Arial-Bold", 7.2)
@@ -395,10 +387,9 @@ def build_master_pdf():
     c.drawString(15*mm, y - 8*mm, "[PASS] Scoobee manufacturer footnote formatted at 1.0 mm (5 pt) fine print at bottom edge.")
     c.drawString(15*mm, y - 12*mm, "[PASS] Live QR Code points to active review and 50g sample voucher portal at broskipetfood.com/r/.")
     
-    # Footer
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v6.0 · Page 1 of 11")
+    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v7.0 · Page 1 of 11")
     c.showPage()
     
     # =========================================================================
@@ -411,15 +402,13 @@ def build_master_pdf():
     c.setFont("Arial-Bold", 12)
     c.drawString(15*mm, 280*mm, "FRONT TOP MASCOT STICKER · 1:1 ACTUAL PRINT SIZE")
     c.setFont("Arial", 8)
-    c.drawString(15*mm, 274*mm, "Dimensions: 115 mm × 105 mm · Die-Cut / Kiss-Cut Outline · Sits above clear window on 8×12\" yellow pouch")
+    c.drawString(15*mm, 274*mm, "Dimensions: 115 mm × 81 mm · Die-Cut / Kiss-Cut Outline · Sits above clear window on 8×12\" yellow pouch")
     
-    # Draw Mascot Image centered
     mascot_w = 115*mm
-    mascot_h = 105*mm
+    mascot_h = 81*mm
     mascot_x = (210*mm - mascot_w)/2
-    mascot_y = 150*mm
+    mascot_y = 160*mm
     
-    # CutContour Guide
     c.setStrokeColor(C_MAGENTA)
     c.setLineWidth(0.5)
     c.roundRect(mascot_x - 1*mm, mascot_y - 1*mm, mascot_w + 2*mm, mascot_h + 2*mm, 8*mm, fill=0, stroke=1)
@@ -427,94 +416,94 @@ def build_master_pdf():
     c.setFillColor(C_MAGENTA)
     c.drawString(mascot_x, mascot_y - 5*mm, "CutContour (Die-Cut Path) — 2.0 mm Bleed Included")
     
-    c.drawImage(mascot_img_path, mascot_x, mascot_y, width=mascot_w, height=mascot_h)
+    c.drawImage(top_mascot_img, mascot_x, mascot_y, width=mascot_w, height=mascot_h, mask='auto')
     
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v6.0 · Page 2 of 11")
+    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v7.0 · Page 2 of 11")
     c.showPage()
     
     # =========================================================================
-    # PAGE 3: FRONT BOTTOM BADGE — CHICKEN BONE BISCUITS (1:1 SCALE)
+    # PAGE 3: FRONT BOTTOM PILL BADGE — CHICKEN BONE BISCUITS (1:1 SCALE)
     # =========================================================================
     c.setFillColor(colors.white)
     c.rect(0, 0, 210*mm, 297*mm, fill=1, stroke=0)
     
     c.setFillColor(C_BROWN)
     c.setFont("Arial-Bold", 12)
-    c.drawString(15*mm, 280*mm, "FRONT BOTTOM BADGE · CHICKEN BONE BISCUITS (NON-VEG) · 1:1 SCALE")
+    c.drawString(15*mm, 280*mm, "FRONT BOTTOM PILL BADGE · CHICKEN BONE (NON-VEG) · 1:1 SCALE")
     c.setFont("Arial", 8)
-    c.drawString(15*mm, 274*mm, "Dimensions: 115 mm × 68 mm · 6 mm Rounded Corners · Sits below clear window on yellow pouch")
+    c.drawString(15*mm, 274*mm, "Dimensions: 115 mm × 32 mm · Rounded Pill (R=12mm) · Sits below clear window on yellow pouch")
     
     b_w = 115*mm
-    b_h = 68*mm
+    b_h = 31.2*mm
     b_x = (210*mm - b_w)/2
-    b_y = 180*mm
+    b_y = 190*mm
     
     c.setStrokeColor(C_MAGENTA)
     c.setLineWidth(0.5)
-    c.roundRect(b_x - 1*mm, b_y - 1*mm, b_w + 2*mm, b_h + 2*mm, 6*mm, fill=0, stroke=1)
+    c.roundRect(b_x - 1*mm, b_y - 1*mm, b_w + 2*mm, b_h + 2*mm, 10*mm, fill=0, stroke=1)
     c.setFont("Arial", 6)
     c.setFillColor(C_MAGENTA)
-    c.drawString(b_x, b_y - 5*mm, "CutContour Path (Rounded Rectangle R=6mm)")
+    c.drawString(b_x, b_y - 5*mm, "CutContour Path (Rounded Pill)")
     
-    c.drawImage(badges["Chicken"], b_x, b_y, width=b_w, height=b_h)
+    c.drawImage(badges["Chicken"], b_x, b_y, width=b_w, height=b_h, mask='auto')
     
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v6.0 · Page 3 of 11")
+    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v7.0 · Page 3 of 11")
     c.showPage()
     
     # =========================================================================
-    # PAGE 4: FRONT BOTTOM BADGE — MIX FLAVOUR BISCUITS (1:1 SCALE)
+    # PAGE 4: FRONT BOTTOM PILL BADGE — MIX FLAVOUR BISCUITS (1:1 SCALE)
     # =========================================================================
     c.setFillColor(colors.white)
     c.rect(0, 0, 210*mm, 297*mm, fill=1, stroke=0)
     
     c.setFillColor(C_BROWN)
     c.setFont("Arial-Bold", 12)
-    c.drawString(15*mm, 280*mm, "FRONT BOTTOM BADGE · MIX FLAVOUR BISCUITS (MIX BONE) · 1:1 SCALE")
+    c.drawString(15*mm, 280*mm, "FRONT BOTTOM PILL BADGE · MIX FLAVOUR (MIX BONE) · 1:1 SCALE")
     c.setFont("Arial", 8)
-    c.drawString(15*mm, 274*mm, "Dimensions: 115 mm × 68 mm · 6 mm Rounded Corners · Sits below clear window on yellow pouch")
+    c.drawString(15*mm, 274*mm, "Dimensions: 115 mm × 32 mm · Rounded Pill (R=12mm) · Sits below clear window on yellow pouch")
     
     c.setStrokeColor(C_MAGENTA)
     c.setLineWidth(0.5)
-    c.roundRect(b_x - 1*mm, b_y - 1*mm, b_w + 2*mm, b_h + 2*mm, 6*mm, fill=0, stroke=1)
+    c.roundRect(b_x - 1*mm, b_y - 1*mm, b_w + 2*mm, b_h + 2*mm, 10*mm, fill=0, stroke=1)
     c.setFont("Arial", 6)
     c.setFillColor(C_MAGENTA)
-    c.drawString(b_x, b_y - 5*mm, "CutContour Path (Rounded Rectangle R=6mm)")
+    c.drawString(b_x, b_y - 5*mm, "CutContour Path (Rounded Pill)")
     
-    c.drawImage(badges["Mix"], b_x, b_y, width=b_w, height=b_h)
+    c.drawImage(badges["Mix"], b_x, b_y, width=b_w, height=b_h, mask='auto')
     
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v6.0 · Page 4 of 11")
+    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v7.0 · Page 4 of 11")
     c.showPage()
     
     # =========================================================================
-    # PAGE 5: FRONT BOTTOM BADGE — PEANUT BUTTER BISCUITS (1:1 SCALE)
+    # PAGE 5: FRONT BOTTOM PILL BADGE — PEANUT BUTTER (PHOTO MATCH) (1:1 SCALE)
     # =========================================================================
     c.setFillColor(colors.white)
     c.rect(0, 0, 210*mm, 297*mm, fill=1, stroke=0)
     
     c.setFillColor(C_BROWN)
     c.setFont("Arial-Bold", 12)
-    c.drawString(15*mm, 280*mm, "FRONT BOTTOM BADGE · PEANUT BUTTER BISCUITS (SAMPLE PHOTO MATCH) · 1:1 SCALE")
+    c.drawString(15*mm, 280*mm, "FRONT BOTTOM PILL BADGE · PEANUT BUTTER (EXACT PHOTO MATCH) · 1:1 SCALE")
     c.setFont("Arial", 8)
-    c.drawString(15*mm, 274*mm, "Dimensions: 115 mm × 68 mm · 6 mm Rounded Corners · Matches exact user photo pouch layout")
+    c.drawString(15*mm, 274*mm, "Dimensions: 115 mm × 32 mm · Matches exact user photo layout with peanuts & paw print")
     
     c.setStrokeColor(C_MAGENTA)
     c.setLineWidth(0.5)
-    c.roundRect(b_x - 1*mm, b_y - 1*mm, b_w + 2*mm, b_h + 2*mm, 6*mm, fill=0, stroke=1)
+    c.roundRect(b_x - 1*mm, b_y - 1*mm, b_w + 2*mm, b_h + 2*mm, 10*mm, fill=0, stroke=1)
     c.setFont("Arial", 6)
     c.setFillColor(C_MAGENTA)
-    c.drawString(b_x, b_y - 5*mm, "CutContour Path (Rounded Rectangle R=6mm)")
+    c.drawString(b_x, b_y - 5*mm, "CutContour Path (Rounded Pill)")
     
-    c.drawImage(badges["PB"], b_x, b_y, width=b_w, height=b_h)
+    c.drawImage(badges["PB"], b_x, b_y, width=b_w, height=b_h, mask='auto')
     
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v6.0 · Page 5 of 11")
+    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v7.0 · Page 5 of 11")
     c.showPage()
     
     # =========================================================================
@@ -538,11 +527,11 @@ def build_master_pdf():
     c.setLineWidth(0.5)
     c.roundRect(lbl_x - 1*mm, lbl_y - 1*mm, lbl_w + 2*mm, lbl_h + 2*mm, 6*mm, fill=0, stroke=1)
     
-    draw_back_label(c, lbl_x, lbl_y, lbl_w, lbl_h, "Non-Veg", "Chicken Flavour", "₹149.00", "₹0.37 / g", "BR-NV-2611-01", qr_img_path)
+    draw_back_label(c, lbl_x, lbl_y, lbl_w, lbl_h, "Non-Veg", "Chicken Bone Biscuits", "₹149.00", "₹0.37 / g", "BR-NV-2611-01", qr_img_path)
     
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v6.0 · Page 6 of 11")
+    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v7.0 · Page 6 of 11")
     c.showPage()
     
     # =========================================================================
@@ -561,11 +550,11 @@ def build_master_pdf():
     c.setLineWidth(0.5)
     c.roundRect(lbl_x - 1*mm, lbl_y - 1*mm, lbl_w + 2*mm, lbl_h + 2*mm, 6*mm, fill=0, stroke=1)
     
-    draw_back_label(c, lbl_x, lbl_y, lbl_w, lbl_h, "Mix", "Mix Flavour", "₹179.00", "₹0.45 / g", "BR-MX-2611-01", qr_img_path)
+    draw_back_label(c, lbl_x, lbl_y, lbl_w, lbl_h, "Mix", "Mix Flavour Biscuits", "₹179.00", "₹0.45 / g", "BR-MX-2611-01", qr_img_path)
     
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v6.0 · Page 7 of 11")
+    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v7.0 · Page 7 of 11")
     c.showPage()
     
     # =========================================================================
@@ -584,15 +573,15 @@ def build_master_pdf():
     c.setLineWidth(0.5)
     c.roundRect(lbl_x - 1*mm, lbl_y - 1*mm, lbl_w + 2*mm, lbl_h + 2*mm, 6*mm, fill=0, stroke=1)
     
-    draw_back_label(c, lbl_x, lbl_y, lbl_w, lbl_h, "PB", "Peanut Butter", "₹149.00", "₹0.37 / g", "BR-PB-2611-01", qr_img_path)
+    draw_back_label(c, lbl_x, lbl_y, lbl_w, lbl_h, "PB", "Peanut Butter Biscuits", "₹149.00", "₹0.37 / g", "BR-PB-2611-01", qr_img_path)
     
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v6.0 · Page 8 of 11")
+    c.drawRightString(195*mm, 8*mm, "BROSKI Digital Print Release v7.0 · Page 8 of 11")
     c.showPage()
     
     # =========================================================================
-    # PAGE 9: READY-TO-PRINT A3 MASTER SHEET (FRONT MASCOTS + FLAVOR BADGES)
+    # PAGE 9: READY-TO-PRINT A3 MASTER SHEET (FRONT BONE MASCOTS + PILL BADGES)
     # =========================================================================
     c.setPageSize(A3) # 297 mm x 420 mm
     c.setFillColor(colors.white)
@@ -600,40 +589,34 @@ def build_master_pdf():
     
     c.setFillColor(C_BROWN)
     c.setFont("Arial-Bold", 14)
-    c.drawString(15*mm, 405*mm, "A3 PRINT SHEET 1: FRONT LABELS (TOP MASCOTS + BOTTOM FLAVOR BADGES)")
+    c.drawString(15*mm, 405*mm, "A3 PRINT SHEET 1: FRONT LABELS (BONE MASCOTS + PILL BADGES)")
     c.setFont("Arial", 8)
-    c.drawString(15*mm, 399*mm, "Paper: A3 (297×420 mm) Self-Adhesive Gumming Sheet · Kiss-Cut / Plotter Finish · Fits 4 Complete Front Sets")
+    c.drawString(15*mm, 399*mm, "Paper: A3 (297×420 mm) Self-Adhesive Gumming Sheet · Kiss-Cut / Plotter Finish · Fits 6 Complete Front Sets")
     
-    # Place 2 Mascot Top Stickers and 2 Badges per column, 2 columns total
-    # Column 1 (Left): X = 20mm; Column 2 (Right): X = 155mm
-    for col_idx, col_x in enumerate([20*mm, 155*mm]):
-        # Row 1: Mascot
-        m_y1 = 280*mm
-        c.drawImage(mascot_img_path, col_x, m_y1, width=115*mm, height=105*mm)
-        c.setStrokeColor(C_MAGENTA)
-        c.setLineWidth(0.3)
-        c.roundRect(col_x, m_y1, 115*mm, 105*mm, 6*mm, stroke=1, fill=0)
-        
-        # Row 2: Bottom Badge 1 (Chicken on Left, Mix on Right)
-        b_y1 = 200*mm
-        flavor_key1 = "Chicken" if col_idx == 0 else "Mix"
-        c.drawImage(badges[flavor_key1], col_x, b_y1, width=115*mm, height=68*mm)
-        c.roundRect(col_x, b_y1, 115*mm, 68*mm, 6*mm, stroke=1, fill=0)
-        
-        # Row 3: Mascot
-        m_y2 = 85*mm
-        c.drawImage(mascot_img_path, col_x, m_y2, width=115*mm, height=105*mm)
-        c.roundRect(col_x, m_y2, 115*mm, 105*mm, 6*mm, stroke=1, fill=0)
-        
-        # Row 4: Bottom Badge 2
-        b_y2 = 10*mm
-        flavor_key2 = "Chicken" if col_idx == 0 else "Mix"
-        c.drawImage(badges[flavor_key2], col_x, b_y2, width=115*mm, height=68*mm)
-        c.roundRect(col_x, b_y2, 115*mm, 68*mm, 6*mm, stroke=1, fill=0)
-        
+    # 2 columns x 3 rows of (Mascot + Pill)
+    col_xs = [20*mm, 155*mm]
+    row_ys = [285*mm, 160*mm, 35*mm]
+    
+    set_idx = 0
+    for r_y in row_ys:
+        for c_x in col_xs:
+            flv_k = "Chicken" if (set_idx % 2 == 0) else "Mix"
+            
+            # Mascot Bone Sticker (115 x 81 mm)
+            c.drawImage(top_mascot_img, c_x, r_y + 35*mm, width=115*mm, height=81*mm, mask='auto')
+            c.setStrokeColor(C_MAGENTA)
+            c.setLineWidth(0.3)
+            c.roundRect(c_x, r_y + 35*mm, 115*mm, 81*mm, 8*mm, stroke=1, fill=0)
+            
+            # Bottom Pill Badge (115 x 31.2 mm)
+            c.drawImage(badges[flv_k], c_x, r_y, width=115*mm, height=31.2*mm, mask='auto')
+            c.roundRect(c_x, r_y, 115*mm, 31.2*mm, 10*mm, stroke=1, fill=0)
+            
+            set_idx += 1
+            
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(285*mm, 5*mm, "BROSKI Digital Print Release v6.0 · Page 9 of 11 (A3 Sheet)")
+    c.drawRightString(285*mm, 5*mm, "BROSKI Digital Print Release v7.0 · Page 9 of 11 (A3 Sheet)")
     c.showPage()
     
     # =========================================================================
@@ -648,12 +631,11 @@ def build_master_pdf():
     c.setFont("Arial", 8)
     c.drawString(15*mm, 399*mm, "Paper: A3 (297×420 mm) Self-Adhesive Gumming Sheet · 4 Complete A6 Labels per Sheet (2 Chicken + 2 Mix)")
     
-    # 2 columns x 2 rows of A6 (100 x 140 mm)
     c_grid = [
-        (35*mm, 245*mm, "Non-Veg", "Chicken Flavour", "₹149.00", "₹0.37 / g", "BR-NV-2611-01"),
-        (155*mm, 245*mm, "Mix", "Mix Flavour", "₹179.00", "₹0.45 / g", "BR-MX-2611-01"),
-        (35*mm, 90*mm, "Non-Veg", "Chicken Flavour", "₹149.00", "₹0.37 / g", "BR-NV-2611-01"),
-        (155*mm, 90*mm, "Mix", "Mix Flavour", "₹179.00", "₹0.45 / g", "BR-MX-2611-01"),
+        (35*mm, 245*mm, "Non-Veg", "Chicken Bone Biscuits", "₹149.00", "₹0.37 / g", "BR-NV-2611-01"),
+        (155*mm, 245*mm, "Mix", "Mix Flavour Biscuits", "₹179.00", "₹0.45 / g", "BR-MX-2611-01"),
+        (35*mm, 90*mm, "Non-Veg", "Chicken Bone Biscuits", "₹149.00", "₹0.37 / g", "BR-NV-2611-01"),
+        (155*mm, 90*mm, "Mix", "Mix Flavour Biscuits", "₹179.00", "₹0.45 / g", "BR-MX-2611-01"),
     ]
     
     for gx, gy, gvar, gtitle, gmrp, gusp, gbatch in c_grid:
@@ -664,7 +646,7 @@ def build_master_pdf():
         
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(285*mm, 5*mm, "BROSKI Digital Print Release v6.0 · Page 10 of 11 (A3 Sheet)")
+    c.drawRightString(285*mm, 5*mm, "BROSKI Digital Print Release v7.0 · Page 10 of 11 (A3 Sheet)")
     c.showPage()
     
     # =========================================================================
@@ -679,7 +661,6 @@ def build_master_pdf():
     c.setFont("Arial", 8)
     c.drawString(15*mm, 399*mm, "Dimensions: 58 mm × 50 mm · For 4×6\" Sample Pouches · 12 Non-Veg + 12 Mix Bone Samplers")
     
-    # 4 columns x 6 rows = 24 sample stickers
     xs = [18*mm + i*66*mm for i in range(4)]
     ys = [85*mm + j*52*mm for j in range(6)]
     
@@ -698,7 +679,6 @@ def build_master_pdf():
             c.setFillColor(col_card)
             c.roundRect(x_pos, y_pos, 60*mm, 48*mm, 4*mm, fill=1, stroke=0)
             
-            # Inner border
             c.setStrokeColor(colors.HexColor("#F5EEE2"))
             c.setLineWidth(0.5)
             c.roundRect(x_pos + 1.5*mm, y_pos + 1.5*mm, 57*mm, 45*mm, 3*mm, fill=0, stroke=1)
@@ -713,9 +693,8 @@ def build_master_pdf():
             
             c.setFont("Arial", 5.2)
             c.setFillColor(C_CREAM)
-            c.drawCentredString(x_pos + 30*mm, y_pos + 29*mm, "100% Oven-Baked Dog Treats · 4–5 Bones")
+            c.drawCentredString(x_pos + 30*mm, y_pos + 29*mm, "— Good Boy Snacks — · 4–5 Bones")
             
-            # Draw Small QR in the center
             c.drawImage(qr_img_path, x_pos + 21*mm, y_pos + 11*mm, width=18*mm, height=18*mm)
             
             c.setFont("Arial-Bold", 4.8)
@@ -729,14 +708,12 @@ def build_master_pdf():
             
     c.setFillColor(colors.HexColor("#998877"))
     c.setFont("Arial", 6.5)
-    c.drawRightString(285*mm, 5*mm, "BROSKI Digital Print Release v6.0 · Page 11 of 11 (A3 Sheet)")
+    c.drawRightString(285*mm, 5*mm, "BROSKI Digital Print Release v7.0 · Page 11 of 11 (A3 Sheet)")
     c.showPage()
     
-    # Save Canvas
     c.save()
     print("Master PDF generated successfully at:", str(out_pdf_path))
     
-    # Copy to Downloads / _Office & Docs folder
     try:
         DOWNLOADS.mkdir(parents=True, exist_ok=True)
         dest_pdf = DOWNLOADS / "Broski_PRINT_READY_Stickers_2026.pdf"
