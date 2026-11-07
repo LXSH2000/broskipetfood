@@ -75,8 +75,8 @@ Rex and the executive team reviewed Lakshay's Excel models and designed the omni
 
 | Date | Milestone / Event | Department / Owner |
 |---|---|---|
-| **6–7 Nov 2026** | Submit GST REG-04 clarification on gst.gov.in; chase OLI for TM-A; get dedicated business SIM. | Lakshay & Maya (Legal) |
-| **7–8 Nov 2026** | Call Scoobee bakery to lock 110 kg order (55 kg Non-Veg + 55 kg Mix) for pickup on 11/12 Nov. | Lakshay & Arjun (Sales) |
+| **7 Nov 2026** | **GST REG-04 SUBMITTED (DONE):** Clarification & 6-page verified PDF filed on gst.gov.in under ARN AA071026132029K (6 days early). | Lakshay & Maya (Legal) |
+| **7–8 Nov 2026** | Call Scoobee bakery to lock 110 kg order (55 kg Non-Veg + 55 kg Mix) for pickup on 11/12 Nov; chase OLI for TM-A; get business SIM. | Lakshay & Arjun (Sales) |
 | **9–10 Nov 2026** | Print front/back labels with Nangloi local printer; procure stand-up zipper pouches (275 pcs). | Lakshay & Rohan (Packaging) |
 | **11–12 Nov 2026** | Pick up 110 kg bulk biscuits from Scoobee (Shalimar Bagh); arrival QA inspection. | Lakshay & Kavya (QA) |
 | **12–14 Nov 2026** | Home packing run (275 packs) at 12A/3 Dharam Colony on stamped scale; box 12-pack cartons. | Lakshay & Sahil (Ops) |
