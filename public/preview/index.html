@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BROSKI · Creative Motion & Interaction Lab (Sample Preview)</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@400;600&family=Gaegu:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #352016;
+  --primary-light: #523425;
+  --accent: #b8452b;
+  --accent-soft: rgba(184, 69, 43, 0.12);
+  --cream: #fff8ed;
+  --cream-dark: #f5efe4;
+  --surface: #ffffff;
+  --border: #e6dcce;
+  --border-light: rgba(53, 32, 22, 0.08);
+  --text: #221c18;
+  --text-muted: #6f6259;
+  --green: #15803d;
+  --green-bg: #dcfce7;
+  --font-main: 'DM Sans', -apple-system, sans-serif;
+  --font-display: 'Outfit', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-hand: 'Gaegu', cursive;
+  --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-main);
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* -------------------------------------------------------------
+   1. SKIPER-UI: Multi-Layer Progressive Blur Mask (skiper41)
+   ------------------------------------------------------------- */
+.progressive-blur-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 90;
+}
+.progressive-blur-top .blur-step {
+  position: absolute;
+  inset: 0;
+}
+.blur-1 { backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px); mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 25%); }
+.blur-2 { backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 50%); }
+.blur-3 { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 75%); }
+.blur-4 { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%); }
+
+/* -------------------------------------------------------------
+   2. SKIPER-UI: Dynamic Island Morphing Engine (skiper2)
+   ------------------------------------------------------------- */
+.dynamic-island-wrap {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  transition: transform 0.4s var(--spring-snappy);
+}
+
+.dynamic-island {
+  background: #20130d;
+  color: var(--cream);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 248, 237, 0.15);
+  box-shadow: 0 10px 40px rgba(32, 19, 13, 0.35), 0 0 0 1px rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 48px;
+  width: 280px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: width 0.45s var(--spring-snappy), height 0.45s var(--spring-snappy), padding 0.45s var(--spring-snappy), border-radius 0.45s var(--spring-snappy);
+  user-select: none;
+}
+
+.dynamic-island[data-mode="expanded"] {
+  width: 440px;
+  height: 110px;
+  padding: 18px 20px;
+  border-radius: 28px;
+}
+
+.island-idle-state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.island-dot {
+  width: 9px;
+  height: 9px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #22c55e;
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+.island-expanded-state {
+  display: none;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dynamic-island[data-mode="expanded"] .island-idle-state { display: none; }
+.dynamic-island[data-mode="expanded"] .island-expanded-state { display: flex; }
+
+.expanded-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.expanded-tag {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #d4a373;
+  font-family: var(--font-mono);
+}
+
+.expanded-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.crunch-synth-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.2s var(--spring-bounce);
+}
+
+.crunch-synth-btn:hover {
+  transform: scale(1.05);
+}
+
+.crunch-synth-btn:active {
+  transform: scale(0.95);
+}
+
+/* -------------------------------------------------------------
+   3. ANIMMASTER: Kinetic Hero & Magnetic Button System
+   ------------------------------------------------------------- */
+.hero-section {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 60px;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(53, 32, 22, 0.04);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 9vw, 92px);
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 0.95;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+  perspective: 1000px;
+}
+
+.hero-title .word-span {
+  display: inline-block;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.hero-subtitle {
+  font-size: clamp(16px, 2.2vw, 21px);
+  color: var(--text-muted);
+  max-width: 580px;
+  margin: 0 auto 36px;
+  line-height: 1.45;
+}
+
+.hero-subtitle strong {
+  color: var(--primary);
+}
+
+/* Magnetic Button with Ripple & Spring Fill */
+.magnetic-btn-wrap {
+  display: inline-block;
+  position: relative;
+}
+
+.magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--primary);
+  color: var(--cream);
+  padding: 16px 36px;
+  border-radius: 40px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 12px 32px rgba(53, 32, 22, 0.22);
+  transition: transform 0.3s var(--spring-snappy), box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160%;
+  padding-bottom: 160%;
+  background: var(--accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s var(--spring-snappy);
+  z-index: 1;
+}
+
+.magnetic-btn:hover::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.magnetic-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(184, 69, 43, 0.3);
+}
+
+.magnetic-btn span {
+  position: relative;
+  z-index: 2;
+}
+
+/* -------------------------------------------------------------
+   4. ANIMMASTER: 3D Sticky Cards Segmented Scrub
+   ------------------------------------------------------------- */
+.stack-section {
+  position: relative;
+  padding: 80px 20px 140px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -1px;
+}
+
+.section-head p {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.stack-cards-viewport {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  height: 520px;
+  margin: 0 auto;
+  perspective: 1200px;
+}
+
+.motion-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 480px;
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(53, 32, 22, 0.12);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Luxury Card Inner Styling */
+.card-left {
+  padding: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.badge-nv { background: #fef08a; color: #854d0e; }
+.badge-mx { background: #e0e7ff; color: #3730a3; }
+.badge-cmb { background: var(--green-bg); color: var(--green); }
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.1;
+  margin: 14px 0 10px;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.card-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.card-price {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 900;
+  color: var(--primary);
+}
+
+.card-price-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.card-right {
+  background: var(--cream-dark);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  overflow: hidden;
+}
+
+.card-img-mock {
+  width: 220px;
+  height: 300px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 36px rgba(53, 32, 22, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  transition: transform 0.3s var(--spring-snappy);
+}
+
+.motion-card:hover .card-img-mock {
+  transform: scale(1.04) rotate(1deg);
+}
+
+/* -------------------------------------------------------------
+   5. PROMPT-MOTION: Studio Scrubber Engine (window.seek(t))
+   ------------------------------------------------------------- */
+.studio-scrubber-bar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
+  max-width: 680px;
+  background: rgba(32, 19, 13, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 248, 237, 0.18);
+  border-radius: 20px;
+  padding: 12px 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--cream);
+}
+
+.scrubber-btn {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s var(--spring-bounce);
+  flex-shrink: 0;
+}
+
+.scrubber-btn:hover { transform: scale(1.1); }
+
+.scrubber-track {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scrubber-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #d4a373;
+}
+
+.scrubber-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 248, 237, 0.2);
+  outline: none;
+  cursor: pointer;
+}
+
+.scrubber-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(184, 69, 43, 0.8);
+  cursor: pointer;
+}
+
+.scrubber-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+/* Card 3D Perspective Offsets */
+.card-0 { z-index: 3; }
+.card-1 { z-index: 2; }
+.card-2 { z-index: 1; }
+
+@media (max-width: 768px) {
+  .motion-card {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .card-right { display: none; }
+  .card-left { padding: 28px; }
+  .stack-cards-viewport { height: 420px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 1. SKIPER-UI: Multi-layer progressive blur mask -->
+<div class="progressive-blur-top" aria-hidden="true">
+  <div class="blur-step blur-1"></div>
+  <div class="blur-step blur-2"></div>
+  <div class="blur-step blur-3"></div>
+  <div class="blur-step blur-4"></div>
+</div>
+
+<!-- 2. SKIPER-UI: Dynamic Island Morphing Engine (skiper2) -->
+<div class="dynamic-island-wrap">
+  <div class="dynamic-island" id="dynamicIsland" data-mode="idle" onclick="toggleIsland()">
+    <!-- Idle State -->
+    <div class="island-idle-state">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="island-dot"></span>
+        <span>West Delhi Launch</span>
+      </div>
+      <span style="font-family:var(--font-mono); font-size:11px; color:#d4a373;">15 NOV</span>
+    </div>
+
+    <!-- Expanded State (Triggered on click) -->
+    <div class="island-expanded-state">
+      <div class="expanded-top">
+        <span class="expanded-tag">Broski Audio Lab & Dispatch</span>
+        <span style="font-size:11px; color:#888;">Tap to minimize ×</span>
+      </div>
+      <div class="expanded-body">
+        <div>
+          <div style="font-size:13px; font-weight:700;">Hear The Oven-Baked Crunch</div>
+          <div style="font-size:10.5px; color:#aaa;">Web Audio Procedural Synthesizer</div>
+        </div>
+        <button type="button" class="crunch-synth-btn" onclick="event.stopPropagation(); triggerCrunchSound();">
+          🔊 Play Crunch
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. ANIMMASTER: Kinetic Typography & Magnetic Hero -->
+<section class="hero-section">
+  <div class="hero-badge">
+    <span>🦴</span>
+    <span>Experimental Motion Prototype</span>
+    <span>·</span>
+    <span>Sample for Lakshay</span>
+  </div>
+
+  <h1 class="hero-title" id="heroTitle">
+    <span class="word-span">Treats</span> <span class="word-span">for</span> <span class="word-span">your</span><br>
+    <span class="word-span" style="color:var(--accent); font-style:italic;">best</span> <span class="word-span" style="color:var(--accent);">bro.</span>
+  </h1>
+
+  <p class="hero-subtitle">
+    Synthesizing <strong>animmaster</strong> 3D scroll physics, <strong>skiper-ui</strong> micro-interactions, and <strong>prompt-motion</strong> deterministic scrubbers.
+  </p>
+
+  <div class="magnetic-btn-wrap" id="magneticWrap">
+    <button type="button" class="magnetic-btn" id="magneticBtn" onclick="scrubToCards()">
+      <span>Explore 3D Stack Cards ↓</span>
+    </button>
+  </div>
+</section>
+
+<!-- 4. ANIMMASTER: 3D Sticky Cards Segmented Scrub ($S = 1/N$) -->
+<section class="stack-section" id="stackSection">
+  <div class="section-head">
+    <h2>Kinetic Stacking Architecture</h2>
+    <p>Drag the Prompt-Motion scrubber below or scroll to scrub card physics in real-time.</p>
+  </div>
+
+  <div class="stack-cards-viewport" id="cardsViewport">
+    <!-- Card 1: Non-Veg -->
+    <div class="motion-card card-0" id="card0">
+      <div class="card-left">
+        <div>
+          <span class="card-badge badge-nv">Hero Choice · Yellow Pouch</span>
+          <h3 class="card-title">Non-Veg Bone Treats</h3>
+          <p class="card-desc">
+            Double oven-baked with savory bone meal and whole wheat base. Specially formulated for that loud, head-turning crunch dogs go crazy for.
+          </p>
+        </div>
+        <div>
+          <div class="card-price-row">
+            <span class="card-price">₹149</span>
+            <span class="card-price-sub">400 g Pouch · MRP incl. taxes</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-right">
+        <div class="card-img-mock">
+          <div style="font-size:36px; margin-bottom:12px;">🦴</div>
+          <strong style="color:var(--primary); font-size:16px;">NON-VEG</strong>
+          <span style="font-size:11px; color:var(--text-muted); margin-top:4px;">400g Stand-up Pouch</span>
+          <div style="margin-top:20px; font-size:11px; background:var(--cream); padding:4px 10px; border-radius:20px;">
+            Clear Window Pack
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Mix -->
+    <div class="motion-card card-1" id="card1">
+      <div class="card-left">
+        <div>
+          <span class="card-badge badge-mx">Flavour Variety · White Pouch</span>
+          <h3 class="card-title">Mix Crunchy Biscuits</h3>
+          <p class="card-desc">
+            Multigrain bone shapes infused with garden herbs, milk solids, and wholesome cereal. Perfect everyday training companion.
+          </p>
+        </div>
+        <div>
+          <div class="card-price-row">
+            <span class="card-price">₹179</span>
+            <span class="card-price-sub">400 g Pouch · MRP incl. taxes</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-right">
+        <div class="card-img-mock">
+          <div style="font-size:36px; margin-bottom:12px;">🌾</div>
+          <strong style="color:var(--primary); font-size:16px;">MIX CRUNCH</strong>
+          <span style="font-size:11px; color:var(--text-muted); margin-top:4px;">400g Stand-up Pouch</span>
+          <div style="margin-top:20px; font-size:11px; background:var(--cream); padding:4px 10px; border-radius:20px;">
+            Multigrain Blend
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Bro Combo -->
+    <div class="motion-card card-2" id="card2">
+      <div class="card-left">
+        <div>
+          <span class="card-badge badge-cmb">Launch Duo · Best Value</span>
+          <h3 class="card-title">The Bro Combo Duo</h3>
+          <p class="card-desc">
+            Get both flavors (Non-Veg + Mix = 800g) plus a free 50g Pocket Bone Sampler and free delivery across West Delhi.
+          </p>
+        </div>
+        <div>
+          <div class="card-price-row">
+            <span class="card-price">₹299</span>
+            <span class="card-price-sub">Save ₹29 · Free Express Delivery</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-right">
+        <div class="card-img-mock" style="border: 2px solid var(--accent);">
+          <div style="font-size:36px; margin-bottom:12px;">🔥</div>
+          <strong style="color:var(--accent); font-size:16px;">THE BRO COMBO</strong>
+          <span style="font-size:11px; color:var(--text-muted); margin-top:4px;">Duo Pack (800g Total)</span>
+          <div style="margin-top:20px; font-size:11px; background:#fef2f2; color:var(--accent); padding:4px 10px; border-radius:20px; font-weight:700;">
+            Includes Free Gift
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. PROMPT-MOTION: Studio Scrubber Engine (window.seek(t)) -->
+<div class="studio-scrubber-bar">
+  <button type="button" class="scrubber-btn" id="playBtn" onclick="togglePlay()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" id="playIcon">
+      <polygon points="5 3 19 12 5 21 5 3"/>
+    </svg>
+  </button>
+
+  <div class="scrubber-track">
+    <div class="scrubber-labels">
+      <span>window.seek(t)</span>
+      <span id="timecodeDisplay">0.00s / 3.00s</span>
+    </div>
+    <input type="range" id="timeSlider" class="scrubber-slider" min="0" max="1" step="0.001" value="0" oninput="onSeekSlider(this.value)">
+  </div>
+
+  <div class="scrubber-meta">60 FPS · Playwright Sync</div>
+</div>
+
+<script>
+/* -------------------------------------------------------------
+   PROMPT-MOTION: Deterministic window.seek(t) Engine
+   ------------------------------------------------------------- */
+const TOTAL_DURATION = 3.0; // 3.0 seconds loop
+let currentTime = 0;
+let isPlaying = false;
+let rafId = null;
+
+// Mathematical Interpolation
+function lerp(a, b, t) { return a + (b - a) * t; }
+function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+
+// Pure Deterministic Evaluation: Every visual state is f(t)
+window.seek = function(t) {
+  const normT = clamp(t / TOTAL_DURATION, 0, 1);
+  const slider = document.getElementById('timeSlider');
+  if (slider) slider.value = normT;
+
+  const tc = document.getElementById('timecodeDisplay');
+  if (tc) tc.innerText = `${(normT * TOTAL_DURATION).toFixed(2)}s / ${TOTAL_DURATION.toFixed(2)}s`;
+
+  // Animmaster 3D Card Stack Physics: 3 cards => segment = 1/3 = 0.333
+  const segment = 1 / 3;
+  const cards = [
+    document.getElementById('card0'),
+    document.getElementById('card1'),
+    document.getElementById('card2')
+  ];
+
+  cards.forEach((card, i) => {
+    if (!card) return;
+    const cardStart = i * segment;
+    const cardEnd = (i + 1) * segment;
+
+    if (normT < cardStart) {
+      // Resting behind in stack
+      const step = i - (normT / segment);
+      const yOffset = -50 + step * 18;
+      const scale = 1 - step * 0.05;
+      card.style.transform = `translate(-50%, ${yOffset}px) scale(${scale})`;
+      card.style.opacity = '1';
+    } else if (normT >= cardStart && normT < cardEnd) {
+      // Active card scrubbing toward exit
+      const segP = (normT - cardStart) / segment;
+      // Exponential lift & 3D rotation
+      const yVal = lerp(-50, -220, Math.pow(segP, 1.8));
+      const rotX = lerp(0, 32, segP);
+      const scaleVal = lerp(1, 0.88, segP);
+      const opac = lerp(1, 0.1, Math.pow(segP, 2));
+
+      card.style.transform = `translate(-50%, ${yVal}px) rotateX(${rotX}deg) scale(${scaleVal})`;
+      card.style.opacity = opac.toFixed(2);
+    } else {
+      // Already discarded
+      card.style.transform = `translate(-50%, -240px) rotateX(40deg) scale(0.8)`;
+      card.style.opacity = '0';
+    }
+  });
+};
+
+function onSeekSlider(val) {
+  pausePlay();
+  currentTime = parseFloat(val) * TOTAL_DURATION;
+  window.seek(currentTime);
+}
+
+function togglePlay() {
+  if (isPlaying) {
+    pausePlay();
+  } else {
+    startPlay();
+  }
+}
+
+function startPlay() {
+  isPlaying = true;
+  document.getElementById('playIcon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  let lastTimestamp = performance.now();
+
+  function loop(now) {
+    if (!isPlaying) return;
+    const delta = (now - lastTimestamp) / 1000;
+    lastTimestamp = now;
+
+    currentTime = (currentTime + delta) % TOTAL_DURATION;
+    window.seek(currentTime);
+    rafId = requestAnimationFrame(loop);
+  }
+  rafId = requestAnimationFrame(loop);
+}
+
+function pausePlay() {
+  isPlaying = false;
+  if (rafId) cancelAnimationFrame(rafId);
+  document.getElementById('playIcon').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+}
+
+/* -------------------------------------------------------------
+   SKIPER-UI: Dynamic Island Toggle
+   ------------------------------------------------------------- */
+function toggleIsland() {
+  const island = document.getElementById('dynamicIsland');
+  const current = island.getAttribute('data-mode');
+  island.setAttribute('data-mode', current === 'idle' ? 'expanded' : 'idle');
+}
+
+/* -------------------------------------------------------------
+   PROMPT-MOTION: Web Audio API Procedural Crunch Synthesizer
+   (Synthesizes authentic biscuit snap sound with zero MP3 files)
+   ------------------------------------------------------------- */
+function triggerCrunchSound() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioCtx();
+
+    // 1. Initial High-Frequency Snap (Crack of baked biscuit)
+    const snapOsc = ctx.createOscillator();
+    const snapGain = ctx.createGain();
+    snapOsc.type = 'triangle';
+    snapOsc.frequency.setValueAtTime(2400, ctx.currentTime);
+    snapOsc.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 0.08);
+
+    snapGain.gain.setValueAtTime(0.7, ctx.currentTime);
+    snapGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+
+    snapOsc.connect(snapGain);
+    snapGain.connect(ctx.destination);
+    snapOsc.start(ctx.currentTime);
+    snapOsc.stop(ctx.currentTime + 0.09);
+
+    // 2. Low-frequency resonance (Oven-baked whole wheat thud)
+    const thudOsc = ctx.createOscillator();
+    const thudGain = ctx.createGain();
+    thudOsc.type = 'sine';
+    thudOsc.frequency.setValueAtTime(140, ctx.currentTime);
+    thudOsc.frequency.exponentialRampToValueAtTime(45, ctx.currentTime + 0.18);
+
+    thudGain.gain.setValueAtTime(0.9, ctx.currentTime);
+    thudGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+
+    thudOsc.connect(thudGain);
+    thudGain.connect(ctx.destination);
+    thudOsc.start(ctx.currentTime + 0.01);
+    thudOsc.stop(ctx.currentTime + 0.22);
+  } catch (e) {
+    console.log("AudioContext blocked until user interaction", e);
+  }
+}
+
+/* -------------------------------------------------------------
+   ANIMMASTER: Magnetic Button Spring Physics
+   ------------------------------------------------------------- */
+const magWrap = document.getElementById('magneticWrap');
+const magBtn = document.getElementById('magneticBtn');
+
+if (magWrap && magBtn) {
+  magWrap.addEventListener('mousemove', (e) => {
+    const rect = magWrap.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    magBtn.style.transform = `translate(${x * 0.35}px, ${y * 0.35}px)`;
+  });
+
+  magWrap.addEventListener('mouseleave', () => {
+    magBtn.style.transform = 'translate(0px, 0px)';
+  });
+}
+
+function scrubToCards() {
+  document.getElementById('stackSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Initial Seek State
+window.seek(0);
+</script>
+</body>
+</html>
