@@ -20,7 +20,7 @@
 - **Dedicated Sub-pages (Served from `public/`):**
   - `/billing/` — Official GST Bill of Supply & Retail Invoicing Generator.
   - `/offers/` — Bro Perks launch deals, bundle discounts, and repeat customer rewards.
-  - `/r/` — Honest customer feedback & review capture form.
+  - `/r/` — Interactive Bro Voice & Text Review Portal with 5-Paw rating and instant Free 50g Sample Voucher generation.
   - `/privacy/` — Privacy policy and data handling statement.
 - **Mobile UX Refinement:** Liquid proximity bottom dock anchored to `left: 50%` with `transform: translate(-50%, 0)` on `width: max-content`, guaranteeing full centering across all viewport sizes.
 
@@ -38,7 +38,7 @@ Rex and the executive team reviewed Lakshay's Excel models and designed the omni
   - Retail Realization: 12 packs × ₹149 MRP = ₹1,788.
   - **Shopkeeper Profit: ₹688 (38.5% margin, 62.5% ROI on capital).**
   - Compare to Pedigree Biscrok (18% margin, ₹328 profit on ₹1,460 investment). BROSKI delivers **MORE THAN DOUBLE** the shopkeeper's profit!
-- **Counter Tasting Jar Conversion Tool:** Each launch partner shop receives a complimentary clear acrylic counter jar pre-loaded with 20 fresh bone biscuits and a table-top tent card: *"Free Taste Test for Your Bro!"*. Dogs crunch on the spot; owners purchase immediately.
+- **Table-top Counter Card:** Compact tent card explaining the 38.5% margin and 100% buyback guarantee (display jars eliminated to save ₹950 outlay).
 - **100% 15-Day Buyback Guarantee:** Zero risk for shopkeepers. Any unsold, undamaged packs are bought back in full cash within 15 days.
 
 ### B. Online D2C Launch ("The Bro Welcome Crate"):
