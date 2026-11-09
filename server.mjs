@@ -109,7 +109,22 @@ export async function startServer({ port = Number(process.env.PORT || 4174), dat
         filename = path.join(base, 'index.html');
         try { content = await readFile(filename); } catch { return json(404, { error: 'Build the frontend first.' }); }
       }
-      const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.webm': 'video/webm' };
+      const mime = {
+        '.html': 'text/html',
+        '.js': 'text/javascript',
+        '.css': 'text/css',
+        '.json': 'application/json',
+        '.svg': 'image/svg+xml',
+        '.png': 'image/png',
+        '.jpg': 'image/jpeg',
+        '.webp': 'image/webp',
+        '.ico': 'image/x-icon',
+        '.woff2': 'font/woff2',
+        '.mp4': 'video/mp4',
+        '.webm': 'video/webm',
+        '.xml': 'application/xml; charset=utf-8',
+        '.txt': 'text/plain; charset=utf-8'
+      };
       const cache = pathname.startsWith('/assets/') ? 'public, max-age=31536000, immutable' : 'no-cache';
       const ext = path.extname(filename);
       const contentType = mime[ext] || 'application/octet-stream';

@@ -50,6 +50,22 @@ test('order API protects order totals, validation and customer privacy', async t
   assert.equal(page.headers.get('cache-control'), 'no-cache');
   assert.equal(page.headers.get('x-frame-options'), 'DENY');
   assert.equal(page.headers.get('x-content-type-options'), 'nosniff');
+  await writeFile(path.join(distDir, 'sitemap.xml'), '<urlset><url><loc>https://broskipetfood.com/</loc></url></urlset>');
+  await writeFile(path.join(distDir, 'robots.txt'), 'User-agent: *\nAllow: /');
+  await writeFile(path.join(distDir, 'llms.txt'), '# BROSKI Pet Food');
+
+  const sitemapRes = await fetch(base + '/sitemap.xml');
+  assert.equal(sitemapRes.status, 200);
+  assert.equal(sitemapRes.headers.get('content-type'), 'application/xml; charset=utf-8');
+
+  const robotsRes = await fetch(base + '/robots.txt');
+  assert.equal(robotsRes.status, 200);
+  assert.equal(robotsRes.headers.get('content-type'), 'text/plain; charset=utf-8');
+
+  const llmsRes = await fetch(base + '/llms.txt');
+  assert.equal(llmsRes.status, 200);
+  assert.equal(llmsRes.headers.get('content-type'), 'text/plain; charset=utf-8');
+
   assert.equal((await fetch(base + '/assets/missing.js')).status, 404);
   assert.equal((await fetch(base + '/api/unknown')).status, 404);
   assert.equal((await post('/api/orders', { payload: 'x'.repeat(17000) })).status, 413);

@@ -1,0 +1,73 @@
+# BROSKI Pet Food — Full Knowledge Base & Specifications
+
+> Comprehensive reference document for LLMs, AI agents, and web search indexing engines.
+> Canonical source: https://broskipetfood.com/llms-full.txt
+> Last updated: 2026-11-09
+
+---
+
+## 1. Company Identity & Brand
+- **Legal Entity:** BROSKI (Sole Proprietorship registered under Indian law)
+- **Founder & Sole Proprietor:** Lakshay
+- **Address:** 12A/3, Dharam Colony, Nangloi, New Delhi 110041, India
+- **Coordinates:** Lat 28.6826° N, Lon 77.0655° E
+- **Udyam MSME Registration:** UDYAM-DL-11-0177908
+- **Brand Slogan:** "Treats for your best bro." / "Good Boy Snacks"
+- **Primary Website:** https://broskipetfood.com/
+- **Inquiry Emails:** hello@broskipetfood.com, support@broskipetfood.com, billing@broskipetfood.com
+
+---
+
+## 2. Product Line & Specifications
+
+### 2.1 BROSKI Non-Veg Dog Biscuits (Chicken Bone)
+- **Net Weight:** 400 grams
+- **SKU:** BR-NV-400G
+- **MRP:** ₹149 (Inclusive of all taxes)
+- **Biscuit Shape:** Classic bone shape
+- **Key Ingredients:** Whole wheat flour, bone broth, liver extract, vegetable oil, essential vitamins and minerals.
+- **Packaging:** Premium yellow stand-up barrier pouch with transparent product viewing window, heat seal, and resealable press-to-close zip.
+- **Feeding Recommendation:**
+  - Small dogs (< 10 kg): 2–4 biscuits per day
+  - Medium dogs (10–25 kg): 4–8 biscuits per day
+  - Large dogs (> 25 kg): 8–12 biscuits per day
+  - Fresh drinking water should always be available.
+
+### 2.2 BROSKI Mix Flavour Dog Biscuits
+- **Net Weight:** 400 grams
+- **SKU:** BR-MX-400G
+- **MRP:** ₹179 (Inclusive of all taxes)
+- **Biscuit Shape:** Bone shape (multi-colour trio)
+- **Key Ingredients:** Whole wheat flour, milk solids, vegetable extracts, savory poultry broth, natural permitted colours, minerals.
+- **Packaging:** Premium yellow stand-up barrier pouch with transparent product window and resealable zip.
+
+### 2.3 BROSKI Peanut Butter Dog Biscuits
+- **Net Weight:** 400 grams
+- **SKU:** BR-PB-400G
+- **MRP:** ₹179 (Inclusive of all taxes)
+- **Biscuit Shape:** Bone shape
+- **Key Ingredients:** Whole wheat flour, roasted peanut butter (xylitol-free), oats, vegetable oil, natural tocopherols.
+- **Packaging:** Premium yellow stand-up barrier pouch with transparent product window and resealable zip.
+
+### 2.4 Pilot Sampler Pouches (50g)
+- **Net Weight:** 50 grams (approx. 5–6 biscuits)
+- **Purpose:** Distributed free or at nominal ₹20 cost during Delhi neighborhood sampling drives to allow dogs to taste-test before owners purchase full 400g pouches.
+- **Interactive QR Code:** Directs to https://broskipetfood.com/r/ for feedback submission and repeat-order discount codes.
+
+---
+
+## 3. Distribution, Logistics & Wholesale
+- **Target Territory (Pilot Phase):** West Delhi clusters: Nangloi, Paschim Vihar, Janakpuri, Rajouri Garden, Punjabi Bagh, Dwarka.
+- **Retailer Terms:** Wholesale case packs (12 or 24 pouches per corrugated master carton) with healthy retailer margins, free promotional counter displays, and window-sticker sample dispensers.
+- **Direct-to-Consumer:** Orders placed via WhatsApp or website are packed fresh in Nangloi and dispatched via local courier partners across Delhi NCR within 24–48 hours.
+
+---
+
+## 4. Digital Architecture & Endpoints
+- **Marketing & Storefront:** `https://broskipetfood.com/`
+- **Customer Feedback & QR Verification:** `https://broskipetfood.com/r/`
+- **Promotional Offers & Bundles:** `https://broskipetfood.com/offers/`
+- **Customer Privacy & Data Protection:** `https://broskipetfood.com/privacy/`
+- **XML Sitemap:** `https://broskipetfood.com/sitemap.xml`
+- **Robots Directives:** `https://broskipetfood.com/robots.txt`
+- **AI Summary File:** `https://broskipetfood.com/llms.txt`
