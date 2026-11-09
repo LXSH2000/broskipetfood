@@ -6,8 +6,22 @@ import BroskiCheckoutGateway from './BroskiCheckoutGateway';
 import './broski-checkout.css';
 
 const C = () => window.BROSKI_CONFIG || {};
-export const waLink = (text) =>
-  `https://wa.me/${C().WHATSAPP_NUMBER}?text=${encodeURIComponent(text || '')}`;
+export const waLink = (text) => {
+  let fullText = text || '';
+  try {
+    if (typeof window !== 'undefined' && window.BroskiAnalytics) {
+      const utm = window.BroskiAnalytics.getUtmTags();
+      if (utm && utm.utm_source) {
+        fullText += ` [Ref: ${utm.utm_source}${utm.utm_campaign ? ' / ' + utm.utm_campaign : ''}]`;
+      }
+      window.BroskiAnalytics.trackEvent('click_whatsapp_order', {
+        order_intent: text,
+        source: (utm && utm.utm_source) || 'direct'
+      });
+    }
+  } catch (e) {}
+  return `https://wa.me/${C().WHATSAPP_NUMBER}?text=${encodeURIComponent(fullText)}`;
+};
 
 function WaButton({ text, children }) {
   return (

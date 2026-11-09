@@ -5,6 +5,7 @@ export const CONFIG = {
   BRAND_NAME: 'Broski',
   TAGLINE: 'Treats for your best bro.',
   SUPPORT_EMAIL: 'support@broskipetfood.com',
+  GA_MEASUREMENT_ID: 'G-BROSKI2026', // Google Analytics 4 Measurement ID
   // Digits only with country code (91 for India). Empty string hides all WhatsApp buttons until new SIM is ready:
   WHATSAPP_NUMBER: '', 
   // Formspree / Web3Forms / Google Apps Script endpoint:

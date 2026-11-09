@@ -1,4 +1,11 @@
 User-agent: *
+Allow: /
 Disallow: /api/
+Disallow: /admin/
+Disallow: /app/
+Disallow: /invoices/
+Disallow: /private/
+Disallow: /*.json$
 
+# Canonical XML Sitemap for Google Search Console
 Sitemap: https://broskipetfood.com/sitemap.xml

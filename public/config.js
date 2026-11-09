@@ -4,6 +4,7 @@ window.BROSKI_CONFIG = {
   WHATSAPP_NUMBER: '918076045934',     // 91XXXXXXXXXX: country code, no +, no spaces
   TALLY_FORM_URL: 'https://tally.so/r/mB0pEq',       // feedback form link
   EMAIL: 'support@broskipetfood.com',         // [EMAIL]
+  GA_MEASUREMENT_ID: 'G-BROSKI2026',           // Replace with your Google Analytics 4 Measurement ID (e.g. G-XXXXXXXXXX)
 
   // Launch banner: shown until this moment (India time), then hidden automatically
   BANNER_TEXT: '🐾 Launch week: free 50 g taste pack + free delivery in West Delhi for the first 50 orders – till 22 Nov',
