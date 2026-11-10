@@ -1,0 +1,71 @@
+# BROSKI Pet Food — Full Knowledge Base & Specifications
+
+> Comprehensive reference document for LLMs, AI agents, and web search indexing engines.
+> Canonical source: https://broskipetfood.com/llms-full.txt
+> Last updated: 2026-11-10
+
+---
+
+## 1. Company Identity & Brand
+- **Legal Entity:** BROSKI (Sole Proprietorship registered under Indian law)
+- **Founder & Sole Proprietor:** Lakshay
+- **Address:** 12A/3, Dharam Colony, Nangloi, New Delhi 110041, India
+- **Coordinates:** Lat 28.6826° N, Lon 77.0655° E
+- **Udyam MSME Registration:** UDYAM-DL-11-0177908
+- **Brand Slogan:** "Treats for your best bro."
+- **Primary Website:** https://broskipetfood.com/
+- **Inquiry Email:** support@broskipetfood.com
+
+---
+
+## 2. Product Line & Specifications
+
+### 2.1 BROSKI Bro Bites (Non-Veg)
+- **Net Weight:** 400 grams
+- **SKU:** BR-NV-400G
+- **MRP:** ₹149 (Inclusive of all taxes)
+- **Biscuit Shape:** Classic bone shape
+- **Packaging:** Stand-up barrier pouch with transparent product viewing window and resealable zip.
+- **Guidance:** A treat, not a meal. Fresh drinking water should always be available.
+
+### 2.2 BROSKI Bro Mix
+- **Net Weight:** 400 grams
+- **SKU:** BR-MX-400G
+- **MRP:** ₹179 (Inclusive of all taxes)
+- **Biscuit Shape:** Bone shape
+- **Packaging:** Stand-up barrier pouch with transparent product viewing window and resealable zip.
+
+### 2.3 BROSKI Peanut Butter Dog Biscuits
+- **Net Weight:** 400 grams
+- **SKU:** BR-PB-400G
+- **MRP:** ₹179 (Inclusive of all taxes)
+- **Biscuit Shape:** Bone shape
+- **Packaging:** Stand-up barrier pouch with transparent product viewing window and resealable zip.
+
+### 2.4 BROSKI Bro Combo
+- **Net Weight:** 800 grams (1 Bro Bites + 1 Bro Mix)
+- **SKU:** BR-CB-800G
+- **MRP:** ₹299 (Save ₹29)
+
+### 2.5 Pilot Sampler Pouches (50g)
+- **Net Weight:** 50 grams
+- **Purpose:** Distributed during West Delhi neighborhood sampling drives to allow dogs to taste-test before owners purchase full 400g pouches.
+- **Interactive QR Code:** Directs to https://broskipetfood.com/r/ for feedback submission and repeat-order discount codes.
+
+---
+
+## 3. Distribution, Logistics & Wholesale
+- **Target Territory (Pilot Phase):** West Delhi clusters: Nangloi, Paschim Vihar, Janakpuri, Rajouri Garden, Punjabi Bagh, Dwarka.
+- **Retailer Terms:** Wholesale case packs (12 pouches per counter box, 11+1 free introductory offer) with healthy retailer margins and free display material.
+- **Direct-to-Consumer:** Orders placed via WhatsApp or website are packed fresh in Nangloi and dispatched via local courier partners across Delhi NCR within 24–48 hours.
+
+---
+
+## 4. Digital Architecture & Endpoints
+- **Marketing & Storefront:** `https://broskipetfood.com/`
+- **Customer Feedback & QR Verification:** `https://broskipetfood.com/r/`
+- **Promotional Offers & Bundles:** `https://broskipetfood.com/offers/`
+- **Customer Privacy & Data Protection:** `https://broskipetfood.com/privacy/`
+- **XML Sitemap:** `https://broskipetfood.com/sitemap.xml`
+- **Robots Directives:** `https://broskipetfood.com/robots.txt`
+- **AI Summary File:** `https://broskipetfood.com/llms.txt`

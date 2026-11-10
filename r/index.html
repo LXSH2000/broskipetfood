@@ -224,7 +224,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .mode-tab-btn.active {
@@ -256,7 +256,7 @@ body {
   justify-content: center;
   margin-bottom: 12px;
   box-shadow: 0 8px 24px rgba(53, 32, 22, 0.2);
-  transition: all 0.25s var(--spring-bounce);
+  transition: transform 0.25s var(--spring-bounce), background-color 0.25s var(--spring-bounce);
 }
 
 .record-mic-btn:hover {
@@ -333,7 +333,7 @@ body {
   border-radius: 12px;
   background: #faf6f0;
   color: var(--text);
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-box:focus, .textarea-box:focus {
@@ -371,7 +371,7 @@ body {
   justify-content: center;
   gap: 8px;
   box-shadow: 0 10px 24px rgba(53, 32, 22, 0.2);
-  transition: all 0.25s var(--spring-snappy);
+  transition: background-color 0.25s var(--spring-snappy), transform 0.25s var(--spring-snappy), box-shadow 0.25s var(--spring-snappy);
 }
 
 .submit-review-btn:hover {

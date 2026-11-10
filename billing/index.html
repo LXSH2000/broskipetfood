@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BROSKI | Professional GST Bill of Supply Generator</title>
-<meta name="description" content="Official GST Composition Scheme Bill of Supply Generator for BROSKI Pet Food.">
+<meta name="robots" content="noindex,nofollow">
+<title>BROSKI | Billing & Delivery Portal</title>
+<meta name="description" content="Official GST Composition Scheme Bill of Supply & Delivery Challan Generator for BROSKI Pet Food.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,7 +120,7 @@ body {
   border-radius: 8px;
   background: var(--card-bg);
   color: var(--text);
-  transition: all 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
 .input:focus, select:focus, textarea:focus {
@@ -133,6 +134,36 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+}
+
+.mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(0, 0, 0, .06);
+  border-radius: 10px;
+}
+
+.mode-btn {
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.mode-btn.active {
+  background: #352016;
+  color: #fff8ed;
+}
+
+.mode-btn:focus-visible {
+  outline: 2px solid #c0562b;
+  outline-offset: 2px;
 }
 
 .preset-pills {
@@ -151,7 +182,7 @@ body {
   font-weight: 600;
   color: var(--primary);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .preset-pill:hover {
@@ -172,7 +203,7 @@ body {
   border-radius: 9px;
   border: none;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   text-decoration: none;
 }
 
@@ -202,59 +233,83 @@ body {
 .btn-action-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
   margin-top: 10px;
 }
 
-/* Invoice Preview Canvas */
-.preview-canvas {
-  background: var(--surface);
-  border-radius: 14px;
-  box-shadow: 0 8px 30px rgba(53, 32, 22, 0.08);
+/* Item Row Box */
+.item-card {
+  background: var(--card-bg);
   border: 1px solid var(--border);
-  padding: 40px;
-  min-height: 960px;
-  position: relative;
-  font-size: 13px;
-  color: #1a1a1a;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
 }
 
-/* Official Bill of Supply Styling */
+.item-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.item-card-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.btn-remove-item {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Printable Bill Sheet (Canvas) */
+.preview-canvas {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(53, 32, 22, 0.08);
+  padding: 40px;
+  min-height: 840px;
+  border: 1px solid var(--border);
+}
+
 .inv-top-bar {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   border-bottom: 2px solid var(--primary);
-  padding-bottom: 20px;
+  padding-bottom: 18px;
   margin-bottom: 20px;
 }
 
 .brand-block h1 {
   font-family: var(--font-display);
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 800;
-  letter-spacing: -0.5px;
   color: var(--primary);
-  line-height: 1;
+  letter-spacing: -0.5px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .brand-block .tagline {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  font-size: 12px;
   color: var(--accent);
-  margin-top: 4px;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 .brand-details {
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--text-muted);
-  margin-top: 8px;
   line-height: 1.45;
+  margin-top: 6px;
 }
 
 .bill-badge-block {
@@ -267,79 +322,76 @@ body {
   font-weight: 800;
   color: var(--primary);
   letter-spacing: 0.5px;
-  text-transform: uppercase;
 }
 
 .statutory-composition-pill {
   display: inline-block;
-  background: var(--card-bg);
-  border: 1px solid #d4c5b1;
-  color: var(--primary);
+  background: var(--cream);
+  border: 1px dashed var(--accent);
+  padding: 6px 12px;
+  border-radius: 6px;
   font-size: 10px;
   font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 4px;
-  margin-top: 6px;
+  color: var(--primary);
   text-align: right;
-  max-width: 300px;
+  margin-top: 6px;
   line-height: 1.35;
 }
 
 .inv-meta-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px;
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 24px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
 }
 
 .meta-col p {
-  font-size: 12px;
+  font-size: 11.5px;
   margin-bottom: 4px;
   display: flex;
   justify-content: space-between;
 }
 
-.meta-col p strong {
-  color: var(--primary);
+.meta-col p span {
+  color: var(--text-muted);
 }
 
 .parties-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 24px;
+  gap: 20px;
+  margin-bottom: 22px;
 }
 
 .party-box {
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 14px 16px;
+  padding: 14px;
+  background: #ffffff;
 }
 
 .party-box h4 {
-  font-family: var(--font-display);
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
   color: var(--accent);
-  margin-bottom: 8px;
-  border-bottom: 1px dashed var(--border);
-  padding-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .party-name {
-  font-size: 14px;
+  font-family: var(--font-display);
+  font-size: 15px;
   font-weight: 700;
   color: var(--primary);
   margin-bottom: 4px;
 }
 
 .party-desc {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--text-muted);
   line-height: 1.45;
 }
@@ -348,8 +400,7 @@ body {
 .items-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 24px;
-  font-size: 12px;
+  margin-bottom: 22px;
 }
 
 .items-table th {
@@ -358,23 +409,21 @@ body {
   font-family: var(--font-display);
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
-  padding: 10px 8px;
+  letter-spacing: 0.5px;
+  padding: 8px 10px;
   text-align: left;
 }
 
 .items-table td {
-  padding: 10px 8px;
+  padding: 10px 10px;
   border-bottom: 1px solid var(--border);
+  font-size: 12px;
   vertical-align: middle;
 }
 
 .items-table tr:nth-child(even) td {
-  background: #fdfaf6;
+  background: #fdfbf7;
 }
-
-.text-right { text-align: right; }
-.text-center { text-align: center; }
 
 .item-title {
   font-weight: 700;
@@ -384,69 +433,68 @@ body {
 .item-sub {
   font-size: 10.5px;
   color: var(--text-muted);
-  font-family: var(--font-mono);
 }
 
 .scheme-tag {
   display: inline-block;
   background: var(--green-bg);
   color: var(--green);
-  font-size: 10px;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 9.5px;
   font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 3px;
-  margin-top: 2px;
+  margin-left: 4px;
 }
 
 /* Totals Area */
 .totals-area {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1fr 340px;
   gap: 24px;
-  align-items: start;
   margin-bottom: 24px;
+  align-items: start;
 }
 
 .amount-words-box {
   background: var(--card-bg);
-  border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 14px;
+  border: 1px solid var(--border);
+  padding: 12px;
 }
 
 .amount-words-box h5 {
-  font-size: 11px;
+  font-size: 10.5px;
   text-transform: uppercase;
   color: var(--text-muted);
   margin-bottom: 4px;
 }
 
 .amount-words-text {
-  font-size: 13px;
+  font-family: var(--font-display);
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--primary);
-  font-style: italic;
 }
 
 .upi-scan-card {
+  margin-top: 14px;
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px dashed var(--border);
+  background: #fdfbf7;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .qr-code-holder {
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
   background: #fff;
-  border: 1px solid #d4c5b1;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 
 .qr-code-holder img {
@@ -519,7 +567,6 @@ body {
   color: var(--primary);
 }
 
-/* Navigation bar back to main site */
 .top-nav-bar {
   display: flex;
   justify-content: space-between;
@@ -549,6 +596,22 @@ body {
   padding: 4px 10px;
   border-radius: 20px;
   letter-spacing: 0.5px;
+}
+
+.challan-triplicate-note {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 12px;
+  font-style: italic;
+}
+
+.receipt-ack-box {
+  margin-top: 16px;
+  padding: 10px;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  font-size: 10.5px;
 }
 
 /* Print Rules */
@@ -593,36 +656,68 @@ body {
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
         </svg>
-        Broski GST Billing Hub
+        Broski Billing Hub
       </h2>
-      <span class="badge-mode">Composition 1%</span>
+      <span class="badge-mode" id="headerModeBadge">Composition 1%</span>
     </div>
 
-    <!-- Quick Preset Buttons -->
+    <!-- Document Type Toggle (Task 3) -->
     <div class="panel-section">
-      <div class="section-label">⚡ Fast Billing Presets</div>
+      <div class="section-label">Document Type</div>
+      <div class="mode-toggle" role="radiogroup" aria-label="Document type">
+        <button type="button" id="modeBill" class="mode-btn active" role="radio" aria-checked="true"
+                onclick="setDocMode('bill')">Bill of Supply</button>
+        <button type="button" id="modeChallan" class="mode-btn" role="radio" aria-checked="false"
+                onclick="setDocMode('challan')">Delivery Challan</button>
+      </div>
+      <div class="field-group" id="purposeGroup" hidden style="margin-top:10px">
+        <label for="dispatchPurpose">Purpose of Dispatch</label>
+        <select id="dispatchPurpose" class="input" onchange="renderInvoice()">
+          <option>Free Samples for Taste Test</option>
+          <option>Supply of Goods on Approval / Consignment</option>
+          <option>Display Jar and Counter Material (Returnable)</option>
+        </select>
+      </div>
+      <div class="field-group" style="margin-top:10px">
+        <label for="sellerGstin">Your GSTIN (leave empty until issued)</label>
+        <input type="text" id="sellerGstin" class="input" value="" maxlength="15" placeholder="e.g. 07XXXXXXXXXX" oninput="renderInvoice()">
+      </div>
+    </div>
+
+    <!-- Quick Billing Presets -->
+    <div class="panel-section">
+      <div class="section-label">⚡ Fast Order Presets</div>
       <div class="preset-pills">
         <button type="button" class="preset-pill" onclick="loadPreset('11plus1')">🔥 11+1 Bro Counter Box (Shop)</button>
+        <button type="button" class="preset-pill" onclick="loadPreset('sampledrop')">🫙 10 Sampler Packs Drop</button>
         <button type="button" class="preset-pill" onclick="loadPreset('wholesale20')">📦 20-Pack Pet Shop Order</button>
-        <button type="button" class="preset-pill" onclick="loadPreset('d2ccombo')">🐾 D2C Bro Combo (Online)</button>
-        <button type="button" class="preset-pill" onclick="loadPreset('samplejar')">🫙 Display Sample Jar Drop</button>
       </div>
     </div>
 
     <!-- Invoice Header Details -->
     <div class="panel-section">
-      <div class="section-label">📋 Bill Parameters</div>
+      <div class="section-label">📋 Document Parameters</div>
       <div class="grid-2">
         <div class="field-group">
-          <label>Bill of Supply No.</label>
+          <label id="billNoLabel" for="billNo">Bill of Supply No.</label>
           <input type="text" id="billNo" class="input" value="BRS/26-27/001" oninput="renderInvoice()">
         </div>
         <div class="field-group">
-          <label>Date of Supply</label>
+          <label>Date</label>
           <input type="date" id="billDate" class="input" onchange="renderInvoice()">
         </div>
       </div>
-      <div class="grid-2">
+
+      <!-- Dynamic UPI ID Input (Task 2) -->
+      <div class="field-group" id="upiFieldGroup">
+        <label for="upiIdInput">Your UPI ID for QR Code</label>
+        <input type="text" id="upiIdInput" class="input" value="" placeholder="yourname@bank"
+               autocomplete="off" spellcheck="false" inputmode="email"
+               oninput="saveUpiId(); renderInvoice()">
+        <small id="upiHint" style="font-size:11px;color:var(--text-muted)"></small>
+      </div>
+
+      <div class="grid-2" id="paymentMetaRow">
         <div class="field-group">
           <label>Payment Mode</label>
           <select id="paymentMode" class="input" onchange="renderInvoice()">
@@ -646,28 +741,22 @@ body {
     <!-- Recipient / Buyer Details -->
     <div class="panel-section">
       <div class="section-label">🏬 Buyer / Pet Shop Details</div>
-      <div class="preset-pills">
-        <button type="button" class="preset-pill" onclick="selectShop('Pet Zone, Paschim Vihar')">Pet Zone (PV)</button>
-        <button type="button" class="preset-pill" onclick="selectShop('Paws & Tails, Rajouri Garden')">Paws & Tails (Rajouri)</button>
-        <button type="button" class="preset-pill" onclick="selectShop('Bark Club, Punjabi Bagh')">Bark Club (PB)</button>
-        <button type="button" class="preset-pill" onclick="selectShop('Walk-in Customer / Society')">Retail Pet Parent</button>
-      </div>
       <div class="field-group">
         <label>Buyer Name / Shop Legal Name</label>
-        <input type="text" id="buyerName" class="input" value="Pet Zone (Paschim Vihar)" oninput="renderInvoice()">
+        <input type="text" id="buyerName" class="input" value="" placeholder="Enter shop or buyer name" oninput="renderInvoice()">
       </div>
       <div class="field-group">
         <label>Address & Locality</label>
-        <input type="text" id="buyerAddress" class="input" value="Shop No. 4, Block B Market, Paschim Vihar, New Delhi - 110063" oninput="renderInvoice()">
+        <input type="text" id="buyerAddress" class="input" value="" placeholder="Enter shop address or locality" oninput="renderInvoice()">
       </div>
       <div class="grid-2">
         <div class="field-group">
           <label>Phone / Contact</label>
-          <input type="text" id="buyerPhone" class="input" value="+91 98110 XXXXX" oninput="renderInvoice()">
+          <input type="text" id="buyerPhone" class="input" value="" placeholder="+91 XXXXX XXXXX" oninput="renderInvoice()">
         </div>
         <div class="field-group">
           <label>GSTIN (Optional if B2C)</label>
-          <input type="text" id="buyerGstin" class="input" value="07AABCP9876Q1Z2" oninput="renderInvoice()">
+          <input type="text" id="buyerGstin" class="input" value="" placeholder="07XXXXXXXXXXXXX" oninput="renderInvoice()">
         </div>
       </div>
     </div>
@@ -675,8 +764,13 @@ body {
     <!-- Items Configuration -->
     <div class="panel-section">
       <div class="section-label">🦴 Line Items & Schemes</div>
+      <div class="preset-pills" style="margin-bottom:8px">
+        <button type="button" class="preset-pill" onclick="addPresetItem('pb400')">+ Peanut Butter (400g)</button>
+        <button type="button" class="preset-pill" onclick="addPresetItem('nv400')">+ Bro Bites (400g)</button>
+        <button type="button" class="preset-pill" onclick="addPresetItem('mx400')">+ Bro Mix (400g)</button>
+      </div>
       <div id="itemsContainer"></div>
-      <button type="button" class="btn btn-outline" style="margin-top:8px;" onclick="addItemRow()">+ Add Another Item</button>
+      <button type="button" class="btn btn-outline" style="margin-top:8px;" onclick="addItemRow()">+ Add Custom Line</button>
     </div>
 
     <!-- Extra Charges / Notes -->
@@ -703,12 +797,12 @@ body {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
         </svg>
-        Print / Save A4 PDF Bill
+        Print / Save A4 PDF
       </button>
 
       <div class="btn-action-row">
         <button type="button" class="btn btn-outline" onclick="copyWhatsAppSummary()">
-          📲 Copy WhatsApp Bill
+          📲 Copy WhatsApp Summary
         </button>
         <button type="button" class="btn btn-outline" onclick="resetForm()">
           🔄 Reset Form
@@ -717,7 +811,7 @@ body {
     </div>
   </aside>
 
-  <!-- Bill of Supply Printable Sheet -->
+  <!-- Document Sheet (Canvas) -->
   <main>
     <div class="top-nav-bar no-print">
       <a href="/" class="back-link">
@@ -726,7 +820,7 @@ body {
         </svg>
         Back to Broski Store
       </a>
-      <span style="font-size:12px; color:var(--text-muted);">Delhi Composition Rule 49 · HSN 2309 10 00</span>
+      <span style="font-size:12px; color:var(--text-muted);" id="topNavStatutory">CGST Rule 49 & Rule 55 · HSN 2309 10 00</span>
     </div>
 
     <div class="preview-canvas" id="invoiceCanvas">
@@ -737,210 +831,167 @@ body {
 </div>
 
 <script>
-// Default Items State
-let items = [
-  {
-    desc: "Broski Non-Veg Crunchy Dog Biscuits (400g Pouch)",
-    hsn: "2309 10 00",
-    batch: "BRS-NV-261115",
+// UPI Validation & Persistence Helpers (Task 2)
+const UPI_RE = /^[a-zA-Z0-9._-]{2,256}@[a-zA-Z][a-zA-Z0-9]{1,63}$/;
+
+function getUpiId() {
+  const el = document.getElementById('upiIdInput');
+  const v = (el ? el.value : '').trim();
+  const ok = UPI_RE.test(v);
+  const hint = document.getElementById('upiHint');
+  if (hint) {
+    hint.textContent = v && !ok ? 'Check the UPI ID (example: name@bank). QR is hidden until it is valid.' : '';
+  }
+  return ok ? v : '';
+}
+
+function saveUpiId() {
+  try {
+    localStorage.setItem('broski-upi-id', (document.getElementById('upiIdInput').value || '').trim());
+  } catch (e) {}
+}
+
+(function restoreUpiId() {
+  try {
+    const saved = localStorage.getItem('broski-upi-id');
+    if (saved && document.getElementById('upiIdInput')) {
+      document.getElementById('upiIdInput').value = saved;
+    }
+  } catch (e) {}
+})();
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Item Presets
+const ITEM_PRESETS = {
+  pb400: {
+    desc: 'Broski Peanut Butter Dog Biscuits (400g Pouch)',
+    hsn: '2309 10 00',
+    batch: 'BRS-PB-2611',
+    qty: 1,
+    freeQty: 0,
+    mrp: 179,
+    rate: 114.86,
+    scheme: ''
+  },
+  nv400: {
+    desc: 'Broski Bro Bites Non-Veg Dog Biscuits (400g Pouch)',
+    hsn: '2309 10 00',
+    batch: 'BRS-NV-2611',
     qty: 11,
     freeQty: 1,
     mrp: 149,
     rate: 100,
-    scheme: "11+1 Free Box Scheme"
+    scheme: '11+1 Free Box Scheme'
+  },
+  mx400: {
+    desc: 'Broski Bro Mix Dog Biscuits (400g Pouch)',
+    hsn: '2309 10 00',
+    batch: 'BRS-MX-2611',
+    qty: 1,
+    freeQty: 0,
+    mrp: 179,
+    rate: 114.86,
+    scheme: ''
   }
-];
+};
 
-// Set today's date
-document.getElementById('billDate').value = new Date().toISOString().split('T')[0];
-
-function selectShop(name) {
-  const shopData = {
-    'Pet Zone, Paschim Vihar': {
-      address: 'Shop No. 4, Block B Market, Paschim Vihar, New Delhi - 110063',
-      phone: '+91 98110 44521',
-      gstin: '07AABCP9876Q1Z2'
-    },
-    'Paws & Tails, Rajouri Garden': {
-      address: 'Main Ring Road, Near Metro Pillar 384, Rajouri Garden, New Delhi - 110027',
-      phone: '+91 99102 77810',
-      gstin: '07BBDPQ1122R1Z8'
-    },
-    'Bark Club, Punjabi Bagh': {
-      address: 'Shop 12, Club Road Market, Punjabi Bagh West, New Delhi - 110026',
-      phone: '+91 98731 55620',
-      gstin: '07CCXPL3344M1Z5'
-    },
-    'Walk-in Customer / Society': {
-      address: 'Direct Delivery, Dharam Colony / Paschim Vihar, Delhi',
-      phone: '+91 99999 XXXXX',
-      gstin: 'URP (Unregistered Consumer)'
-    }
-  };
-
-  document.getElementById('buyerName').value = name;
-  if (shopData[name]) {
-    document.getElementById('buyerAddress').value = shopData[name].address;
-    document.getElementById('buyerPhone').value = shopData[name].phone;
-    document.getElementById('buyerGstin').value = shopData[name].gstin;
-  }
-  renderInvoice();
-}
-
-function loadPreset(type) {
-  if (type === '11plus1') {
-    items = [
-      {
-        desc: "Broski Non-Veg Crunchy Dog Biscuits (400g)",
-        hsn: "2309 10 00",
-        batch: "BRS-NV-261115",
-        qty: 6,
-        freeQty: 1,
-        mrp: 149,
-        rate: 100,
-        scheme: "11+1 Scheme (1 Pk Free)"
-      },
-      {
-        desc: "Broski Mix Flavoured Dog Biscuits (400g)",
-        hsn: "2309 10 00",
-        batch: "BRS-MX-261115",
-        qty: 5,
-        freeQty: 0,
-        mrp: 179,
-        rate: 100,
-        scheme: "Introductory Carton Deal"
-      },
-      {
-        desc: "Broski Acrylic Counter Tasting Jar (Complimentary 20 Bones)",
-        hsn: "3926 90 99",
-        batch: "BRS-JAR-01",
-        qty: 1,
-        freeQty: 0,
-        mrp: 0,
-        rate: 0,
-        scheme: "100% Free Display Promo"
-      }
-    ];
-    document.getElementById('billNotes').value = "11+1 Bro Counter Box: Pay for 11 packs, get 12th pack free + complimentary tasting jar. 15-day 100% buyback guarantee.";
-  } else if (type === 'wholesale20') {
-    items = [
-      {
-        desc: "Broski Non-Veg Crunchy Dog Biscuits (400g)",
-        hsn: "2309 10 00",
-        batch: "BRS-NV-261115",
-        qty: 10,
-        freeQty: 1,
-        mrp: 149,
-        rate: 100,
-        scheme: "Bulk Trade Margin"
-      },
-      {
-        desc: "Broski Mix Flavoured Dog Biscuits (400g)",
-        hsn: "2309 10 00",
-        batch: "BRS-MX-261115",
-        qty: 10,
-        freeQty: 1,
-        mrp: 179,
-        rate: 100,
-        scheme: "Bulk Trade Margin"
-      }
-    ];
-    document.getElementById('billNotes').value = "Wholesale dispatch for West Delhi retail stockists. Standard payment terms: Immediate on delivery.";
-  } else if (type === 'd2ccombo') {
-    items = [
-      {
-        desc: "Broski Bro Combo (Non-Veg 400g + Mix 400g Duo)",
-        hsn: "2309 10 00",
-        batch: "BRS-CMB-261115",
-        qty: 1,
-        freeQty: 0,
-        mrp: 328,
-        rate: 299,
-        scheme: "Bro Combo Deal (Save ₹29)"
-      },
-      {
-        desc: "Broski Pocket Bone Sampler (50g)",
-        hsn: "2309 10 00",
-        batch: "BRS-SMP-01",
-        qty: 1,
-        freeQty: 0,
-        mrp: 0,
-        rate: 0,
-        scheme: "Free Welcome Gift"
-      }
-    ];
-    document.getElementById('billNotes').value = "D2C Direct Home Delivery. Free West Delhi shipping applied.";
-  } else if (type === 'samplejar') {
-    items = [
-      {
-        desc: "Broski Acrylic Counter Sample Jar + 20 Fresh Trial Biscuits",
-        hsn: "3926 / 2309",
-        batch: "BRS-SAMPLE-JAR",
-        qty: 1,
-        freeQty: 0,
-        mrp: 0,
-        rate: 0,
-        scheme: "Zero Charge - Retail Pilot Display"
-      }
-    ];
-    document.getElementById('billNotes').value = "No commercial value. Counter display tasting jar for retail pet dog taste test.";
-  }
+function addPresetItem(key) {
+  const p = ITEM_PRESETS[key];
+  if (!p) return;
+  items.push({ ...p });
   renderFormItems();
   renderInvoice();
 }
 
+// Document Mode State (Task 3)
+let docMode = 'bill';
+
+function setDocMode(mode) {
+  docMode = mode === 'challan' ? 'challan' : 'bill';
+  const isChallan = docMode === 'challan';
+  document.getElementById('modeBill').classList.toggle('active', !isChallan);
+  document.getElementById('modeChallan').classList.toggle('active', isChallan);
+  document.getElementById('modeBill').setAttribute('aria-checked', String(!isChallan));
+  document.getElementById('modeChallan').setAttribute('aria-checked', String(isChallan));
+  document.getElementById('purposeGroup').hidden = !isChallan;
+  document.getElementById('upiFieldGroup').hidden = isChallan;
+  document.getElementById('paymentMetaRow').hidden = isChallan;
+  document.getElementById('headerModeBadge').textContent = isChallan ? 'Rule 55 Challan' : 'Composition 1%';
+  document.getElementById('billNoLabel').textContent = isChallan ? 'Delivery Challan No.' : 'Bill of Supply No.';
+  const no = document.getElementById('billNo');
+  if (isChallan && no.value.startsWith('BRS/')) no.value = no.value.replace(/^BRS\//, 'DC/');
+  if (!isChallan && no.value.startsWith('DC/')) no.value = no.value.replace(/^DC\//, 'BRS/');
+  renderInvoice();
+}
+
+// Default items state
+let items = [
+  { ...ITEM_PRESETS.nv400 }
+];
+
 function renderFormItems() {
   const container = document.getElementById('itemsContainer');
-  container.innerHTML = '';
-  items.forEach((it, idx) => {
-    const div = document.createElement('div');
-    div.style.background = '#faf6f0';
-    div.style.border = '1px solid #e6dcce';
-    div.style.padding = '10px';
-    div.style.borderRadius = '8px';
-    div.style.marginBottom = '10px';
-    div.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <strong style="font-size:12px; color:#352016;">Item #${idx + 1}</strong>
-        ${items.length > 1 ? `<button type="button" onclick="removeItem(${idx})" style="background:none; border:none; color:#b8452b; font-size:11px; cursor:pointer; font-weight:700;">✕ Remove</button>` : ''}
+  if (!container) return;
+  container.innerHTML = items.map((it, idx) => `
+    <div class="item-card">
+      <div class="item-card-header">
+        <span class="item-card-title">Item #${idx + 1}</span>
+        ${items.length > 1 ? `<button type="button" class="btn-remove-item" onclick="removeItem(${idx})">✕ Remove</button>` : ''}
       </div>
-      <input type="text" class="input" style="margin-bottom:6px; font-size:12px;" value="${it.desc}" oninput="items[${idx}].desc = this.value; renderInvoice();" placeholder="Item Name">
-      <div class="grid-2" style="margin-bottom:6px;">
-        <div>
-          <label style="font-size:10px; color:#6f6259;">Billed Qty</label>
-          <input type="number" class="input" style="font-size:12px;" value="${it.qty}" min="0" oninput="items[${idx}].qty = parseFloat(this.value)||0; renderInvoice();">
+      <div class="field-group">
+        <label>Description</label>
+        <input type="text" class="input" value="${esc(it.desc)}" oninput="updateItem(${idx}, 'desc', this.value)">
+      </div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label>HSN</label>
+          <input type="text" class="input" value="${esc(it.hsn)}" oninput="updateItem(${idx}, 'hsn', this.value)">
         </div>
-        <div>
-          <label style="font-size:10px; color:#6f6259;">Free Qty (Scheme)</label>
-          <input type="number" class="input" style="font-size:12px;" value="${it.freeQty || 0}" min="0" oninput="items[${idx}].freeQty = parseFloat(this.value)||0; renderInvoice();">
+        <div class="field-group">
+          <label>Batch No.</label>
+          <input type="text" class="input" value="${esc(it.batch)}" oninput="updateItem(${idx}, 'batch', this.value)">
         </div>
       </div>
       <div class="grid-2">
-        <div>
-          <label style="font-size:10px; color:#6f6259;">Rate (₹/Unit)</label>
-          <input type="number" class="input" style="font-size:12px;" value="${it.rate}" min="0" oninput="items[${idx}].rate = parseFloat(this.value)||0; renderInvoice();">
+        <div class="field-group">
+          <label>Billed Qty</label>
+          <input type="number" class="input" min="1" value="${it.qty}" oninput="updateItem(${idx}, 'qty', parseInt(this.value)||0)">
         </div>
-        <div>
-          <label style="font-size:10px; color:#6f6259;">MRP (₹)</label>
-          <input type="number" class="input" style="font-size:12px;" value="${it.mrp}" min="0" oninput="items[${idx}].mrp = parseFloat(this.value)||0; renderInvoice();">
+        <div class="field-group">
+          <label>Free Scheme Qty</label>
+          <input type="number" class="input" min="0" value="${it.freeQty || 0}" oninput="updateItem(${idx}, 'freeQty', parseInt(this.value)||0)">
         </div>
       </div>
-    `;
-    container.appendChild(div);
-  });
+      <div class="grid-2">
+        <div class="field-group">
+          <label>Unit MRP (₹)</label>
+          <input type="number" class="input" value="${it.mrp}" oninput="updateItem(${idx}, 'mrp', parseFloat(this.value)||0)">
+        </div>
+        <div class="field-group">
+          <label>Billed Rate (₹)</label>
+          <input type="number" class="input" step="0.01" value="${it.rate}" oninput="updateItem(${idx}, 'rate', parseFloat(this.value)||0)">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Scheme Note</label>
+        <input type="text" class="input" value="${esc(it.scheme || '')}" placeholder="e.g. 11+1 Free Box" oninput="updateItem(${idx}, 'scheme', this.value)">
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateItem(idx, field, val) {
+  if (items[idx]) {
+    items[idx][field] = val;
+    renderInvoice();
+  }
 }
 
 function addItemRow() {
-  items.push({
-    desc: "Broski Mix Flavoured Dog Biscuits (400g Pouch)",
-    hsn: "2309 10 00",
-    batch: "BRS-MX-261115",
-    qty: 5,
-    freeQty: 0,
-    mrp: 179,
-    rate: 100,
-    scheme: "Standard Trade"
-  });
+  items.push({ ...ITEM_PRESETS.mx400 });
   renderFormItems();
   renderInvoice();
 }
@@ -973,17 +1024,23 @@ function numberToWords(num) {
 }
 
 function renderInvoice() {
-  const billNo = document.getElementById('billNo').value || 'BRS/26-27/001';
+  const billNo = (document.getElementById('billNo').value || 'BRS/26-27/001').trim();
   const billDate = document.getElementById('billDate').value || new Date().toISOString().split('T')[0];
   const paymentMode = document.getElementById('paymentMode').value;
   const paymentStatus = document.getElementById('paymentStatus').value;
-  const buyerName = document.getElementById('buyerName').value || 'Cash Customer';
-  const buyerAddress = document.getElementById('buyerAddress').value || 'Delhi, India';
-  const buyerPhone = document.getElementById('buyerPhone').value || '-';
-  const buyerGstin = document.getElementById('buyerGstin').value || 'Unregistered';
+  const buyerName = document.getElementById('buyerName').value.trim() || 'Cash Customer';
+  const buyerAddress = document.getElementById('buyerAddress').value.trim() || 'Delhi, India';
+  const buyerPhone = document.getElementById('buyerPhone').value.trim() || '-';
+  const buyerGstin = document.getElementById('buyerGstin').value.trim() || 'Unregistered';
   const freight = parseFloat(document.getElementById('freight').value) || 0;
   const extraDiscount = parseFloat(document.getElementById('extraDiscount').value) || 0;
-  const notes = document.getElementById('billNotes').value || '';
+  const notes = document.getElementById('billNotes').value.trim();
+
+  const isChallan = docMode === 'challan';
+  const sellerGstin = (document.getElementById('sellerGstin').value || '').trim().toUpperCase();
+  const purpose = document.getElementById('dispatchPurpose').value;
+  const docTitle = isChallan ? 'DELIVERY CHALLAN' : (sellerGstin ? 'BILL OF SUPPLY' : 'ESTIMATE / CASH MEMO');
+  document.title = `BROSKI | ${docTitle} ${esc(billNo)}`;
 
   let totalBilledUnits = 0;
   let totalFreeUnits = 0;
@@ -999,14 +1056,14 @@ function renderInvoice() {
       <tr>
         <td class="text-center">${idx + 1}</td>
         <td>
-          <div class="item-title">${it.desc}</div>
-          <div class="item-sub">HSN: ${it.hsn} · Batch: ${it.batch}</div>
-          ${it.freeQty > 0 ? `<span class="scheme-tag">+${it.freeQty} Unit FREE (${it.scheme})</span>` : ''}
+          <div class="item-title">${esc(it.desc)}</div>
+          <div class="item-sub">HSN: ${esc(it.hsn)} · Batch: ${esc(it.batch)}</div>
+          ${it.freeQty > 0 ? `<span class="scheme-tag">+${it.freeQty} Unit FREE (${esc(it.scheme)})</span>` : ''}
         </td>
         <td class="text-center font-mono">${it.qty}</td>
         <td class="text-center font-mono">${it.freeQty || 0}</td>
-        <td class="text-right font-mono">₹${it.mrp}</td>
-        <td class="text-right font-mono">₹${it.rate.toFixed(2)}</td>
+        <td class="text-right font-mono">₹${Number(it.mrp || 0).toFixed(2)}</td>
+        <td class="text-right font-mono">₹${Number(it.rate || 0).toFixed(2)}</td>
         <td class="text-right font-mono" style="font-weight:700;">₹${lineTotal.toFixed(2)}</td>
       </tr>
     `;
@@ -1015,9 +1072,15 @@ function renderInvoice() {
   const grandTotal = Math.max(0, grossTotal + freight - extraDiscount);
   const words = numberToWords(grandTotal);
 
-  // Dynamic UPI string
-  const upiLink = `upi://pay?pa=9999000000@paytm&pn=BROSKI&am=${grandTotal}&cu=INR&tn=Bill-${billNo}`;
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiLink)}`;
+  // Dynamic UPI Link & QR (Task 2)
+  const upiId = getUpiId();
+  const showQr = Boolean(upiId) && docMode === 'bill' && Number(grandTotal) > 0;
+  const upiLink = showQr
+    ? `upi://pay?pa=${encodeURIComponent(upiId)}&pn=BROSKI&am=${Number(grandTotal).toFixed(2)}&cu=INR&tn=${encodeURIComponent('Bill-' + billNo)}`
+    : '';
+  const qrUrl = showQr
+    ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiLink)}`
+    : '';
 
   const canvas = document.getElementById('invoiceCanvas');
   canvas.innerHTML = `
@@ -1034,21 +1097,25 @@ function renderInvoice() {
           </svg>
           BROSKI
         </h1>
-        <div class="tagline">For Your Favourite Kind of Company</div>
+        <div class="tagline">Treats for your best bro.</div>
         <div class="brand-details">
           <strong>BROSKI (Prop. Lakshay)</strong><br>
           12A/3, Dharam Colony, Nangloi, West Delhi, New Delhi - 110041<br>
-          UDYAM Reg: <strong>UDYAM-DL-11-0177908</strong> | State Code: <strong>07 (Delhi)</strong><br>
+          UDYAM Reg: <strong>UDYAM-DL-11-0177908</strong> | State Code: <strong>07 (Delhi)</strong>${sellerGstin ? ` | GSTIN: <strong>${esc(sellerGstin)}</strong>` : ''}<br>
           Email: support@broskipetfood.com | Web: broskipetfood.com
         </div>
       </div>
 
       <div class="bill-badge-block">
-        <div class="bill-heading">BILL OF SUPPLY</div>
+        <div class="bill-heading">${docTitle}</div>
         <div class="statutory-composition-pill">
-          <strong>COMPOSITION TAXABLE PERSON</strong><br>
-          NOT ELIGIBLE TO COLLECT TAX ON SUPPLIES<br>
-          <span style="font-size:9px; color:#6f6259;">(Issued under Section 10 & Rule 49 of CGST Rules, 2017)</span>
+          ${isChallan
+            ? `<strong>DELIVERY CHALLAN FOR GOODS SENT ON APPROVAL / SAMPLE DISTRIBUTION</strong><br>
+               (NOT A TAX INVOICE - ISSUED UNDER RULE 55 OF CGST RULES, 2017)`
+            : sellerGstin
+              ? `<strong>COMPOSITION TAXABLE PERSON</strong><br>NOT ELIGIBLE TO COLLECT TAX ON SUPPLIES<br>
+                 <span style="font-size:9px; color:#6f6259;">(Issued under Section 10 & Rule 49 of CGST Rules, 2017)</span>`
+              : `<strong>GST REGISTRATION APPLIED FOR</strong><br>No GST charged on this document`}
         </div>
       </div>
     </div>
@@ -1056,13 +1123,19 @@ function renderInvoice() {
     <!-- Meta Details Grid -->
     <div class="inv-meta-grid">
       <div class="meta-col">
-        <p><span>Bill Number:</span> <strong>${billNo}</strong></p>
-        <p><span>Date of Issue:</span> <strong>${billDate}</strong></p>
+        <p><span>${isChallan ? 'Challan Number:' : 'Bill Number:'}</span> <strong>${esc(billNo)}</strong></p>
+        <p><span>Date of Issue:</span> <strong>${esc(billDate)}</strong></p>
         <p><span>Place of Supply:</span> <strong>Delhi (State Code: 07)</strong></p>
+        ${isChallan ? `<p><span>Purpose of Dispatch:</span> <strong>${esc(purpose)}</strong></p>` : ''}
       </div>
       <div class="meta-col">
-        <p><span>Payment Mode:</span> <strong>${paymentMode}</strong></p>
-        <p><span>Payment Status:</span> <strong style="color:${paymentStatus.includes('PAID') ? 'var(--green)' : 'var(--accent)'};">${paymentStatus}</strong></p>
+        ${!isChallan ? `
+        <p><span>Payment Mode:</span> <strong>${esc(paymentMode)}</strong></p>
+        <p><span>Payment Status:</span> <strong style="color:${paymentStatus.includes('PAID') ? 'var(--green)' : 'var(--accent)'};">${esc(paymentStatus)}</strong></p>
+        ` : `
+        <p><span>Document Standard:</span> <strong>Rule 55 CGST Rules</strong></p>
+        <p><span>Consignment Status:</span> <strong>Dispatched on Approval / Sample</strong></p>
+        `}
         <p><span>Jurisdiction:</span> <strong>Delhi NCT Courts</strong></p>
       </div>
     </div>
@@ -1070,21 +1143,21 @@ function renderInvoice() {
     <!-- Parties Grid -->
     <div class="parties-grid">
       <div class="party-box">
-        <h4>Billed By (Supplier)</h4>
+        <h4>Dispatched By (Consignor / Supplier)</h4>
         <div class="party-name">BROSKI (Lakshay)</div>
         <div class="party-desc">
           12A/3, Dharam Colony, Nangloi, New Delhi - 110041<br>
           West Delhi, Delhi, PIN: 110041<br>
-          State: Delhi (07) | MSME: UDYAM-DL-11-0177908
+          State: Delhi (07) | MSME: UDYAM-DL-11-0177908${sellerGstin ? `<br>GSTIN: <strong>${esc(sellerGstin)}</strong>` : ''}
         </div>
       </div>
       <div class="party-box">
-        <h4>Billed To (Recipient / Retailer)</h4>
-        <div class="party-name">${buyerName}</div>
+        <h4>${isChallan ? 'Dispatched To (Consignee / Recipient)' : 'Billed To (Recipient / Retailer)'}</h4>
+        <div class="party-name">${esc(buyerName)}</div>
         <div class="party-desc">
-          ${buyerAddress}<br>
-          Phone: <strong>${buyerPhone}</strong><br>
-          GSTIN: <strong>${buyerGstin}</strong>
+          ${esc(buyerAddress)}<br>
+          Phone: <strong>${esc(buyerPhone)}</strong><br>
+          GSTIN: <strong>${esc(buyerGstin)}</strong>
         </div>
       </div>
     </div>
@@ -1098,8 +1171,8 @@ function renderInvoice() {
           <th style="width:65px;" class="text-center">Qty</th>
           <th style="width:65px;" class="text-center">Free</th>
           <th style="width:75px;" class="text-right">MRP</th>
-          <th style="width:85px;" class="text-right">Unit Rate</th>
-          <th style="width:95px;" class="text-right">Amount (₹)</th>
+          <th style="width:85px;" class="text-right">${isChallan ? 'Rate' : 'Unit Rate'}</th>
+          <th style="width:95px;" class="text-right">${isChallan ? 'Value (₹)' : 'Amount (₹)'}</th>
         </tr>
       </thead>
       <tbody>
@@ -1111,10 +1184,11 @@ function renderInvoice() {
     <div class="totals-area">
       <div>
         <div class="amount-words-box">
-          <h5>Total in Words:</h5>
-          <div class="amount-words-text">${words}</div>
+          <h5>${isChallan ? 'Total Declared Value in Words:' : 'Total Amount in Words:'}</h5>
+          <div class="amount-words-text">${esc(words)}</div>
         </div>
 
+        ${showQr ? `
         <div class="upi-scan-card">
           <div class="qr-code-holder">
             <img src="${qrUrl}" alt="Scan UPI to Pay">
@@ -1122,16 +1196,25 @@ function renderInvoice() {
           <div class="upi-info">
             <strong>Scan to Pay via UPI</strong>
             <div>GPay · PhonePe · Paytm · BHIM</div>
-            <div style="font-family:var(--font-mono); font-size:10px; margin-top:3px; color:var(--text-muted);">UPI ID: 9999000000@paytm</div>
-            <div style="font-size:10px; color:var(--accent); margin-top:2px;">(Exact amount ₹${grandTotal} preloaded)</div>
+            <div style="font-family:var(--font-mono); font-size:10px; margin-top:3px; color:var(--text-muted);">UPI ID: ${esc(upiId)}</div>
+            <div style="font-size:10px; color:var(--accent); margin-top:2px;">(Exact amount ₹${grandTotal.toFixed(2)} preloaded)</div>
           </div>
         </div>
+        ` : ''}
+
+        ${isChallan ? `
+        <div class="receipt-ack-box">
+          <strong>Consignee Acknowledgement:</strong><br>
+          Received the above goods in good condition.<br>
+          <span style="font-size:9.5px; color:var(--text-muted); margin-top:4px; display:inline-block;">Name, Signature, Date &amp; Shop Stamp</span>
+        </div>
+        ` : ''}
       </div>
 
       <div>
         <table class="totals-table">
           <tr>
-            <td>Total Billed Packs:</td>
+            <td>Total ${isChallan ? 'Dispatched' : 'Billed'} Packs:</td>
             <td class="text-right font-mono"><strong>${totalBilledUnits} pcs</strong></td>
           </tr>
           ${totalFreeUnits > 0 ? `
@@ -1140,7 +1223,7 @@ function renderInvoice() {
             <td class="text-right font-mono" style="color:var(--green);"><strong>+${totalFreeUnits} pcs FREE</strong></td>
           </tr>` : ''}
           <tr>
-            <td>Subtotal (Gross):</td>
+            <td>Subtotal:</td>
             <td class="text-right font-mono">₹${grossTotal.toFixed(2)}</td>
           </tr>
           ${extraDiscount > 0 ? `
@@ -1148,6 +1231,7 @@ function renderInvoice() {
             <td style="color:var(--accent);">Trade Scheme Discount:</td>
             <td class="text-right font-mono" style="color:var(--accent);">-₹${extraDiscount.toFixed(2)}</td>
           </tr>` : ''}
+          ${!isChallan ? `
           <tr>
             <td>Delivery / Transport:</td>
             <td class="text-right font-mono">${freight > 0 ? '₹' + freight.toFixed(2) : 'FREE'}</td>
@@ -1156,6 +1240,17 @@ function renderInvoice() {
             <td>TOTAL AMOUNT:</td>
             <td class="text-right font-mono">₹${grandTotal.toFixed(2)}</td>
           </tr>
+          ` : `
+          <tr class="grand-total">
+            <td>TOTAL DECLARED VALUE:</td>
+            <td class="text-right font-mono">₹${grandTotal.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-size:10.5px; color:var(--text-muted); padding-top:4px;">
+              * No payment due on this delivery challan. Goods sent on approval / sample.
+            </td>
+          </tr>
+          `}
         </table>
       </div>
     </div>
@@ -1163,7 +1258,7 @@ function renderInvoice() {
     <!-- Notes if any -->
     ${notes ? `
     <div style="background:var(--card-bg); border-left:3px solid var(--accent); padding:8px 12px; margin-bottom:18px; font-size:11.5px;">
-      <strong>Note / Scheme:</strong> ${notes}
+      <strong>Note / Scheme:</strong> ${esc(notes)}
     </div>` : ''}
 
     <!-- Footer Terms & Signature -->
@@ -1171,11 +1266,19 @@ function renderInvoice() {
       <div>
         <strong>Terms & Conditions:</strong>
         <ol class="declarations-list">
-          <li>Composition taxable person; no GST is charged or collected on this supply as per Section 10 of CGST Act.</li>
+          ${isChallan ? `
+          <li>Goods sent for the purpose stated above. This is not a sale and not a tax invoice.</li>
+          <li>Goods sent on approval will be billed when accepted, or returned to BROSKI within statutory limits.</li>
+          <li>Issued under Rule 55 of CGST Rules, 2017 for sample distribution / goods on approval.</li>
+          <li>Subject to Delhi Jurisdiction only.</li>
+          ` : `
+          <li>${sellerGstin ? 'Composition taxable person; no GST is charged or collected on this supply as per Section 10 of CGST Act.' : 'GST registration applied for; no GST charged on this supply.'}</li>
           <li><strong>15-Day Freshness & Reorder Guarantee:</strong> Unopened packs in original condition are eligible for 100% buyback/replacement within 15 days of supply.</li>
           <li>Goods once accepted without notice shall be deemed in fresh, crunchy condition.</li>
           <li>Subject to Delhi Jurisdiction only.</li>
+          `}
         </ol>
+        ${isChallan ? `<div class="challan-triplicate-note">Original for consignee · Duplicate for transporter · Triplicate for consignor (Rule 55(2))</div>` : ''}
       </div>
 
       <div class="signature-box">
@@ -1189,9 +1292,48 @@ function renderInvoice() {
   `;
 }
 
+function loadPreset(type) {
+  if (type === '11plus1') {
+    setDocMode('bill');
+    items = [
+      { ...ITEM_PRESETS.nv400 }
+    ];
+    document.getElementById('billNotes').value = "Introductory 11+1 carton offer with complimentary acrylic counter tasting jar.";
+  } else if (type === 'sampledrop') {
+    setDocMode('challan');
+    document.getElementById('dispatchPurpose').value = "Free Samples for Taste Test";
+    items = [
+      {
+        desc: "BROSKI 50g Sampler Pouches (Taste Test)",
+        hsn: "2309 10 00",
+        batch: "BRS-SAM-2611",
+        qty: 10,
+        freeQty: 0,
+        mrp: 20,
+        rate: 0,
+        scheme: "Complimentary Taste Sampler Drop"
+      }
+    ];
+    document.getElementById('billNotes').value = "10 complimentary 50g taste sampler pouches with QR review cards for customer tasting.";
+  } else if (type === 'wholesale20') {
+    setDocMode('bill');
+    items = [
+      { ...ITEM_PRESETS.nv400, qty: 10, freeQty: 0, rate: 95.60, scheme: 'Wholesale Tier 1' },
+      { ...ITEM_PRESETS.mx400, qty: 10, freeQty: 0, rate: 114.86, scheme: 'Wholesale Tier 1' }
+    ];
+    document.getElementById('billNotes').value = "Wholesale shop order (20 packs). Fresh batch dispatched directly from Nangloi.";
+  }
+  renderFormItems();
+  renderInvoice();
+}
+
 function copyWhatsAppSummary() {
   const billNo = document.getElementById('billNo').value;
-  const buyerName = document.getElementById('buyerName').value;
+  const buyerName = document.getElementById('buyerName').value || 'Customer';
+  const isChallan = docMode === 'challan';
+  const sellerGstin = (document.getElementById('sellerGstin').value || '').trim();
+  const docTitle = isChallan ? 'DELIVERY CHALLAN' : (sellerGstin ? 'BILL OF SUPPLY' : 'ESTIMATE / CASH MEMO');
+
   let totalBilledUnits = 0;
   let totalFreeUnits = 0;
   let grossTotal = 0;
@@ -1204,23 +1346,37 @@ function copyWhatsAppSummary() {
   const freight = parseFloat(document.getElementById('freight').value) || 0;
   const grandTotal = Math.max(0, grossTotal + freight - extraDiscount);
 
-  const text = `🐾 *BROSKI PET FOOD — BILL OF SUPPLY*\n` +
-    `📄 *Bill No:* ${billNo}\n` +
-    `🏬 *Billed To:* ${buyerName}\n` +
-    `📦 *Order:* ${totalBilledUnits} Packs (+${totalFreeUnits} Free Scheme Packs)\n` +
-    `💰 *Total Amount Payable:* ₹${grandTotal.toFixed(2)}\n` +
-    `⚡ *Payment:* UPI / Cash on Delivery\n` +
-    `📍 *Freshness Guarantee:* 15-day 100% Buyback\n\n` +
-    `Thank you for stocking BROSKI — Treats for your best bro! 🐕`;
+  let text = `🐾 *BROSKI PET FOOD — ${docTitle}*\n` +
+    `📄 *Document No:* ${billNo}\n` +
+    `🏬 *Recipient:* ${buyerName}\n` +
+    `📦 *Quantity:* ${totalBilledUnits} Packs${totalFreeUnits > 0 ? ` (+${totalFreeUnits} Free Scheme Packs)` : ''}\n`;
+
+  if (!isChallan) {
+    text += `💰 *Total Amount Payable:* ₹${grandTotal.toFixed(2)}\n` +
+      `⚡ *Payment:* UPI / Cash on Delivery\n` +
+      `📍 *Freshness Guarantee:* 15-day 100% Buyback\n\n`;
+  } else {
+    const purpose = document.getElementById('dispatchPurpose').value;
+    text += `📋 *Purpose:* ${purpose}\n` +
+      `🚚 *Issued under Rule 55 CGST Rules (Samples / Goods on Approval)*\n\n`;
+  }
+  text += `Thank you for partnering with BROSKI — Treats for your best bro! 🐕`;
 
   navigator.clipboard.writeText(text).then(() => {
-    alert("✅ WhatsApp Bill Summary copied to clipboard! Paste it to the shopkeeper.");
+    alert("✅ WhatsApp Summary copied to clipboard! Paste it to the shopkeeper.");
+  }).catch(() => {
+    alert(text);
   });
 }
 
 function resetForm() {
+  setDocMode('bill');
   document.getElementById('billNo').value = "BRS/26-27/00" + Math.floor(Math.random() * 90 + 10);
   document.getElementById('billDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('buyerName').value = "";
+  document.getElementById('buyerAddress').value = "";
+  document.getElementById('buyerPhone').value = "";
+  document.getElementById('buyerGstin').value = "";
   loadPreset('11plus1');
 }
 
