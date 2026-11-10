@@ -12,6 +12,7 @@ Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /app/
+Disallow: /billing/
 Disallow: /invoices/
 Disallow: /private/
 Disallow: /*.json$
@@ -34,6 +35,7 @@ Allow: /privacy/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /app/
+Disallow: /billing/
 Disallow: /invoices/
 Disallow: /private/
 Disallow: /*.json$
@@ -44,6 +46,7 @@ Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /app/
+Disallow: /billing/
 Disallow: /invoices/
 Disallow: /private/
 Disallow: /*.json$

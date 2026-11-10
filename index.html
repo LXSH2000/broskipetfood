@@ -8,16 +8,14 @@
   <meta name="description" content="BROSKI – crunchy dog biscuits from Nangloi, Delhi. Non-Veg ₹149 and Mix ₹179, 400 g. Order on WhatsApp.">
   <link rel="canonical" href="https://broskipetfood.com/">
 
-  <!-- Search Engine Verification Tags -->
-  <meta name="google-site-verification" content="YOUR_GOOGLE_SEARCH_CONSOLE_CODE">
-  <meta name="msvalidate.01" content="YOUR_BING_WEBMASTER_CODE">
+  <!-- Robots & Social Discovery -->
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="BROSKI">
   <meta property="og:title" content="BROSKI – Crunchy dog biscuits from Nangloi, Delhi | Order on WhatsApp">
-  <meta property="og:description" content="BROSKI – crunchy dog biscuits from Nangloi, Delhi. Non-Veg ₹149 and Mix ₹179, 400 g. Order on WhatsApp.">
+  <meta property="og:description" content="BROSKI – crunchy dog biscuits from Nangloi, Delhi. Bro Bites ₹149 and Bro Mix ₹179, 400 g. Order on WhatsApp.">
   <meta property="og:url" content="https://broskipetfood.com/">
   <meta property="og:image" content="https://broskipetfood.com/og-share.jpg">
   <meta property="og:image:width" content="1200">
@@ -28,7 +26,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="BROSKI – Treats for your best bro">
-  <meta name="twitter:description" content="BROSKI – crunchy dog biscuits from Nangloi, Delhi. Non-Veg ₹149 and Mix ₹179, 400 g. Order on WhatsApp.">
+  <meta name="twitter:description" content="BROSKI – crunchy dog biscuits from Nangloi, Delhi. Bro Bites ₹149 and Bro Mix ₹179, 400 g. Order on WhatsApp.">
   <meta name="twitter:image" content="https://broskipetfood.com/og-share.jpg">
   <meta name="twitter:image:alt" content="BROSKI Dog Biscuits 400g Stand-up Pouch">
 
@@ -41,14 +39,19 @@
   <script src="/config.js"></script>
   <script src="/analytics.js"></script>
 
-  <!-- Google Analytics 4 (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BROSKI2026"></script>
+  <!-- Google Analytics 4 (GA4) - Loads only with verified live Measurement ID -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    var gaId = (window.BROSKI_CONFIG && window.BROSKI_CONFIG.GA_MEASUREMENT_ID) || 'G-BROSKI2026';
-    gtag('config', gaId, { send_page_view: true });
+    var gaId = (window.BROSKI_CONFIG && window.BROSKI_CONFIG.GA_MEASUREMENT_ID) || '';
+    if (gaId && /^G-[A-Z0-9]{8,}$/.test(gaId)) {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+      document.head.appendChild(s);
+      gtag('config', gaId, { send_page_view: true });
+    }
   </script>
 
   <!-- Schema.org JSON-LD Structured Data for LocalBusiness & Organization -->
@@ -61,9 +64,9 @@
     "url": "https://broskipetfood.com/",
     "logo": "https://broskipetfood.com/og-share.jpg",
     "image": "https://broskipetfood.com/og-share.jpg",
-    "description": "BROSKI – crunchy dog biscuits packed by hand in Nangloi, West Delhi 110041. 400g stand-up zip pouches in Chicken Bone and Mix Flavour.",
-    "telephone": "+91-92892-00000",
-    "email": "hello@broskipetfood.com",
+    "description": "BROSKI – crunchy dog biscuits packed by hand in Nangloi, West Delhi 110041. 400g stand-up zip pouches in Bro Bites, Bro Mix, and Peanut Butter.",
+    "telephone": "+91-80760-45934",
+    "email": "support@broskipetfood.com",
     "priceRange": "₹149 - ₹299",
     "currenciesAccepted": "INR",
     "paymentAccepted": "Cash, UPI, Net Banking",
@@ -99,8 +102,8 @@
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "BROSKI Non-Veg Dog Biscuits (Chicken Bone, 400g)",
-            "description": "Crunchy bone-shaped biscuits with real bone broth & liver extract in 400g yellow stand-up pouch.",
+            "name": "BROSKI Bro Bites (Non-Veg, 400g)",
+            "description": "Crunchy bone-shaped dog biscuits in 400g yellow stand-up pouch with transparent window.",
             "sku": "BR-NV-400G",
             "offers": {
               "@type": "Offer",
@@ -114,9 +117,24 @@
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "BROSKI Mix Flavour Dog Biscuits (400g)",
-            "description": "Triple treat blend with milk solids, vegetable extracts, and broth in 400g stand-up pouch.",
+            "name": "BROSKI Bro Mix (400g)",
+            "description": "Crunchy dog biscuit blend in 400g white stand-up pouch with transparent window.",
             "sku": "BR-MX-400G",
+            "offers": {
+              "@type": "Offer",
+              "price": "179.00",
+              "priceCurrency": "INR",
+              "availability": "https://schema.org/InStock"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "BROSKI Peanut Butter Dog Biscuits (400g)",
+            "description": "Crunchy peanut butter dog biscuits in 400g yellow stand-up pouch with transparent window.",
+            "sku": "BR-PB-400G",
             "offers": {
               "@type": "Offer",
               "price": "179.00",

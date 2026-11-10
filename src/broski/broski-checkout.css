@@ -140,7 +140,7 @@
   border: 1px solid rgba(53, 32, 22, 0.12);
   border-radius: 14px;
   background: #fffdf9;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .bk-pack-row.selected {
@@ -311,7 +311,7 @@
   border-radius: 12px;
   background: #ffffff;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .bk-pay-opt.active {
@@ -420,7 +420,7 @@
   font-size: 17px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
   box-shadow: 0 4px 16px rgba(53, 32, 22, 0.25);
 }
 
@@ -581,5 +581,19 @@
   }
   .bk-conf-actions {
     flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bk-gateway-overlay,
+  .bk-gateway-modal {
+    animation: none !important;
+  }
+  .bk-pack-row,
+  .bk-pay-opt,
+  .bk-place-order-btn,
+  .bk-gateway-close {
+    transition: none !important;
+    transform: none !important;
   }
 }

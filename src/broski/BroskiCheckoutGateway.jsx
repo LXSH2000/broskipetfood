@@ -97,7 +97,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
       savings,
       shippingFee,
       totalPayable,
-      paymentMethod: paymentMethod === 'cod' ? 'Cash / UPI on Delivery' : 'Online Payment Gateway (Simulated / Instant QR)',
+      paymentMethod: 'Cash / UPI on Delivery',
       status: 'Confirmed'
     };
 
@@ -124,7 +124,8 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
       `*Items:*\n${itemsText}\n\n` +
       `*Total Payable:* ₹${orderConfirmed.totalPayable} (${orderConfirmed.paymentMethod})\n` +
       `*Delivery Window:* Dispatch from 15 Nov in West Delhi.\n\nPlease confirm my order dispatch!`;
-    return `https://wa.me/${cfg.WHATSAPP_NUMBER || '918076045934'}?text=${encodeURIComponent(msg)}`;
+    const phone = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+    return phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : '#';
   };
 
   return (
@@ -290,34 +291,19 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
               </h3>
               
               <div className="bk-payment-options">
-                <label className={`bk-pay-opt ${paymentMethod === 'cod' ? 'active' : ''}`}>
+                <label className="bk-pay-opt active">
                   <input
                     type="radio"
                     name="paymethod"
                     value="cod"
-                    checked={paymentMethod === 'cod'}
-                    onChange={() => setPaymentMethod('cod')}
+                    checked={true}
+                    readOnly
                   />
                   <div className="bk-pay-text">
-                    <strong>Cash / UPI on Delivery (Recommended)</strong>
+                    <strong>Cash / UPI on Delivery</strong>
                     <span>Pay at your doorstep via cash or Google Pay / PhonePe when treats arrive.</span>
                   </div>
                   <span className="bk-pay-badge">ZERO RISK</span>
-                </label>
-
-                <label className={`bk-pay-opt ${paymentMethod === 'online' ? 'active' : ''}`}>
-                  <input
-                    type="radio"
-                    name="paymethod"
-                    value="online"
-                    checked={paymentMethod === 'online'}
-                    onChange={() => setPaymentMethod('online')}
-                  />
-                  <div className="bk-pay-text">
-                    <strong>Online Payment Gateway (UPI / QR / Cards)</strong>
-                    <span>Instant UPI QR code & merchant payment gateway (Connecting for live launch).</span>
-                  </div>
-                  <span className="bk-pay-badge live">INSTANT UPI</span>
                 </label>
               </div>
             </div>

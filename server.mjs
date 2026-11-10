@@ -6,8 +6,9 @@ import { randomUUID } from 'node:crypto';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 export const products = [
-  ['peanut', 'Non-Veg Dog Biscuits', 14900, '400g', 'biscuits'],
-  ['pumpkin', 'Mix Dog Biscuits', 14900, '400g', 'training'],
+  ['non-veg', 'Bro Bites (Non-Veg)', 14900, '400g', 'biscuits'],
+  ['mix', 'Bro Mix', 17900, '400g', 'biscuits'],
+  ['peanut-butter', 'Peanut Butter Dog Biscuits', 17900, '400g', 'biscuits'],
 ].map(([id, name, price, weight, category]) => Object.freeze({ id, name, price, weight, category }));
 const fail = (message, status = 400) => Object.assign(new Error(message), { status });
 const emailValid = value => typeof value === 'string' && value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);

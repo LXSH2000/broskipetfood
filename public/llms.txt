@@ -1,9 +1,9 @@
 # BROSKI Pet Food
 
-> Fresh, crunchy dog biscuits packed by hand in Nangloi, West Delhi 110041. Wholesome daily treats at honest pricing (₹149 & ₹179 per 400g zip pouch) for Indian dog parents.
+> Fresh, crunchy dog biscuits packed by hand in Nangloi, West Delhi 110041. Wholesome daily treats at honest pricing (Bro Bites ₹149 & Bro Mix ₹179 per 400g zip pouch) for Indian dog parents.
 
 ## Overview
-BROSKI is an independent dog treat brand founded by Lakshay in West Delhi, India. We make crunchy bone-shaped biscuits formulated for daily rewarding, training, and treat time. All batches are packed fresh in sealed, food-grade stand-up pouches with zip closures to preserve aroma and crunch without harsh chemical preservatives.
+BROSKI is an independent dog treat brand founded by Lakshay in West Delhi, India. We make crunchy bone-shaped biscuits for daily rewarding, training, and treat time. All batches are packed fresh in sealed stand-up pouches with zip closures to preserve crunch.
 
 - **Founder & Owner:** Lakshay (Sole Proprietorship)
 - **Headquarters:** 12A/3, Dharam Colony, Nangloi, New Delhi 110041, India
@@ -13,14 +13,15 @@ BROSKI is an independent dog treat brand founded by Lakshay in West Delhi, India
 
 ## Core Products
 
-- [BROSKI Non-Veg Dog Biscuits (400g)](https://broskipetfood.com/): Crunchy bone-shaped dog biscuits baked with real bone broth and liver extract. Formulated for everyday dogs. Packaged in a yellow stand-up zip pouch (400g net weight). MRP: ₹149.
-- [BROSKI Mix Flavour Dog Biscuits (400g)](https://broskipetfood.com/): Multi-flavour blend combining milk solids, vegetable extracts, and savory broth for fussy eaters. Packaged in a yellow stand-up zip pouch (400g net weight). MRP: ₹179.
-- [BROSKI Peanut Butter Dog Biscuits (400g)](https://broskipetfood.com/): Vegetarian-friendly crunchy treats made with roasted peanut butter. Packaged in a yellow stand-up zip pouch (400g net weight). MRP: ₹179.
+- [BROSKI Bro Bites (Non-Veg, 400g)](https://broskipetfood.com/): Crunchy bone-shaped dog biscuits in a yellow stand-up zip pouch (400g net weight). MRP: ₹149.
+- [BROSKI Bro Mix (400g)](https://broskipetfood.com/): Crunchy blend of biscuits in a white stand-up zip pouch (400g net weight). MRP: ₹179.
+- [BROSKI Peanut Butter Dog Biscuits (400g)](https://broskipetfood.com/): Crunchy peanut butter treats in a yellow stand-up zip pouch (400g net weight). MRP: ₹179.
+- [BROSKI Bro Combo (800g)](https://broskipetfood.com/): 1 Bro Bites + 1 Bro Mix pouch pack (800g total). MRP: ₹299 (Save ₹29).
 - [Taste Test Sampler Pouch (50g)](https://broskipetfood.com/r/): 50g mini pouches with QR code distributed across Delhi clinics, grooming salons, and parks for dog parents to test their dog's taste preference before buying a full 400g pouch.
 
 ## Key URLs & Endpoints
 
-- [Storefront & WhatsApp Order Hub](https://broskipetfood.com/): Main marketing website, product specs, feeding guidelines, and zero-friction WhatsApp order integration.
+- [Storefront & WhatsApp Order Hub](https://broskipetfood.com/): Main marketing website, honest transparency standards, and zero-friction WhatsApp ordering.
 - [Review & Free Sampler Verification](https://broskipetfood.com/r/): Customer feedback and QR scanner portal for sampler pouch recipients.
 - [Special Offers & Combo Packs](https://broskipetfood.com/offers/): Delhi launch promotions, B2B wholesale case rates for pet shops, and multi-pack savings.
 - [Privacy Policy](https://broskipetfood.com/privacy/): Comprehensive customer privacy notice, zero data selling policy, and order tracking terms.
@@ -29,11 +30,11 @@ BROSKI is an independent dog treat brand founded by Lakshay in West Delhi, India
 ## Ordering & Contact
 
 - **WhatsApp Direct Ordering:** Tap the "Order on WhatsApp" button on https://broskipetfood.com/ to order directly with instant delivery confirmation.
-- **Email Inquiries:** hello@broskipetfood.com or support@broskipetfood.com
+- **Email Inquiries:** support@broskipetfood.com
 - **Customer Support Hours:** Monday – Saturday, 09:00 to 20:00 IST.
 - **Accepted Payments:** UPI (Google Pay, PhonePe, Paytm), Net Banking, and Cash on Delivery (Delhi NCR).
 
 ## Guarantees & Brand Commitments
 1. **Honest Treats:** No misleading health, medical, calming, or "vet approved" claims.
-2. **Fresh Packaging:** Every pouch is sealed with a reusable zip-lock to maintain oven-fresh crunch.
-3. **Delhi Direct:** Locally packed in Nangloi, West Delhi, keeping overhead low so pet parents get high quality at half the price of imported treats.
+2. **Fresh Packaging:** Every pouch is sealed with a reusable zip-lock to maintain crunch.
+3. **Delhi Direct:** Locally packed in Nangloi, West Delhi, keeping overhead low so pet parents get high quality at an honest price.

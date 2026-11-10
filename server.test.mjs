@@ -4,8 +4,39 @@ import { mkdtemp, readFile, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { startServer } from './server.mjs';
+import { checkPincode, UPI_RE, esc } from './src/helpers.js';
 
 const customer = { name: 'Test Person', email: 'test@example.com', phone: '9876543210', address: '123 Test Street', city: 'Delhi', pincode: '110001' };
+
+test('helpers: checkPincode validates local, Delhi, outside and invalid formats', () => {
+  const local = checkPincode('110041');
+  assert.equal(local.kind, 'local');
+  assert.ok(local.text.includes('Fast local delivery'));
+
+  const delhi = checkPincode('110001');
+  assert.equal(delhi.kind, 'delhi');
+  assert.ok(delhi.text.includes('local courier'));
+
+  const outside = checkPincode('400001');
+  assert.equal(outside.kind, 'outside');
+  assert.ok(outside.text.includes('only in Delhi'));
+
+  const bad = checkPincode('12');
+  assert.equal(bad.kind, 'error');
+  assert.ok(bad.text.includes('6-digit'));
+});
+
+test('helpers: UPI_RE and esc sanitize billing inputs safely', () => {
+  assert.equal(UPI_RE.test('8076045934@paytm'), true);
+  assert.equal(UPI_RE.test('lakshay.dtu@okaxis'), true);
+  assert.equal(UPI_RE.test('invalid-upi'), false);
+  assert.equal(UPI_RE.test(''), false);
+
+  assert.equal(esc('<script>alert("xss")</script>'), '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;');
+  assert.equal(esc('Pet Zone & Co.'), 'Pet Zone &amp; Co.');
+  assert.equal(esc(null), '');
+});
+
 test('order API protects order totals, validation and customer privacy', async t => {
   const dir = await mkdtemp(path.join(tmpdir(), 'biscuit-test-'));
   const distDir = path.join(dir, 'dist');
@@ -16,28 +47,31 @@ test('order API protects order totals, validation and customer privacy', async t
   const base = `http://127.0.0.1:${server.address().port}`;
   const post = (route, data) => fetch(base + route, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
   const order = (items, extras = {}) => post('/api/orders', { customer, items, ...extras });
+
   assert.equal((await (await fetch(base + '/api/health')).json()).brand, 'Broski');
   const products = (await (await fetch(base + '/api/products')).json()).products;
-  assert.equal(products.length, 2);
-  assert.equal(products[0].name, 'Non-Veg Dog Biscuits');
+  assert.equal(products.length, 3);
+  assert.equal(products[0].name, 'Bro Bites (Non-Veg)');
   assert.equal(products[0].price, 14900);
-  assert.equal(products[1].name, 'Mix Dog Biscuits');
-  assert.equal(products[1].price, 14900);
+  assert.equal(products[1].name, 'Bro Mix');
+  assert.equal(products[1].price, 17900);
+  assert.equal(products[2].name, 'Peanut Butter Dog Biscuits');
+  assert.equal(products[2].price, 17900);
 
-  const response = await order([{ id: 'peanut', quantity: 2 }]);
+  const response = await order([{ id: 'non-veg', quantity: 2 }]);
   assert.equal(response.status, 201);
   const result = await response.json();
   assert.match(result.id, /^BR-\d{8}-[A-Z0-9]{4}/);
   assert.deepEqual([result.subtotal, result.discount, result.shipping, result.total], [29800, 0, 0, 29800]);
 
-  for (const items of [[], [{ id: 'unknown', quantity: 1 }], [{ id: 'peanut', quantity: 0 }], [{ id: 'peanut', quantity: 21 }], [{ id: 'peanut', quantity: 1.5 }], [{ id: 'peanut', quantity: 1 }, { id: 'peanut', quantity: 2 }]]) {
+  for (const items of [[], [{ id: 'unknown', quantity: 1 }], [{ id: 'non-veg', quantity: 0 }], [{ id: 'non-veg', quantity: 21 }], [{ id: 'non-veg', quantity: 1.5 }], [{ id: 'non-veg', quantity: 1 }, { id: 'non-veg', quantity: 2 }]]) {
     assert.equal((await order(items)).status, 400);
   }
   for (const change of [{ email: 'invalid' }, { phone: '123' }, { pincode: '0' }, { address: '' }]) {
-    assert.equal((await order([{ id: 'peanut', quantity: 1 }], { customer: { ...customer, ...change } })).status, 400);
+    assert.equal((await order([{ id: 'non-veg', quantity: 1 }], { customer: { ...customer, ...change } })).status, 400);
   }
 
-  const concurrent = await Promise.all([order([{ id: 'peanut', quantity: 1 }]), order([{ id: 'pumpkin', quantity: 1 }])]);
+  const concurrent = await Promise.all([order([{ id: 'non-veg', quantity: 1 }]), order([{ id: 'mix', quantity: 1 }])]);
   assert.ok(concurrent.every(r => r.status === 201));
   const saved = await readFile(path.join(dir, 'orders.json'), 'utf8');
   assert.equal(JSON.parse(saved).length, 3);

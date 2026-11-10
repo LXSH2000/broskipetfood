@@ -3,9 +3,11 @@
 */
 import React, { useEffect, useState } from 'react';
 import BroskiCheckoutGateway from './BroskiCheckoutGateway';
+import { checkPincode, LOCAL_PINS } from '../helpers';
 import './broski-checkout.css';
 
 const C = () => window.BROSKI_CONFIG || {};
+
 export const waLink = (text) => {
   let fullText = text || '';
   try {
@@ -20,12 +22,15 @@ export const waLink = (text) => {
       });
     }
   } catch (e) {}
-  return `https://wa.me/${C().WHATSAPP_NUMBER}?text=${encodeURIComponent(fullText)}`;
+  const phone = (C().WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+  return phone ? `https://wa.me/${phone}?text=${encodeURIComponent(fullText)}` : '#';
 };
 
 function WaButton({ text, children }) {
+  const link = waLink(text);
+  if (link === '#') return null;
   return (
-    <a className="bk-h-btn bk-h-btn--wa" href={waLink(text)} target="_blank" rel="noopener">
+    <a className="bk-h-btn bk-h-btn--wa" href={link} target="_blank" rel="noopener noreferrer">
       {children}
     </a>
   );
@@ -45,27 +50,71 @@ export function LaunchBanner() {
   return (
     <div className="bk-banner" role="region" aria-label="Launch offer">
       <p>{cfg.BANNER_TEXT}</p>
-      <button type="button" className="bk-banner__close" aria-label="Close offer banner"
-        onClick={() => { setOpen(false); try { localStorage.setItem('broski-banner-closed', cfg.BANNER_HIDE_FROM); } catch {} }}>
+      <button
+        type="button"
+        className="bk-banner__close"
+        aria-label="Close offer banner"
+        onClick={() => {
+          setOpen(false);
+          try { localStorage.setItem('broski-banner-closed', cfg.BANNER_HIDE_FROM); } catch {}
+        }}
+      >
         ×
       </button>
     </div>
   );
 }
 
-/* 1. Exactly three product cards with Professional Online Checkout Gateway */
+/* Pincode Checker Component (Task 4) */
+export function PincodeChecker() {
+  const [pin, setPin] = useState('');
+  const [result, setResult] = useState(null);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const r = checkPincode(pin, C().DELIVERY_PINCODES || LOCAL_PINS);
+    setResult(r);
+    try { window.BroskiAnalytics?.trackEvent('pincode_check', { result: r.kind }); } catch {}
+  };
+  return (
+    <form className="bk-pin" onSubmit={onSubmit} aria-labelledby="pin-h" noValidate>
+      <h3 id="pin-h" className="bk-pin__title">Check Delivery in Your Area</h3>
+      <div className="bk-pin__row">
+        <label htmlFor="bk-pin-input" className="bk-sr-only">6-digit pincode</label>
+        <input
+          id="bk-pin-input"
+          className="bk-pin__input"
+          type="text"
+          inputMode="numeric"
+          autoComplete="postal-code"
+          maxLength={6}
+          placeholder="Enter pincode"
+          value={pin}
+          onChange={(e) => {
+            setPin(e.target.value.replace(/\D/g, '').slice(0, 6));
+            setResult(null);
+          }}
+        />
+        <button type="submit" className="bk-h-btn bk-pin__btn">Check</button>
+      </div>
+      <p className={`bk-pin__msg ${result ? `bk-pin__msg--${result.kind} is-shown` : ''}`} role="status" aria-live="polite">
+        {result ? result.text : ''}
+      </p>
+    </form>
+  );
+}
+
+/* 1. Product cards with Online Checkout Gateway */
 export function ProductCards() {
   const { PRODUCTS = [], UNIT_PRICE_LINE } = C();
   const nv = PRODUCTS.find((p) => p.id === 'non-veg');
   const mx = PRODUCTS.find((p) => p.id === 'mix');
   const [activeGatewayProduct, setActiveGatewayProduct] = useState(null);
-  const [activeTab, setActiveTab] = useState('nutrition');
 
   return (
     <section id="shop" className="bk-shop" aria-labelledby="shop-h">
       <div className="bk-shop-head">
         <div>
-          <span className="bk-shop-eyebrow">D2C DIRECT STORE</span>
+          <span className="bk-shop-eyebrow">Order direct</span>
           <h2 id="shop-h" className="bk-shop__title">Pick your Bro's crunch</h2>
         </div>
         <button
@@ -76,7 +125,7 @@ export function ProductCards() {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
           </svg>
-          Direct Order Gateway
+          Order now
         </button>
       </div>
 
@@ -127,99 +176,26 @@ export function ProductCards() {
       </div>
       {UNIT_PRICE_LINE && <p className="bk-shop__unit">{UNIT_PRICE_LINE}</p>}
 
-      {/* Pro Pet Industry Standard: Nutrition, Feeding Guide & Freshness Transparency */}
+      <PincodeChecker />
+
+      {/* Honest 3-point freshness transparency (F1) */}
       <div className="bk-transparency-card">
-        <div className="bk-transparency-tabs">
-          <button
-            type="button"
-            className={activeTab === 'nutrition' ? 'active' : ''}
-            onClick={() => setActiveTab('nutrition')}
-          >
-            Guaranteed Nutrition
-          </button>
-          <button
-            type="button"
-            className={activeTab === 'feeding' ? 'active' : ''}
-            onClick={() => setActiveTab('feeding')}
-          >
-            Daily Feeding Guide
-          </button>
-          <button
-            type="button"
-            className={activeTab === 'freshness' ? 'active' : ''}
-            onClick={() => setActiveTab('freshness')}
-          >
-            Freshness Standards
-          </button>
-        </div>
-
-        <div className="bk-transparency-content">
-          {activeTab === 'nutrition' && (
-            <div className="bk-nutrition-grid">
-              <div className="bk-nutri-box">
-                <span className="bk-nutri-val">≥ 20%</span>
-                <span className="bk-nutri-lbl">Crude Protein (Non-Veg)</span>
-                <small>≥ 18% in Mix pack</small>
-              </div>
-              <div className="bk-nutri-box">
-                <span className="bk-nutri-val">≥ 8%</span>
-                <span className="bk-nutri-lbl">Crude Fat</span>
-                <small>Wholesome poultry lipids</small>
-              </div>
-              <div className="bk-nutri-box">
-                <span className="bk-nutri-val">≤ 4%</span>
-                <span className="bk-nutri-lbl">Crude Fibre</span>
-                <small>Easy digestion profile</small>
-              </div>
-              <div className="bk-nutri-box">
-                <span className="bk-nutri-val">≤ 10%</span>
-                <span className="bk-nutri-lbl">Moisture</span>
-                <small>Crisp oven baked texture</small>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'feeding' && (
-            <div className="bk-feeding-list">
-              <div className="bk-feeding-item">
-                <strong>Small Dogs (&lt; 10 kg)</strong>
-                <span>Pug, Shih Tzu, Pomeranian, Indie Pups: <strong>2 – 4 biscuits / day</strong></span>
-              </div>
-              <div className="bk-feeding-item">
-                <strong>Medium Dogs (10 – 25 kg)</strong>
-                <span>Beagle, Cocker Spaniel, Indie Adult: <strong>4 – 8 biscuits / day</strong></span>
-              </div>
-              <div className="bk-feeding-item">
-                <strong>Large Dogs (&gt; 25 kg)</strong>
-                <span>Labrador, Golden Retriever, German Shepherd: <strong>8 – 12 biscuits / day</strong></span>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'freshness' && (
-            <div className="bk-freshness-grid">
-              <div className="bk-fresh-item">
-                <span className="bk-fresh-icon">🌾</span>
-                <strong>Whole Wheat Base</strong>
-                <p>Pure cereal flour base with wholesome minerals. No sawdust fillers.</p>
-              </div>
-              <div className="bk-fresh-item">
-                <span className="bk-fresh-icon">🔥</span>
-                <strong>Oven-Baked Crisp</strong>
-                <p>Double-baked in Shalimar Bagh for that loud, satisfying bone crunch.</p>
-              </div>
-              <div className="bk-fresh-item">
-                <span className="bk-fresh-icon">🔍</span>
-                <strong>Clear Window Pouch</strong>
-                <p>You see the biscuits before you buy. Nothing hidden inside foil.</p>
-              </div>
-              <div className="bk-fresh-item">
-                <span className="bk-fresh-icon">📍</span>
-                <strong>Nangloi Local Dispatch</strong>
-                <p>Dispatched direct from West Delhi. No 6-month distributor warehouse dust.</p>
-              </div>
-            </div>
-          )}
+        <div className="bk-freshness-grid">
+          <div className="bk-fresh-item">
+            <span className="bk-fresh-icon">🔍</span>
+            <strong>Clear window pouch – you see the biscuits</strong>
+            <p>Every bone biscuit is visible before you buy. Nothing hidden inside foil.</p>
+          </div>
+          <div className="bk-fresh-item">
+            <span className="bk-fresh-icon">📍</span>
+            <strong>Packed in Nangloi, West Delhi</strong>
+            <p>Sealed and dispatched fresh locally in West Delhi (PIN 110041).</p>
+          </div>
+          <div className="bk-fresh-item">
+            <span className="bk-fresh-icon">💧</span>
+            <strong>A treat, not a meal – keep fresh water nearby</strong>
+            <p>Nutritious reward biscuits for training and treat time. Always keep clean water available.</p>
+          </div>
         </div>
       </div>
 
@@ -234,41 +210,43 @@ export function ProductCards() {
   );
 }
 
-/* 5. For pet shops */
+/* 5. Retail Partner Section (Task 5) */
 export function PartnerSection() {
   const { MSG = {} } = C();
   return (
     <section className="bk-partner" aria-labelledby="partner-h">
-      <h2 id="partner-h">Become a BROSKI Launch Partner</h2>
+      <h2 id="partner-h">Run a Pet Shop or Grooming Salon in West Delhi?</h2>
+      <p className="bk-partner__offer">
+        Get our Introductory 11+1 Free Launch Box (12 packs of 400g) for ₹1,100 investment.
+        Earn ₹688 profit (38.5% margin) with our 15-day 100% cash buyback guarantee.
+      </p>
       <ul>
-        <li>11 + 1 free on your first order (The Bro Counter Box)</li>
-        <li>Free sample jar + counter card</li>
-        <li>5 free taste packs for your customers</li>
-        <li>15-day 100% buyback guarantee if unsold</li>
-        <li>Delivery from 15 Nov in West Delhi</li>
+        <li>Free sample display jar</li>
+        <li>Counter cards</li>
+        <li>5 complimentary 50g taste packs</li>
       </ul>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center', marginTop: '16px' }}>
-        <WaButton text={MSG.shop}>WhatsApp us for shop rates</WaButton>
-        <a className="bk-h-btn" href="/billing/" style={{ background: '#352016', color: '#fff8ed', border: '1px solid #fff8ed' }}>
-          Official GST Bill Portal →
-        </a>
-      </div>
-      <p className="bk-partner__small">First 20 shops only · 38.5% effective retailer margin.</p>
+      <WaButton text={MSG.shop}>WhatsApp us for the Launch Box</WaButton>
+      <p className="bk-partner__small">
+        Profit shown at MRP ₹149 per pack. Buyback covers unopened packs returned within 15 days. First 20 shops only.
+      </p>
     </section>
   );
 }
 
 /* 6. Footer (all pages) */
 export function SiteFooter() {
-  const { EMAIL, MSG = {} } = C();
+  const { EMAIL, GSTIN, MSG = {} } = C();
   return (
     <footer className="bk-h-foot">
       <nav aria-label="Footer">
-        <a href="/">Home</a><a href="/offers/">Bro Perks</a><a href="/r/">Feedback</a><a href="/billing/">Billing Portal</a><a href="/privacy/">Privacy</a>
+        <a href="/">Home</a>
+        <a href="/offers/">Bro Perks</a>
+        <a href="/r/">Feedback</a>
+        <a href="/privacy/">Privacy</a>
       </nav>
       <p>
         BROSKI · Nangloi, Delhi 110041 · <a href={`mailto:${EMAIL}`}>{EMAIL}</a> ·{' '}
-        <a href={waLink(MSG.hello)} target="_blank" rel="noopener">WhatsApp</a> · Udyam: UDYAM-DL-11-0177908 · GST: Composition Scheme (07)
+        <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp</a> · Udyam: UDYAM-DL-11-0177908{GSTIN ? ` · GSTIN: ${GSTIN}` : ''}
       </p>
     </footer>
   );
