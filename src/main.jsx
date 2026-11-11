@@ -107,7 +107,6 @@ function App() {
           <a href="/r/" onClick={() => setMenu(false)}>Feedback</a>
           <a href="#story" onClick={() => setMenu(false)}>Our story</a>
           <a href="#faq" onClick={() => setMenu(false)}>Good to know</a>
-          <a href="/billing/" onClick={() => setMenu(false)}>Billing Portal</a>
           <a href="/?intro=1" onClick={() => { try { sessionStorage.removeItem('broski-intro-seen'); } catch {} }}>Watch intro ↺</a>
         </nav>
         <div className="nav-actions">
@@ -306,7 +305,7 @@ function App() {
               ['How do I order?', 'Tap Order on WhatsApp on any pack – we confirm delivery and payment in the chat.'],
               ["What's in the treats?", 'Full ingredient list coming soon – it will be printed on every pack and posted here, word for word, before we sell.'],
               ['How does delivery work?', 'We deliver in West Delhi to start. Delivery day and any charge are confirmed by WhatsApp or email before you pay.'],
-              ['I run a pet shop – can I stock Broski?', "WhatsApp us or email at support@broskipetfood.com; we'll visit and leave a sample jar."]
+              ['I run a pet shop – can I stock Broski?', "WhatsApp us or email at support@broskipetfood.com; we'll share our 11+1 wholesale offer and drop off complimentary tasting packs."]
             ].map(([q, a]) => (
               <details key={q}>
                 <summary>{q}<span>+</span></summary>

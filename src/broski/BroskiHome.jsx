@@ -217,17 +217,16 @@ export function PartnerSection() {
     <section className="bk-partner" aria-labelledby="partner-h">
       <h2 id="partner-h">Run a Pet Shop or Grooming Salon in West Delhi?</h2>
       <p className="bk-partner__offer">
-        Get our Introductory 11+1 Free Launch Box (12 packs of 400g) for ₹1,100 investment.
-        Earn ₹688 profit (38.5% margin) with our 15-day 100% cash buyback guarantee.
+        We are onboarding our first 11 retail partners across Nangloi, Paschim Vihar, Punjabi Bagh, Janakpuri, and Rajouri Garden. Every partner gets 1 bonus tasting pack for every 11 packs stocked (₹1,100 investment, ₹688 retail profit @ 38.5% margin) with our 15-day 100% cash buyback guarantee.
       </p>
       <ul>
-        <li>Free sample display jar</li>
-        <li>Counter cards</li>
-        <li>5 complimentary 50g taste packs</li>
+        <li>Counter marketing cards</li>
+        <li>Complimentary 50g taste packs with QR review cards</li>
+        <li>Zero-risk 15-day 100% cash buyback guarantee</li>
       </ul>
-      <WaButton text={MSG.shop}>WhatsApp us for the Launch Box</WaButton>
+      <WaButton text={MSG.shop}>WhatsApp Lakshay for the Launch Box</WaButton>
       <p className="bk-partner__small">
-        Profit shown at MRP ₹149 per pack. Buyback covers unopened packs returned within 15 days. First 20 shops only.
+        Profit shown at MRP ₹149 per pack. Buyback covers unopened, undamaged packs returned within 15 days. First 11 shops only.
       </p>
     </section>
   );
