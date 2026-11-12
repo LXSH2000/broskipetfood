@@ -36,17 +36,6 @@ window.BROSKI_CONFIG = {
       msg: 'Hi BROSKI! I want to order Bro Mix 400 g ×1'
     },
     {
-      id: 'peanut-butter',
-      title: 'Peanut Butter Dog Biscuits',
-      note: 'Yellow pack · Peanut Butter Badge',
-      size: '400 g',
-      price: 179,
-      img: '/broski-pouch-nonveg.jpg',
-      alt: 'BROSKI Peanut Butter dog biscuits, 400 g pack',
-      button: 'Order on WhatsApp',
-      msg: 'Hi BROSKI! I want to order Peanut Butter 400 g ×1'
-    },
-    {
       id: 'combo',
       title: 'Bro Combo',
       note: '1 Bro Bites + 1 Bro Mix',
