@@ -40,17 +40,6 @@ export const CONFIG = {
       image: '/broski-pouch-mix.jpg',
       tag: '400g Stand-up Pouch · ₹179',
       shortDesc: 'A crunchy blend in our white zip pouch with transparent window.'
-    },
-    {
-      id: 'peanut-butter',
-      name: 'Peanut Butter Dog Biscuits',
-      price: 17900,
-      weight: '400g',
-      category: 'biscuits',
-      pouchColor: 'yellow',
-      image: '/broski-pouch-nonveg.jpg',
-      tag: '400g Stand-up Pouch · ₹179',
-      shortDesc: 'Crunchy peanut butter treats in our yellow zip pouch.'
     }
   ]
 };

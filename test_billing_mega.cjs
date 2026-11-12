@@ -24,14 +24,14 @@ const path = require('path');
 
   // 3. Test Scheme Presets
   console.log('Testing 20-Pack Wholesale Carton preset...');
-  await page.locator('button.preset-pill:has-text("20-Pack Master Carton")').click();
-  await page.waitForTimeout(200);
+  await page.locator('#btnSchemeWholesale20').click();
+  await page.waitForTimeout(300);
   const wholesaleMargin = await page.locator('#marginMetricsBox').innerText();
   console.log('Wholesale Margin Text:\n', wholesaleMargin);
 
   console.log('Testing 11+1 Retail Box preset...');
-  await page.locator('button.preset-pill:has-text("11+1 Retail Box")').click();
-  await page.waitForTimeout(200);
+  await page.locator('#btnScheme11plus1').click();
+  await page.waitForTimeout(300);
 
   // Fill in Buyer Details
   await page.locator('#buyerName').fill('Pawsome Pet Shoppe (Paschim Vihar)');
@@ -39,9 +39,9 @@ const path = require('path');
   await page.locator('#buyerAddress').fill('Shop 4, A-Block Market, Paschim Vihar, West Delhi');
 
   // 4. Test Save Record
-  console.log('Clicking Save Record...');
-  await page.locator('button:has-text("Save Record")').click();
-  await page.waitForTimeout(500);
+  console.log('Clicking Save Bill...');
+  await page.locator('button:has-text("Save Bill")').click();
+  await page.waitForTimeout(600);
 
   // Verify badge count is 1
   const badgeVal = await page.locator('#recordCountBadge').innerText();
@@ -65,34 +65,34 @@ const path = require('path');
 
   // 6. Test cycling status
   console.log('Testing status cycle...');
-  await page.locator('.status-pill').first().click();
+  await page.locator('.status-badge-toggle').first().click();
   await page.waitForTimeout(300);
-  const updatedStatus = await page.locator('.status-pill').first().innerText();
+  const updatedStatus = await page.locator('.status-badge-toggle').first().innerText();
   console.log('Updated Status Label:', updatedStatus);
 
   // Take screenshot of Records Modal
-  await page.screenshot({ path: 'qa_screenshots/billing_records_modal.png' });
-  console.log('Screenshot saved: qa_screenshots/billing_records_modal.png');
+  await page.screenshot({ path: 'qa_screenshots/billing_apple_records.png' });
+  console.log('Screenshot saved: qa_screenshots/billing_apple_records.png');
 
   // Close modal
-  await page.locator('.btn-close-modal').click();
+  await page.locator('.btn-close-sheet').click();
   await page.waitForTimeout(300);
 
   // Take screenshot of Canvas with 11+1 and dynamic calculations
-  await page.screenshot({ path: 'qa_screenshots/billing_canvas_11plus1.png' });
-  console.log('Screenshot saved: qa_screenshots/billing_canvas_11plus1.png');
+  await page.screenshot({ path: 'qa_screenshots/billing_apple_desktop.png' });
+  console.log('Screenshot saved: qa_screenshots/billing_apple_desktop.png');
 
   // 7. Test Mobile Viewport (390x844)
   console.log('Testing mobile viewport 390x844...');
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(400);
   const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
   console.log('Mobile scrollWidth:', scrollWidth);
   if (scrollWidth > 390) {
     console.warn('Warning: Mobile view has horizontal scroll of', scrollWidth);
   }
-  await page.screenshot({ path: 'qa_screenshots/billing_mobile_view.png' });
-  console.log('Screenshot saved: qa_screenshots/billing_mobile_view.png');
+  await page.screenshot({ path: 'qa_screenshots/billing_apple_mobile.png' });
+  console.log('Screenshot saved: qa_screenshots/billing_apple_mobile.png');
 
   await browser.close();
   console.log('ALL BILLING MEGA TESTS PASSED CLEANLY! ✅');

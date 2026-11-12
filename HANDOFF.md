@@ -1,6 +1,6 @@
 # BROSKI Master Project Handoff
 
-**Current Status:** PRODUCTION ACTIVE & SPRINT READY  
+**Current Status:** PRODUCTION DEPLOYED & APPLE-GRADE POLISHED  
 **Date:** 12 November 2026 · **Owner:** Lakshay · **CEO:** Rex  
 **Live Production URL:** [https://broskipetfood.com/](https://broskipetfood.com/)  
 **Live Billing & Scheme Hub:** [https://broskipetfood.com/billing/](https://broskipetfood.com/billing/)  
@@ -13,19 +13,26 @@
 
 - **Hosting & Infrastructure:** Vite + React single-page application hosted on GitHub Pages (`LXSH2000/broskipetfood`). Branch `main` holds full source code; branch `gh-pages` serves static production bundles from `dist/`.
 - **Zero-Downtime Deployment:** Built with `emptyOutDir: false` preserving hashed asset chunks and preventing 404 errors for cached visitors.
-- **On-Site D2C Checkout Gateway:** Replaced pure WhatsApp redirect with an interactive on-site checkout modal (`BroskiCheckoutGateway.jsx`). Visitors select packs (Non-Veg ₹149, Mix ₹179, Bro Combo ₹299), enter pet details, street address, and payment method (Cash on Delivery or Instant UPI QR), generating a tracking Order ID.
-- **Official GST & Rule 55 Billing Mega Generator (`/billing/`):**
-  - Standalone, production-grade billing application compliant with GST Composition Scheme (Rule 49 of CGST Rules, 2017) and Delivery Challan standards (Rule 55 of CGST Rules, 2017) for HSN 2309 10 00.
-  - **Persistent Multi-Tier Database Storage:** Dual-layer storage with `IndexedDB` (`BroskiBillingDB`) for unlimited capacity on mobile and desktop, `localStorage` mirror for instant offline recovery, and optional background `/api/invoices` server sync.
-  - **Records & Invoices History Drawer:** Searchable and filterable database drawer allowing instant search by shop name, phone, or invoice number; filters by Paid / Due / Challans; one-click status cycling (`PAID` ↺ `DUE`); one-click invoice loading, re-printing, and WhatsApp sharing.
-  - **Data Export & Cloud Backup:** One-click Excel/CSV export (`BROSKI_Invoices_YYYY-MM-DD.csv`), full JSON backup download (`BROSKI_Billing_Backup_YYYY-MM-DD.json`), and instant JSON restore file picker.
-  - **Dynamic Trade Margin & Scheme Engine:** Automatically updates live retailer economics:
+- **Batch 1 Product Reality (Peanut Butter Completely Removed):**
+  - All collateral, config files (`src/config.js`, `public/config.js`, `dist/config.js`), and server APIs strictly aligned with physical bakery production (60 kg Bro Bites Non-Veg + 60 kg Bro Mix = 120 kg total / 300 packs).
+  - Active products:
+    1. **Bro Bites Non-Veg 400g** (MRP ₹149 / Wholesale ₹100)
+    2. **Bro Mix 400g** (MRP ₹179 / Wholesale ₹120)
+    3. **Bro Combo 800g** (MRP ₹299 / Wholesale ₹220)
+- **Apple-Grade Billing & Scheme Studio (`/billing/`):**
+  - **Authentic Brand Mark:** Features the official dark chocolate (`#352016`) rounded square emblem with the golden biscuit bone silhouette (`#f5e8cf`) matching packaging and `favicon.svg`. Bold Outfit 800 wordmark with tight optical letter-spacing and registered MSME/Bakery FSSAI credentials.
+  - **Editorial Minimalism:** Parchment background (`#f7f4ee`), hairline borders (`#e8dfd3`), soft ambient elevation, and segmented toggle controls (Bill of Supply vs Rule 55 Delivery Challan).
+  - **Monospace Typography:** `JetBrains Mono` for all financial figures, quantities, and HSN codes.
+  - **Dynamic Trade Margin & Scheme Engine:**
     * **11+1 Retail Launch Box:** ₹1,100 outlay, ₹1,788 retail sales, **₹688 shopkeeper profit (38.5% margin!)** vs Pedigree 18% (~₹328).
-    * **20-Pack Master Carton:** ₹2,104.60 wholesale tier.
-    * **D2C Bro Combo:** 2-pack introductory bundle @ ₹299.
-    * **Rule 55 Sample Drop:** 10 complimentary 50g pouches + acrylic counter tasting jar.
-    * **15-Day Approval Consignment:** 12 packs on sale-or-return with 100% buyback guarantee.
-  - **Dynamic UPI QR:** Real-time generation of scan-to-pay QR linking to Lakshay's UPI VPA.
+    * **20-Pack Master Carton:** 10 Non-Veg + 10 Mix @ ₹2,149 outlay, ₹3,280 retail sales, ₹1,131 profit (34.5% margin).
+    * **D2C Bro Combo:** 2-pack bundle @ ₹299.
+    * **10 Sampler Drop:** Complimentary 50g pouches + tasting jar on 15-day 100% cash buyback guarantee.
+  - **Live Retailer Profit Snapshot:** Embedded sidebar analytics displaying real-time shop profit and margin comparisons on every keystroke.
+  - **Persistent Dual-Layer Storage:** Client-side `IndexedDB` (`broski_billing_db`) with `localStorage` fallback and background cloud sync (`/api/invoices`).
+  - **Records Drawer:** Searchable and filterable database drawer allowing instant search by shop name, phone, or invoice number; filters by Paid / Due / Challans; one-click status cycling (`PAID` ↺ `DUE`); one-click invoice loading, re-printing, and WhatsApp sharing.
+  - **Data Export & Cloud Backup:** One-click Excel/CSV export (`BROSKI_Invoices_YYYY-MM-DD.csv`), full JSON backup download, and instant JSON restore file picker.
+  - **Dynamic UPI QR:** Real-time generation of scan-to-pay QR linking to Lakshay's UPI VPA (`lakshay9643@oksbi`) with dynamic grand total.
 - **Dedicated Sub-pages (Served from `public/`):**
   - `/billing/` — Official GST Bill of Supply & Delivery Challan Hub with Persistent Database.
   - `/offers/` — Bro Perks launch deals, bundle discounts, and repeat customer rewards.

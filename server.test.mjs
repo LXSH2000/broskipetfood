@@ -50,13 +50,11 @@ test('order API protects order totals, validation and customer privacy', async t
 
   assert.equal((await (await fetch(base + '/api/health')).json()).brand, 'Broski');
   const products = (await (await fetch(base + '/api/products')).json()).products;
-  assert.equal(products.length, 3);
+  assert.equal(products.length, 2);
   assert.equal(products[0].name, 'Bro Bites (Non-Veg)');
   assert.equal(products[0].price, 14900);
   assert.equal(products[1].name, 'Bro Mix');
   assert.equal(products[1].price, 17900);
-  assert.equal(products[2].name, 'Peanut Butter Dog Biscuits');
-  assert.equal(products[2].price, 17900);
 
   const response = await order([{ id: 'non-veg', quantity: 2 }]);
   assert.equal(response.status, 201);
