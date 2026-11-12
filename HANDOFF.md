@@ -77,9 +77,8 @@ Rex and the executive team reviewed Lakshay's Excel models and designed the omni
 |---|---|---|
 | **7 Nov 2026** | **GST REG-04 SUBMITTED (DONE):** Clarification & 6-page verified PDF filed on gst.gov.in under ARN AA071026132029K (6 days early). | Lakshay & Maya (Legal) |
 | **10 Nov 2026** | **WEBSITE SOLUTION PACK DEPLOYED (DONE):** Single source config, Rule 55 challan, dynamic UPI QR generator, pincode checker, 11+1 launch box, zero-hit audit passed (3/3 unit tests pass), deployed live to production (https://broskipetfood.com/ via commit f7130fe). | Rex & Dev (E-com) |
-| **7–8 Nov 2026** | Call Scoobee bakery to lock 110 kg order (55 kg Non-Veg + 55 kg Mix) for pickup on 11/12 Nov; chase OLI for TM-A; get business SIM. | Lakshay & Arjun (Sales) |
-| **9–10 Nov 2026** | Print front/back labels with Nangloi local printer; procure stand-up zipper pouches (275 pcs). | Lakshay & Rohan (Packaging) |
-| **11–12 Nov 2026** | Pick up 110 kg bulk biscuits from Scoobee (Shalimar Bagh); arrival QA inspection. | Lakshay & Kavya (QA) |
-| **12–14 Nov 2026** | Home packing run (275 packs) at 12A/3 Dharam Colony on stamped scale; box 12-pack cartons. | Lakshay & Sahil (Ops) |
-| **15 Nov 2026** | **COMMERCIAL LAUNCH DAY:** First store drops (Route 1) + WhatsApp broadcast to dog parents. | Lakshay, Rex & Dev (E-com) |
+| **12 Nov 2026** | **STICKERS ORDERED & TM POA READY (DONE):** Stickers ordered from Nangloi printer for ₹2,110 (~150 sets front/back); TM-48 Power of Attorney signed for Online Legal India submission. GST clarification awaiting officer order (Rule 9(5) deadline 14–16 Nov). | Lakshay, Rohan & Meera |
+| **13 Nov 2026** | **BAKERY BATCH LOCK & STICKER PICKUP:** Call Scoobee bakery to lock 120 kg batch (60 kg Non-Veg + 60 kg Mix) for Saturday pickup; collect stickers and conduct QR scan QA; ensure 300 zipper pouches on hand. | Lakshay, Arjun & Rohan |
+| **14 Nov 2026** | **BAKERY PICKUP & PACKING RUN:** Pick up 120 kg bulk biscuits from Scoobee (Shalimar Bagh); arrival QA; home packing run (300 packs @ 402g–404g target) at 12A/3 Dharam Colony on stamped scale; box 10 retail cartons (11+1 free). | Lakshay, Kavya & Sahil |
+| **15 Nov 2026** | **COMMERCIAL LAUNCH DAY:** Route 1 pet shop drops (Nangloi & Paschim Vihar - 5 shops) + WhatsApp D2C broadcast to dog parents. | Lakshay, Rex & Dev (E-com) |
 | **15 Dec 2026** | **PILOT GATE REVIEW:** 150 packs sold + 30% shop reorder rate. Data-driven decision to scale. | Rex & Lakshay |
