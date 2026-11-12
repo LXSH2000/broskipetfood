@@ -79,6 +79,27 @@ test('order API protects order totals, validation and customer privacy', async t
   assert.equal(saved.includes('customer'), false);
   assert.equal((await post('/api/newsletter', { email: 'bad' })).status, 400);
   assert.equal((await (await post('/api/newsletter', { email: customer.email })).json()).status, 'received');
+
+  // Test Invoices API persistence
+  const invGetEmpty = await (await fetch(base + '/api/invoices')).json();
+  assert.deepEqual(invGetEmpty, { invoices: [] });
+  const testInv = {
+    id: 'BRS-TEST-001',
+    billNo: 'BRS/26-27/001',
+    billDate: '2026-11-15',
+    docMode: 'bill',
+    buyerName: 'Paws & Tails West Delhi',
+    buyerPhone: '9876543210',
+    grandTotal: 1100,
+    paymentStatus: 'PAID',
+    items: [{ desc: 'Bro Bites', qty: 11, freeQty: 1, rate: 100 }]
+  };
+  const invPost = await post('/api/invoices', testInv);
+  assert.equal(invPost.status, 200);
+  const invSaved = await (await fetch(base + '/api/invoices')).json();
+  assert.equal(invSaved.invoices.length, 1);
+  assert.equal(invSaved.invoices[0].buyerName, 'Paws & Tails West Delhi');
+
   const page = await fetch(base + '/checkout');
   assert.equal(page.status, 200);
   assert.equal(page.headers.get('cache-control'), 'no-cache');

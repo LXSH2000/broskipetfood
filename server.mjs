@@ -72,6 +72,30 @@ export async function startServer({ port = Number(process.env.PORT || 4174), dat
     writes = next.catch(() => {});
     await next;
   }
+
+  let invoiceWrites = Promise.resolve();
+  async function persistInvoice(inv) {
+    const next = invoiceWrites.then(async () => {
+      await mkdir(dataDir, { recursive: true });
+      const filename = path.join(dataDir, 'invoices.json');
+      let invoices = [];
+      try { invoices = JSON.parse(await readFile(filename, 'utf8')); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+      if (!Array.isArray(invoices)) throw new Error('Invalid invoice store.');
+      const idx = invoices.findIndex(i => (i.id && i.id === inv.id) || (i.billNo && i.billNo === inv.billNo));
+      const record = { ...inv, updatedAt: new Date().toISOString() };
+      if (idx >= 0) {
+        invoices[idx] = { ...invoices[idx], ...record };
+      } else {
+        record.createdAt = record.createdAt || new Date().toISOString();
+        invoices.unshift(record);
+      }
+      const temp = `${filename}.${randomUUID()}.tmp`;
+      await writeFile(temp, JSON.stringify(invoices, null, 2), { mode: 0o600 });
+      await rename(temp, filename);
+    });
+    invoiceWrites = next.catch(() => {});
+    await next;
+  }
   const server = http.createServer(async (req, res) => {
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('X-Frame-Options', 'DENY');
@@ -90,6 +114,23 @@ export async function startServer({ port = Number(process.env.PORT || 4174), dat
         const input = await body(req);
         if (!emailValid(input.email)) throw fail('Enter a valid email address.');
         return json(200, { status: 'received', message: 'Notification signup recorded.' });
+      }
+      if (req.method === 'GET' && pathname === '/api/invoices') {
+        const filename = path.join(dataDir, 'invoices.json');
+        try {
+          const invoices = JSON.parse(await readFile(filename, 'utf8'));
+          return json(200, { invoices: Array.isArray(invoices) ? invoices : [] });
+        } catch (error) {
+          if (error.code === 'ENOENT') return json(200, { invoices: [] });
+          throw error;
+        }
+      }
+      if (req.method === 'POST' && pathname === '/api/invoices') {
+        const inv = await body(req);
+        if (!inv || typeof inv !== 'object' || !inv.billNo) throw fail('Valid invoice data with billNo is required.');
+        if (!inv.id) inv.id = inv.billNo;
+        await persistInvoice(inv);
+        return json(200, { status: 'saved', invoice: inv });
       }
       if (pathname.startsWith('/api/')) return json(404, { error: 'API endpoint not found.' });
       if (!['GET', 'HEAD'].includes(req.method)) return json(405, { error: 'Method not allowed.' });

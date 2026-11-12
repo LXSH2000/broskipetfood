@@ -664,6 +664,363 @@ body {
     gap: 6px;
   }
 }
+
+/* --- BROSKI Mega Hub & Database Styles --- */
+.hub-action-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.hub-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hub-btn:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.hub-btn.btn-save-record {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.hub-btn.btn-save-record:hover {
+  background: #15803d;
+  color: #fff;
+  border-color: #15803d;
+}
+
+.hub-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Margin & Scheme Economics Card */
+.margin-metrics-box {
+  background: #fdfbf7;
+  border: 1.5px solid #d4c5b3;
+  border-left: 4px solid var(--green);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 11.5px;
+}
+
+.margin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.margin-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--green);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.margin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 4px;
+  margin: 6px 0;
+}
+
+.margin-stat-item .val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.margin-stat-item .lbl {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.margin-pitch {
+  font-size: 10.5px;
+  color: #4a3b32;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+/* Database Modal & Drawer */
+.records-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.records-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(34, 28, 24, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.records-sheet {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 960px;
+  max-height: 90vh;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1001;
+}
+
+.records-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card-bg);
+}
+
+.records-header h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.records-subtitle {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.btn-close-modal:hover {
+  background: rgba(0,0,0,0.06);
+  color: var(--primary);
+}
+
+.records-toolbar {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  background: #ffffff;
+}
+
+.records-toolbar .search-box {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-pills {
+  display: flex;
+  gap: 6px;
+}
+
+.filter-pill {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 5px 10px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-pill.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.backup-actions-bar {
+  padding: 8px 20px;
+  background: #faf6f0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 11px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.records-table-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 20px;
+}
+
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.records-table th {
+  background: var(--card-bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 700;
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--border);
+  text-align: left;
+}
+
+.records-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.records-table tr:hover td {
+  background: #fdfbf7;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+.status-pill.status-paid {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-pill.status-pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-pill.status-challan {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.record-action-btns {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.btn-icon {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 7px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--primary);
+  transition: all 0.15s;
+}
+
+.btn-icon:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-icon.btn-danger:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #fff;
+}
+
+.empty-records-box {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* Toast Floating Notification */
+.toast-msg {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--primary);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 2000;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+.toast-msg.show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
 </style>
 </head>
 <body>
@@ -680,6 +1037,24 @@ body {
         Broski Billing Hub
       </h2>
       <span class="badge-mode" id="headerModeBadge">Composition 1%</span>
+    </div>
+
+    <!-- Quick Hub Actions (Records Database, Save, New) -->
+    <div class="hub-action-bar">
+      <button type="button" class="hub-btn" onclick="toggleRecordsModal(true)" title="View all stored invoices">
+        📂 Records <span class="hub-badge" id="recordCountBadge">0</span>
+      </button>
+      <button type="button" class="hub-btn btn-save-record" onclick="saveCurrentInvoice()" title="Save current invoice to local & cloud database">
+        💾 Save Record
+      </button>
+      <button type="button" class="hub-btn" onclick="resetForm()" title="Create a new invoice">
+        ✨ New Bill
+      </button>
+    </div>
+
+    <!-- Live Retailer Margin / Scheme Economics Banner -->
+    <div id="marginMetricsBox" class="margin-metrics-box">
+      <!-- Injected via JavaScript updateMarginMetrics() -->
     </div>
 
     <!-- Document Type Toggle (Task 3) -->
@@ -707,11 +1082,13 @@ body {
 
     <!-- Quick Billing Presets -->
     <div class="panel-section">
-      <div class="section-label">⚡ Fast Order Presets</div>
+      <div class="section-label">⚡ Fast Order & Trade Schemes</div>
       <div class="preset-pills">
-        <button type="button" class="preset-pill" onclick="loadPreset('11plus1')">🔥 11+1 Bro Counter Box (Shop)</button>
-        <button type="button" class="preset-pill" onclick="loadPreset('sampledrop')">🫙 10 Sampler Packs Drop</button>
-        <button type="button" class="preset-pill" onclick="loadPreset('wholesale20')">📦 20-Pack Pet Shop Order</button>
+        <button type="button" class="preset-pill" onclick="loadPreset('11plus1')">🔥 11+1 Retail Box (₹1,100 · 38.5% Margin)</button>
+        <button type="button" class="preset-pill" onclick="loadPreset('wholesale20')">📦 20-Pack Master Carton</button>
+        <button type="button" class="preset-pill" onclick="loadPreset('d2ccombo')">🐕 Bro Combo D2C (₹299)</button>
+        <button type="button" class="preset-pill" onclick="loadPreset('sampledrop')">🫙 10 Sampler Drop (Rule 55)</button>
+        <button type="button" class="preset-pill" onclick="loadPreset('consignment')">🔄 15-Day Consignment (Rule 55)</button>
       </div>
     </div>
 
@@ -829,6 +1206,15 @@ body {
           🔄 Reset Form
         </button>
       </div>
+
+      <div class="btn-action-row" style="margin-top:8px;">
+        <button type="button" class="btn btn-outline" style="background:#f0fdf4; border-color:#86efac; color:#166534;" onclick="saveCurrentInvoice()">
+          💾 Save to Records
+        </button>
+        <button type="button" class="btn btn-outline" onclick="toggleRecordsModal(true)">
+          📂 Open Database
+        </button>
+      </div>
     </div>
   </aside>
 
@@ -850,6 +1236,87 @@ body {
   </main>
 
 </div>
+
+<!-- Records & Invoices Database Modal -->
+<div id="recordsModal" class="records-modal no-print" style="display:none;">
+  <div class="records-backdrop" onclick="toggleRecordsModal(false)"></div>
+  <div class="records-sheet">
+    <div class="records-header">
+      <div>
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style="color:var(--accent);">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          Invoices & Delivery Records Database
+        </h3>
+        <div class="records-subtitle">
+          <span id="statTotalBills">0 Bills</span> ·
+          <span id="statTotalValue">₹0.00 Total Revenue</span> ·
+          <span id="statTotalPacks">0 Packs Dispatched</span>
+        </div>
+      </div>
+      <button type="button" class="btn-close-modal" onclick="toggleRecordsModal(false)" aria-label="Close Records Modal">✕</button>
+    </div>
+
+    <div class="records-toolbar">
+      <div class="search-box">
+        <input type="text" id="recordSearchInput" class="input" placeholder="🔍 Search shop name, phone, bill no..." oninput="filterRecordsTable()">
+      </div>
+      <div class="filter-pills">
+        <button type="button" class="filter-pill active" id="filterAll" onclick="setRecordFilter('all')">All</button>
+        <button type="button" class="filter-pill" id="filterPaid" onclick="setRecordFilter('PAID')">Paid</button>
+        <button type="button" class="filter-pill" id="filterPending" onclick="setRecordFilter('PENDING')">Due / Pending</button>
+        <button type="button" class="filter-pill" id="filterChallan" onclick="setRecordFilter('challan')">Challans / Samples</button>
+      </div>
+    </div>
+
+    <div class="backup-actions-bar">
+      <button type="button" class="btn btn-sm btn-outline" onclick="exportRecordsToCsv()" title="Download Excel-compatible CSV">
+        📥 Export to Excel / CSV
+      </button>
+      <button type="button" class="btn btn-sm btn-outline" onclick="downloadJsonBackup()" title="Download complete database JSON backup">
+        💾 Download JSON Backup
+      </button>
+      <label class="btn btn-sm btn-outline" style="cursor:pointer; margin-bottom:0;" title="Restore records from JSON backup">
+        📤 Restore / Import JSON
+        <input type="file" id="importJsonInput" accept=".json" style="display:none;" onchange="importJsonBackup(event)">
+      </label>
+      <button type="button" class="btn btn-sm btn-outline" style="margin-left:auto; color:var(--text-muted);" onclick="syncWithCloudServer()" title="Sync records with local server">
+        🔄 Cloud Sync
+      </button>
+    </div>
+
+    <div class="records-table-container">
+      <table class="records-table" id="recordsTable">
+        <thead>
+          <tr>
+            <th>Doc # & Date</th>
+            <th>Buyer / Pet Shop</th>
+            <th>Type</th>
+            <th>Packs</th>
+            <th>Amount (₹)</th>
+            <th>Status</th>
+            <th style="text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="recordsTbody">
+          <!-- Injected dynamically via renderRecordsTable() -->
+        </tbody>
+      </table>
+      <div id="emptyRecordsNotice" class="empty-records-box" style="display:none;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style="color:var(--text-muted); margin-bottom:8px;">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <div>No saved billing records found yet.</div>
+        <div style="font-size:11.5px; margin-top:4px;">Generate an invoice or delivery challan and click <strong>💾 Save Record</strong>!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Toast Notification -->
+<div id="toastMsg" class="toast-msg"></div>
 
 <script>
 // UPI Validation & Persistence Helpers (Task 2)
@@ -952,6 +1419,72 @@ function setDocMode(mode) {
 let items = [
   { ...ITEM_PRESETS.nv400 }
 ];
+
+function updateMarginMetrics() {
+  const box = document.getElementById('marginMetricsBox');
+  if (!box) return;
+
+  const isChallan = docMode === 'challan';
+  if (isChallan) {
+    box.innerHTML = `
+      <div class="margin-header">
+        <span class="margin-title">🚚 Rule 55 Delivery Challan Mode</span>
+        <span style="font-size:10px; color:var(--text-muted);">Non-Sale Transit</span>
+      </div>
+      <div style="font-size:11px; color:#5c4b3f;">
+        Goods sent on approval / free sampling under <strong>Rule 55 CGST Rules</strong>. No payment collected upon delivery. 100% returnable within 15 days if unaccepted.
+      </div>
+    `;
+    return;
+  }
+
+  let totalOutlay = 0;
+  let totalRetail = 0;
+  let totalBilled = 0;
+  let totalFree = 0;
+
+  items.forEach(it => {
+    const qty = it.qty || 0;
+    const free = it.freeQty || 0;
+    const rate = it.rate || 0;
+    const mrp = it.mrp || 0;
+    totalBilled += qty;
+    totalFree += free;
+    totalOutlay += qty * rate;
+    totalRetail += (qty + free) * mrp;
+  });
+
+  const extraDiscount = parseFloat(document.getElementById('extraDiscount').value) || 0;
+  const netOutlay = Math.max(0, totalOutlay - extraDiscount);
+  const shopProfit = Math.max(0, totalRetail - netOutlay);
+  const marginPct = totalRetail > 0 ? ((shopProfit / totalRetail) * 100).toFixed(1) : '0';
+
+  box.innerHTML = `
+    <div class="margin-header">
+      <span class="margin-title">📈 Retailer Profit Calculator</span>
+      <span style="font-size:10.5px; font-weight:700; color:var(--primary);">${totalBilled + totalFree} Total Packs</span>
+    </div>
+    <div class="margin-stat-grid">
+      <div class="margin-stat-item">
+        <div class="val">₹${netOutlay.toFixed(0)}</div>
+        <div class="lbl">Shop Outlay</div>
+      </div>
+      <div class="margin-stat-item">
+        <div class="val">₹${totalRetail.toFixed(0)}</div>
+        <div class="lbl">Retail Sales</div>
+      </div>
+      <div class="margin-stat-item">
+        <div class="val" style="color:var(--green);">₹${shopProfit.toFixed(0)} (${marginPct}%)</div>
+        <div class="lbl">Shop Profit</div>
+      </div>
+    </div>
+    <div class="margin-pitch">
+      ${totalFree > 0
+        ? `🔥 <strong>${totalFree} Free Bonus Packs</strong> included! Shopkeeper keeps <strong>${marginPct}% margin</strong> (Pedigree standard is only ~18% / ₹328 on 12 packs).`
+        : `⚡ Direct bakery pricing from Nangloi. Protected by BROSKI 15-Day 100% Cash Buyback Guarantee.`}
+    </div>
+  `;
+}
 
 function renderFormItems() {
   const container = document.getElementById('itemsContainer');
@@ -1311,15 +1844,34 @@ function renderInvoice() {
       </div>
     </div>
   `;
+
+  updateMarginMetrics();
 }
 
 function loadPreset(type) {
   if (type === '11plus1') {
     setDocMode('bill');
     items = [
-      { ...ITEM_PRESETS.nv400 }
+      { ...ITEM_PRESETS.nv400, qty: 11, freeQty: 1, rate: 100, scheme: '11+1 Free Box Scheme' }
     ];
-    document.getElementById('billNotes').value = "Introductory 11+1 carton offer with complimentary acrylic counter tasting jar.";
+    document.getElementById('billNotes').value = "Introductory 11+1 Retail Box. Includes acrylic counter tasting jar. 15-Day 100% Cash Buyback Guarantee.";
+    showToast("🔥 Loaded 11+1 Retail Launch Box (38.5% Margin for Shop)");
+  } else if (type === 'wholesale20') {
+    setDocMode('bill');
+    items = [
+      { ...ITEM_PRESETS.nv400, qty: 10, freeQty: 0, rate: 95.60, scheme: 'Wholesale Tier 1' },
+      { ...ITEM_PRESETS.mx400, qty: 10, freeQty: 0, rate: 114.86, scheme: 'Wholesale Tier 1' }
+    ];
+    document.getElementById('billNotes').value = "Wholesale shop order (20 packs). Fresh batch dispatched directly from Nangloi.";
+    showToast("📦 Loaded 20-Pack Master Wholesale Carton");
+  } else if (type === 'd2ccombo') {
+    setDocMode('bill');
+    items = [
+      { ...ITEM_PRESETS.nv400, qty: 1, freeQty: 0, rate: 149.00, scheme: 'Bro Combo Launch' },
+      { ...ITEM_PRESETS.mx400, qty: 1, freeQty: 0, rate: 150.00, scheme: 'Bro Combo Launch' }
+    ];
+    document.getElementById('billNotes').value = "BROSKI 2-Pack Launch Combo (Non-Veg + Bro Mix) @ ₹299. Fast local West Delhi delivery.";
+    showToast("🐕 Loaded D2C Bro Combo (₹299)");
   } else if (type === 'sampledrop') {
     setDocMode('challan');
     document.getElementById('dispatchPurpose').value = "Free Samples for Taste Test";
@@ -1335,17 +1887,513 @@ function loadPreset(type) {
         scheme: "Complimentary Taste Sampler Drop"
       }
     ];
-    document.getElementById('billNotes').value = "10 complimentary 50g taste sampler pouches with QR review cards for customer tasting.";
-  } else if (type === 'wholesale20') {
-    setDocMode('bill');
+    document.getElementById('billNotes').value = "10 complimentary 50g taste sampler pouches with QR review cards and acrylic counter jar.";
+    showToast("🫙 Loaded 10 Sampler Packs Drop (Rule 55 Challan)");
+  } else if (type === 'consignment') {
+    setDocMode('challan');
+    document.getElementById('dispatchPurpose').value = "Supply of Goods on Approval / Consignment";
     items = [
-      { ...ITEM_PRESETS.nv400, qty: 10, freeQty: 0, rate: 95.60, scheme: 'Wholesale Tier 1' },
-      { ...ITEM_PRESETS.mx400, qty: 10, freeQty: 0, rate: 114.86, scheme: 'Wholesale Tier 1' }
+      { ...ITEM_PRESETS.nv400, qty: 6, freeQty: 0, rate: 100, scheme: 'Approval / Consignment' },
+      { ...ITEM_PRESETS.mx400, qty: 6, freeQty: 0, rate: 115, scheme: 'Approval / Consignment' }
     ];
-    document.getElementById('billNotes').value = "Wholesale shop order (20 packs). Fresh batch dispatched directly from Nangloi.";
+    document.getElementById('billNotes').value = "Goods dispatched on approval (15-day sale-or-return). 100% buyback / replacement of unsold packs.";
+    showToast("🔄 Loaded 15-Day Consignment on Approval (Rule 55)");
   }
   renderFormItems();
   renderInvoice();
+}
+
+// ==========================================
+// BROSKI Persistent Invoicing Database Layer
+// (IndexedDB + LocalStorage fallback + API sync)
+// ==========================================
+const DB_NAME = 'BroskiBillingDB';
+const DB_VERSION = 1;
+const DB_STORE = 'invoices';
+let dbInstance = null;
+
+function initDB() {
+  return new Promise((resolve) => {
+    if (!window.indexedDB) {
+      resolve(null);
+      return;
+    }
+    try {
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(DB_STORE)) {
+          const store = db.createObjectStore(DB_STORE, { keyPath: 'id' });
+          store.createIndex('billNo', 'billNo', { unique: false });
+          store.createIndex('buyerName', 'buyerName', { unique: false });
+          store.createIndex('updatedAt', 'updatedAt', { unique: false });
+        }
+      };
+      req.onsuccess = (e) => {
+        dbInstance = e.target.result;
+        resolve(dbInstance);
+      };
+      req.onerror = () => resolve(null);
+    } catch (err) {
+      resolve(null);
+    }
+  });
+}
+
+async function getAllInvoicesFromStorage() {
+  const db = await initDB();
+  if (db) {
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(DB_STORE, 'readonly');
+        const store = tx.objectStore(DB_STORE);
+        const req = store.getAll();
+        req.onsuccess = () => {
+          const list = req.result || [];
+          // Sort newest first
+          list.sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0));
+          resolve(list);
+        };
+        req.onerror = () => resolve(getInvoicesFromLocalStorage());
+      } catch (e) {
+        resolve(getInvoicesFromLocalStorage());
+      }
+    });
+  }
+  return getInvoicesFromLocalStorage();
+}
+
+function getInvoicesFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem('broski_invoices_v1');
+    const list = raw ? JSON.parse(raw) : [];
+    list.sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0));
+    return list;
+  } catch (e) {
+    return [];
+  }
+}
+
+async function saveInvoiceToStorage(inv) {
+  const db = await initDB();
+  inv.updatedAt = new Date().toISOString();
+  if (!inv.createdAt) inv.createdAt = inv.updatedAt;
+  if (!inv.id) inv.id = inv.billNo || 'BRS-' + Date.now();
+
+  // 1. IndexedDB
+  if (db) {
+    try {
+      const tx = db.transaction(DB_STORE, 'readwrite');
+      tx.objectStore(DB_STORE).put(inv);
+    } catch (e) {}
+  }
+
+  // 2. LocalStorage mirror
+  try {
+    const list = getInvoicesFromLocalStorage();
+    const idx = list.findIndex(i => i.id === inv.id || i.billNo === inv.billNo);
+    if (idx >= 0) list[idx] = inv;
+    else list.unshift(inv);
+    localStorage.setItem('broski_invoices_v1', JSON.stringify(list));
+  } catch (e) {}
+
+  // 3. Background Cloud Server sync if running on local server
+  if (window.location.protocol.startsWith('http')) {
+    try {
+      fetch('/api/invoices', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(inv)
+      }).catch(() => {});
+    } catch (e) {}
+  }
+
+  updateRecordCountBadge();
+  return inv;
+}
+
+async function deleteInvoiceFromStorage(id) {
+  const db = await initDB();
+  if (db) {
+    try {
+      const tx = db.transaction(DB_STORE, 'readwrite');
+      tx.objectStore(DB_STORE).delete(id);
+    } catch (e) {}
+  }
+  try {
+    const list = getInvoicesFromLocalStorage().filter(i => i.id !== id);
+    localStorage.setItem('broski_invoices_v1', JSON.stringify(list));
+  } catch (e) {}
+  updateRecordCountBadge();
+}
+
+function getCurrentFormData() {
+  const billNo = (document.getElementById('billNo').value || 'BRS/26-27/001').trim();
+  const billDate = document.getElementById('billDate').value || new Date().toISOString().split('T')[0];
+  const paymentMode = document.getElementById('paymentMode').value;
+  const paymentStatus = document.getElementById('paymentStatus').value;
+  const buyerName = document.getElementById('buyerName').value.trim() || 'Cash Customer';
+  const buyerAddress = document.getElementById('buyerAddress').value.trim() || 'Delhi, India';
+  const buyerPhone = document.getElementById('buyerPhone').value.trim() || '-';
+  const buyerGstin = document.getElementById('buyerGstin').value.trim() || 'Unregistered';
+  const freight = parseFloat(document.getElementById('freight').value) || 0;
+  const extraDiscount = parseFloat(document.getElementById('extraDiscount').value) || 0;
+  const notes = document.getElementById('billNotes').value.trim();
+  const sellerGstin = (document.getElementById('sellerGstin').value || '').trim();
+  const dispatchPurpose = document.getElementById('dispatchPurpose').value;
+
+  let totalBilledUnits = 0;
+  let totalFreeUnits = 0;
+  let grossTotal = 0;
+  items.forEach(it => {
+    totalBilledUnits += (it.qty || 0);
+    totalFreeUnits += (it.freeQty || 0);
+    grossTotal += (it.qty || 0) * (it.rate || 0);
+  });
+  const grandTotal = Math.max(0, grossTotal + freight - extraDiscount);
+
+  return {
+    id: billNo,
+    billNo,
+    billDate,
+    docMode,
+    dispatchPurpose,
+    sellerGstin,
+    buyerName,
+    buyerAddress,
+    buyerPhone,
+    buyerGstin,
+    paymentMode,
+    paymentStatus,
+    items: JSON.parse(JSON.stringify(items)),
+    freight,
+    extraDiscount,
+    notes,
+    totalBilledUnits,
+    totalFreeUnits,
+    grandTotal,
+    grossTotal
+  };
+}
+
+async function saveCurrentInvoice() {
+  const inv = getCurrentFormData();
+  await saveInvoiceToStorage(inv);
+  showToast(`✅ Saved ${esc(inv.billNo)} for ${esc(inv.buyerName)}!`);
+}
+
+function loadInvoiceIntoForm(inv) {
+  if (!inv) return;
+  document.getElementById('billNo').value = inv.billNo || '';
+  document.getElementById('billDate').value = inv.billDate || new Date().toISOString().split('T')[0];
+  document.getElementById('buyerName').value = inv.buyerName === 'Cash Customer' ? '' : (inv.buyerName || '');
+  document.getElementById('buyerAddress').value = inv.buyerAddress === 'Delhi, India' ? '' : (inv.buyerAddress || '');
+  document.getElementById('buyerPhone').value = inv.buyerPhone === '-' ? '' : (inv.buyerPhone || '');
+  document.getElementById('buyerGstin').value = inv.buyerGstin === 'Unregistered' ? '' : (inv.buyerGstin || '');
+  document.getElementById('freight').value = inv.freight || 0;
+  document.getElementById('extraDiscount').value = inv.extraDiscount || 0;
+  document.getElementById('billNotes').value = inv.notes || '';
+  if (inv.sellerGstin) document.getElementById('sellerGstin').value = inv.sellerGstin;
+  if (inv.paymentMode) document.getElementById('paymentMode').value = inv.paymentMode;
+  if (inv.paymentStatus) document.getElementById('paymentStatus').value = inv.paymentStatus;
+  if (inv.dispatchPurpose) document.getElementById('dispatchPurpose').value = inv.dispatchPurpose;
+
+  items = Array.isArray(inv.items) && inv.items.length > 0 ? JSON.parse(JSON.stringify(inv.items)) : [{ ...ITEM_PRESETS.nv400 }];
+  setDocMode(inv.docMode || 'bill');
+  renderFormItems();
+  renderInvoice();
+  toggleRecordsModal(false);
+  showToast(`📂 Loaded ${esc(inv.billNo)} into Editor`);
+}
+
+// Records Modal UI & Filtering
+let activeRecordFilter = 'all';
+let cachedRecords = [];
+
+async function updateRecordCountBadge() {
+  const records = await getAllInvoicesFromStorage();
+  const badge = document.getElementById('recordCountBadge');
+  if (badge) badge.textContent = records.length;
+}
+
+async function toggleRecordsModal(show) {
+  const modal = document.getElementById('recordsModal');
+  if (!modal) return;
+  modal.style.display = show ? 'flex' : 'none';
+  if (show) {
+    cachedRecords = await getAllInvoicesFromStorage();
+    updateModalStats(cachedRecords);
+    renderRecordsTable(cachedRecords);
+  }
+}
+
+function updateModalStats(records) {
+  let totalRev = 0;
+  let totalPacks = 0;
+  records.forEach(r => {
+    if (r.docMode !== 'challan') totalRev += (r.grandTotal || 0);
+    totalPacks += ((r.totalBilledUnits || 0) + (r.totalFreeUnits || 0));
+  });
+  document.getElementById('statTotalBills').textContent = `${records.length} Records`;
+  document.getElementById('statTotalValue').textContent = `₹${totalRev.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Value`;
+  document.getElementById('statTotalPacks').textContent = `${totalPacks} Packs Total`;
+}
+
+function setRecordFilter(filter) {
+  activeRecordFilter = filter;
+  ['filterAll', 'filterPaid', 'filterPending', 'filterChallan'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('active');
+  });
+  if (filter === 'all') document.getElementById('filterAll')?.classList.add('active');
+  if (filter === 'PAID') document.getElementById('filterPaid')?.classList.add('active');
+  if (filter === 'PENDING') document.getElementById('filterPending')?.classList.add('active');
+  if (filter === 'challan') document.getElementById('filterChallan')?.classList.add('active');
+  filterRecordsTable();
+}
+
+function filterRecordsTable() {
+  const q = (document.getElementById('recordSearchInput').value || '').trim().toLowerCase();
+  const filtered = cachedRecords.filter(r => {
+    // Status filter
+    if (activeRecordFilter === 'PAID' && !r.paymentStatus?.includes('PAID')) return false;
+    if (activeRecordFilter === 'PENDING' && r.paymentStatus?.includes('PAID')) return false;
+    if (activeRecordFilter === 'challan' && r.docMode !== 'challan') return false;
+
+    // Search query
+    if (q) {
+      const match = (r.billNo || '').toLowerCase().includes(q) ||
+                    (r.buyerName || '').toLowerCase().includes(q) ||
+                    (r.buyerPhone || '').toLowerCase().includes(q) ||
+                    (r.notes || '').toLowerCase().includes(q);
+      if (!match) return false;
+    }
+    return true;
+  });
+  renderRecordsTable(filtered);
+}
+
+function renderRecordsTable(records) {
+  const tbody = document.getElementById('recordsTbody');
+  const empty = document.getElementById('emptyRecordsNotice');
+  if (!tbody || !empty) return;
+
+  if (!records || records.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = records.map(r => {
+    const isChallan = r.docMode === 'challan';
+    const isPaid = (r.paymentStatus || '').includes('PAID');
+    const totalUnits = (r.totalBilledUnits || 0) + (r.totalFreeUnits || 0);
+    const statusCls = isChallan ? 'status-challan' : (isPaid ? 'status-paid' : 'status-pending');
+    const statusLabel = isChallan ? 'CHALLAN' : (isPaid ? 'PAID' : 'DUE');
+
+    return `
+      <tr>
+        <td>
+          <div style="font-weight:700; color:var(--primary); font-family:var(--font-mono);">${esc(r.billNo)}</div>
+          <div style="font-size:10.5px; color:var(--text-muted);">${esc(r.billDate)}</div>
+        </td>
+        <td>
+          <div style="font-weight:600; color:var(--text);">${esc(r.buyerName)}</div>
+          <div style="font-size:10.5px; color:var(--text-muted);">${esc(r.buyerPhone || '-')}</div>
+        </td>
+        <td>
+          <span style="font-size:10.5px; font-weight:600; color:var(--primary);">${isChallan ? 'Delivery Challan' : 'Bill of Supply'}</span>
+        </td>
+        <td>
+          <span style="font-weight:700; font-family:var(--font-mono);">${totalUnits}</span>
+          ${r.totalFreeUnits > 0 ? `<span style="font-size:10px; color:var(--green); font-weight:700;"> (+${r.totalFreeUnits})</span>` : ''}
+        </td>
+        <td>
+          <span style="font-weight:700; font-family:var(--font-mono);">₹${Number(r.grandTotal || 0).toFixed(2)}</span>
+        </td>
+        <td>
+          <span class="status-pill ${statusCls}" onclick="cyclePaymentStatus('${esc(r.id)}')" title="Click to cycle status: PAID / DUE">
+            ${statusLabel} ↺
+          </span>
+        </td>
+        <td>
+          <div class="record-action-btns">
+            <button type="button" class="btn-icon" onclick="loadRecordById('${esc(r.id)}')" title="Load into Editor">👁️ Load</button>
+            <button type="button" class="btn-icon" onclick="quickPrintRecord('${esc(r.id)}')" title="Print A4">🖨️</button>
+            <button type="button" class="btn-icon" onclick="quickShareRecord('${esc(r.id)}')" title="Copy WhatsApp">📲</button>
+            <button type="button" class="btn-icon btn-danger" onclick="deleteRecordById('${esc(r.id)}')" title="Delete Record">✕</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function cyclePaymentStatus(id) {
+  const r = cachedRecords.find(item => item.id === id);
+  if (!r) return;
+  if (r.docMode === 'challan') return; // challans don't take payment status
+  r.paymentStatus = (r.paymentStatus || '').includes('PAID') ? 'PENDING / DUE' : 'PAID';
+  await saveInvoiceToStorage(r);
+  filterRecordsTable();
+  showToast(`Updated ${esc(r.billNo)} to ${esc(r.paymentStatus)}`);
+}
+
+function loadRecordById(id) {
+  const r = cachedRecords.find(item => item.id === id);
+  if (r) loadInvoiceIntoForm(r);
+}
+
+function quickPrintRecord(id) {
+  const r = cachedRecords.find(item => item.id === id);
+  if (r) {
+    loadInvoiceIntoForm(r);
+    setTimeout(() => window.print(), 300);
+  }
+}
+
+function quickShareRecord(id) {
+  const r = cachedRecords.find(item => item.id === id);
+  if (r) {
+    loadInvoiceIntoForm(r);
+    copyWhatsAppSummary();
+  }
+}
+
+async function deleteRecordById(id) {
+  if (!confirm(`Delete record ${id} from billing database?`)) return;
+  await deleteInvoiceFromStorage(id);
+  cachedRecords = cachedRecords.filter(r => r.id !== id);
+  updateModalStats(cachedRecords);
+  filterRecordsTable();
+  showToast(`🗑️ Deleted record ${id}`);
+}
+
+// CSV & JSON Data Export / Import
+function exportRecordsToCsv() {
+  if (cachedRecords.length === 0) {
+    alert("No records to export.");
+    return;
+  }
+  const headers = [
+    "Document No", "Date", "Document Type", "Buyer Name", "Buyer Phone",
+    "Buyer Address", "Buyer GSTIN", "Billed Units", "Free Units", "Total Units",
+    "Subtotal (INR)", "Discount (INR)", "Freight (INR)", "Grand Total (INR)",
+    "Payment Mode", "Payment Status", "Remarks"
+  ];
+
+  const escapeCsv = (val) => {
+    const s = String(val ?? '').replace(/"/g, '""');
+    return `"${s}"`;
+  };
+
+  const rows = cachedRecords.map(r => [
+    escapeCsv(r.billNo),
+    escapeCsv(r.billDate),
+    escapeCsv(r.docMode === 'challan' ? 'Delivery Challan' : 'Bill of Supply'),
+    escapeCsv(r.buyerName),
+    escapeCsv(r.buyerPhone),
+    escapeCsv(r.buyerAddress),
+    escapeCsv(r.buyerGstin),
+    r.totalBilledUnits || 0,
+    r.totalFreeUnits || 0,
+    (r.totalBilledUnits || 0) + (r.totalFreeUnits || 0),
+    (r.grossTotal || 0).toFixed(2),
+    (r.extraDiscount || 0).toFixed(2),
+    (r.freight || 0).toFixed(2),
+    (r.grandTotal || 0).toFixed(2),
+    escapeCsv(r.paymentMode || ''),
+    escapeCsv(r.paymentStatus || ''),
+    escapeCsv(r.notes || '')
+  ].join(','));
+
+  const csvContent = "\uFEFF" + [headers.join(','), ...rows].join("\r\n");
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `BROSKI_Invoices_${new Date().toISOString().split('T')[0]}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("📥 Exported records to CSV / Excel!");
+}
+
+function downloadJsonBackup() {
+  if (cachedRecords.length === 0) {
+    alert("No records to export.");
+    return;
+  }
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cachedRecords, null, 2));
+  const a = document.createElement('a');
+  a.href = dataStr;
+  a.download = `BROSKI_Billing_Backup_${new Date().toISOString().split('T')[0]}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showToast("💾 Database JSON backup downloaded!");
+}
+
+function importJsonBackup(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) throw new Error("JSON must be an array of records.");
+      let count = 0;
+      for (const item of imported) {
+        if (item && (item.billNo || item.id)) {
+          await saveInvoiceToStorage(item);
+          count++;
+        }
+      }
+      cachedRecords = await getAllInvoicesFromStorage();
+      updateModalStats(cachedRecords);
+      renderRecordsTable(cachedRecords);
+      showToast(`📤 Successfully imported ${count} records!`);
+    } catch (err) {
+      alert("Invalid backup file: " + err.message);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+async function syncWithCloudServer() {
+  showToast("🔄 Syncing with server...");
+  try {
+    const res = await fetch('/api/invoices');
+    if (!res.ok) throw new Error("Server not responding");
+    const data = await res.json();
+    if (Array.isArray(data.invoices)) {
+      for (const inv of data.invoices) {
+        await saveInvoiceToStorage(inv);
+      }
+      cachedRecords = await getAllInvoicesFromStorage();
+      updateModalStats(cachedRecords);
+      renderRecordsTable(cachedRecords);
+      showToast(`☁️ Cloud sync complete! (${data.invoices.length} records verified)`);
+    }
+  } catch (err) {
+    showToast("⚠️ Standalone mode: Running locally on browser IndexedDB");
+  }
+}
+
+// Toast floating message
+let toastTimeout = null;
+function showToast(msg, duration = 2800) {
+  const toast = document.getElementById('toastMsg');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove('show');
+  }, duration);
 }
 
 function copyWhatsAppSummary() {
@@ -1384,7 +2432,7 @@ function copyWhatsAppSummary() {
   text += `Thank you for partnering with BROSKI — Treats for your best bro! 🐕`;
 
   navigator.clipboard.writeText(text).then(() => {
-    alert("✅ WhatsApp Summary copied to clipboard! Paste it to the shopkeeper.");
+    showToast("✅ WhatsApp summary copied to clipboard!");
   }).catch(() => {
     alert(text);
   });
@@ -1399,11 +2447,13 @@ function resetForm() {
   document.getElementById('buyerPhone').value = "";
   document.getElementById('buyerGstin').value = "";
   loadPreset('11plus1');
+  showToast("✨ Started new invoice");
 }
 
-// Initial Render
+// Initial Render & DB Init
 renderFormItems();
 renderInvoice();
+updateRecordCountBadge();
 </script>
 
 </body>

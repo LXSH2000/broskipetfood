@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BROSKI | West Delhi Retail Sales Diary & Store Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #352016;
+  --accent: #b8452b;
+  --cream: #fff8ed;
+  --border: #d4c5b3;
+  --text: #221c18;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: #ede6dc;
+  color: var(--text);
+  padding: 24px 16px;
+  line-height: 1.4;
+}
+
+.controls {
+  max-width: 297mm;
+  margin: 0 auto 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-print {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.diary-sheet {
+  max-width: 297mm;
+  background: #fff;
+  margin: 0 auto;
+  padding: 16mm 14mm;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border-radius: 6px;
+}
+
+.diary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.diary-header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 22px;
+  color: var(--primary);
+}
+
+.diary-header .meta {
+  font-size: 11px;
+  color: #555;
+  text-align: right;
+}
+
+.pilot-gate-pill {
+  background: #ecfdf5;
+  border: 1px solid #10b981;
+  color: #065f46;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+table.diary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+table.diary-table th {
+  background: var(--primary);
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  padding: 8px 6px;
+  text-align: left;
+  border: 1px solid var(--primary);
+}
+
+table.diary-table td {
+  border: 1px solid var(--border);
+  padding: 8px 6px;
+  vertical-align: middle;
+}
+
+table.diary-table tr:nth-child(even) td {
+  background: #faf6f0;
+}
+
+.store-name {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.store-loc {
+  font-size: 10px;
+  color: #666;
+}
+
+.scheme-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+@media print {
+  body { background: transparent; padding: 0; }
+  .controls { display: none !important; }
+  .diary-sheet {
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    max-width: 100%;
+  }
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <a href="/billing/" style="color:var(--primary); text-decoration:none; font-weight:700;">← Back to Billing Hub</a>
+  <button type="button" class="btn-print" onclick="window.print()">🖨️ Print Sales Diary (A4 Landscape)</button>
+</div>
+
+<div class="diary-sheet">
+  <div class="diary-header">
+    <div>
+      <h1>🐾 BROSKI West Delhi Retail Sales Diary & 15-Store Pipeline</h1>
+      <div style="font-size:12px; color:var(--accent); font-weight:600;">Proprietor: Lakshay · Launch Cycle: 15 Nov – 15 Dec 2026</div>
+    </div>
+    <div class="meta">
+      <strong>Commercial Pilot Gate:</strong> 150 packs sold + 30% store reorder rate<br>
+      Billing System: <code>broskipetfood.com/billing/</code>
+    </div>
+  </div>
+
+  <div class="pilot-gate-pill">
+    🎯 Founder's Rule: Sell before scale. Target: 15 West Delhi stores visited by 22 Nov 2026.
+  </div>
+
+  <table class="diary-table">
+    <thead>
+      <tr>
+        <th style="width:28px;">#</th>
+        <th style="width:160px;">Pet Shop & Locality</th>
+        <th style="width:110px;">Owner / Contact</th>
+        <th style="width:90px;">Visit Date</th>
+        <th style="width:110px;">Scheme Placed</th>
+        <th style="width:65px;">Billed Qty</th>
+        <th style="width:65px;">Free Qty</th>
+        <th style="width:80px;">Amount (₹)</th>
+        <th style="width:85px;">Payment / Status</th>
+        <th style="width:60px;">Jar Placed</th>
+        <th style="width:85px;">Day 7 Follow-Up</th>
+        <th>Field Notes / Customer Feedback</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><div class="store-name">Pet Zone & Clinic</div><div class="store-loc">A-Block, Paschim Vihar</div></td>
+        <td>Dr. Rajesh Sharma<br>98111XXXXX</td>
+        <td>15/11/26</td>
+        <td><span class="scheme-tag">11+1 Launch Box</span></td>
+        <td>11 pcs</td>
+        <td>+1 Free</td>
+        <td>₹1,100.00</td>
+        <td>UPI / PAID</td>
+        <td>[✓] Yes</td>
+        <td>22/11/26</td>
+        <td>Counter jar placed right at prescription desk. High footfall.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><div class="store-name">Paws & Claws Pet Shoppe</div><div class="store-loc">B-Block Market, Paschim Vihar</div></td>
+        <td>Mr. Amit Verma<br>98180XXXXX</td>
+        <td>15/11/26</td>
+        <td><span class="scheme-tag">11+1 Launch Box</span></td>
+        <td>11 pcs</td>
+        <td>+1 Free</td>
+        <td>₹1,100.00</td>
+        <td>Cash</td>
+        <td>[✓] Yes</td>
+        <td>22/11/26</td>
+        <td>Appreciated 38.5% margin comparison vs Pedigree.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><div class="store-name">K9 Pet Care & Grooming</div><div class="store-loc">Near Jwalaheri Market, Paschim Vihar</div></td>
+        <td>Mr. Harpreet Singh<br>99991XXXXX</td>
+        <td>15/11/26</td>
+        <td><span class="scheme-tag">15-Day Approval</span></td>
+        <td>6 NV + 6 MX</td>
+        <td>0</td>
+        <td>₹1,290.00</td>
+        <td>Rule 55 Challan</td>
+        <td>[✓] Yes</td>
+        <td>22/11/26</td>
+        <td>Took on 15-day approval under Lakshay's cash buyback promise.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><div class="store-name">The Dog Father</div><div class="store-loc">Main Market, Rajouri Garden</div></td>
+        <td>Mr. Sahil Anand<br>98730XXXXX</td>
+        <td>16/11/26</td>
+        <td><span class="scheme-tag">11+1 Launch Box</span></td>
+        <td>11 pcs</td>
+        <td>+1 Free</td>
+        <td>₹1,100.00</td>
+        <td>UPI</td>
+        <td>[✓] Yes</td>
+        <td>23/11/26</td>
+        <td>Premium clientele. Interested in Bro Mix and Peanut Butter.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><div class="store-name">Tail Waggers Pet Store</div><div class="store-loc">Block 13, Tilak Nagar</div></td>
+        <td>Mr. Gurpreet Singh<br>98102XXXXX</td>
+        <td>16/11/26</td>
+        <td><span class="scheme-tag">Sample Drop</span></td>
+        <td>0 (10 samplers)</td>
+        <td>0</td>
+        <td>₹0.00</td>
+        <td>Sample Challan</td>
+        <td>[✓] Yes</td>
+        <td>20/11/26</td>
+        <td>Tested on his own German Shepherd on the spot; dog loved it.</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><div class="store-name">Happy Paws Vet Clinic & Store</div><div class="store-loc">District Centre, Janakpuri</div></td>
+        <td>Dr. Neha Gupta<br>98115XXXXX</td>
+        <td>17/11/26</td>
+        <td><span class="scheme-tag">11+1 Launch Box</span></td>
+        <td>11 pcs</td>
+        <td>+1 Free</td>
+        <td>₹1,100.00</td>
+        <td>UPI</td>
+        <td>[✓] Yes</td>
+        <td>24/11/26</td>
+        <td>Checked ingredients list. Confirmed zero synthetic preservatives.</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><div class="store-name">Pet Planet</div><div class="store-loc">C-4E Market, Janakpuri</div></td>
+        <td>Mr. Mohit Arora<br>98912XXXXX</td>
+        <td>17/11/26</td>
+        <td><span class="scheme-tag">11+1 Launch Box</span></td>
+        <td>11 pcs</td>
+        <td>+1 Free</td>
+        <td>₹1,100.00</td>
+        <td>Cash</td>
+        <td>[✓] Yes</td>
+        <td>24/11/26</td>
+        <td>Regular dog biscuit buyer crowd. High reorder candidate.</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><div class="store-name">Delhi Pet Shoppe</div><div class="store-loc">Community Centre, Vikaspuri</div></td>
+        <td>Mr. Vikas Bajaj<br>98107XXXXX</td>
+        <td>18/11/26</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>[ ]</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><div class="store-name">Puppy Love Pet World</div><div class="store-loc">Block F, Vikaspuri</div></td>
+        <td>Mr. Sanjay Kapoor<br>98114XXXXX</td>
+        <td>18/11/26</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>[ ]</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><div class="store-name">Barkers Pet Hub</div><div class="store-loc">Main Rohtak Road, Nangloi</div></td>
+        <td>Mr. Deepak Kumar<br>98718XXXXX</td>
+        <td>15/11/26</td>
+        <td><span class="scheme-tag">11+1 Launch Box</span></td>
+        <td>11 pcs</td>
+        <td>+1 Free</td>
+        <td>₹1,100.00</td>
+        <td>Cash / UPI</td>
+        <td>[✓] Yes</td>
+        <td>21/11/26</td>
+        <td>Closest home territory store. 5-minute replenishment distance.</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td><div class="store-name">Shree Krishna Pet Care</div><div class="store-loc">Camp Market, Nangloi</div></td>
+        <td>Mr. Rakesh Sharma<br>98188XXXXX</td>
+        <td>15/11/26</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>[ ]</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td><div class="store-name">Royal Paws Pet Store</div><div class="store-loc">Central Market, Punjabi Bagh</div></td>
+        <td>Mr. Karan Chadha<br>98100XXXXX</td>
+        <td>19/11/26</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>[ ]</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td><div class="store-name">Pet Kingdom</div><div class="store-loc">Club Road, Punjabi Bagh Ext.</div></td>
+        <td>Mr. Puneet Suri<br>98119XXXXX</td>
+        <td>19/11/26</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>[ ]</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td><div class="store-name">Super Paws Pet Care</div><div class="store-loc">Najafgarh Road, Uttam Nagar</div></td>
+        <td>Mr. Sunil Batra<br>98733XXXXX</td>
+        <td>20/11/26</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>[ ]</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td><div class="store-name">West End Pets</div><div class="store-loc">Block A, Tagore Garden</div></td>
+        <td>Mr. Tarun Malhotra<br>98184XXXXX</td>
+        <td>20/11/26</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>[ ]</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:16px; display:flex; justify-content:space-between; font-size:11px; color:#555; border-top:1px solid #ddd; padding-top:10px;">
+    <div><strong>Rule 55 CGST Rules:</strong> Goods sent on approval or sample distribution. Not a tax invoice until approved.</div>
+    <div><strong>Founder's Signature:</strong> _____________________________ (Lakshay)</div>
+  </div>
+</div>
+
+</body>
+</html>
