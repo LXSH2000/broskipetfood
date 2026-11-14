@@ -246,28 +246,43 @@ export function PartnerSection() {
   );
 }
 
-/* 6. Footer (all pages) */
+/* 6. Footer (initial authentic design) */
 export function SiteFooter() {
   const { EMAIL, GSTIN, MSG = {} } = C();
   return (
-    <footer className="bk-h-foot">
-      <nav aria-label="Footer">
-        <a href="/">Home</a>
-        <a href="/offers/">Bro Perks</a>
-        <a href="/r/">Feedback</a>
-        <a href="/partner/">Retail & Pet Shops</a>
-        <a href="/privacy/">Privacy</a>
-      </nav>
-      <div className="footer-word" style={{ fontFamily: "'Gaegu', cursive", fontSize: 'clamp(52px, 11vw, 110px)', textAlign: 'center', color: '#35201625', letterSpacing: '-2px', margin: '30px 0 16px', userSelect: 'none' }}>
-        best bro ever. 🐾
+    <footer style={{ paddingBottom: '88px' }}>
+      <div className="footer-top">
+        <a className="logo" href="/" style={{ color: '#fcf7ee', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '9px' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <ellipse cx="12" cy="16" rx="5" ry="4" /><ellipse cx="5" cy="10" rx="2" ry="3" transform="rotate(-25 5 10)" /><ellipse cx="10" cy="6" rx="2" ry="3" /><ellipse cx="16" cy="6" rx="2" ry="3" /><ellipse cx="20" cy="11" rx="2" ry="3" transform="rotate(25 20 11)" />
+          </svg>
+          Broski
+        </a>
+        <p>Crunchy dog biscuits packed by hand in Nangloi, West Delhi – 110041.<br />Treats for your best bro.</p>
+        <div>
+          <a href="/#shop">Shop treats</a>
+          <a href="/#story">Our story</a>
+          <a href="/#faq">FAQs</a>
+          <a href="/offers/">Bro Perks</a>
+        </div>
+        <div>
+          <a href="/partner/">Retail & Pet Shops</a>
+          <a href="/r/">Feedback</a>
+          <a href="/privacy/">Privacy</a>
+          <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        </div>
       </div>
-      <p style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-        <span>
-          BROSKI · Nangloi, Delhi 110041 · <a href={`mailto:${EMAIL}`}>{EMAIL}</a> ·{' '}
-          <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp</a> · Udyam: UDYAM-DL-11-0177908{GSTIN ? ` · GSTIN: ${GSTIN}` : ''}
-        </span>
-        <span style={{ fontSize: '13px', opacity: 0.8 }}>Made for the ones with paws. ♡</span>
-      </p>
+      <div className="footer-word">
+        best bro ever.
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <ellipse cx="12" cy="16" rx="5" ry="4" /><ellipse cx="5" cy="10" rx="2" ry="3" transform="rotate(-25 5 10)" /><ellipse cx="10" cy="6" rx="2" ry="3" /><ellipse cx="16" cy="6" rx="2" ry="3" /><ellipse cx="20" cy="11" rx="2" ry="3" transform="rotate(25 20 11)" />
+        </svg>
+      </div>
+      <div className="footer-bottom">
+        <span>© 2026 Broski · Nangloi, Delhi 110041 · <a href={`mailto:${EMAIL}`} style={{ color: 'inherit' }}>{EMAIL}</a> · Udyam UDYAM-DL-11-0177908{GSTIN ? ` · GSTIN: ${GSTIN}` : ''}</span>
+        <span>Made for the ones with paws. ♡</span>
+        <span>IN / INR ₹</span>
+      </div>
     </footer>
   );
 }
