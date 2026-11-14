@@ -255,11 +255,18 @@ export function SiteFooter() {
         <a href="/">Home</a>
         <a href="/offers/">Bro Perks</a>
         <a href="/r/">Feedback</a>
+        <a href="/partner/">Retail & Pet Shops</a>
         <a href="/privacy/">Privacy</a>
       </nav>
-      <p>
-        BROSKI · Nangloi, Delhi 110041 · <a href={`mailto:${EMAIL}`}>{EMAIL}</a> ·{' '}
-        <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp</a> · Udyam: UDYAM-DL-11-0177908{GSTIN ? ` · GSTIN: ${GSTIN}` : ''}
+      <div className="footer-word" style={{ fontFamily: "'Gaegu', cursive", fontSize: 'clamp(52px, 11vw, 110px)', textAlign: 'center', color: '#35201625', letterSpacing: '-2px', margin: '30px 0 16px', userSelect: 'none' }}>
+        best bro ever. 🐾
+      </div>
+      <p style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+        <span>
+          BROSKI · Nangloi, Delhi 110041 · <a href={`mailto:${EMAIL}`}>{EMAIL}</a> ·{' '}
+          <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp</a> · Udyam: UDYAM-DL-11-0177908{GSTIN ? ` · GSTIN: ${GSTIN}` : ''}
+        </span>
+        <span style={{ fontSize: '13px', opacity: 0.8 }}>Made for the ones with paws. ♡</span>
       </p>
     </footer>
   );

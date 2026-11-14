@@ -10,7 +10,8 @@ import LiquidButton from './LiquidButton.jsx';
 import BroskiDock from './BroskiDock.jsx';
 import Intro from './Intro.jsx';
 import './liquid-dock.css';
-import { LaunchBanner, ProductCards, PartnerSection, SiteFooter, waLink } from './broski/BroskiHome';
+import { LaunchBanner, ProductCards, SiteFooter, waLink } from './broski/BroskiHome';
+import Experience from './Experience.jsx';
 import './broski/broski-home.css';
 import './polish.css';
 import './polish.js';
@@ -245,54 +246,6 @@ function App() {
           </div>
         </section>
 
-        <section className="everyday-editorial">
-          <video
-            className="everyday-video"
-            src="/broski-commercial-ad-720.mp4"
-            poster="/broski-hero-desktop-poster.jpg"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            aria-label="Official Broski commercial ad featuring authentic 400g Bro Bites – Classic Crunch and Bro Mix – Happy Mix pouches"
-          >
-            <source src="/broski-commercial-ad-720.mp4" type="video/mp4" />
-          </video>
-          <div>
-            <span className="video-pill-badge"><Icon type="paw" /> Official Commercial</span>
-            <span className="eyebrow">SEALED FOR MY BRO</span>
-            <h2>Life tastes<br /><em>better together.</em></h2>
-            <p>Real crunchy bone biscuits.<br />Packed by hand in Nangloi, West Delhi.</p>
-            <div className="video-story-actions">
-              <a className="button light" href="#shop">Explore our treats <Icon type="arrow" /></a>
-              <button
-                type="button"
-                className="video-toggle-btn"
-                onClick={() => {
-                  const v = document.querySelector('.everyday-video');
-                  if (v) { v.paused ? v.play() : v.pause(); }
-                }}
-              >
-                Pause / Play Ⅱ
-              </button>
-              <button
-                type="button"
-                className="video-toggle-btn"
-                onClick={e => {
-                  const v = document.querySelector('.everyday-video');
-                  if (v) {
-                    v.muted = !v.muted;
-                    e.currentTarget.textContent = v.muted ? 'Sound On 🔊' : 'Mute 🔇';
-                  }
-                }}
-              >
-                Sound On 🔊
-              </button>
-            </div>
-          </div>
-        </section>
-
         <section id="faq" className="faq section">
           <div>
             <div className="eyebrow">GOOD TO KNOW</div>
@@ -315,6 +268,8 @@ function App() {
           </div>
         </section>
 
+        <Experience onShop={() => document.querySelector('#shop')?.scrollIntoView({ behavior: 'smooth' })} />
+
         <section className="newsletter section">
           <div>
             <span className="eyebrow">LET’S STAY IN THE LOOP</span>
@@ -331,8 +286,6 @@ function App() {
             <p className="form-message" role="status">{newsletterMsg}</p>
           </form>
         </section>
-
-        <PartnerSection />
       </main>
 
       <SiteFooter />

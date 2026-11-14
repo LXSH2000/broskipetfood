@@ -61,7 +61,7 @@ export default function Experience({ onShop }) {
     engine.current?.(x, y - 70); setTossed(n => n + 1);
   };
   return <section id="play" className={`bc-experience ${seen ? 'is-seen' : ''}`} ref={section} aria-labelledby="experience-title">
-    <div className="bc-experience-top"><span>A LITTLE PLAY GOES A LONG WAY</span><span>NO BORING BITES, EVER.</span></div>
+    <div className="bc-experience-top"><span>A LITTLE PLAY GOES A LONG WAY</span><span>FOR YOUR BEST BRO EVER</span></div>
     <div className="bc-experience-copy">
       <p className="bc-experience-hint"><span className="bc-pointer-hint">Move your cursor. Make a little mischief.</span><span className="bc-touch-hint">Tap “Toss a treat”. Make a little mischief.</span> <span aria-hidden="true">↙</span></p>
       <h2 id="experience-title">What makes<br/><span>that tail wag?</span></h2>
@@ -70,8 +70,8 @@ export default function Experience({ onShop }) {
     </div>
     <div className="bc-experience-decoration bc-experience-decoration-left" aria-hidden="true"><Bone/></div>
     <div className="bc-experience-decoration bc-experience-decoration-right" aria-hidden="true"><span>100%</span><small>GOOD DOG<br/>ENERGY</small></div>
-    <div className="bc-experience-trails" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <div key={i} ref={node => { pieces.current[i] = node; }} className={`bc-trail-piece bc-trail-kind-${i % 3}`}>{i % 3 === 1 ? <div className="bc-trail-pack"><small>FOR YOUR BEST BRO</small><strong>BROSKI</strong><Bone/><span>NON-VEG</span></div> : i % 3 === 2 ? <div className="bc-trail-stamp"><span>good</span><strong>DOG!</strong><small>VERY GOOD TREATS</small></div> : <Bone/>}</div>)}</div>
+    <div className="bc-experience-trails" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <div key={i} ref={node => { pieces.current[i] = node; }} className={`bc-trail-piece bc-trail-kind-${i % 3}`}>{i % 3 === 1 ? <div className="bc-trail-pack"><small>FOR YOUR BEST BRO</small><strong>BROSKI</strong><Bone/><span>CLASSIC CRUNCH</span></div> : i % 3 === 2 ? <div className="bc-trail-stamp"><span>good</span><strong>DOG!</strong><small>VERY GOOD TREATS</small></div> : <Bone/>}</div>)}</div>
     <span className="bc-experience-sr" role="status">{tossed ? `Treats tossed ${tossed} ${tossed === 1 ? 'time' : 'times'}. Good dog energy!` : ''}</span>
-    <div className="bc-experience-bottom"><span>FOR THE LOVE OF DOGS</span><span aria-hidden="true">✳</span><span>AND THE JOY OF TREATS</span></div>
+    <div className="bc-experience-bottom"><span>FOR THE LOVE OF DOGS</span><span aria-hidden="true">✳</span><span>BEST BRO EVER</span></div>
   </section>;
 }
