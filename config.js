@@ -1,6 +1,6 @@
 /* BROSKI site config: the ONLY place to change numbers, links and offer dates. */
 window.BROSKI_CONFIG = {
-  WHATSAPP_NUMBER: '918076045934',     // 91XXXXXXXXXX: country code, no +, no spaces
+  WHATSAPP_NUMBER: '919821563468',     // 91XXXXXXXXXX: country code, no +, no spaces
   TALLY_FORM_URL: 'https://tally.so/r/mB0pEq',       // feedback form link
   EMAIL: 'support@broskipetfood.com',
   GA_MEASUREMENT_ID: '',               // Empty until verified GA4 ID is issued (e.g. G-XXXXXXXXXX)
@@ -15,30 +15,30 @@ window.BROSKI_CONFIG = {
   PRODUCTS: [
     {
       id: 'non-veg',
-      title: 'Bro Bites (Non-Veg)',
+      title: 'Bro Bites – Classic Crunch',
       note: 'Yellow pack',
       size: '400 g',
       price: 149,
-      img: '/broski-pouch-nonveg.jpg',
-      alt: 'BROSKI Bro Bites Non-Veg dog biscuits, yellow 400 g pack',
+      img: '/broski-pouch-nonveg.webp',
+      alt: 'BROSKI Bro Bites – Classic Crunch dog biscuits, yellow 400 g pack',
       button: 'Order on WhatsApp',
-      msg: 'Hi BROSKI! I want to order Bro Bites (Non-Veg) 400 g ×1'
+      msg: 'Hi BROSKI! I want to order Bro Bites – Classic Crunch 400 g ×1'
     },
     {
       id: 'mix',
-      title: 'Bro Mix',
+      title: 'Bro Mix – Happy Mix',
       note: 'White pack',
       size: '400 g',
       price: 179,
-      img: '/broski-pouch-mix.jpg',
-      alt: 'BROSKI Bro Mix dog biscuits, white 400 g pack',
+      img: '/broski-pouch-mix.webp',
+      alt: 'BROSKI Bro Mix – Happy Mix dog biscuits, white 400 g pack',
       button: 'Order on WhatsApp',
-      msg: 'Hi BROSKI! I want to order Bro Mix 400 g ×1'
+      msg: 'Hi BROSKI! I want to order Bro Mix – Happy Mix 400 g ×1'
     },
     {
       id: 'combo',
       title: 'Bro Combo',
-      note: '1 Bro Bites + 1 Bro Mix',
+      note: '1 Classic Crunch + 1 Happy Mix',
       size: '2 × 400 g',
       price: 299,
       save: 29,
@@ -48,7 +48,7 @@ window.BROSKI_CONFIG = {
       msg: 'Hi BROSKI! I want the Bro Combo (₹299)'
     }
   ],
-  UNIT_PRICE_LINE: 'Unit price: Bro Bites ₹0.37/g · Bro Mix ₹0.45/g · Combo ₹0.37/g. Free delivery within 5 km of Nangloi on orders from ₹299, otherwise ₹20.',
+  UNIT_PRICE_LINE: 'Unit price: Bro Bites – Classic Crunch ₹0.37/g · Bro Mix – Happy Mix ₹0.45/g · Combo ₹0.37/g. Free delivery within 5 km of Nangloi on orders from ₹299, otherwise ₹20.',
 
   MSG: {
     combo: 'Hi BROSKI! I want the Bro Combo (₹299)',

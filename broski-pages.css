@@ -1,4 +1,5 @@
 /* BROSKI static pages: matches the site's cream / brown / rust / mustard look. ~4 KB */
+@view-transition { navigation: auto; }
 :root {
   --cream: #f5efe4; --paper: #fbf7ef; --brown: #352016; --brown-2: #5a4033;
   --rust: #b8452b; --rust-dark: #9a3620; --mustard: #e2a72e; --line: #e6dccb;
