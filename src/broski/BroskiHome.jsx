@@ -159,7 +159,7 @@ export function ProductCards() {
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginRight: '6px'}}>
                     <path d="M5 7h14l1 14H4L5 7Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/>
                   </svg>
-                  Order Online (₹{p.price})
+                  Order now
                 </button>
                 <a
                   className="bk-card-wa-link"
@@ -182,17 +182,31 @@ export function ProductCards() {
       <div className="bk-transparency-card">
         <div className="bk-freshness-grid">
           <div className="bk-fresh-item">
-            <span className="bk-fresh-icon">🔍</span>
+            <span className="bk-fresh-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+            </span>
             <strong>Clear window pouch – you see the biscuits</strong>
             <p>Every bone biscuit is visible before you buy. Nothing hidden inside foil.</p>
           </div>
           <div className="bk-fresh-item">
-            <span className="bk-fresh-icon">📍</span>
+            <span className="bk-fresh-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </span>
             <strong>Packed in Nangloi, West Delhi</strong>
             <p>Sealed and dispatched fresh locally in West Delhi (PIN 110041).</p>
           </div>
           <div className="bk-fresh-item">
-            <span className="bk-fresh-icon">💧</span>
+            <span className="bk-fresh-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+              </svg>
+            </span>
             <strong>A treat, not a meal – keep fresh water nearby</strong>
             <p>Nutritious reward biscuits for training and treat time. Always keep clean water available.</p>
           </div>

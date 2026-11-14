@@ -1,0 +1,113 @@
+/* BROSKI polish.css – layout fixes + premium motion. Import LAST in src/main.jsx.
+   Everything that hides content is gated behind html.pz-on (set by polish.js),
+   so the page stays fully visible if the script fails. */
+
+/* ============ 1. FIXES ============ */
+/* 1a. Mobile: footer links were floating over the logo (a generic `nav` rule made them absolute) */
+.bk-h-foot nav { position: static !important; display: flex !important; width: auto !important;
+  background: none !important; padding: 0 !important; border: 0 !important; }
+
+/* 1b. Mobile: remove the staircase indent on the three "ritual" blocks */
+@media (max-width: 760px) {
+  .ritual-grid article:nth-child(2), .ritual-grid article:nth-child(3) { margin-left: 0 !important; }
+}
+
+/* 1c. Video section: the main button was almost invisible on the dark panel */
+.everyday-editorial .button.light { background: #fff8ed !important; color: #30180f !important; border-color: #fff8ed !important; }
+
+/* 1d. Tap targets below 44 px */
+.bk-card-wa-link { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; }
+
+/* 1e. WhatsApp bubble steps aside when it would cover a button (class set by polish.js) */
+.whatsapp-float { transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease; }
+.whatsapp-float.pz-away { opacity: 0; transform: translateY(12px) scale(.9); pointer-events: none; }
+
+/* ============ 2. MOTION ============ */
+:root { --pz-ease: cubic-bezier(.22, 1, .36, 1); }
+
+/* 2a. Scroll reveal (works on phones too – no GSAP needed) */
+html.pz-on [data-pz] { opacity: 0; transform: translateY(26px);
+  transition: opacity .8s var(--pz-ease), transform .8s var(--pz-ease);
+  transition-delay: calc(var(--pz-i, 0) * 80ms); will-change: opacity, transform; }
+html.pz-on [data-pz].pz-in { opacity: 1; transform: none; will-change: auto; }
+
+/* 2b. Picture reveal: soft wipe + settle zoom on product and story photos */
+html.pz-on [data-pz-img] { overflow: hidden; }
+html.pz-on [data-pz-img] img { clip-path: inset(0 0 100% 0); transform: scale(1.12);
+  transition: clip-path 1s var(--pz-ease), transform 1.4s var(--pz-ease); }
+html.pz-on [data-pz-img].pz-in img { clip-path: inset(0 0 0 0); transform: scale(1); }
+
+/* 2c. Hero entrance on phones (desktop already has the GSAP version) */
+@media (max-width: 799px), (hover: none) {
+  html.pz-on:not(.broski-intro-active) .hero-title span { display: inline-block;
+    animation: pz-rise .9s var(--pz-ease) both; animation-delay: calc(var(--letter, 0) * 60ms); }
+  html.pz-on:not(.broski-intro-active) .hero .eyebrow { animation: pz-fade .8s ease both; }
+  html.pz-on:not(.broski-intro-active) .hero-intro { animation: pz-up .9s var(--pz-ease) .35s both; }
+  html.pz-on:not(.broski-intro-active) .cinema-frame { animation: pz-up 1s var(--pz-ease) .55s both; }
+}
+@keyframes pz-rise { from { opacity: 0; transform: translateY(60%) rotate(4deg); } to { opacity: 1; transform: none; } }
+@keyframes pz-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes pz-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* 2d. Ticker becomes a slow endless marquee (polish.js builds .pz-track) */
+.ticker.pz-marquee { justify-content: flex-start; gap: 0; padding-inline: 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.ticker.pz-marquee > span:last-child { display: inline; }
+.pz-track { display: flex; align-items: center; flex: none; gap: 44px; padding-right: 44px;
+  animation: pz-marquee 28s linear infinite; }
+.pz-track > span:last-child { display: inline !important; }
+.ticker.pz-marquee:hover .pz-track { animation-play-state: paused; }
+@keyframes pz-marquee { to { transform: translateX(-100%); } }
+
+/* 2e. Product cards: lift + photo zoom on hover, gentle press on touch */
+.bk-pcard { transition: transform .45s var(--pz-ease), box-shadow .45s var(--pz-ease); }
+.bk-pcard__img { overflow: hidden; }
+.bk-pcard__img img { transition: transform .9s var(--pz-ease); }
+@media (hover: hover) {
+  .bk-pcard:hover { transform: translateY(-8px); box-shadow: 0 26px 50px -18px rgba(53, 32, 22, .28); }
+  .bk-pcard:hover .bk-pcard__img img { transform: scale(1.05); }
+}
+.bk-pcard:active { transform: scale(.985); }
+
+/* 2f. Buttons: press feedback, arrow nudge, one soft shine on the order button */
+.bk-h-btn, .button, .bk-gateway-trigger-btn, .video-toggle-btn { transition: transform .2s var(--pz-ease), box-shadow .3s ease, background-color .3s ease; }
+.bk-h-btn:active, .button:active, .bk-gateway-trigger-btn:active, .video-toggle-btn:active { transform: scale(.96); }
+.button svg, .text-link { transition: transform .35s var(--pz-ease); }
+@media (hover: hover) {
+  .button:hover svg { transform: translateX(5px); }
+  .bk-h-btn--order { position: relative; overflow: hidden; }
+  .bk-h-btn--order::after { content: ''; position: absolute; inset: 0; transform: translateX(-120%);
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .22) 50%, transparent 65%); transition: transform .8s var(--pz-ease); }
+  .bk-h-btn--order:hover::after { transform: translateX(120%); }
+  .text-link:hover { transform: translateX(4px); }
+}
+
+/* 2g. FAQ opens smoothly */
+details summary span { transition: transform .35s var(--pz-ease); }
+details[open] > p { animation: pz-faq .45s var(--pz-ease) both; }
+@keyframes pz-faq { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+/* 2h. Small life: banner slides in, Save badge pops once, WhatsApp ring every few seconds */
+.bk-banner { animation: pz-banner .7s var(--pz-ease) both; }
+@keyframes pz-banner { from { transform: translateY(-100%); } to { transform: none; } }
+html.pz-on .bk-pcard.pz-in .bk-pcard__save { animation: pz-pop .6s var(--pz-ease) .5s both; }
+@keyframes pz-pop { 0% { transform: scale(0); } 70% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.whatsapp-float::before { content: ''; position: absolute; inset: 0; border-radius: inherit; border: 2px solid #25d366;
+  animation: pz-ring 5s ease-out 3s infinite; pointer-events: none; }
+@keyframes pz-ring { 0% { transform: scale(1); opacity: .7; } 22%, 100% { transform: scale(1.5); opacity: 0; } }
+
+/* 2i. Thin scroll progress line at the very top */
+.pz-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 200; transform-origin: 0 50%;
+  transform: scaleX(var(--pz-p, 0)); background: linear-gradient(90deg, #c98a1b, #ad482b); pointer-events: none; }
+
+/* 2j. Soft cross-fade when moving between pages (Chrome, Edge, Safari 18+) */
+@view-transition { navigation: auto; }
+
+/* ============ 3. RESPECT "REDUCE MOTION" ============ */
+@media (prefers-reduced-motion: reduce) {
+  html.pz-on [data-pz], html.pz-on [data-pz-img] img { opacity: 1 !important; transform: none !important; clip-path: none !important; transition: none !important; }
+  .pz-track, .bk-banner, .whatsapp-float::before, .hero-title span, .hero-intro, .cinema-frame, .hero .eyebrow, .bk-pcard__save, details[open] > p { animation: none !important; }
+  .pz-progress { display: none; }
+  @view-transition { navigation: none; }
+}

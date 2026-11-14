@@ -23,7 +23,7 @@ html.broski-intro-active, html.broski-intro-active body { overflow: hidden; }
 }
 .bintro-logo { width: min(88vw, 700px); height: auto; overflow: visible; }
 .bintro-word-text {
-  font-family: 'Gaegu', 'Caveat', cursive; font-weight: 700; font-size: 210px; letter-spacing: -8px;
+  font-family: 'Gaegu', 'Gaegu', cursive; font-weight: 700; font-size: 210px; letter-spacing: -8px;
   fill: #30180f; stroke: #30180f; stroke-width: 3.2; stroke-linejoin: round; paint-order: stroke;
 }
 .bintro-swoosh { fill: none; stroke: #ad482b; stroke-width: 5; stroke-linecap: round; }

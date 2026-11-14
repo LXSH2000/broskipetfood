@@ -1,10 +1,11 @@
 # BROSKI Master Project Handoff
 
-**Current Status:** PRODUCTION DEPLOYED & APPLE-GRADE POLISHED  
-**Date:** 12 November 2026 · **Owner:** Lakshay · **CEO:** Rex  
+**Current Status:** GSTIN ISSUED (07BONPL7742A1ZW), SITE POLISHED & PACKAGING V18 ALIGNED  
+**Date:** 14 November 2026 · **Owner:** Lakshay · **CEO:** Rex  
 **Live Production URL:** [https://broskipetfood.com/](https://broskipetfood.com/)  
 **Live Billing & Scheme Hub:** [https://broskipetfood.com/billing/](https://broskipetfood.com/billing/)  
-**Target Commercial Launch Date:** Sunday, 15 November 2026 (T-3 Days)  
+**Active Support / WhatsApp Number:** `+91-9821563468`  
+**Target Commercial Launch Date:** Sunday, 15 November 2026 (T-1 Day)  
 **Pilot Gate (15 Nov – 15 Dec 2026):** 150 Packs Sold + 30% Pet Shop Reorder Rate  
 
 ---
@@ -12,12 +13,18 @@
 ## 1. Digital Platform & Website Architecture
 
 - **Hosting & Infrastructure:** Vite + React single-page application hosted on GitHub Pages (`LXSH2000/broskipetfood`). Branch `main` holds full source code; branch `gh-pages` serves static production bundles from `dist/`.
-- **Zero-Downtime Deployment:** Built with `emptyOutDir: false` preserving hashed asset chunks and preventing 404 errors for cached visitors.
+- **Site Polish & Animation Optimization (14 Nov 2026):**
+  - Integrated `polish.css` and `polish.js` with view transitions `@view-transition { navigation: auto; }`.
+  - WhatsApp phone number synchronized to `9821563468` (`919821563468`) across `public/config.js`, `src/config.js`, and `public/r/index.html`.
+  - Converted heavy pouch imagery to ultra-light WebP format (`broski-pouch-nonveg.webp`, `broski-pouch-mix.webp`, `broski-hero-duo-studio.webp` — over 94% compression savings!).
+  - Purged 100MB+ of unused large video duplicates (`Broski_Hero_Ad_16x9_1080p.mp4`, `broski-hero-mobile.mp4`, `broski-hero-desktop.mp4`, `broski-story-video-1.mp4`, `broski-story-video-2.mp4`) and 21 stale build hashes from `dist/assets/`.
+  - Product card action buttons renamed to clean `"Order now"`.
+  - Real Scoobee back-label ingredients incorporated into the public FAQ ("What's in the treats?").
+  - Packshot imagery updated to reflect the new v18 die-cut bone sticker (`BROSKI - Good Boy Snacks -`) and side pill labels.
 - **Batch 1 Product Reality (Peanut Butter Completely Removed):**
-  - All collateral, config files (`src/config.js`, `public/config.js`, `dist/config.js`), and server APIs strictly aligned with physical bakery production (60 kg Bro Bites Non-Veg + 60 kg Bro Mix = 120 kg total / 300 packs).
   - Active products:
-    1. **Bro Bites Non-Veg 400g** (MRP ₹149 / Wholesale ₹100)
-    2. **Bro Mix 400g** (MRP ₹179 / Wholesale ₹120)
+    1. **Bro Bites – Classic Crunch 400g** (MRP ₹149 / Wholesale ₹100)
+    2. **Bro Mix – Happy Mix 400g** (MRP ₹179 / Wholesale ₹120)
     3. **Bro Combo 800g** (MRP ₹299 / Wholesale ₹220)
 - **Apple-Grade Billing & Scheme Studio (`/billing/`):**
   - **Authentic Brand Mark:** Features the official dark chocolate (`#352016`) rounded square emblem with the golden biscuit bone silhouette (`#f5e8cf`) matching packaging and `favicon.svg`. Bold Outfit 800 wordmark with tight optical letter-spacing and registered MSME/Bakery FSSAI credentials.
@@ -118,7 +125,7 @@ Rex and the executive team reviewed Lakshay's Excel models and designed the omni
 | **7 Nov 2026** | **GST REG-04 SUBMITTED (DONE):** Clarification & 6-page verified PDF filed on gst.gov.in under ARN AA071026132029K (6 days early). | Lakshay & Maya (Legal) |
 | **10 Nov 2026** | **WEBSITE SOLUTION PACK DEPLOYED (DONE):** Single source config, Rule 55 challan, dynamic UPI QR generator, pincode checker, 11+1 launch box, zero-hit audit passed (3/3 unit tests pass), deployed live to production (https://broskipetfood.com/ via commit f7130fe). | Rex & Dev (E-com) |
 | **12 Nov 2026** | **STICKERS ORDERED, TM POA READY, BILLING & MARKETING PACK DEPLOYED (DONE):** Stickers ordered from Nangloi printer for ₹2,110 (~150 sets); TM-48 POA prepared for Online Legal India; Invoicing & Scheme Mega Hub upgraded with persistent IndexedDB, search drawer, CSV/JSON export/restore, dynamic 38.5% margin calculator, and server sync; Print-ready A5 Counter Card, WhatsApp Broadcast Pack, and 15-Store Retail Diary completed and verified. | Lakshay, Rex, Arjun & Meera |
-| **13 Nov 2026** | **BAKERY BATCH LOCK & STICKER PICKUP:** Call Scoobee bakery to lock 120 kg batch (60 kg Non-Veg + 60 kg Mix) for Saturday pickup; collect stickers and conduct QR scan QA; ensure 300 zipper pouches on hand. | Lakshay, Arjun & Rohan |
-| **14 Nov 2026** | **BAKERY PICKUP & PACKING RUN:** Pick up 120 kg bulk biscuits from Scoobee (Shalimar Bagh); arrival QA; home packing run (300 packs @ 402g–404g target) at 12A/3 Dharam Colony on stamped scale; box 10 retail cartons (11+1 free). | Lakshay, Kavya & Sahil |
+| **13 Nov 2026** | **GSTIN ISSUED & BUSINESS SIM ACTIVE (DONE):** GSTIN `07BONPL7742A1ZW` (Regular Registration) granted by Superintendent Vikram Pal (Mundka); Form GST REG-06 certificate downloaded and archived; Business SIM arrived; Billing studio updated with official GSTIN; DP and WhatsApp branding pack delivered. | Lakshay, Rex & Meera (Legal) |
+| **14 Nov 2026** | **BAKERY PICKUP & PACKING RUN:** Pick up 120 kg bulk biscuits from Scoobee (Shalimar Bagh); arrival QA; home packing run (300 packs @ 402g–404g target) at 12A/3 Dharam Colony on stamped scale; box 10 retail cartons (11+1 free); collect stickers from Nangloi printer. | Lakshay, Kavya & Sahil |
 | **15 Nov 2026** | **COMMERCIAL LAUNCH DAY:** Route 1 pet shop drops (Nangloi & Paschim Vihar - 5 shops) + WhatsApp D2C broadcast to dog parents. | Lakshay, Rex & Dev (E-com) |
 | **15 Dec 2026** | **PILOT GATE REVIEW:** 150 packs sold + 30% shop reorder rate. Data-driven decision to scale. | Rex & Lakshay |

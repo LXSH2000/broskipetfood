@@ -89,8 +89,8 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
       address: `${address.trim()}, ${locality.trim() ? locality.trim() + ', ' : ''}PIN ${pincode.trim() || '110041'}`,
       pincode: pincode.trim(),
       items: [
-        nvQty > 0 && { id: 'non-veg', name: 'Non-Veg 400g', qty: nvQty, price: 149 },
-        mxQty > 0 && { id: 'mix', name: 'Mix 400g', qty: mxQty, price: 179 },
+        nvQty > 0 && { id: 'non-veg', name: 'Bro Bites – Classic Crunch 400g', qty: nvQty, price: 149 },
+        mxQty > 0 && { id: 'mix', name: 'Bro Mix – Happy Mix 400g', qty: mxQty, price: 179 },
         cbQty > 0 && { id: 'combo', name: 'Bro Combo (2×400g)', qty: cbQty, price: 299 },
       ].filter(Boolean),
       subtotal,
@@ -154,31 +154,31 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
               </h3>
               
               <div className="bk-pack-cards">
-                {/* Non-Veg */}
+                {/* Classic Crunch */}
                 <div className={`bk-pack-row ${nvQty > 0 ? 'selected' : ''}`}>
                   <div className="bk-pack-info">
-                    <span className="bk-pack-tag nv">NON-VEG</span>
-                    <strong>Non-Veg Dog Biscuits (400g)</strong>
+                    <span className="bk-pack-tag nv">CLASSIC CRUNCH</span>
+                    <strong>Bro Bites – Classic Crunch (400g)</strong>
                     <span className="bk-pack-meta">₹149 · ₹0.37/g · Yellow Pouch</span>
                   </div>
                   <div className="bk-qty-stepper">
-                    <button type="button" onClick={() => updateQty('non-veg', -1)} aria-label="Decrease Non-Veg">−</button>
+                    <button type="button" onClick={() => updateQty('non-veg', -1)} aria-label="Decrease Classic Crunch">−</button>
                     <span>{nvQty}</span>
-                    <button type="button" onClick={() => updateQty('non-veg', 1)} aria-label="Increase Non-Veg">+</button>
+                    <button type="button" onClick={() => updateQty('non-veg', 1)} aria-label="Increase Classic Crunch">+</button>
                   </div>
                 </div>
 
-                {/* Mix */}
+                {/* Happy Mix */}
                 <div className={`bk-pack-row ${mxQty > 0 ? 'selected' : ''}`}>
                   <div className="bk-pack-info">
-                    <span className="bk-pack-tag mx">MIX CRUNCH</span>
-                    <strong>Mix Dog Biscuits (400g)</strong>
+                    <span className="bk-pack-tag mx">HAPPY MIX</span>
+                    <strong>Bro Mix – Happy Mix (400g)</strong>
                     <span className="bk-pack-meta">₹179 · ₹0.45/g · White Pouch</span>
                   </div>
                   <div className="bk-qty-stepper">
-                    <button type="button" onClick={() => updateQty('mix', -1)} aria-label="Decrease Mix">−</button>
+                    <button type="button" onClick={() => updateQty('mix', -1)} aria-label="Decrease Happy Mix">−</button>
                     <span>{mxQty}</span>
-                    <button type="button" onClick={() => updateQty('mix', 1)} aria-label="Increase Mix">+</button>
+                    <button type="button" onClick={() => updateQty('mix', 1)} aria-label="Increase Happy Mix">+</button>
                   </div>
                 </div>
 
@@ -189,7 +189,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                       <span className="bk-pack-tag cb">POPULAR COMBO</span>
                       <span className="bk-save-tag">SAVE ₹29</span>
                     </div>
-                    <strong>Bro Combo (1 Non-Veg + 1 Mix)</strong>
+                    <strong>Bro Combo (1 Classic Crunch + 1 Happy Mix)</strong>
                     <span className="bk-pack-meta">₹299 for 800g (2 × 400g pouches)</span>
                   </div>
                   <div className="bk-qty-stepper">

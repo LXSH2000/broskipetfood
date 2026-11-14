@@ -12,6 +12,8 @@ import Intro from './Intro.jsx';
 import './liquid-dock.css';
 import { LaunchBanner, ProductCards, PartnerSection, SiteFooter, waLink } from './broski/BroskiHome';
 import './broski/broski-home.css';
+import './polish.css';
+import './polish.js';
 
 function Icon({ type, ...props }) {
   return (
@@ -138,7 +140,7 @@ function App() {
                 Treats for your<br /><em>best bro.</em>
               </p>
               <div className="hero-price-chip" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#352016', color: '#fff8ed', padding: '5px 13px', borderRadius: '20px', fontSize: '11.5px', fontWeight: '600', margin: '0 auto 14px auto', letterSpacing: '.3px' }}>
-                <span>400 g Pouch</span><span>·</span><span>Non-Veg ₹149 · Mix ₹179</span>
+                <span>400 g Pouch</span><span>·</span><span>Bro Bites – Classic Crunch ₹149 · Bro Mix – Happy Mix ₹179</span>
               </div>
               <p className="hero-description" style={{ textAlign: 'center', marginInline: 'auto' }}>
                 For the muddy paws. The happy hellos.<br />And the friend who makes every day better.
@@ -165,7 +167,6 @@ function App() {
             <div className="cinema-window">
               <video
                 className="cinema-image cinema-video"
-                src="/broski-hero-desktop-720.mp4"
                 poster="/broski-hero-desktop-poster.jpg"
                 autoPlay
                 loop
@@ -174,8 +175,8 @@ function App() {
                 preload="metadata"
                 aria-label="A golden retriever enjoying crunchy Broski treats alongside the authentic 400g trial pouches"
               >
+                <source src="/broski-hero-mobile-720.mp4" media="(max-width: 760px)" type="video/mp4" />
                 <source src="/broski-hero-desktop-720.mp4" type="video/mp4" />
-                <source src="/broski-hero-desktop.mp4" type="video/mp4" />
               </video>
               <div className="video-live-pill" aria-label="Moments in motion">
                 <span className="live-dot" />
@@ -203,10 +204,10 @@ function App() {
         <section id="story" className="story section">
           <div className="story-photo">
             <img
-              src="/broski-hero-duo-studio.jpg"
+              src="/broski-hero-duo-studio.webp"
               alt="Broski dog biscuits authentic trial packaging studio duo"
               loading="lazy"
-              onError={e => { e.currentTarget.src = '/broski-hero-desktop-poster.jpg'; }}
+              onError={e => { e.currentTarget.src = '/broski-hero-duo-studio.jpg'; }}
             />
             <div className="photo-note">the best part of<br /><em>every day.</em><Icon type="paw" /></div>
           </div>
@@ -227,7 +228,7 @@ function App() {
               <span className="ritual-icon">01 <Bone /></span>
               <h3>The little victories</h3>
               <p>For learning a new trick, taking a brave step, or finally getting that “stay”.</p>
-              <a className="text-link" href="#shop">Explore Mix biscuits ↗</a>
+              <a className="text-link" href="#shop">Explore Bro Mix – Happy Mix ↗</a>
             </article>
             <article>
               <span className="ritual-icon">02 <Icon type="paw" /></span>
@@ -239,7 +240,7 @@ function App() {
               <span className="ritual-icon">03 <span>♡</span></span>
               <h3>The just-because days</h3>
               <p>No tricks required. Sometimes being your favourite dog is more than enough.</p>
-              <a className="text-link" href="#shop">Explore Non-Veg biscuits ↗</a>
+              <a className="text-link" href="#shop">Explore Bro Bites – Classic Crunch ↗</a>
             </article>
           </div>
         </section>
@@ -254,10 +255,9 @@ function App() {
             muted
             playsInline
             preload="metadata"
-            aria-label="Official Broski commercial ad featuring authentic 400g Yellow Non-Veg and White Mix pouches"
+            aria-label="Official Broski commercial ad featuring authentic 400g Bro Bites – Classic Crunch and Bro Mix – Happy Mix pouches"
           >
             <source src="/broski-commercial-ad-720.mp4" type="video/mp4" />
-            <source src="/Broski_Hero_Ad_16x9_1080p.mp4" type="video/mp4" />
           </video>
           <div>
             <span className="video-pill-badge"><Icon type="paw" /> Official Commercial</span>
@@ -303,7 +303,7 @@ function App() {
             {[
               ['When can I buy Broski?', 'Available now in West Delhi via WhatsApp, with delivery from 15 Nov.'],
               ['How do I order?', 'Tap Order on WhatsApp on any pack – we confirm delivery and payment in the chat.'],
-              ["What's in the treats?", 'Full ingredient list coming soon – it will be printed on every pack and posted here, word for word, before we sell.'],
+              ["What's in the treats?", 'Every ingredient is printed transparently on our back label: Bro Bites (Classic Crunch) contains Real Chicken, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Permitted Colours. Bro Mix (Happy Mix) contains Chicken Powder, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Colour. Both contain chicken and egg. Complementary pet treat – break into pieces for smaller dogs and always keep fresh water nearby.'],
               ['How does delivery work?', 'We deliver in West Delhi to start. Delivery day and any charge are confirmed by WhatsApp or email before you pay.'],
               ['I run a pet shop – can I stock Broski?', "WhatsApp us or email at support@broskipetfood.com; we'll share our 11+1 wholesale offer and drop off complimentary tasting packs."]
             ].map(([q, a]) => (

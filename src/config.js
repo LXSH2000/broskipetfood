@@ -6,7 +6,7 @@ export const CONFIG = {
   TAGLINE: 'Treats for your best bro.',
   SUPPORT_EMAIL: 'support@broskipetfood.com',
   GA_MEASUREMENT_ID: '', // Set when verified GA4 ID is available
-  WHATSAPP_NUMBER: '918076045934',
+  WHATSAPP_NUMBER: '919821563468',
   FORM_ENDPOINT: 'https://api.web3forms.com/submit',
   FORM_ACCESS_KEY: '',
   LAUNCH_STATUS: 'coming',
@@ -21,23 +21,23 @@ export const CONFIG = {
   PRODUCTS: [
     {
       id: 'non-veg',
-      name: 'Bro Bites (Non-Veg)',
+      name: 'Bro Bites – Classic Crunch',
       price: 14900,
       weight: '400g',
       category: 'biscuits',
       pouchColor: 'yellow',
-      image: '/broski-pouch-nonveg.jpg',
+      image: '/broski-pouch-nonveg.webp',
       tag: '400g Stand-up Pouch · ₹149',
       shortDesc: 'Crunchy bone-shaped biscuits in our yellow zip pouch with transparent window.'
     },
     {
       id: 'mix',
-      name: 'Bro Mix',
+      name: 'Bro Mix – Happy Mix',
       price: 17900,
       weight: '400g',
       category: 'biscuits',
       pouchColor: 'white',
-      image: '/broski-pouch-mix.jpg',
+      image: '/broski-pouch-mix.webp',
       tag: '400g Stand-up Pouch · ₹179',
       shortDesc: 'A crunchy blend in our white zip pouch with transparent window.'
     }
