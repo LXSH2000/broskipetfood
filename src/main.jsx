@@ -12,6 +12,7 @@ import Intro from './Intro.jsx';
 import './liquid-dock.css';
 import { LaunchBanner, ProductCards, SiteFooter, waLink } from './broski/BroskiHome';
 import Experience from './Experience.jsx';
+import BroskiWordmark from './BroskiWordmark.jsx';
 import './broski/broski-home.css';
 import './polish.css';
 import './polish.js';
@@ -100,8 +101,7 @@ function App() {
       <LaunchBanner />
       <header>
         <a href="/" className="logo" aria-label="Broski home">
-          <Icon type="paw" />
-          <span>Broski<span className="registered"></span></span>
+          <BroskiWordmark height={26} />
         </a>
         <span className="concept-watermark">Est. 2026 · West Delhi</span>
         <nav className={menu ? 'open' : ''} id="main-navigation" aria-label="Main navigation">

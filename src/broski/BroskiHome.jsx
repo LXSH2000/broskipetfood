@@ -2,6 +2,7 @@
    Reads window.BROSKI_CONFIG (load /config.js in index.html before the app bundle).
 */
 import React, { useEffect, useState } from 'react';
+import BroskiWordmark from '../BroskiWordmark.jsx';
 import BroskiCheckoutGateway from './BroskiCheckoutGateway';
 import { checkPincode, LOCAL_PINS } from '../helpers';
 import './broski-checkout.css';
@@ -252,11 +253,8 @@ export function SiteFooter() {
   return (
     <footer style={{ paddingBottom: '88px' }}>
       <div className="footer-top">
-        <a className="logo" href="/" style={{ color: '#fcf7ee', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '9px' }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <ellipse cx="12" cy="16" rx="5" ry="4" /><ellipse cx="5" cy="10" rx="2" ry="3" transform="rotate(-25 5 10)" /><ellipse cx="10" cy="6" rx="2" ry="3" /><ellipse cx="16" cy="6" rx="2" ry="3" /><ellipse cx="20" cy="11" rx="2" ry="3" transform="rotate(25 20 11)" />
-          </svg>
-          Broski
+        <a className="logo" href="/" style={{ color: '#fcf7ee', textDecoration: 'none', display: 'flex', alignItems: 'center' }} aria-label="Broski home">
+          <BroskiWordmark height={26} style={{ color: '#fcf7ee' }} />
         </a>
         <p>Crunchy dog biscuits packed by hand in Nangloi, West Delhi – 110041.<br />Treats for your best bro.</p>
         <div>
