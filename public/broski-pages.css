@@ -63,3 +63,83 @@ h3 { font-size: 20px; font-weight: 700; }
 
 /* 44px tap area for inline links without changing the layout */
 .bk-foot p a, .bk-small a { display: inline-block; padding: 13px 2px; margin: -13px 0; }
+
+/* Portal & form additions: cream, brown & rust theme */
+.bk-form-group { margin-bottom: 20px; }
+.bk-label { display: block; font: 700 15px/1.3 "Outfit", sans-serif; color: var(--brown); margin-bottom: 8px; }
+.bk-label .bk-opt { font-weight: 400; font-size: 13px; color: var(--brown-2); }
+.bk-input, .bk-select, .bk-textarea {
+  width: 100%; min-height: 48px; padding: 12px 14px;
+  font: 400 16px/1.4 "DM Sans", system-ui, -apple-system, sans-serif;
+  color: var(--brown); background: #ffffff;
+  border: 1.5px solid var(--line); border-radius: 12px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.bk-textarea { min-height: 100px; resize: vertical; }
+.bk-input:focus, .bk-select:focus, .bk-textarea:focus, .bk-phone-wrap:focus-within {
+  outline: none; border-color: var(--brown); box-shadow: 0 0 0 3px rgba(53, 32, 22, 0.12);
+}
+.bk-phone-wrap {
+  display: flex; align-items: center; background: #ffffff;
+  border: 1.5px solid var(--line); border-radius: 12px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.bk-phone-prefix {
+  padding: 0 12px 0 14px; font: 700 15px/1 "Outfit", sans-serif;
+  color: var(--brown-2); user-select: none; flex: none;
+}
+.bk-phone-wrap .bk-input { border: 0; box-shadow: none; padding-left: 0; min-height: 48px; }
+.bk-radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.bk-radio-chip {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  gap: 8px; min-height: 48px; padding: 10px 14px; border: 1.5px solid var(--line);
+  border-radius: 12px; background: #ffffff; cursor: pointer;
+  font: 700 15px/1.2 "Outfit", sans-serif; color: var(--brown);
+  transition: all .15s ease;
+}
+.bk-radio-chip input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.bk-radio-chip:has(input:checked) {
+  border-color: var(--rust); background: #fff7f4; color: var(--rust-dark);
+  box-shadow: 0 0 0 2px var(--rust);
+}
+.bk-check-label {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 14px; line-height: 1.45; color: var(--brown-2);
+  cursor: pointer; padding: 8px 0; min-height: 44px;
+}
+.bk-checkbox {
+  flex: none; width: 22px; height: 22px; margin-top: 2px;
+  accent-color: var(--rust); cursor: pointer;
+}
+.bk-alert {
+  padding: 14px 16px; border-radius: 12px; margin: 16px 0;
+  font-size: 14px; line-height: 1.45;
+}
+.bk-alert--error { background: #fdf2f2; border: 1px solid #f8b4b4; color: #9b1c1c; }
+.bk-alert--info { background: #eff8ff; border: 1px solid #b4dbf8; color: #1e429f; }
+.bk-alert--success { background: #f3faf7; border: 1px solid #bcf0da; color: #046c4e; }
+.bk-code-card {
+  text-align: center; padding: 24px 16px; background: #ffffff;
+  border: 2px dashed var(--rust); border-radius: 16px; margin: 20px 0;
+}
+.bk-code-display {
+  font: 800 clamp(32px, 8vw, 44px)/1.1 "Outfit", monospace;
+  color: var(--rust-dark); letter-spacing: .12em; text-transform: uppercase; margin: 12px 0;
+}
+.bk-badge {
+  display: inline-flex; align-items: center; padding: 4px 10px;
+  border-radius: 999px; font: 700 12px/1 "Outfit", sans-serif;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.bk-badge--pending { background: #fef3c7; color: #92400e; }
+.bk-badge--verified { background: #e0e7ff; color: #3730a3; }
+.bk-badge--handed { background: #dcfce7; color: #166534; }
+.bk-badge--rejected { background: #fee2e2; color: #991b1b; }
+.bk-badge--delivered { background: #dcfce7; color: #166534; }
+.bk-badge--requested { background: #fef3c7; color: #92400e; }
+.bk-badge--confirmed { background: #e0f2fe; color: #0369a1; }
+.bk-badge--cancelled { background: #fee2e2; color: #991b1b; }
+.bk-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 16px 0; }
+.bk-table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+.bk-table th { font: 700 13px/1.2 "Outfit", sans-serif; text-transform: uppercase; letter-spacing: .05em; color: var(--brown-2); padding: 10px 8px; border-bottom: 2px solid var(--line); }
+.bk-table td { padding: 12px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }

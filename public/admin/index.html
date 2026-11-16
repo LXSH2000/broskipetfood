@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#352016">
+<title>BROSKI Admin Portal · Restricted Access</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="/broski-pages.css">
+<style>
+  :root {
+    --adm-bg: #f5efe4;
+    --adm-panel: #ffffff;
+    --adm-border: #e6dcce;
+    --adm-dark: #352016;
+    --adm-rust: #b8452b;
+  }
+  body { background: var(--adm-bg); color: var(--adm-dark); }
+  .adm-nav-tabs {
+    display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    padding: 6px 0 16px; border-bottom: 2px solid var(--adm-border); margin-bottom: 20px;
+  }
+  .adm-tab-btn {
+    flex: none; min-height: 44px; padding: 10px 18px; border-radius: 10px;
+    background: transparent; border: 1.5px solid var(--adm-border);
+    font: 700 14px/1 "Outfit", sans-serif; color: var(--adm-dark); cursor: pointer;
+    transition: all .15s ease;
+  }
+  .adm-tab-btn.active {
+    background: var(--adm-dark); color: #fff7e9; border-color: var(--adm-dark);
+  }
+  .adm-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
+  }
+  .adm-search {
+    flex: 1; min-width: 200px; max-width: 380px; min-height: 44px; padding: 10px 14px;
+    border: 1.5px solid var(--adm-border); border-radius: 10px; font-size: 14px;
+  }
+  .adm-flag {
+    display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px;
+    background: #fef2f2; border: 1px solid #f87171; color: #b91c1c;
+    border-radius: 6px; font: 700 11px/1 "Outfit", sans-serif; text-transform: uppercase;
+  }
+  .adm-action-btn {
+    min-height: 38px; padding: 6px 12px; font-size: 13px; font-weight: 700;
+    border-radius: 8px; cursor: pointer; border: 1px solid var(--adm-border);
+    background: #ffffff; color: var(--adm-dark);
+  }
+  .adm-action-btn--primary { background: var(--adm-dark); color: #fff; border-color: var(--adm-dark); }
+  .adm-action-btn--wa { background: #166534; color: #fff; border-color: #166534; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+  .adm-action-btn--danger { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+  .adm-modal-backdrop {
+    position: fixed; inset: 0; background: rgba(53, 32, 22, 0.6);
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    z-index: 9999; backdrop-filter: blur(4px);
+  }
+  .adm-modal {
+    background: #ffffff; border-radius: 18px; max-width: 520px; width: 100%;
+    padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;
+  }
+</style>
+<script src="/config.js"></script>
+<script src="/supabase.js" defer></script>
+<script src="/portal-shared.js" defer></script>
+</head>
+<body>
+<div class="bk-wrap" style="max-width:1040px; padding:20px 16px 80px;">
+  <!-- Admin Header -->
+  <header style="display:flex; justify-content:space-between; align-items:center; padding-bottom:16px; border-bottom:1px solid var(--line); margin-bottom:20px;">
+    <div>
+      <span class="bk-badge bk-badge--rejected" style="margin-bottom:4px;">Restricted</span>
+      <h1 style="font-size:24px; margin:0;">BROSKI Admin · Operations</h1>
+    </div>
+    <div id="authStatusWrap" style="display:flex; align-items:center; gap:10px;">
+      <span id="adminUserEmail" class="bk-small" style="font-weight:700;"></span>
+      <button type="button" id="adminLogoutBtn" class="adm-action-btn" style="display:none;">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- Login Card (Shown when unauthenticated) -->
+  <div id="loginCard" class="bk-card" style="max-width:440px; margin:40px auto; padding:32px 24px;">
+    <h2 style="font-size:22px; margin-top:0;">Founder Login</h2>
+    <p class="bk-small">Sign in with authorized administrator credentials.</p>
+
+    <form id="loginForm" style="margin-top:20px;">
+      <div class="bk-form-group">
+        <label class="bk-label" for="loginEmail">Email Address</label>
+        <input class="bk-input" type="email" id="loginEmail" placeholder="support@broskipetfood.com" autocomplete="username" required>
+      </div>
+
+      <div class="bk-form-group">
+        <label class="bk-label" for="loginPassword">Password</label>
+        <input class="bk-input" type="password" id="loginPassword" placeholder="••••••••••••" autocomplete="current-password" required>
+      </div>
+
+      <div id="loginAlert" class="bk-alert bk-alert--error" style="display:none;" role="alert"></div>
+
+      <button type="submit" id="loginSubmitBtn" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%;">
+        Sign In to Operations
+      </button>
+    </form>
+  </div>
+
+  <!-- Dashboard Container (Shown when authenticated as admin) -->
+  <main id="dashboardWrap" style="display:none;">
+    <!-- Navigation Tabs -->
+    <nav class="adm-nav-tabs" aria-label="Admin Tabs">
+      <button type="button" class="adm-tab-btn active" data-tab="samples">🎁 Sample Claims (<span id="countSamples">0</span>)</button>
+      <button type="button" class="adm-tab-btn" data-tab="orders">📦 Orders (<span id="countOrders">0</span>)</button>
+      <button type="button" class="adm-tab-btn" data-tab="feedback">💬 Feedback (<span id="countFeedback">0</span>)</button>
+      <button type="button" class="adm-tab-btn" data-tab="customers">👥 Customers (<span id="countCustomers">0</span>)</button>
+    </nav>
+
+    <!-- Tab 1: Samples -->
+    <section id="tab-samples" class="adm-tab-content">
+      <div class="adm-toolbar">
+        <input type="text" id="sampleSearchInput" class="adm-search" placeholder="Search by phone, name or claim code...">
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="adm-action-btn" onclick="exportSamplesCSV()">📥 Export CSV</button>
+          <button type="button" class="adm-action-btn" onclick="loadSamples()">🔄 Refresh</button>
+        </div>
+      </div>
+      <div id="samplesTableWrap" class="bk-table-wrap">
+        <p class="bk-small">Loading sample claims...</p>
+      </div>
+    </section>
+
+    <!-- Tab 2: Orders -->
+    <section id="tab-orders" class="adm-tab-content" style="display:none;">
+      <div class="adm-toolbar">
+        <input type="text" id="orderSearchInput" class="adm-search" placeholder="Search orders by phone, customer or status...">
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="adm-action-btn adm-action-btn--primary" onclick="openManualOrderModal()">+ Add Manual Order</button>
+          <button type="button" class="adm-action-btn" onclick="exportOrdersCSV()">📥 Export CSV</button>
+          <button type="button" class="adm-action-btn" onclick="loadOrders()">🔄 Refresh</button>
+        </div>
+      </div>
+      <div id="ordersTableWrap" class="bk-table-wrap">
+        <p class="bk-small">Loading orders...</p>
+      </div>
+    </section>
+
+    <!-- Tab 3: Feedback -->
+    <section id="tab-feedback" class="adm-tab-content" style="display:none;">
+      <div class="adm-toolbar">
+        <input type="text" id="feedbackSearchInput" class="adm-search" placeholder="Filter feedback by phone, rating or text...">
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="adm-action-btn" onclick="exportFeedbackCSV()">📥 Export CSV</button>
+          <button type="button" class="adm-action-btn" onclick="loadFeedback()">🔄 Refresh</button>
+        </div>
+      </div>
+      <div id="feedbackTableWrap" class="bk-table-wrap">
+        <p class="bk-small">Loading feedback reviews...</p>
+      </div>
+    </section>
+
+    <!-- Tab 4: Customers -->
+    <section id="tab-customers" class="adm-tab-content" style="display:none;">
+      <div class="adm-toolbar">
+        <input type="text" id="customerSearchInput" class="adm-search" placeholder="Search customers by phone, code or name...">
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="adm-action-btn" onclick="exportCustomersCSV()">📥 Export CSV</button>
+          <button type="button" class="adm-action-btn" onclick="loadCustomers()">🔄 Refresh</button>
+        </div>
+      </div>
+      <div id="customersTableWrap" class="bk-table-wrap">
+        <p class="bk-small">Loading customers...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer style="margin-top:40px; padding-top:20px; border-top:1px solid var(--line); font-size:13px; color:var(--brown-2); text-align:center;">
+    BROSKI Admin · Nangloi, West Delhi – 110041 · Confidential
+  </footer>
+</div>
+
+<!-- Modal Container for Dynamic Forms -->
+<div id="modalHost" style="display:none;"></div>
+
+<script>
+let currentUser = null;
+let cachedSamples = [];
+let cachedOrders = [];
+let cachedFeedback = [];
+let cachedCustomers = [];
+let activeTab = 'samples';
+
+window.addEventListener('DOMContentLoaded', async function () {
+  initTabs();
+  initAuth();
+});
+
+function getClient() {
+  return window.BroskiPortal ? window.BroskiPortal.getClient() : null;
+}
+
+// 1. Auth & Session Management
+async function initAuth() {
+  const loginCard = document.getElementById('loginCard');
+  const dashboardWrap = document.getElementById('dashboardWrap');
+  const loginForm = document.getElementById('loginForm');
+  const loginAlert = document.getElementById('loginAlert');
+  const logoutBtn = document.getElementById('adminLogoutBtn');
+  const emailSpan = document.getElementById('adminUserEmail');
+
+  const supabase = getClient();
+  if (!supabase) return;
+
+  // Check existing session
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session && session.user) {
+      await verifyAdmin(session.user);
+    }
+  } catch (e) {
+    console.warn('[Admin Auth] Session check:', e);
+  }
+
+  // Handle Login
+  loginForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    loginAlert.style.display = 'none';
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    const btn = document.getElementById('loginSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Authenticating...';
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      if (data && data.user) {
+        await verifyAdmin(data.user);
+      }
+    } catch (err) {
+      console.error('[Admin Login] Error:', err);
+      loginAlert.textContent = err.message || 'Login failed. Check your email and password.';
+      loginAlert.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Sign In to Operations';
+    }
+  });
+
+  // Handle Logout
+  logoutBtn.addEventListener('click', async function () {
+    await supabase.auth.signOut();
+    currentUser = null;
+    dashboardWrap.style.display = 'none';
+    logoutBtn.style.display = 'none';
+    emailSpan.textContent = '';
+    loginCard.style.display = 'block';
+  });
+
+  async function verifyAdmin(user) {
+    try {
+      // Check admin status in admins table
+      const { data, error } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
+      if (error || !data) {
+        // Not an admin in admins table
+        alert('Access denied: account does not have administrative privileges in public.admins.');
+        await supabase.auth.signOut();
+        return;
+      }
+
+      currentUser = user;
+      emailSpan.textContent = user.email;
+      logoutBtn.style.display = 'inline-block';
+      loginCard.style.display = 'none';
+      dashboardWrap.style.display = 'block';
+
+      // Load initial data
+      loadSamples();
+      loadOrders();
+      loadFeedback();
+      loadCustomers();
+    } catch (err) {
+      console.error('[Verify Admin] Error:', err);
+      alert('Authentication check error: ' + err.message);
+    }
+  }
+}
+
+// 2. Tab Navigation
+function initTabs() {
+  const tabs = document.querySelectorAll('.adm-tab-btn');
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTab = btn.dataset.tab;
+      document.querySelectorAll('.adm-tab-content').forEach(c => c.style.display = 'none');
+      const target = document.getElementById('tab-' + activeTab);
+      if (target) target.style.display = 'block';
+    });
+  });
+
+  // Attach search listeners
+  document.getElementById('sampleSearchInput')?.addEventListener('input', renderSamples);
+  document.getElementById('orderSearchInput')?.addEventListener('input', renderOrders);
+  document.getElementById('feedbackSearchInput')?.addEventListener('input', renderFeedback);
+  document.getElementById('customerSearchInput')?.addEventListener('input', renderCustomers);
+}
+
+// 3. Tab: Samples
+async function loadSamples() {
+  const supabase = getClient();
+  if (!supabase) return;
+  const wrap = document.getElementById('samplesTableWrap');
+  wrap.innerHTML = '<p class="bk-small">Refreshing claims...</p>';
+
+  try {
+    const { data, error } = await supabase
+      .from('sample_claims')
+      .select('*, customers(*)')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    cachedSamples = data || [];
+    document.getElementById('countSamples').textContent = cachedSamples.length;
+    renderSamples();
+  } catch (err) {
+    wrap.innerHTML = `<div class="bk-alert bk-alert--error">Error loading claims: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderSamples() {
+  const wrap = document.getElementById('samplesTableWrap');
+  const term = (document.getElementById('sampleSearchInput')?.value || '').toLowerCase().trim();
+
+  // Find duplicates across all samples for red flagging
+  const deviceCounts = {};
+  const namePinCounts = {};
+  cachedSamples.forEach(s => {
+    if (s.device_id) deviceCounts[s.device_id] = (deviceCounts[s.device_id] || 0) + 1;
+    const c = s.customers;
+    if (c && c.name && c.pincode) {
+      const key = `${c.name.toLowerCase()}_${c.pincode}`;
+      namePinCounts[key] = (namePinCounts[key] || 0) + 1;
+    }
+  });
+
+  const filtered = cachedSamples.filter(s => {
+    if (!term) return true;
+    const phone = (s.customers?.phone || '').toLowerCase();
+    const name = (s.customers?.name || '').toLowerCase();
+    const code = (s.claim_code || '').toLowerCase();
+    const status = (s.status || '').toLowerCase();
+    return phone.includes(term) || name.includes(term) || code.includes(term) || status.includes(term);
+  });
+
+  if (filtered.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px 0;">No matching sample claims found.</p>';
+    return;
+  }
+
+  let html = '<table class="bk-table"><thead><tr><th>Claim Code</th><th>Customer</th><th>Flavour</th><th>Status / Flags</th><th>Actions</th></tr></thead><tbody>';
+
+  filtered.forEach(s => {
+    const cust = s.customers || {};
+    const d = s.created_at ? new Date(s.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '-';
+    
+    // Duplicate detection flags
+    let isDeviceDup = s.device_id && deviceCounts[s.device_id] > 1;
+    let isNamePinDup = cust.name && cust.pincode && namePinCounts[`${cust.name.toLowerCase()}_${cust.pincode}`] > 1;
+
+    let flagBadges = '';
+    if (isDeviceDup) flagBadges += '<span class="adm-flag" title="Same device ID used in another claim">🚩 Device Dup</span> ';
+    if (isNamePinDup) flagBadges += '<span class="adm-flag" title="Same name and pincode in another claim">🚩 Name/Pin Dup</span> ';
+
+    const waPhone = cust.phone ? cust.phone.replace(/\D/g, '') : '';
+    const waText = encodeURIComponent(`Your BROSKI customer code is ${cust.customer_code || ''}. Use it on broskipetfood.com/points`);
+    const waLink = waPhone ? `https://wa.me/${waPhone}?text=${waText}` : '#';
+
+    html += `<tr>
+      <td>
+        <strong style="font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--adm-rust);">${escapeHtml(s.claim_code)}</strong>
+        <div class="bk-small" style="color:var(--brown-2);">${d}</div>
+      </td>
+      <td>
+        <strong>${escapeHtml(cust.name || 'Anonymous')}</strong>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:13px;">${escapeHtml(cust.phone || '-')}</div>
+        <div class="bk-small">Pin: ${escapeHtml(cust.pincode || '-')} · Code: <strong>${escapeHtml(cust.customer_code || '-')}</strong></div>
+      </td>
+      <td><span class="bk-badge">${s.flavour === 'bites' ? 'Bro Bites' : 'Bro Mix'}</span></td>
+      <td>
+        <span class="bk-badge bk-badge--${s.status}">${s.status}</span>
+        ${flagBadges ? '<div style="margin-top:4px;">' + flagBadges + '</div>' : ''}
+        ${s.handed_by ? `<div class="bk-small" style="margin-top:2px;">Handed by: ${escapeHtml(s.handed_by)}</div>` : ''}
+        ${s.note ? `<div class="bk-small" style="color:#b91c1c;">Note: ${escapeHtml(s.note)}</div>` : ''}
+      </td>
+      <td>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          ${s.status === 'pending' ? `<button type="button" class="adm-action-btn adm-action-btn--primary" onclick="verifySample('${s.id}', '${s.customer_id}')">Verify</button>` : ''}
+          ${s.status !== 'handed' ? `<button type="button" class="adm-action-btn" onclick="handOverSample('${s.id}')">Handed</button>` : ''}
+          ${s.status !== 'rejected' ? `<button type="button" class="adm-action-btn adm-action-btn--danger" onclick="rejectSample('${s.id}')">Reject</button>` : ''}
+          ${waPhone ? `<a class="adm-action-btn adm-action-btn--wa" href="${waLink}" target="_blank" rel="noopener">WhatsApp Code</a>` : ''}
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+async function verifySample(claimId, customerId) {
+  const supabase = getClient();
+  try {
+    const { error: cErr } = await supabase.from('customers').update({ wa_verified: true }).eq('id', customerId);
+    if (cErr) throw cErr;
+    const { error: sErr } = await supabase.from('sample_claims').update({ status: 'verified' }).eq('id', claimId);
+    if (sErr) throw sErr;
+    loadSamples();
+    loadCustomers();
+  } catch (e) {
+    alert('Verification error: ' + e.message);
+  }
+}
+
+async function handOverSample(claimId) {
+  const handedBy = prompt('Enter name of staff / partner who handed over the sample:', 'Lakshay');
+  if (handedBy === null) return;
+  const supabase = getClient();
+  try {
+    const { error } = await supabase.from('sample_claims').update({
+      status: 'handed',
+      handed_by: handedBy.trim() || 'Lakshay',
+      handed_at: new Date().toISOString()
+    }).eq('id', claimId);
+    if (error) throw error;
+    loadSamples();
+  } catch (e) {
+    alert('Error recording handover: ' + e.message);
+  }
+}
+
+async function rejectSample(claimId) {
+  const note = prompt('Reason for rejection (e.g. duplicate device, invalid number):');
+  if (note === null) return;
+  const supabase = getClient();
+  try {
+    const { error } = await supabase.from('sample_claims').update({
+      status: 'rejected',
+      note: note.trim()
+    }).eq('id', claimId);
+    if (error) throw error;
+    loadSamples();
+  } catch (e) {
+    alert('Error rejecting claim: ' + e.message);
+  }
+}
+
+// 4. Tab: Orders
+async function loadOrders() {
+  const supabase = getClient();
+  if (!supabase) return;
+  const wrap = document.getElementById('ordersTableWrap');
+  wrap.innerHTML = '<p class="bk-small">Refreshing orders...</p>';
+
+  try {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*, customers(*)')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    cachedOrders = data || [];
+    document.getElementById('countOrders').textContent = cachedOrders.length;
+    renderOrders();
+  } catch (err) {
+    wrap.innerHTML = `<div class="bk-alert bk-alert--error">Error loading orders: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderOrders() {
+  const wrap = document.getElementById('ordersTableWrap');
+  const term = (document.getElementById('orderSearchInput')?.value || '').toLowerCase().trim();
+
+  const filtered = cachedOrders.filter(o => {
+    if (!term) return true;
+    const phone = (o.customers?.phone || '').toLowerCase();
+    const name = (o.customers?.name || '').toLowerCase();
+    const status = (o.status || '').toLowerCase();
+    const id = (o.id || '').toLowerCase();
+    return phone.includes(term) || name.includes(term) || status.includes(term) || id.includes(term);
+  });
+
+  if (filtered.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px 0;">No matching orders found.</p>';
+    return;
+  }
+
+  let html = '<table class="bk-table"><thead><tr><th>Order ID / Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+
+  filtered.forEach(o => {
+    const cust = o.customers || {};
+    const d = o.created_at ? new Date(o.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '-';
+    
+    let itemsStr = '';
+    if (typeof o.items === 'object' && o.items !== null) {
+      const p = [];
+      if (o.items.bites) p.push(`Bites ×${o.items.bites}`);
+      if (o.items.mix) p.push(`Mix ×${o.items.mix}`);
+      if (o.items.combo) p.push(`Combo ×${o.items.combo}`);
+      itemsStr = p.join(', ') || JSON.stringify(o.items);
+    } else {
+      itemsStr = String(o.items || '-');
+    }
+
+    html += `<tr>
+      <td>
+        <strong style="font-family:'JetBrains Mono',monospace;">#${o.id.slice(0,8)}</strong>
+        <div class="bk-small" style="color:var(--brown-2);">${d}</div>
+        <span class="bk-badge">${escapeHtml(o.channel || 'site')}</span>
+      </td>
+      <td>
+        <strong>${escapeHtml(cust.name || 'Anonymous')}</strong>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:13px;">${escapeHtml(cust.phone || '-')}</div>
+        <div class="bk-small">Pin: ${escapeHtml(cust.pincode || '-')}</div>
+      </td>
+      <td>${escapeHtml(itemsStr)}</td>
+      <td style="font-weight:700; font-size:16px;">₹${o.total}</td>
+      <td><span class="bk-badge bk-badge--${o.status}">${o.status}</span></td>
+      <td>
+        <select class="bk-select" style="min-height:36px; padding:4px 8px; font-size:13px;" onchange="updateOrderStatus('${o.id}', this.value)">
+          <option value="requested" ${o.status==='requested'?'selected':''}>requested</option>
+          <option value="confirmed" ${o.status==='confirmed'?'selected':''}>confirmed</option>
+          <option value="delivered" ${o.status==='delivered'?'selected':''}>delivered</option>
+          <option value="cancelled" ${o.status==='cancelled'?'selected':''}>cancelled</option>
+        </select>
+      </td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+async function updateOrderStatus(orderId, newStatus) {
+  const supabase = getClient();
+  try {
+    const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
+    if (error) throw error;
+    loadOrders();
+  } catch (e) {
+    alert('Error updating order: ' + e.message);
+  }
+}
+
+// Manual Order Modal
+function openManualOrderModal() {
+  const host = document.getElementById('modalHost');
+  host.style.display = 'block';
+  host.innerHTML = `
+    <div class="adm-modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <div class="adm-modal">
+        <h3 style="margin-top:0;">Add Manual Order (Shop / WhatsApp)</h3>
+        <form id="manualOrderForm">
+          <div class="bk-form-group">
+            <label class="bk-label">Customer Mobile</label>
+            <div class="bk-phone-wrap">
+              <span class="bk-phone-prefix">+91</span>
+              <input class="bk-input" type="tel" id="manPhone" placeholder="9821563468" required>
+            </div>
+          </div>
+          <div class="bk-form-group">
+            <label class="bk-label">Customer Name</label>
+            <input class="bk-input" type="text" id="manName" placeholder="e.g. Pet Paradise / Rohit" required>
+          </div>
+          <div class="bk-form-group">
+            <label class="bk-label">Pincode</label>
+            <input class="bk-input" type="text" id="manPincode" placeholder="110041" maxlength="6">
+          </div>
+          <div class="bk-form-group">
+            <label class="bk-label">Channel</label>
+            <select class="bk-select" id="manChannel">
+              <option value="shop">Pet Shop</option>
+              <option value="whatsapp">WhatsApp Direct</option>
+              <option value="site">Website</option>
+            </select>
+          </div>
+          <div class="bk-form-group">
+            <label class="bk-label">Quantities</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+              <div>
+                <span class="bk-small">Bites (₹149)</span>
+                <input class="bk-input" type="number" id="manBites" value="0" min="0">
+              </div>
+              <div>
+                <span class="bk-small">Mix (₹179)</span>
+                <input class="bk-input" type="number" id="manMix" value="0" min="0">
+              </div>
+              <div>
+                <span class="bk-small">Combo (₹299)</span>
+                <input class="bk-input" type="number" id="manCombo" value="0" min="0">
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
+            <button type="button" class="adm-action-btn" onclick="closeModal()">Cancel</button>
+            <button type="submit" class="adm-action-btn adm-action-btn--primary">Save Order</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('manualOrderForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const rawP = document.getElementById('manPhone').value.trim();
+    const cleanPhone = window.BroskiPortal ? window.BroskiPortal.normalizePhone(rawP) : ('+91' + rawP.replace(/\D/g, '').slice(-10));
+    const name = document.getElementById('manName').value.trim();
+    const pincode = document.getElementById('manPincode').value.trim() || '110041';
+    const channel = document.getElementById('manChannel').value;
+
+    const b = parseInt(document.getElementById('manBites').value) || 0;
+    const m = parseInt(document.getElementById('manMix').value) || 0;
+    const c = parseInt(document.getElementById('manCombo').value) || 0;
+
+    const total = (b * 149) + (m * 179) + (c * 299);
+    if (total <= 0) {
+      alert('Please select at least 1 product.');
+      return;
+    }
+
+    const supabase = getClient();
+    try {
+      // Find or create customer
+      let { data: cust } = await supabase.from('customers').select('*').eq('phone', cleanPhone).maybeSingle();
+      if (!cust) {
+        const randCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+        const { data: newCust, error: insErr } = await supabase.from('customers').insert({
+          phone: cleanPhone,
+          name: name,
+          pincode: pincode,
+          customer_code: randCode,
+          consent_at: new Date().toISOString(),
+          source: 'admin_manual'
+        }).select().single();
+        if (insErr) throw insErr;
+        cust = newCust;
+      }
+
+      const { error: ordErr } = await supabase.from('orders').insert({
+        customer_id: cust.id,
+        items: { bites: b, mix: m, combo: c },
+        total: total,
+        channel: channel,
+        status: 'confirmed'
+      });
+      if (ordErr) throw ordErr;
+
+      closeModal();
+      loadOrders();
+      loadCustomers();
+    } catch (err) {
+      alert('Error creating manual order: ' + err.message);
+    }
+  });
+}
+
+// 5. Tab: Feedback
+async function loadFeedback() {
+  const supabase = getClient();
+  if (!supabase) return;
+  const wrap = document.getElementById('feedbackTableWrap');
+  wrap.innerHTML = '<p class="bk-small">Refreshing feedback...</p>';
+
+  try {
+    const { data, error } = await supabase
+      .from('feedback')
+      .select('*, customers(*)')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    cachedFeedback = data || [];
+    document.getElementById('countFeedback').textContent = cachedFeedback.length;
+    renderFeedback();
+  } catch (err) {
+    wrap.innerHTML = `<div class="bk-alert bk-alert--error">Error loading feedback: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderFeedback() {
+  const wrap = document.getElementById('feedbackTableWrap');
+  const term = (document.getElementById('feedbackSearchInput')?.value || '').toLowerCase().trim();
+
+  const filtered = cachedFeedback.filter(f => {
+    if (!term) return true;
+    const phone = (f.customers?.phone || '').toLowerCase();
+    const comments = (f.comments || '').toLowerCase();
+    const batch = (f.batch_no || '').toLowerCase();
+    return phone.includes(term) || comments.includes(term) || batch.includes(term);
+  });
+
+  if (filtered.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px 0;">No matching feedback found.</p>';
+    return;
+  }
+
+  let html = '<table class="bk-table"><thead><tr><th>Rating / Date</th><th>Customer</th><th>Pack / Batch</th><th>Comments</th><th>Quote?</th><th>Actions</th></tr></thead><tbody>';
+
+  filtered.forEach(f => {
+    const cust = f.customers || {};
+    const d = f.created_at ? new Date(f.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short' }) : '-';
+    const paws = '🐾'.repeat(f.rating || 5);
+
+    html += `<tr>
+      <td>
+        <div style="font-size:16px;">${paws} (${f.rating || 5}/5)</div>
+        <div class="bk-small" style="color:var(--brown-2);">${d}</div>
+      </td>
+      <td>
+        <strong>${escapeHtml(cust.name || 'Anonymous')}</strong>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:13px;">${escapeHtml(cust.phone || 'Unlinked')}</div>
+      </td>
+      <td>
+        <div>${f.flavour === 'bites' ? 'Bro Bites' : 'Bro Mix'}</div>
+        <div class="bk-small">Batch: ${escapeHtml(f.batch_no || 'None')}</div>
+      </td>
+      <td style="max-width:320px; font-size:13.5px;">${escapeHtml(f.comments || '-')}</td>
+      <td>${f.quote_ok ? '<span style="color:#166534; font-weight:700;">✓ Yes</span>' : '<span style="color:#888;">No</span>'}</td>
+      <td>
+        ${cust.id ? `<button type="button" class="adm-action-btn adm-action-btn--primary" onclick="givePointsModal('${cust.id}', '${f.id}')">Give Points</button>` : '<span class="bk-small" style="color:#888;">Unlinked</span>'}
+      </td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+function givePointsModal(customerId, feedbackId) {
+  const delta = prompt('Enter points to award for this review (e.g. 50):', '50');
+  if (!delta || isNaN(delta)) return;
+
+  const supabase = getClient();
+  supabase.from('points_ledger').insert({
+    customer_id: customerId,
+    delta: parseInt(delta),
+    reason: 'feedback',
+    ref: feedbackId
+  }).then(({ error }) => {
+    if (error) alert('Error awarding points: ' + error.message);
+    else {
+      alert(`Successfully awarded ${delta} points!`);
+      loadCustomers();
+    }
+  });
+}
+
+// 6. Tab: Customers
+async function loadCustomers() {
+  const supabase = getClient();
+  if (!supabase) return;
+  const wrap = document.getElementById('customersTableWrap');
+  wrap.innerHTML = '<p class="bk-small">Refreshing customers...</p>';
+
+  try {
+    const { data: custs, error: cErr } = await supabase.from('customers').select('*').order('created_at', { ascending: false });
+    if (cErr) throw cErr;
+
+    const { data: ledger, error: lErr } = await supabase.from('points_ledger').select('customer_id, delta');
+    if (lErr) throw lErr;
+
+    const pointsMap = {};
+    (ledger || []).forEach(l => {
+      pointsMap[l.customer_id] = (pointsMap[l.customer_id] || 0) + l.delta;
+    });
+
+    cachedCustomers = (custs || []).map(c => ({
+      ...c,
+      pointsTotal: pointsMap[c.id] || 0
+    }));
+
+    document.getElementById('countCustomers').textContent = cachedCustomers.length;
+    renderCustomers();
+  } catch (err) {
+    wrap.innerHTML = `<div class="bk-alert bk-alert--error">Error loading customers: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderCustomers() {
+  const wrap = document.getElementById('customersTableWrap');
+  const term = (document.getElementById('customerSearchInput')?.value || '').toLowerCase().trim();
+
+  const filtered = cachedCustomers.filter(c => {
+    if (!term) return true;
+    const phone = (c.phone || '').toLowerCase();
+    const name = (c.name || '').toLowerCase();
+    const code = (c.customer_code || '').toLowerCase();
+    return phone.includes(term) || name.includes(term) || code.includes(term);
+  });
+
+  if (filtered.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px 0;">No matching customers found.</p>';
+    return;
+  }
+
+  let html = '<table class="bk-table"><thead><tr><th>Customer / Code</th><th>Phone / Pin</th><th>Points</th><th>Verified</th><th>Actions</th></tr></thead><tbody>';
+
+  filtered.forEach(c => {
+    html += `<tr>
+      <td>
+        <strong>${escapeHtml(c.name || 'Anonymous')}</strong>
+        <div><code style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--adm-rust);">${escapeHtml(c.customer_code)}</code></div>
+        <div class="bk-small">${c.source ? 'Source: ' + escapeHtml(c.source) : ''}</div>
+      </td>
+      <td>
+        <div style="font-family:'JetBrains Mono',monospace; font-weight:700;">${escapeHtml(c.phone)}</div>
+        <div class="bk-small">Pincode: ${escapeHtml(c.pincode || '-')}</div>
+      </td>
+      <td>
+        <strong style="font-size:16px; color:var(--adm-rust);">${c.pointsTotal} pts</strong>
+      </td>
+      <td>
+        ${c.wa_verified ? '<span class="bk-badge bk-badge--handed">✓ WA Verified</span>' : '<span class="bk-badge bk-badge--pending">Unverified</span>'}
+      </td>
+      <td>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <button type="button" class="adm-action-btn" onclick="openManualPointsModal('${c.id}', '${escapeHtml(c.name || c.phone)}')">+/- Points</button>
+          <button type="button" class="adm-action-btn adm-action-btn--danger" onclick="deleteCustomer('${c.id}', '${escapeHtml(c.phone)}')">Delete (DPDP)</button>
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+function openManualPointsModal(customerId, customerName) {
+  const host = document.getElementById('modalHost');
+  host.style.display = 'block';
+  host.innerHTML = `
+    <div class="adm-modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <div class="adm-modal">
+        <h3 style="margin-top:0;">Manual Points Adjustment</h3>
+        <p class="bk-small">Customer: <strong>${customerName}</strong></p>
+        <form id="manualPointsForm">
+          <div class="bk-form-group">
+            <label class="bk-label">Delta (+ or -)</label>
+            <input class="bk-input" type="number" id="ptsDelta" placeholder="e.g. 50 or -20" required>
+          </div>
+          <div class="bk-form-group">
+            <label class="bk-label">Reason</label>
+            <input class="bk-input" type="text" id="ptsReason" placeholder="e.g. Shop referral bonus / return" required>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
+            <button type="button" class="adm-action-btn" onclick="closeModal()">Cancel</button>
+            <button type="submit" class="adm-action-btn adm-action-btn--primary">Apply Points</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('manualPointsForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const delta = parseInt(document.getElementById('ptsDelta').value);
+    const reason = document.getElementById('ptsReason').value.trim();
+
+    if (isNaN(delta) || !reason) {
+      alert('Please fill out all fields.');
+      return;
+    }
+
+    const supabase = getClient();
+    try {
+      const { error } = await supabase.from('points_ledger').insert({
+        customer_id: customerId,
+        delta: delta,
+        reason: reason
+      });
+      if (error) throw error;
+      closeModal();
+      loadCustomers();
+    } catch (err) {
+      alert('Error updating points: ' + err.message);
+    }
+  });
+}
+
+async function deleteCustomer(customerId, phone) {
+  const conf = prompt(`WARNING: DPDP Deletion will PERMANENTLY erase this customer (${phone}) and cascade delete all their orders, sample claims, feedback and points ledger entries.\n\nType DELETE to confirm:`);
+  if (conf !== 'DELETE') return;
+
+  const supabase = getClient();
+  try {
+    const { error } = await supabase.from('customers').delete().eq('id', customerId);
+    if (error) throw error;
+    alert('Customer permanently deleted in compliance with DPDP request.');
+    loadCustomers();
+    loadSamples();
+    loadOrders();
+    loadFeedback();
+  } catch (err) {
+    alert('Error deleting customer: ' + err.message);
+  }
+}
+
+// 7. CSV Exports
+function exportCSV(headers, rows, filename) {
+  const content = [
+    headers.join(','),
+    ...rows.map(r => r.map(field => `"${String(field || '').replace(/"/g, '""')}"`).join(','))
+  ].join('\n');
+
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function exportSamplesCSV() {
+  const headers = ['Claim Code', 'Flavour', 'Status', 'Date', 'Customer Name', 'Phone', 'Pincode', 'Customer Code', 'Handed By', 'Note', 'Device ID'];
+  const rows = cachedSamples.map(s => [
+    s.claim_code, s.flavour, s.status, s.created_at,
+    s.customers?.name, s.customers?.phone, s.customers?.pincode, s.customers?.customer_code,
+    s.handed_by, s.note, s.device_id
+  ]);
+  exportCSV(headers, rows, `BROSKI_Samples_${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+function exportOrdersCSV() {
+  const headers = ['Order ID', 'Channel', 'Status', 'Total', 'Items', 'Date', 'Customer Name', 'Phone', 'Pincode'];
+  const rows = cachedOrders.map(o => [
+    o.id, o.channel, o.status, o.total, JSON.stringify(o.items), o.created_at,
+    o.customers?.name, o.customers?.phone, o.customers?.pincode
+  ]);
+  exportCSV(headers, rows, `BROSKI_Orders_${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+function exportFeedbackCSV() {
+  const headers = ['Rating', 'Flavour', 'Batch', 'Quote OK', 'Comments', 'Date', 'Customer Name', 'Phone'];
+  const rows = cachedFeedback.map(f => [
+    f.rating, f.flavour, f.batch_no, f.quote_ok ? 'YES' : 'NO', f.comments, f.created_at,
+    f.customers?.name, f.customers?.phone
+  ]);
+  exportCSV(headers, rows, `BROSKI_Feedback_${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+function exportCustomersCSV() {
+  const headers = ['Customer ID', 'Phone', 'Name', 'Pincode', 'Customer Code', 'Points Total', 'WA Verified', 'Consent Date', 'Source'];
+  const rows = cachedCustomers.map(c => [
+    c.id, c.phone, c.name, c.pincode, c.customer_code, c.pointsTotal,
+    c.wa_verified ? 'YES' : 'NO', c.consent_at, c.source
+  ]);
+  exportCSV(headers, rows, `BROSKI_Customers_${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+function closeModal() {
+  const host = document.getElementById('modalHost');
+  host.style.display = 'none';
+  host.innerHTML = '';
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, function (m) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+  });
+}
+</script>
+</body>
+</html>

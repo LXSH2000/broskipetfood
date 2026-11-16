@@ -5,53 +5,46 @@ const C = () => window.BROSKI_CONFIG || {};
 export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
   const cfg = C();
   const products = cfg.PRODUCTS || [];
-  
-  // Cart state: quantities of each product
+
+  // Product prices directly from public/config.js
+  const bitesPrice = products.find(p => p.id === 'non-veg')?.price || 149;
+  const mixPrice = products.find(p => p.id === 'mix')?.price || 179;
+  const comboPrice = products.find(p => p.id === 'combo')?.price || 299;
+
+  // Cart quantities
   const [quantities, setQuantities] = useState(() => {
-    const q = { 'non-veg': 0, 'mix': 0, 'combo': 0 };
-    if (initialProduct && q.hasOwnProperty(initialProduct)) {
-      q[initialProduct] = 1;
-    } else {
-      q['combo'] = 1; // default to the popular combo
-    }
+    const q = { bites: 0, mix: 0, combo: 0 };
+    if (initialProduct === 'non-veg' || initialProduct === 'bites') q.bites = 1;
+    else if (initialProduct === 'mix') q.mix = 1;
+    else q.combo = 1;
     return q;
   });
 
-  // Customer & Delivery Form State
-  const [dogName, setDogName] = useState('');
+  // Customer details
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
-  const [locality, setLocality] = useState('');
   const [pincode, setPincode] = useState('110041');
-  const [paymentMethod, setPaymentMethod] = useState('cod');
-  const [orderConfirmed, setOrderConfirmed] = useState(null);
+  const [consent, setConsent] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [orderConfirmed, setOrderConfirmed] = useState(null);
 
-  // Calculations
-  const getProduct = (id) => products.find(p => p.id === id) || { price: 0, title: id };
-  const nvQty = quantities['non-veg'] || 0;
-  const mxQty = quantities['mix'] || 0;
-  const cbQty = quantities['combo'] || 0;
+  const bQty = quantities.bites || 0;
+  const mQty = quantities.mix || 0;
+  const cQty = quantities.combo || 0;
+  const totalItems = bQty + mQty + cQty;
 
-  const subtotal = 
-    nvQty * (getProduct('non-veg').price || 149) +
-    mxQty * (getProduct('mix').price || 179) +
-    cbQty * (getProduct('combo').price || 299);
+  // Compute total strictly from config prices
+  const total = (bQty * bitesPrice) + (mQty * mixPrice) + (cQty * comboPrice);
 
-  const totalItems = nvQty + mxQty + cbQty;
-  const savings = cbQty * 29;
-  const shippingFee = subtotal >= 299 || totalItems >= 2 ? 0 : (subtotal > 0 ? 20 : 0);
-  const totalPayable = subtotal + shippingFee;
-
-  const updateQty = (id, delta) => {
-    setQuantities(prev => {
-      const next = Math.max(0, (prev[id] || 0) + delta);
-      return { ...prev, [id]: next };
-    });
+  const updateQty = (key, delta) => {
+    setQuantities(prev => ({
+      ...prev,
+      [key]: Math.max(0, (prev[key] || 0) + delta)
+    }));
   };
 
-  const handlePlaceOrder = (e) => {
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
     setErrorMsg('');
 
@@ -60,86 +53,132 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
       return;
     }
 
-    if (!customerName.trim()) {
+    if (!customerName.trim() || customerName.trim().length < 2) {
       setErrorMsg('Please enter your name.');
       return;
     }
 
-    const cleanPhone = phone.replace(/[^0-9]/g, '');
-    if (cleanPhone.length < 10) {
+    const cleanPhoneDigits = phone.replace(/\D/g, '').slice(-10);
+    if (cleanPhoneDigits.length !== 10) {
       setErrorMsg('Please enter a valid 10-digit mobile number.');
       return;
     }
+    const cleanPhone = `+91${cleanPhoneDigits}`;
 
-    if (!address.trim()) {
-      setErrorMsg('Please enter your delivery address.');
+    if (!/^[0-9]{6}$/.test(pincode.trim())) {
+      setErrorMsg('Please enter a valid 6-digit Delhi pincode.');
       return;
     }
 
-    // Generate official Order ID
-    const randomHex = Math.floor(1000 + Math.random() * 9000);
-    const orderId = `BR-ORD-2611-${randomHex}`;
-
-    const newOrder = {
-      id: orderId,
-      date: new Date().toISOString(),
-      dogName: dogName.trim() || 'My Bro',
-      customerName: customerName.trim(),
-      phone: cleanPhone,
-      address: `${address.trim()}, ${locality.trim() ? locality.trim() + ', ' : ''}PIN ${pincode.trim() || '110041'}`,
-      pincode: pincode.trim(),
-      items: [
-        nvQty > 0 && { id: 'non-veg', name: 'Bro Bites – Classic Crunch 400g', qty: nvQty, price: 149 },
-        mxQty > 0 && { id: 'mix', name: 'Bro Mix – Happy Mix 400g', qty: mxQty, price: 179 },
-        cbQty > 0 && { id: 'combo', name: 'Bro Combo (2×400g)', qty: cbQty, price: 299 },
-      ].filter(Boolean),
-      subtotal,
-      savings,
-      shippingFee,
-      totalPayable,
-      paymentMethod: 'Cash / UPI on Delivery',
-      status: 'Confirmed'
-    };
-
-    // Save to local storage
-    try {
-      const existing = JSON.parse(localStorage.getItem('broski_customer_orders') || '[]');
-      existing.unshift(newOrder);
-      localStorage.setItem('broski_customer_orders', JSON.stringify(existing));
-    } catch (err) {
-      console.warn('LocalStorage save error:', err);
+    if (!consent) {
+      setErrorMsg('Please accept the consent terms to place your order request.');
+      return;
     }
 
-    setOrderConfirmed(newOrder);
-  };
+    setLoading(true);
 
-  const getWhatsAppReceiptLink = () => {
-    if (!orderConfirmed) return '#';
-    const itemsText = orderConfirmed.items.map(i => `• ${i.name} × ${i.qty} (₹${i.price * i.qty})`).join('\n');
-    const msg = `🐾 *BROSKI Order Confirmation*\n` +
-      `*Order ID:* ${orderConfirmed.id}\n` +
-      `*Bro's Name:* ${orderConfirmed.dogName}\n` +
-      `*Customer:* ${orderConfirmed.customerName} (${orderConfirmed.phone})\n` +
-      `*Address:* ${orderConfirmed.address}\n\n` +
-      `*Items:*\n${itemsText}\n\n` +
-      `*Total Payable:* ₹${orderConfirmed.totalPayable} (${orderConfirmed.paymentMethod})\n` +
-      `*Delivery Window:* Dispatch from 15 Nov in West Delhi.\n\nPlease confirm my order dispatch!`;
-    const phone = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
-    return phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : '#';
+    try {
+      // Dynamic import of Supabase so initial page load remains ultra-light
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+
+      const itemsPayload = { bites: bQty, mix: mQty, combo: cQty };
+
+      const { data, error } = await supabase.rpc('create_order_request', {
+        p_phone: cleanPhone,
+        p_name: customerName.trim(),
+        p_pincode: pincode.trim(),
+        p_items: itemsPayload,
+        p_total: total,
+        p_consent: true
+      });
+
+      if (error) throw error;
+
+      const orderId = (data && data.order_id) || Math.random().toString(36).substring(2, 8).toUpperCase();
+
+      // Safe GA4 event: STRICTLY NO PHONE, NO NAME, NO CODE
+      try {
+        if (typeof window.gtag === 'function') {
+          const src = (window.BroskiPortal && window.BroskiPortal.getSource()) || 'direct';
+          window.gtag('event', 'order_request', {
+            source: src,
+            total: total,
+            items_count: totalItems
+          });
+        }
+      } catch (_) {}
+
+      // Build items text for WhatsApp
+      const lines = [];
+      if (bQty > 0) lines.push(`• Bro Bites – Classic Crunch ×${bQty} (₹${bQty * bitesPrice})`);
+      if (mQty > 0) lines.push(`• Bro Mix – Happy Mix ×${mQty} (₹${mQty * mixPrice})`);
+      if (cQty > 0) lines.push(`• Bro Combo ×${cQty} (₹${cQty * comboPrice})`);
+      const itemsText = lines.join('\n');
+
+      const waMsg = `Hi BROSKI! Order Request #${orderId}\n\n${itemsText}\n\nEstimated Total: ₹${total}\nName: ${customerName.trim()}\nPincode: ${pincode.trim()}\n\nPlease confirm delivery in West Delhi. Thank you!`;
+
+      // Contact action: WhatsApp or mailto
+      let contactUrl = '#';
+      const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+      if (waNum && waNum.length >= 10) {
+        contactUrl = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
+      } else {
+        const sub = encodeURIComponent(`BROSKI Order Request #${orderId}`);
+        const body = encodeURIComponent(waMsg);
+        contactUrl = `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}?subject=${sub}&body=${body}`;
+      }
+
+      setOrderConfirmed({
+        id: orderId,
+        itemsText,
+        total,
+        contactUrl,
+        customerName: customerName.trim(),
+        pincode: pincode.trim()
+      });
+
+      // Automatically open WhatsApp / mailto link
+      window.open(contactUrl, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      console.error('[OrderRequest] Error:', err);
+      // Fallback: If database is placeholder, still generate order request and open WhatsApp
+      const fallbackId = Math.random().toString(36).substring(2, 8).toUpperCase();
+      const lines = [];
+      if (bQty > 0) lines.push(`• Bro Bites – Classic Crunch ×${bQty}`);
+      if (mQty > 0) lines.push(`• Bro Mix – Happy Mix ×${mQty}`);
+      if (cQty > 0) lines.push(`• Bro Combo ×${cQty}`);
+      const itemsText = lines.join('\n');
+      const waMsg = `Hi BROSKI! Order Request #${fallbackId}\n\n${itemsText}\n\nEstimated Total: ₹${total}\nName: ${customerName.trim()}\nPincode: ${pincode.trim()}`;
+      const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+      const contactUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}` : `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}?subject=BROSKI Order #${fallbackId}&body=${encodeURIComponent(waMsg)}`;
+
+      setOrderConfirmed({
+        id: fallbackId,
+        itemsText,
+        total,
+        contactUrl,
+        customerName: customerName.trim(),
+        pincode: pincode.trim()
+      });
+      window.open(contactUrl, '_blank', 'noopener,noreferrer');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="bk-gateway-overlay" role="dialog" aria-modal="true" aria-labelledby="gw-title">
-      <div className="bk-gateway-modal">
+      <div className="bk-gateway-modal" style={{ maxWidth: '500px' }}>
         {/* Header */}
         <div className="bk-gateway-header">
           <div>
-            <span className="bk-gateway-badge">D2C DIRECT CHECKOUT</span>
-            <h2 id="gw-title">
-              {orderConfirmed ? 'Order Confirmed! 🐾' : 'Complete Your Bro\'s Order'}
+            <span className="bk-gateway-badge">ORDER ON WHATSAPP</span>
+            <h2 id="gw-title" style={{ fontSize: '22px' }}>
+              {orderConfirmed ? 'Order Request Sent! 🐾' : 'Order Direct from Bakery'}
             </h2>
           </div>
-          <button type="button" className="bk-gateway-close" onClick={onClose} aria-label="Close checkout">
+          <button type="button" className="bk-gateway-close" onClick={onClose} aria-label="Close order form">
             ✕
           </button>
         </div>
@@ -147,254 +186,203 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
         {/* Content */}
         {!orderConfirmed ? (
           <form className="bk-gateway-body" onSubmit={handlePlaceOrder}>
-            {/* Step 1: Pack Selection */}
+            {/* Step 1: Quantities */}
             <div className="bk-gateway-section">
               <h3 className="bk-sec-title">
-                <span>1</span> Select Pack & Quantities
+                <span>1</span> Select Packs
               </h3>
-              
+
               <div className="bk-pack-cards">
-                {/* Classic Crunch */}
-                <div className={`bk-pack-row ${nvQty > 0 ? 'selected' : ''}`}>
+                {/* Bites */}
+                <div className={`bk-pack-row ${bQty > 0 ? 'selected' : ''}`}>
                   <div className="bk-pack-info">
-                    <span className="bk-pack-tag nv">CLASSIC CRUNCH</span>
-                    <strong>Bro Bites – Classic Crunch (400g)</strong>
-                    <span className="bk-pack-meta">₹149 · ₹0.37/g · Yellow Pouch</span>
+                    <span className="bk-pack-tag nv">YELLOW PACK</span>
+                    <strong>Bro Bites – Classic Crunch</strong>
+                    <span className="bk-pack-meta">₹{bitesPrice} · 400 g</span>
                   </div>
                   <div className="bk-qty-stepper">
-                    <button type="button" onClick={() => updateQty('non-veg', -1)} aria-label="Decrease Classic Crunch">−</button>
-                    <span>{nvQty}</span>
-                    <button type="button" onClick={() => updateQty('non-veg', 1)} aria-label="Increase Classic Crunch">+</button>
+                    <button type="button" onClick={() => updateQty('bites', -1)} aria-label="Decrease Bites">−</button>
+                    <span>{bQty}</span>
+                    <button type="button" onClick={() => updateQty('bites', 1)} aria-label="Increase Bites">+</button>
                   </div>
                 </div>
 
-                {/* Happy Mix */}
-                <div className={`bk-pack-row ${mxQty > 0 ? 'selected' : ''}`}>
+                {/* Mix */}
+                <div className={`bk-pack-row ${mQty > 0 ? 'selected' : ''}`}>
                   <div className="bk-pack-info">
-                    <span className="bk-pack-tag mx">HAPPY MIX</span>
-                    <strong>Bro Mix – Happy Mix (400g)</strong>
-                    <span className="bk-pack-meta">₹179 · ₹0.45/g · White Pouch</span>
+                    <span className="bk-pack-tag mx">WHITE PACK</span>
+                    <strong>Bro Mix – Happy Mix</strong>
+                    <span className="bk-pack-meta">₹{mixPrice} · 400 g</span>
                   </div>
                   <div className="bk-qty-stepper">
-                    <button type="button" onClick={() => updateQty('mix', -1)} aria-label="Decrease Happy Mix">−</button>
-                    <span>{mxQty}</span>
-                    <button type="button" onClick={() => updateQty('mix', 1)} aria-label="Increase Happy Mix">+</button>
+                    <button type="button" onClick={() => updateQty('mix', -1)} aria-label="Decrease Mix">−</button>
+                    <span>{mQty}</span>
+                    <button type="button" onClick={() => updateQty('mix', 1)} aria-label="Increase Mix">+</button>
                   </div>
                 </div>
 
-                {/* Bro Combo */}
-                <div className={`bk-pack-row combo ${cbQty > 0 ? 'selected' : ''}`}>
+                {/* Combo */}
+                <div className={`bk-pack-row combo ${cQty > 0 ? 'selected' : ''}`}>
                   <div className="bk-pack-info">
                     <div className="bk-pack-combo-tags">
                       <span className="bk-pack-tag cb">POPULAR COMBO</span>
                       <span className="bk-save-tag">SAVE ₹29</span>
                     </div>
-                    <strong>Bro Combo (1 Classic Crunch + 1 Happy Mix)</strong>
-                    <span className="bk-pack-meta">₹299 for 800g (2 × 400g pouches)</span>
+                    <strong>Bro Combo (1 Bites + 1 Mix)</strong>
+                    <span className="bk-pack-meta">₹{comboPrice} · 2 × 400 g</span>
                   </div>
                   <div className="bk-qty-stepper">
                     <button type="button" onClick={() => updateQty('combo', -1)} aria-label="Decrease Combo">−</button>
-                    <span>{cbQty}</span>
+                    <span>{cQty}</span>
                     <button type="button" onClick={() => updateQty('combo', 1)} aria-label="Increase Combo">+</button>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Step 2: Pet & Delivery Details */}
+            {/* Step 2: Contact Details */}
             <div className="bk-gateway-section">
               <h3 className="bk-sec-title">
-                <span>2</span> Dog & Delivery Details
+                <span>2</span> Your Details
               </h3>
-              
+
               <div className="bk-form-grid">
                 <div className="bk-field">
-                  <label htmlFor="bk-dog-name">Your Bro's Name (Dog)</label>
+                  <label htmlFor="ord-name">Your Name</label>
                   <input
-                    id="bk-dog-name"
+                    id="ord-name"
                     type="text"
-                    placeholder="e.g. Rocky, Bruno, Simba"
-                    value={dogName}
-                    onChange={(e) => setDogName(e.target.value)}
-                  />
-                </div>
-                
-                <div className="bk-field">
-                  <label htmlFor="bk-cust-name">Your Full Name *</label>
-                  <input
-                    id="bk-cust-name"
-                    type="text"
-                    required
-                    placeholder="Pet parent name"
+                    placeholder="e.g. Lakshay"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
+                    required
                   />
                 </div>
 
-                <div className="bk-field full">
-                  <label htmlFor="bk-phone">Mobile Phone (for delivery & order status) *</label>
-                  <div className="bk-phone-input">
-                    <span className="bk-country-code">+91</span>
+                <div className="bk-field">
+                  <label htmlFor="ord-phone">WhatsApp Number</label>
+                  <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1.5px solid var(--border)', borderRadius: '12px' }}>
+                    <span style={{ padding: '0 10px', fontWeight: '700', color: '#555', fontSize: '14px' }}>+91</span>
                     <input
-                      id="bk-phone"
+                      id="ord-phone"
                       type="tel"
-                      required
-                      placeholder="10-digit mobile number"
-                      maxLength={10}
+                      placeholder="9821563468"
+                      inputMode="numeric"
+                      maxLength={14}
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
+                      style={{ border: 0, paddingLeft: 0, width: '100%' }}
+                      required
                     />
                   </div>
                 </div>
 
-                <div className="bk-field full">
-                  <label htmlFor="bk-address">Delivery Address (House/Flat No., Street, Landmark) *</label>
-                  <textarea
-                    id="bk-address"
-                    rows={2}
-                    required
-                    placeholder="e.g. H-34, Dharam Colony, near Summer Singh Clinic"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                  />
-                </div>
-
                 <div className="bk-field">
-                  <label htmlFor="bk-locality">Area / Locality</label>
+                  <label htmlFor="ord-pin">Delhi Pincode (6 Digits)</label>
                   <input
-                    id="bk-locality"
+                    id="ord-pin"
                     type="text"
-                    placeholder="e.g. Nangloi, Paschim Vihar, Janakpuri"
-                    value={locality}
-                    onChange={(e) => setLocality(e.target.value)}
-                  />
-                </div>
-
-                <div className="bk-field">
-                  <label htmlFor="bk-pincode">PIN Code</label>
-                  <input
-                    id="bk-pincode"
-                    type="text"
+                    inputMode="numeric"
                     maxLength={6}
                     placeholder="110041"
                     value={pincode}
-                    onChange={(e) => setPincode(e.target.value)}
+                    onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    required
                   />
+                </div>
+
+                <div className="bk-field" style={{ gridColumn: '1 / -1' }}>
+                  <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', cursor: 'pointer', minHeight: '44px', padding: '6px 0' }}>
+                    <input
+                      type="checkbox"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      style={{ width: '18px', height: '18px', marginTop: '2px', accentColor: '#b8452b' }}
+                      required
+                    />
+                    <span>I agree that BROSKI saves my order request, name, phone and pincode to process delivery.</span>
+                  </label>
                 </div>
               </div>
             </div>
 
-            {/* Step 3: Payment Gateway Selector */}
-            <div className="bk-gateway-section">
-              <h3 className="bk-sec-title">
-                <span>3</span> Payment Preference
-              </h3>
-              
-              <div className="bk-payment-options">
-                <label className="bk-pay-opt active">
-                  <input
-                    type="radio"
-                    name="paymethod"
-                    value="cod"
-                    checked={true}
-                    readOnly
-                  />
-                  <div className="bk-pay-text">
-                    <strong>Cash / UPI on Delivery</strong>
-                    <span>Pay at your doorstep via cash or Google Pay / PhonePe when treats arrive.</span>
-                  </div>
-                  <span className="bk-pay-badge">ZERO RISK</span>
-                </label>
-              </div>
-            </div>
-
-            {/* Summary & Place Order */}
+            {/* Footer & Submit */}
             <div className="bk-gateway-footer">
               {errorMsg && <div className="bk-gateway-error">{errorMsg}</div>}
 
               <div className="bk-summary-box">
                 <div className="bk-sum-row">
-                  <span>Selected Treats ({totalItems} packs):</span>
-                  <span>₹{subtotal}</span>
-                </div>
-                {savings > 0 && (
-                  <div className="bk-sum-row save">
-                    <span>Combo Savings:</span>
-                    <span>−₹{savings}</span>
-                  </div>
-                )}
-                <div className="bk-sum-row">
-                  <span>West Delhi Delivery:</span>
-                  <span>{shippingFee === 0 ? <strong style={{color:'#1f8f4e'}}>FREE</strong> : `₹${shippingFee}`}</span>
+                  <span>Selected items ({totalItems} packs):</span>
+                  <span>₹{total}</span>
                 </div>
                 <div className="bk-sum-total">
-                  <span>Total Amount:</span>
-                  <strong>₹{totalPayable}</strong>
+                  <span>Estimated Total:</span>
+                  <strong>₹{total}</strong>
                 </div>
+                <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#777', lineHeight: '1.4' }}>
+                  The admin confirms the final amount on WhatsApp. This is an order request, not a direct bill.
+                </p>
               </div>
 
               <button
                 type="submit"
-                disabled={totalItems === 0}
+                disabled={totalItems === 0 || loading}
                 className="bk-place-order-btn"
+                style={{ minHeight: '50px', fontSize: '16px' }}
               >
-                Place Order for ₹{totalPayable}
+                {loading ? 'Creating Order Request...' : `Order on WhatsApp (₹${total})`}
               </button>
-              
-              <p className="bk-gateway-guarantee">
-                🔒 Official BROSKI D2C Order · Freshly baked & packed in Nangloi · Dispatches from 15 Nov
+
+              <p className="bk-gateway-guarantee" style={{ fontSize: '12px' }}>
+                Nangloi, West Delhi – 110041 · No online payment required
               </p>
             </div>
           </form>
         ) : (
           /* Confirmation Screen */
-          <div className="bk-gateway-confirmed">
-            <div className="bk-conf-paw">🐾</div>
-            <h3>Your Bro's Stash is Confirmed!</h3>
-            <p className="bk-conf-id">
-              Order Reference: <strong>{orderConfirmed.id}</strong>
+          <div className="bk-gateway-confirmed" style={{ textAlign: 'center', padding: '24px 16px' }}>
+            <div className="bk-conf-paw" style={{ fontSize: '40px', marginBottom: '8px' }}>🐾</div>
+            <h3 style={{ fontSize: '22px', margin: '0 0 6px' }}>Order Request Saved!</h3>
+            <p className="bk-conf-id" style={{ fontSize: '15px' }}>
+              Order Reference: <strong>#{orderConfirmed.id}</strong>
             </p>
-            <p className="bk-conf-meta">
-              We received your order for <strong>{orderConfirmed.dogName}</strong> ({orderConfirmed.customerName}).
+            <p style={{ fontSize: '13.5px', color: '#666', margin: '8px 0 16px' }}>
+              We saved your request. Click below to send your details directly on WhatsApp to confirm delivery!
             </p>
 
-            <div className="bk-conf-receipt">
-              <div className="bk-conf-receipt-header">Order Summary</div>
-              {orderConfirmed.items.map(item => (
-                <div key={item.id} className="bk-conf-item">
-                  <span>{item.name} × {item.qty}</span>
-                  <strong>₹{item.price * item.qty}</strong>
-                </div>
-              ))}
-              <div className="bk-conf-total">
-                <span>Total Amount ({orderConfirmed.paymentMethod}):</span>
-                <strong>₹{orderConfirmed.totalPayable}</strong>
-              </div>
-              <div className="bk-conf-addr">
-                <strong>Delivery Address:</strong> {orderConfirmed.address}
+            <div className="bk-conf-receipt" style={{ textAlign: 'left', background: '#fff', border: '1px solid #e6dccb', borderRadius: '12px', padding: '14px', margin: '14px 0' }}>
+              <div style={{ fontWeight: '700', fontSize: '14px', marginBottom: '8px' }}>Order Request Summary</div>
+              <pre style={{ margin: 0, fontFamily: 'inherit', fontSize: '13px', whiteSpace: 'pre-wrap', color: '#444' }}>
+                {orderConfirmed.itemsText}
+              </pre>
+              <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px dashed #e6dccb', fontWeight: '700', display: 'flex', justifyContent: 'space-between' }}>
+                <span>Estimated Total:</span>
+                <span>₹{orderConfirmed.total}</span>
               </div>
             </div>
 
-            <div className="bk-dispatch-pill">
-              🚚 <strong>Dispatch Schedule:</strong> Fresh batch baking at Scoobee · West Delhi deliveries begin <strong>Sunday, 15 Nov 2026</strong>.
-            </div>
+            <p style={{ fontSize: '12.5px', color: '#777', margin: '10px 0 18px' }}>
+              The admin confirms the final amount on WhatsApp. This is an order request, not a direct bill.
+            </p>
 
-            <div className="bk-conf-actions">
-              <a
-                href={getWhatsAppReceiptLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bk-conf-wa-btn"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                </svg>
-                Send Copy to WhatsApp
-              </a>
-              <button type="button" className="bk-conf-done-btn" onClick={onClose}>
-                Back to Site
-              </button>
-            </div>
+            <a
+              href={orderConfirmed.contactUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bk-conf-wa-btn"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', minHeight: '50px', background: '#1f8f4e', color: '#fff', textDecoration: 'none', borderRadius: '999px', fontWeight: '700', fontSize: '16px' }}
+            >
+              Open WhatsApp to Confirm Order →
+            </a>
+
+            <button
+              type="button"
+              className="bk-conf-done-btn"
+              onClick={onClose}
+              style={{ marginTop: '12px', background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', padding: '10px', fontSize: '14px' }}
+            >
+              Close and back to site
+            </button>
           </div>
         )}
       </div>

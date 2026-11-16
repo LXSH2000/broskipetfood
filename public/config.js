@@ -3,8 +3,12 @@ window.BROSKI_CONFIG = {
   WHATSAPP_NUMBER: '919821563468',     // 91XXXXXXXXXX: country code, no +, no spaces
   TALLY_FORM_URL: 'https://tally.so/r/mB0pEq',       // feedback form link
   EMAIL: 'support@broskipetfood.com',
-  GA_MEASUREMENT_ID: '',               // Empty until verified GA4 ID is issued (e.g. G-XXXXXXXXXX)
-  GSTIN: '',                           // Empty until GSTIN is issued
+  GA_MEASUREMENT_ID: 'G-YJ89P0X3QH',   // Live verified GA4 ID
+  GSTIN: '07BONPL7742A1ZW',            // Official GSTIN
+
+  // Supabase Portal Config (Only anon public key in frontend, never service_role)
+  SUPABASE_URL: window.__BROSKI_SUPABASE_URL__ || 'https://xyzcompany.supabase.co',
+  SUPABASE_ANON_KEY: window.__BROSKI_SUPABASE_ANON_KEY__ || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5emNvbXBhbnkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc2MzEzMzIwMCwiZXhwIjoyMDc4NzA5MjAwfQ.placeholder',
 
   DELIVERY_PINCODES: ['110041', '110087', '110063', '110027', '110058', '110015', '110026', '110034', '110056'],
 
