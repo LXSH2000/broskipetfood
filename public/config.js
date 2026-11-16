@@ -6,9 +6,9 @@ window.BROSKI_CONFIG = {
   GA_MEASUREMENT_ID: 'G-YJ89P0X3QH',   // Live verified GA4 ID
   GSTIN: '07BONPL7742A1ZW',            // Official GSTIN
 
-  // Supabase Portal Config (Only anon public key in frontend, never service_role)
-  SUPABASE_URL: window.__BROSKI_SUPABASE_URL__ || 'https://xyzcompany.supabase.co',
-  SUPABASE_ANON_KEY: window.__BROSKI_SUPABASE_ANON_KEY__ || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5emNvbXBhbnkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc2MzEzMzIwMCwiZXhwIjoyMDc4NzA5MjAwfQ.placeholder',
+  // Supabase Portal Config (Only public anon/publishable key in frontend, never service_role)
+  SUPABASE_URL: window.__BROSKI_SUPABASE_URL__ || 'https://gnunhiqahhnrkroqtxib.supabase.co',
+  SUPABASE_ANON_KEY: window.__BROSKI_SUPABASE_ANON_KEY__ || 'sb_publishable_RM2Nr1mk-KjUeVt9SPQmzA_ZWFyYNGG',
 
   DELIVERY_PINCODES: ['110041', '110087', '110063', '110027', '110058', '110015', '110026', '110034', '110056'],
 
