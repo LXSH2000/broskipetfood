@@ -96,12 +96,19 @@
       }
     },
 
-    // 5. Clean 10-digit Indian mobile number with +91 prefix
+    // 5. Clean 10-digit Indian mobile number with +91 prefix (must start with 6-9)
     normalizePhone: function (raw) {
       if (!raw) return '';
       const digits = raw.toString().replace(/\D/g, '');
       const last10 = digits.slice(-10);
-      return last10.length === 10 ? `+91${last10}` : '';
+      return (last10.length === 10 && /^[6-9][0-9]{9}$/.test(last10)) ? `+91${last10}` : '';
+    },
+
+    // Validate 6-digit Indian pincode
+    validatePincode: function (raw) {
+      if (!raw) return false;
+      const digits = raw.toString().replace(/\D/g, '');
+      return digits.length === 6 && /^[1-9][0-9]{5}$/.test(digits);
     },
 
     // 6. WhatsApp or email fallback helper

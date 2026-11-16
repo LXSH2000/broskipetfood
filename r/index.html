@@ -639,8 +639,8 @@ body {
         </p>
         <div class="grid-2">
           <div>
-            <label class="field-label" for="userPhone">WhatsApp Number</label>
-            <input type="tel" id="userPhone" class="input-box" placeholder="e.g. 9821563468">
+            <label class="field-label" for="userPhone">WhatsApp Number (10 Digits)</label>
+            <input type="tel" id="userPhone" class="input-box" placeholder="e.g. 85XXXXXXXX" maxlength="10" inputmode="numeric">
           </div>
           <div>
             <label class="field-label" for="custCode">Customer Code</label>
@@ -807,7 +807,16 @@ async function submitFeedback() {
     return;
   }
 
-  const cleanPhone = rawPhone ? (window.BroskiPortal ? window.BroskiPortal.normalizePhone(rawPhone) : rawPhone) : null;
+  let cleanPhone = null;
+  if (rawPhone) {
+    const pDigits = rawPhone.replace(/\D/g, '');
+    if (pDigits.length !== 10 || !/^[6-9][0-9]{9}$/.test(pDigits)) {
+      alertEl.textContent = 'Please enter a valid 10-digit mobile number (e.g. 85XXXXXXXX) or leave it empty.';
+      alertEl.style.display = 'block';
+      return;
+    }
+    cleanPhone = '+91' + pDigits;
+  }
 
   const btn = document.getElementById('submitFeedbackBtn');
   btn.disabled = true;

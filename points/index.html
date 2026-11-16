@@ -57,8 +57,9 @@
           <label class="bk-label" for="phoneInput">WhatsApp Number</label>
           <div class="bk-phone-wrap">
             <span class="bk-phone-prefix">+91</span>
-            <input class="bk-input" type="tel" id="phoneInput" placeholder="9821563468" inputmode="numeric" maxlength="14" autocomplete="tel" required>
+            <input class="bk-input" type="tel" id="phoneInput" placeholder="85XXXXXXXX" inputmode="numeric" maxlength="10" autocomplete="tel" required>
           </div>
+          <span class="bk-small" style="display:block; margin-top:4px;">Enter exactly 10 digits (e.g. 85XXXXXXXX).</span>
         </div>
 
         <div class="bk-form-group">
@@ -169,6 +170,13 @@ window.addEventListener('DOMContentLoaded', function () {
     document.getElementById('codeInput').value = params.get('code').toUpperCase();
   }
 
+  const phoneInputEl = document.getElementById('phoneInput');
+  if (phoneInputEl) {
+    phoneInputEl.addEventListener('input', function() {
+      this.value = this.value.replace(/\D/g, '').slice(0, 10);
+    });
+  }
+
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
     alertEl.style.display = 'none';
@@ -176,12 +184,12 @@ window.addEventListener('DOMContentLoaded', function () {
     const rawPhone = document.getElementById('phoneInput').value.trim();
     const code = document.getElementById('codeInput').value.trim().toUpperCase();
 
-    const cleanPhone = window.BroskiPortal ? window.BroskiPortal.normalizePhone(rawPhone) : ('+91' + rawPhone.replace(/\D/g, '').slice(-10));
-
-    if (!cleanPhone || !/^\+91[6-9][0-9]{9}$/.test(cleanPhone)) {
-      showAlert('Please enter a valid 10-digit mobile number.');
+    const phoneDigits = rawPhone.replace(/\D/g, '');
+    if (phoneDigits.length !== 10 || !/^[6-9][0-9]{9}$/.test(phoneDigits)) {
+      showAlert('Please enter a valid 10-digit mobile number (e.g. 85XXXXXXXX).');
       return;
     }
+    const cleanPhone = `+91${phoneDigits}`;
 
     if (!code || code.length < 4) {
       showAlert('Please enter your customer code.');

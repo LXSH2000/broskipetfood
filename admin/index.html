@@ -565,10 +565,10 @@ function openManualOrderModal() {
         <h3 style="margin-top:0;">Add Manual Order (Shop / WhatsApp)</h3>
         <form id="manualOrderForm">
           <div class="bk-form-group">
-            <label class="bk-label">Customer Mobile</label>
+            <label class="bk-label">Customer Mobile (10 Digits)</label>
             <div class="bk-phone-wrap">
               <span class="bk-phone-prefix">+91</span>
-              <input class="bk-input" type="tel" id="manPhone" placeholder="9821563468" required>
+              <input class="bk-input" type="tel" id="manPhone" placeholder="85XXXXXXXX" maxlength="10" inputmode="numeric" required>
             </div>
           </div>
           <div class="bk-form-group">
@@ -616,9 +616,20 @@ function openManualOrderModal() {
   document.getElementById('manualOrderForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const rawP = document.getElementById('manPhone').value.trim();
-    const cleanPhone = window.BroskiPortal ? window.BroskiPortal.normalizePhone(rawP) : ('+91' + rawP.replace(/\D/g, '').slice(-10));
+    const pDigits = rawP.replace(/\D/g, '');
+    if (pDigits.length !== 10 || !/^[6-9][0-9]{9}$/.test(pDigits)) {
+      alert('Please enter a valid 10-digit mobile number (e.g. 85XXXXXXXX).');
+      return;
+    }
+    const cleanPhone = '+91' + pDigits;
+
+    const pinDigits = (document.getElementById('manPincode').value.trim() || '110041').replace(/\D/g, '');
+    if (pinDigits.length !== 6 || !/^[1-9][0-9]{5}$/.test(pinDigits)) {
+      alert('Please enter a valid 6-digit pincode (e.g. 110041).');
+      return;
+    }
+    const pincode = pinDigits;
     const name = document.getElementById('manName').value.trim();
-    const pincode = document.getElementById('manPincode').value.trim() || '110041';
     const channel = document.getElementById('manChannel').value;
 
     const b = parseInt(document.getElementById('manBites').value) || 0;
