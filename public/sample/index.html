@@ -47,6 +47,11 @@
     <h1>Claim your free 50 g sample</h1>
     <p class="bk-lead">Freshly baked crunchy bone biscuits for your best bro. One free 50 g sample pouch per phone number.</p>
 
+    <!-- Taste Drop Visual Preview -->
+    <div style="text-align:center; margin: 18px 0 24px 0;">
+      <img src="/broski-trio-sampler.webp" alt="BROSKI Treats Family with 50g Free Taste Pack" width="1024" height="764" style="width:100%; max-width:520px; height:auto; border-radius:20px; border:1px solid rgba(53,32,22,0.15); box-shadow:0 10px 28px rgba(53,32,22,0.08);">
+    </div>
+
     <!-- Claim Form Card -->
     <div class="bk-card" id="claimCard">
       <form id="sampleForm" novalidate>
@@ -71,14 +76,18 @@
 
         <div class="bk-form-group">
           <label class="bk-label">Select Your Flavour</label>
-          <div class="bk-radio-group">
-            <label class="bk-radio-chip">
-              <input type="radio" name="flavour" value="bites" checked>
-              <span>Bro Bites (Yellow)</span>
+          <div class="bk-radio-group" style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <label class="bk-radio-chip" style="display:flex; flex-direction:column; align-items:center; text-align:center; padding:12px; border-radius:16px; cursor:pointer;">
+              <input type="radio" name="flavour" value="bites" checked style="margin-bottom:8px;">
+              <img src="/broski-sample-bites.webp" alt="50g Bro Bites Sample" width="100" height="100" style="width:90px; height:90px; object-fit:cover; border-radius:12px; margin-bottom:6px;">
+              <strong>Bro Bites (Yellow)</strong>
+              <span class="bk-small" style="color:var(--brown-2);">Classic Crunch</span>
             </label>
-            <label class="bk-radio-chip">
-              <input type="radio" name="flavour" value="mix">
-              <span>Bro Mix (White)</span>
+            <label class="bk-radio-chip" style="display:flex; flex-direction:column; align-items:center; text-align:center; padding:12px; border-radius:16px; cursor:pointer;">
+              <input type="radio" name="flavour" value="mix" style="margin-bottom:8px;">
+              <img src="/broski-sample-mix.webp" alt="50g Bro Mix Sample" width="100" height="100" style="width:90px; height:90px; object-fit:cover; border-radius:12px; margin-bottom:6px;">
+              <strong>Bro Mix (White)</strong>
+              <span class="bk-small" style="color:var(--brown-2);">Happy Mix</span>
             </label>
           </div>
         </div>
@@ -99,10 +108,17 @@
     </div>
 
     <!-- Success View -->
-    <div class="bk-card" id="successCard" style="display:none;">
+    <div class="bk-card" id="successCard" style="display:none; text-align:center;">
       <span class="bk-badge bk-badge--handed">🎉 Sample Code Generated</span>
       <h2 style="margin-top:14px;">Your Free 50 g Sample is Reserved</h2>
       <p>Show this code when collecting your sample pouch at a partner pet shop or with your home delivery order.</p>
+
+      <div style="margin: 20px auto 22px auto;">
+        <img id="sampleReservedImg" src="/broski-sample-bites.webp" alt="Your Reserved 50g Sample Pouch" width="220" height="220" style="width:190px; height:190px; object-fit:cover; border-radius:20px; border:2px solid var(--brown); box-shadow:0 10px 26px rgba(53,32,22,0.12); display:inline-block;">
+        <div id="sampleReservedBadge" style="margin-top:10px; font-weight:700; font-family:'Outfit',sans-serif; color:var(--brown); font-size:16px;">
+          50 g Complimentary Pouch Reserved: Bro Bites
+        </div>
+      </div>
 
       <div class="bk-code-card">
         <span class="bk-small" style="letter-spacing:0.08em; text-transform:uppercase;">Official Claim Code</span>
@@ -240,6 +256,17 @@ window.addEventListener('DOMContentLoaded', function () {
           window.BroskiPortal.trackGA('sample_claim_success', { flavour: flavour });
         }
         document.getElementById('displayClaimCode').textContent = data.claim_code;
+
+        // Display the specific sample pouch reserved
+        const sampleImg = document.getElementById('sampleReservedImg');
+        const sampleBadge = document.getElementById('sampleReservedBadge');
+        if (flavour === 'mix') {
+          if (sampleImg) sampleImg.src = '/broski-sample-mix.webp';
+          if (sampleBadge) sampleBadge.textContent = '50 g Complimentary Pouch Reserved: Bro Mix (Happy Mix)';
+        } else {
+          if (sampleImg) sampleImg.src = '/broski-sample-bites.webp';
+          if (sampleBadge) sampleBadge.textContent = '50 g Complimentary Pouch Reserved: Bro Bites (Classic Crunch)';
+        }
 
         // Configure WhatsApp button
         const confirmMsg = `BROSKI sample code ${data.claim_code}`;
