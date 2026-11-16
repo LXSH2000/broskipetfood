@@ -15,14 +15,13 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
-            echo "Notice: SUPABASE_URL or SUPABASE_ANON_KEY secret not yet configured in GitHub repo secrets."
-            exit 0
-          fi
+          URL="${SUPABASE_URL:-https://gnunhiqahhnrkroqtxib.supabase.co}"
+          KEY="${SUPABASE_ANON_KEY:-sb_publishable_RM2Nr1mk-KjUeVt9SPQmzA_ZWFyYNGG}"
+          
           echo "Pinging Supabase get_my_summary RPC..."
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${SUPABASE_URL}/rest/v1/rpc/get_my_summary" \
-            -H "apikey: ${SUPABASE_ANON_KEY}" \
-            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${URL}/rest/v1/rpc/get_my_summary" \
+            -H "apikey: ${KEY}" \
+            -H "Authorization: Bearer ${KEY}" \
             -H "Content-Type: application/json" \
             -d '{"p_phone":"+919999999999","p_code":"TEST00"}')
           echo "Supabase responded with HTTP status: $STATUS"
