@@ -641,6 +641,38 @@ body {
   display: block;
 }
 
+.inv-brand-wordmark-img {
+  height: 30px;
+  width: auto;
+  max-width: 170px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.signature-stamp-box {
+  position: absolute;
+  top: 6px;
+  right: 28px;
+  pointer-events: none;
+  transform: rotate(-7deg);
+  opacity: 0.88;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 1px 2px rgba(29, 78, 216, 0.15));
+  z-index: 2;
+}
+
+.signature-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  text-align: right;
+  min-height: 108px;
+  position: relative;
+  min-width: 175px;
+}
+
 .inv-brand-info h1 {
   font-family: var(--font-display);
   font-size: 32px;
@@ -1932,7 +1964,7 @@ function renderInvoice() {
       <div class="inv-brand-wrapper">
         <img src="/broski-logo.png" alt="BROSKI Good Boy Snacks" class="inv-brand-logo-img">
         <div class="inv-brand-info">
-          <h1>BROSKI</h1>
+          <img src="/broski-wordmark-brown.svg" alt="BROSKI" class="inv-brand-wordmark-img">
           <div class="tagline">Treats for your best bro.</div>
           <div class="legal-sub">
             <strong>BROSKI</strong> · Nangloi, New Delhi – 110041<br>
@@ -2081,11 +2113,43 @@ function renderInvoice() {
           <strong style="color:var(--primary);">15-Day 100% Cash Buyback Guarantee:</strong> All unopened, sealed packs eligible for full cash refund.<br>
           For reorders & support: WhatsApp <strong>+91 9821563468</strong> · support@broskipetfood.com
         </div>
+        <div style="margin-top:7px; display:inline-flex; align-items:center; gap:6px; background:var(--green-bg); border:1px solid var(--green-border); border-radius:6px; padding:3px 8px; font-size:10.5px; font-weight:700; color:var(--green);">
+          <span>🐾</span> Give feedback & claim free sample at broskipetfood.com/sample
+        </div>
         ${notes ? `<div style="margin-top:6px; font-weight:600; color:var(--accent); font-size:11px;">Note: ${esc(notes)}</div>` : ''}
       </div>
 
       <div class="signature-container">
         <div style="font-size:11.5px; font-weight:700; color:var(--primary);">For BROSKI</div>
+        
+        <!-- Official BROSKI Rubber Stamp -->
+        <div class="signature-stamp-box">
+          <svg viewBox="0 0 140 140" width="86" height="86" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="70" cy="70" r="66" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="4 2"/>
+            <circle cx="70" cy="70" r="61" fill="none" stroke="#1d4ed8" stroke-width="1.2"/>
+            <defs>
+              <path id="stampArcTop" d="M 22 70 A 48 48 0 0 1 118 70" fill="none"/>
+              <path id="stampArcBottom" d="M 118 70 A 48 48 0 0 1 22 70" fill="none"/>
+            </defs>
+            <text fill="#1d4ed8" font-size="10" font-weight="900" font-family="'Outfit', sans-serif" letter-spacing="2">
+              <textPath href="#stampArcTop" startOffset="50%" text-anchor="middle">★ BROSKI PET FOOD ★</textPath>
+            </text>
+            <text fill="#1d4ed8" font-size="8.5" font-weight="800" font-family="'Outfit', sans-serif" letter-spacing="1.5">
+              <textPath href="#stampArcBottom" startOffset="50%" text-anchor="middle">DELHI - 110041</textPath>
+            </text>
+            <circle cx="70" cy="70" r="32" fill="none" stroke="#1d4ed8" stroke-width="1.2"/>
+            <g transform="translate(56, 46) scale(0.42)" fill="#1d4ed8">
+              <ellipse cx="14" cy="8" rx="5" ry="7"/>
+              <ellipse cx="28" cy="8" rx="5" ry="7"/>
+              <ellipse cx="4" cy="22" rx="4.5" ry="6"/>
+              <ellipse cx="38" cy="22" rx="4.5" ry="6"/>
+              <path d="M 10 26 C 10 22, 32 22, 32 26 C 36 34, 34 44, 21 44 C 8 44, 6 34, 10 26 Z"/>
+            </g>
+            <text x="70" y="76" text-anchor="middle" fill="#1d4ed8" font-size="6.5" font-weight="900" font-family="'JetBrains Mono', monospace" letter-spacing="1">AUTHENTIC</text>
+            <text x="70" y="86" text-anchor="middle" fill="#1d4ed8" font-size="6" font-weight="700" font-family="'JetBrains Mono', monospace" letter-spacing="0.5">VERIFIED</text>
+          </svg>
+        </div>
+
         <div class="signature-line-mark">Authorized Signatory</div>
       </div>
     </div>
@@ -2104,7 +2168,7 @@ function loadPreset(type) {
     items = [
       { ...ITEM_PRESETS.nv400, qty: 11, freeQty: 1, rate: 100, scheme: '11+1 Free Box Scheme' }
     ];
-    document.getElementById('billNotes').value = "Introductory 11+1 Retail Box. Includes acrylic counter tasting jar. 15-Day 100% Cash Buyback Guarantee.";
+    document.getElementById('billNotes').value = '';
     showToast("⭐ Loaded 11+1 Retail Box (38.5% Margin for Shop)");
   } else if (type === 'wholesale20') {
     document.getElementById('btnSchemeWholesale20')?.classList.add('active');
@@ -2113,7 +2177,7 @@ function loadPreset(type) {
       { ...ITEM_PRESETS.nv400, qty: 10, freeQty: 0, rate: 100.00, scheme: 'Wholesale Tier' },
       { ...ITEM_PRESETS.mx400, qty: 10, freeQty: 0, rate: 114.86, scheme: 'Wholesale Tier' }
     ];
-    document.getElementById('billNotes').value = "Wholesale shop order (20 packs: 10 Non-Veg + 10 Mix). Dispatched from Nangloi bakery.";
+    document.getElementById('billNotes').value = '';
     showToast("📦 Loaded 20-Pack Master Wholesale Carton");
   } else if (type === 'd2ccombo') {
     document.getElementById('btnSchemeCombo')?.classList.add('active');
