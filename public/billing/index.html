@@ -89,23 +89,28 @@ body {
 }
 
 .brand-emblem-badge {
-  width: 38px;
-  height: 38px;
-  background: var(--primary);
+  width: 40px;
+  height: 40px;
+  background: #ffffff;
+  border: 1px solid var(--border);
   border-radius: 10px;
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  box-shadow: 0 3px 8px rgba(53, 32, 22, 0.18);
+  box-shadow: 0 2px 8px rgba(53, 32, 22, 0.06);
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  padding: 3px;
 }
+
 .brand-nav-link:hover .brand-emblem-badge {
   transform: scale(1.05);
 }
 
-.brand-emblem-badge svg {
-  width: 24px;
-  height: 24px;
+.brand-emblem-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand-nav-text {
@@ -623,24 +628,17 @@ body {
 
 .inv-brand-wrapper {
   display: flex;
-  align-items: flex-start;
-  gap: 18px;
+  align-items: center;
+  gap: 16px;
 }
 
-.inv-brand-emblem {
-  width: 58px;
-  height: 58px;
-  background: var(--primary);
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
+.inv-brand-logo-img {
+  height: 64px;
+  width: auto;
+  max-width: 95px;
+  object-fit: contain;
   flex-shrink: 0;
-  box-shadow: 0 6px 18px rgba(53, 32, 22, 0.28);
-}
-
-.inv-brand-emblem svg {
-  width: 36px;
-  height: 36px;
+  display: block;
 }
 
 .inv-brand-info h1 {
@@ -1281,11 +1279,7 @@ body {
 <!-- Glass Top Navigation Bar -->
 <header class="app-top-nav no-print">
   <a class="brand-nav-link" href="/" aria-label="Broski Home">
-    <div class="brand-emblem-badge">
-      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M21 22c-10-9-18 7-8 12-8 8 6 18 12 8l15-8c10 9 18-7 8-12 8-8-6-18-12-8Z" fill="#f5e8cf"/>
-      </svg>
-    </div>
+    <div class="brand-emblem-badge"><img src="/broski-logo.png" alt="BROSKI"></div>
     <div class="brand-nav-text">
       <div class="title">
         BROSKI STUDIO <span class="dot"></span>
@@ -1936,18 +1930,14 @@ function renderInvoice() {
     <!-- Top Header -->
     <div class="inv-top-bar">
       <div class="inv-brand-wrapper">
-        <div class="inv-brand-emblem">
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 22c-10-9-18 7-8 12-8 8 6 18 12 8l15-8c10 9 18-7 8-12 8-8-6-18-12-8Z" fill="#f5e8cf"/>
-          </svg>
-        </div>
+        <img src="/broski-logo.png" alt="BROSKI Good Boy Snacks" class="inv-brand-logo-img">
         <div class="inv-brand-info">
           <h1>BROSKI</h1>
           <div class="tagline">Treats for your best bro.</div>
           <div class="legal-sub">
-            <strong>BROSKI (Prop. Lakshay)</strong> · 12A/3, Dharam Colony, Nangloi, New Delhi – 110041<br>
+            <strong>BROSKI</strong> · Nangloi, New Delhi – 110041<br>
             UDYAM Reg: <strong>UDYAM-DL-11-0177908</strong> · State: <strong>07 (Delhi)</strong> · GSTIN: <strong>${esc(sellerGstin)}</strong><br>
-            support@broskipetfood.com · broskipetfood.com · +91-9821563468
+            support@broskipetfood.com · broskipetfood.com · +91 9821563468
           </div>
         </div>
       </div>
@@ -1989,11 +1979,11 @@ function renderInvoice() {
     <div class="inv-parties-grid">
       <div class="inv-party-card">
         <div class="inv-party-label">Supplier (Dispatched From)</div>
-        <div class="inv-party-name">BROSKI (Lakshay)</div>
+        <div class="inv-party-name">BROSKI</div>
         <div class="inv-party-details">
-          12A/3, Dharam Colony, Nangloi, New Delhi – 110041<br>
+          Nangloi, New Delhi – 110041<br>
           GSTIN: <strong>${esc(sellerGstin)}</strong><br>
-          Bakery Partner: Scoobee Pet Products, Shalimar Bagh<br>
+          State: <strong>07 (Delhi)</strong><br>
           Phone: +91 9821563468
         </div>
       </div>
@@ -2054,10 +2044,7 @@ function renderInvoice() {
           </div>
         ` : '')}
 
-        <div style="margin-top:14px; font-size:11px; color:var(--text-muted); background:#fcfbfa; border:1px solid var(--border); border-radius:8px; padding:8px 12px; display:flex; align-items:center; gap:8px;">
-          <span>🛡️</span>
-          <span><strong>15-Day 100% Cash Buyback Guarantee:</strong> All unopened, undamaged packs are eligible for full cash refund by Lakshay within 15 days.</span>
-        </div>
+        
       </div>
 
       <div>
@@ -2073,40 +2060,39 @@ function renderInvoice() {
             </tr>
           ` : ''}
           <tr>
-            <td style="color:var(--text-muted);">Gross Taxable Value:</td>
+            <td style="color:var(--text-muted);">Subtotal (Total Value):</td>
             <td style="text-align:right; font-family:var(--font-mono);">₹${grossTotal.toFixed(2)}</td>
           </tr>
-          <tr>
-            <td style="color:var(--text-muted);">CGST (Exempt under Composition):</td>
-            <td style="text-align:right; font-family:var(--font-mono);">₹0.00</td>
-          </tr>
-          <tr>
-            <td style="color:var(--text-muted);">SGST (Exempt under Composition):</td>
-            <td style="text-align:right; font-family:var(--font-mono);">₹0.00</td>
-          </tr>
+          ${discount > 0 ? `
+            <tr>
+              <td style="color:var(--accent); font-weight:600;">Trade Discount:</td>
+              <td style="text-align:right; font-family:var(--font-mono); color:var(--accent);">-₹${discount.toFixed(2)}</td>
+            </tr>
+          ` : ''}
           <tr class="grand-row">
-            <td>Grand Total (₹):</td>
+            <td>${isChallan ? 'Total Declared Value (₹):' : 'Grand Total (₹):'}</td>
             <td style="text-align:right; font-family:var(--font-mono);">₹${grandTotal.toFixed(2)}</td>
           </tr>
         </table>
+        <div style="font-size:10px; color:var(--text-soft); text-align:right; margin-top:5px; font-weight:500;">
+          ${isChallan ? 'Rule 55 Transit Value · Not for Commercial Sale' : 'GST Composition Scheme · Tax not charged'}
+        </div>
       </div>
     </div>
 
     <!-- Footer Terms & Signatures -->
     <div class="inv-footer-block">
       <div>
-        <strong style="color:var(--primary); font-size:11.5px; display:block; margin-bottom:4px;">Terms & Conditions:</strong>
-        <ol class="terms-list">
-          <li>Goods once sold are covered by the BROSKI 15-day 100% cash buyback on unopened, sealed cartons.</li>
-          <li>Dog reward treats — not for human consumption. Keep fresh drinking water available.</li>
-          <li>Subject to Delhi jurisdiction. Inquiries: support@broskipetfood.com or WhatsApp +91-9821563468.</li>
-        </ol>
-        ${notes ? `<div style="margin-top:8px; font-weight:600; color:var(--accent);">Note: ${esc(notes)}</div>` : ''}
+        <div style="font-size:11px; color:var(--text-muted); line-height:1.5;">
+          <strong style="color:var(--primary);">15-Day 100% Cash Buyback Guarantee:</strong> All unopened, sealed packs eligible for full cash refund.<br>
+          For reorders & support: WhatsApp <strong>+91 9821563468</strong> · support@broskipetfood.com
+        </div>
+        ${notes ? `<div style="margin-top:6px; font-weight:600; color:var(--accent); font-size:11px;">Note: ${esc(notes)}</div>` : ''}
       </div>
 
       <div class="signature-container">
         <div style="font-size:11.5px; font-weight:700; color:var(--primary);">For BROSKI</div>
-        <div class="signature-line-mark">Authorized Signatory<br><span style="font-size:10px; font-weight:500; color:var(--text-soft);">(Lakshay, Founder)</span></div>
+        <div class="signature-line-mark">Authorized Signatory</div>
       </div>
     </div>
   `;
