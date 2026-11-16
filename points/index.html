@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ89P0X3QH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YJ89P0X3QH');
+  gtag('config', 'GTM-WHMRKDWX');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5efe4">
+<title>My BROSKI – Points, Sample Status & Orders | Nangloi, Delhi</title>
+<meta name="description" content="Check your Broski points balance, sample request status and order history with your phone and customer code.">
+<link rel="canonical" href="https://broskipetfood.com/points/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="BROSKI">
+<meta property="og:title" content="My BROSKI – Points, Sample Status & Orders">
+<meta property="og:description" content="Check your Broski points balance, sample request status and order history.">
+<meta property="og:image" content="https://broskipetfood.com/og-share.jpg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Gaegu:wght@700&display=swap">
+<link rel="stylesheet" href="/broski-pages.css">
+<script src="/config.js"></script>
+<script src="/supabase.js" defer></script>
+<script src="/portal-shared.js" defer></script>
+</head>
+<body>
+<div class="bk-wrap">
+  <header class="bk-head">
+    <a class="bk-logo" href="/">broski</a>
+    <nav class="bk-nav" aria-label="Main">
+      <a href="/offers/">Bro Perks</a>
+      <a href="/sample/">Free Sample</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <span class="bk-eyebrow">Customer Loyalty Hub</span>
+    <h1>My BROSKI</h1>
+    <p class="bk-lead">Track your loyalty points balance, free sample status and past orders.</p>
+
+    <!-- Login / Lookup Card -->
+    <div class="bk-card" id="lookupCard">
+      <h2 style="font-size:22px; margin-top:0;">Look Up Your Account</h2>
+      <p class="bk-small">Enter your registered mobile number and the 6-character code from your sample or order confirmation.</p>
+
+      <form id="pointsForm" novalidate style="margin-top:16px;">
+        <div class="bk-form-group">
+          <label class="bk-label" for="phoneInput">WhatsApp Number</label>
+          <div class="bk-phone-wrap">
+            <span class="bk-phone-prefix">+91</span>
+            <input class="bk-input" type="tel" id="phoneInput" placeholder="9821563468" inputmode="numeric" maxlength="14" autocomplete="tel" required>
+          </div>
+        </div>
+
+        <div class="bk-form-group">
+          <label class="bk-label" for="codeInput">Customer Code (6 Characters)</label>
+          <input class="bk-input" type="text" id="codeInput" placeholder="e.g. A1B2C3" maxlength="6" style="text-transform:uppercase; font-family:'JetBrains Mono', monospace; letter-spacing:0.1em; font-weight:700;" required>
+          <span class="bk-small" style="display:block; margin-top:4px;">Printed on your WhatsApp confirmation or sample card.</span>
+        </div>
+
+        <div id="lookupAlert" class="bk-alert bk-alert--error" style="display:none;" role="alert"></div>
+
+        <button type="submit" id="checkBtn" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%;">
+          View My Points & Orders
+        </button>
+      </form>
+    </div>
+
+    <!-- Summary Details (Hidden until loaded) -->
+    <div id="summaryView" style="display:none;">
+      <!-- Profile & Points Balance Card -->
+      <div class="bk-card" style="background:#fff7f4; border:2px solid var(--rust);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+          <div>
+            <span class="bk-small" style="text-transform:uppercase; letter-spacing:0.08em; color:var(--rust-dark); font-weight:700;">Bro Member</span>
+            <h2 id="dispName" style="margin:4px 0 0; font-size:26px;">Hello Bro!</h2>
+          </div>
+          <button type="button" id="logoutBtn" class="bk-btn bk-btn--ghost" style="min-height:38px; padding:6px 14px; font-size:13px; border-radius:8px;">
+            Check Another
+          </button>
+        </div>
+
+        <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div style="background:#ffffff; border:1px solid var(--line); border-radius:14px; padding:16px;">
+            <div class="bk-small" style="color:var(--brown-2); font-weight:700;">Points Balance</div>
+            <div id="dispPoints" style="font:800 36px/1.1 'Outfit', sans-serif; color:var(--rust-dark); margin-top:6px;">0</div>
+            <span class="bk-small" style="color:var(--brown-2);">1 pt = ₹1 on future orders</span>
+          </div>
+
+          <div style="background:#ffffff; border:1px solid var(--line); border-radius:14px; padding:16px;">
+            <div class="bk-small" style="color:var(--brown-2); font-weight:700;">Sample Status</div>
+            <div id="dispSampleBadge" style="margin-top:10px;">
+              <span class="bk-badge bk-badge--pending">None</span>
+            </div>
+            <div id="dispSampleText" class="bk-small" style="margin-top:6px; color:var(--brown-2);">No sample claimed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Section -->
+      <div class="bk-card">
+        <h3 style="margin-top:0;">Order History</h3>
+        <div id="ordersContainer">
+          <p class="bk-small" style="color:var(--brown-2);">Loading orders...</p>
+        </div>
+      </div>
+
+      <!-- Points Ledger Section -->
+      <div class="bk-card">
+        <h3 style="margin-top:0;">Points Activity</h3>
+        <div id="historyContainer">
+          <p class="bk-small" style="color:var(--brown-2);">Loading points history...</p>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin:24px 0;">
+        <a href="/" class="bk-btn bk-btn--primary">Browse Biscuits & Order →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bk-foot">
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="/offers/">Bro Perks</a>
+      <a href="/sample/">Free Sample</a>
+      <a href="/points/">My Points</a>
+      <a href="/r/">Feedback</a>
+      <a href="/privacy/">Privacy</a>
+    </nav>
+    <p class="bk-small">
+      BROSKI · Nangloi, West Delhi – 110041 · <a id="footContactLink" href="#">Contact WhatsApp</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('pointsForm');
+  const alertEl = document.getElementById('lookupAlert');
+  const checkBtn = document.getElementById('checkBtn');
+  const lookupCard = document.getElementById('lookupCard');
+  const summaryView = document.getElementById('summaryView');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const footContactLink = document.getElementById('footContactLink');
+
+  if (footContactLink && window.BroskiPortal) {
+    const act = window.BroskiPortal.getContactAction('Hi BROSKI! I have a question about my loyalty points.');
+    footContactLink.href = act.url;
+    footContactLink.textContent = act.type === 'whatsapp' ? 'WhatsApp' : 'support@broskipetfood.com';
+    if (act.type === 'whatsapp') footContactLink.target = '_blank';
+  }
+
+  // Pre-fill from query params if present (e.g. /points?phone=...&code=...)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('phone')) {
+    document.getElementById('phoneInput').value = params.get('phone').replace(/^\+91/, '');
+  }
+  if (params.get('code')) {
+    document.getElementById('codeInput').value = params.get('code').toUpperCase();
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    alertEl.style.display = 'none';
+
+    const rawPhone = document.getElementById('phoneInput').value.trim();
+    const code = document.getElementById('codeInput').value.trim().toUpperCase();
+
+    const cleanPhone = window.BroskiPortal ? window.BroskiPortal.normalizePhone(rawPhone) : ('+91' + rawPhone.replace(/\D/g, '').slice(-10));
+
+    if (!cleanPhone || !/^\+91[6-9][0-9]{9}$/.test(cleanPhone)) {
+      showAlert('Please enter a valid 10-digit mobile number.');
+      return;
+    }
+
+    if (!code || code.length < 4) {
+      showAlert('Please enter your customer code.');
+      return;
+    }
+
+    checkBtn.disabled = true;
+    checkBtn.textContent = 'Verifying Code...';
+
+    try {
+      const supabase = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
+      if (!supabase) throw new Error('Portal client initialisation error.');
+
+      const { data, error } = await supabase.rpc('get_my_summary', {
+        p_phone: cleanPhone,
+        p_code: code
+      });
+
+      if (error) throw error;
+
+      // GA4 event: strictly no phone, name, or code
+      if (window.BroskiPortal) {
+        window.BroskiPortal.trackGA('points_check');
+      }
+
+      if (data && data.status === 'ok') {
+        renderSummary(data);
+        lookupCard.style.display = 'none';
+        summaryView.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        showAlert('Account not found. Please check your phone number and customer code.');
+      }
+    } catch (err) {
+      console.error('[Points] Lookup error:', err);
+      const cfg = window.BROSKI_CONFIG || {};
+      if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.includes('xyzcompany')) {
+        showAlert('Notice: Loyalty database is currently undergoing launch setup. Please message us on WhatsApp to verify points directly.');
+      } else {
+        showAlert('Account not found. Please verify your details or contact support.');
+      }
+    } finally {
+      checkBtn.disabled = false;
+      checkBtn.textContent = 'View My Points & Orders';
+    }
+  });
+
+  logoutBtn.addEventListener('click', function () {
+    summaryView.style.display = 'none';
+    lookupCard.style.display = 'block';
+    document.getElementById('codeInput').value = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function renderSummary(data) {
+    document.getElementById('dispName').textContent = data.name ? `Welcome, ${data.name}!` : 'Hello Bro!';
+    document.getElementById('dispPoints').textContent = (data.points || 0) + ' pts';
+
+    // Sample status badge
+    const badgeEl = document.getElementById('dispSampleBadge');
+    const textEl = document.getElementById('dispSampleText');
+    const s = data.sample;
+
+    if (s === 'pending') {
+      badgeEl.innerHTML = '<span class="bk-badge bk-badge--pending">Pending</span>';
+      textEl.textContent = 'Sample requested · Pending collection or dispatch';
+    } else if (s === 'verified') {
+      badgeEl.innerHTML = '<span class="bk-badge bk-badge--verified">Verified</span>';
+      textEl.textContent = 'Sample verified · Ready for pickup / dispatch';
+    } else if (s === 'handed') {
+      badgeEl.innerHTML = '<span class="bk-badge bk-badge--handed">Collected</span>';
+      textEl.textContent = 'Sample handed over · Enjoy the crunch!';
+    } else if (s === 'rejected') {
+      badgeEl.innerHTML = '<span class="bk-badge bk-badge--rejected">Not Approved</span>';
+      textEl.textContent = 'Sample request declined';
+    } else {
+      badgeEl.innerHTML = '<span class="bk-badge bk-badge--pending">Not Claimed</span>';
+      textEl.innerHTML = '<a href="/sample/" style="color:var(--rust-dark); font-weight:700;">Claim your free 50g sample →</a>';
+    }
+
+    // Orders
+    const ordContainer = document.getElementById('ordersContainer');
+    const orders = data.orders || [];
+    if (orders.length === 0) {
+      ordContainer.innerHTML = '<p class="bk-small" style="color:var(--brown-2); margin:0;">No orders found yet. <a href="/" style="color:var(--rust-dark); font-weight:700;">Order your first box today!</a></p>';
+    } else {
+      let html = '<div class="bk-table-wrap"><table class="bk-table"><thead><tr><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead><tbody>';
+      orders.forEach(function (o) {
+        const d = o.date ? new Date(o.date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : '-';
+        let itemsDesc = '';
+        if (typeof o.items === 'object' && o.items !== null) {
+          const parts = [];
+          if (o.items.bites) parts.push(`Bites ×${o.items.bites}`);
+          if (o.items.mix) parts.push(`Mix ×${o.items.mix}`);
+          if (o.items.combo) parts.push(`Combo ×${o.items.combo}`);
+          itemsDesc = parts.join(', ') || JSON.stringify(o.items);
+        } else {
+          itemsDesc = String(o.items || '-');
+        }
+        const badgeClass = `bk-badge--${o.status || 'requested'}`;
+        html += `<tr><td>${d}</td><td>${escapeHtml(itemsDesc)}</td><td style="font-weight:700;">₹${o.total}</td><td><span class="bk-badge ${badgeClass}">${escapeHtml(o.status || 'requested')}</span></td></tr>`;
+      });
+      html += '</tbody></table></div>';
+      ordContainer.innerHTML = html;
+    }
+
+    // Points history
+    const histContainer = document.getElementById('historyContainer');
+    const history = data.history || [];
+    if (history.length === 0) {
+      histContainer.innerHTML = '<p class="bk-small" style="color:var(--brown-2); margin:0;">No points transactions recorded yet.</p>';
+    } else {
+      let html = '<div class="bk-table-wrap"><table class="bk-table"><thead><tr><th>Date</th><th>Points</th><th>Reason</th></tr></thead><tbody>';
+      history.forEach(function (h) {
+        const d = h.date ? new Date(h.date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : '-';
+        const sign = h.delta > 0 ? `+${h.delta}` : `${h.delta}`;
+        const color = h.delta > 0 ? '#15803d' : '#9b1c1c';
+        html += `<tr><td>${d}</td><td style="font-weight:800; color:${color};">${sign} pts</td><td>${escapeHtml(h.reason || '-')}</td></tr>`;
+      });
+      html += '</tbody></table></div>';
+      histContainer.innerHTML = html;
+    }
+  }
+
+  function showAlert(msg) {
+    alertEl.textContent = msg;
+    alertEl.style.display = 'block';
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, function (m) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+    });
+  }
+});
+</script>
+</body>
+</html>

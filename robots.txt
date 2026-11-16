@@ -10,6 +10,7 @@ User-agent: Baiduspider
 User-agent: Yandex
 Allow: /
 Disallow: /api/
+Disallow: /admin
 Disallow: /admin/
 Disallow: /app/
 Disallow: /billing/
@@ -33,6 +34,7 @@ Allow: /r/
 Allow: /offers/
 Allow: /privacy/
 Disallow: /api/
+Disallow: /admin
 Disallow: /admin/
 Disallow: /app/
 Disallow: /billing/
@@ -44,6 +46,7 @@ Disallow: /*.json$
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin
 Disallow: /admin/
 Disallow: /app/
 Disallow: /billing/

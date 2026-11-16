@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ89P0X3QH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YJ89P0X3QH');
+  gtag('config', 'GTM-WHMRKDWX');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5efe4">
+<title>Claim Free 50g Sample Pouch – BROSKI dog biscuits, Nangloi, Delhi</title>
+<meta name="description" content="Try crunchy Broski dog biscuits for free. Claim your complimentary 50g sample pouch in West Delhi. One per customer.">
+<link rel="canonical" href="https://broskipetfood.com/sample/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="BROSKI">
+<meta property="og:title" content="Claim Free 50g Sample Pouch – BROSKI">
+<meta property="og:description" content="Try crunchy Broski dog biscuits for free. Claim your complimentary 50g sample pouch in West Delhi.">
+<meta property="og:image" content="https://broskipetfood.com/og-share.jpg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=Gaegu:wght@700&display=swap">
+<link rel="stylesheet" href="/broski-pages.css">
+<script src="/config.js"></script>
+<script src="/supabase.js" defer></script>
+<script src="/portal-shared.js" defer></script>
+</head>
+<body>
+<div class="bk-wrap">
+  <header class="bk-head">
+    <a class="bk-logo" href="/">broski</a>
+    <nav class="bk-nav" aria-label="Main">
+      <a href="/offers/">Bro Perks</a>
+      <a href="/points/">My Points</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <span class="bk-eyebrow">Free Taste Drop · West Delhi</span>
+    <h1>Claim your free 50 g sample</h1>
+    <p class="bk-lead">Freshly baked crunchy bone biscuits for your best bro. One free 50 g sample pouch per phone number.</p>
+
+    <!-- Claim Form Card -->
+    <div class="bk-card" id="claimCard">
+      <form id="sampleForm" novalidate>
+        <div class="bk-form-group">
+          <label class="bk-label" for="custName">Your Name</label>
+          <input class="bk-input" type="text" id="custName" name="name" placeholder="e.g. Lakshay" autocomplete="name" required minlength="2">
+        </div>
+
+        <div class="bk-form-group">
+          <label class="bk-label" for="custPhone">WhatsApp Number</label>
+          <div class="bk-phone-wrap">
+            <span class="bk-phone-prefix">+91</span>
+            <input class="bk-input" type="tel" id="custPhone" name="phone" placeholder="9821563468" inputmode="numeric" maxlength="14" autocomplete="tel" required>
+          </div>
+          <span class="bk-small" style="display:block; margin-top:4px;">10-digit mobile number for claim verification.</span>
+        </div>
+
+        <div class="bk-form-group">
+          <label class="bk-label" for="custPincode">Delhi Pincode (6 Digits)</label>
+          <input class="bk-input" type="text" id="custPincode" name="pincode" placeholder="110041" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required>
+        </div>
+
+        <div class="bk-form-group">
+          <label class="bk-label">Select Your Flavour</label>
+          <div class="bk-radio-group">
+            <label class="bk-radio-chip">
+              <input type="radio" name="flavour" value="bites" checked>
+              <span>Bro Bites (Yellow)</span>
+            </label>
+            <label class="bk-radio-chip">
+              <input type="radio" name="flavour" value="mix">
+              <span>Bro Mix (White)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="bk-form-group">
+          <label class="bk-check-label">
+            <input class="bk-checkbox" type="checkbox" id="custConsent" required>
+            <span>I agree that BROSKI saves my name, phone and pincode to give me one free sample and track my points. I can ask for deletion at <a href="mailto:support@broskipetfood.com">support@broskipetfood.com</a>.</span>
+          </label>
+        </div>
+
+        <div id="formAlert" class="bk-alert bk-alert--error" style="display:none;" role="alert"></div>
+
+        <button type="submit" id="submitBtn" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%;">
+          Get My Free Sample Code
+        </button>
+      </form>
+    </div>
+
+    <!-- Success View -->
+    <div class="bk-card" id="successCard" style="display:none;">
+      <span class="bk-badge bk-badge--handed">🎉 Sample Code Generated</span>
+      <h2 style="margin-top:14px;">Your Free 50 g Sample is Reserved</h2>
+      <p>Show this code when collecting your sample pouch at a partner pet shop or with your home delivery order.</p>
+
+      <div class="bk-code-card">
+        <span class="bk-small" style="letter-spacing:0.08em; text-transform:uppercase;">Official Claim Code</span>
+        <div class="bk-code-display" id="displayClaimCode">------</div>
+        <p class="bk-small" style="margin:0;">One free sample per number.</p>
+      </div>
+
+      <a id="waConfirmBtn" href="#" class="bk-btn bk-btn--wa bk-btn--big" target="_blank" rel="noopener noreferrer">
+        Send on WhatsApp to confirm
+      </a>
+      <p class="bk-small" style="text-align:center; margin-top:12px; color:var(--brown-2);">
+        Show this code when you collect your sample. One free sample per number.
+      </p>
+
+      <div style="margin-top:24px; text-align:center;">
+        <a href="/points/" class="bk-btn bk-btn--ghost">Track My Points & Orders →</a>
+      </div>
+    </div>
+
+    <!-- Already Claimed View -->
+    <div class="bk-card" id="alreadyClaimedCard" style="display:none;">
+      <span class="bk-badge bk-badge--pending">Notice</span>
+      <h2 style="margin-top:14px;">Sample Already Claimed</h2>
+      <p class="bk-lead">A free 50 g sample has already been claimed for this phone number.</p>
+      <div class="bk-alert bk-alert--info">
+        <strong>Current Claim Status:</strong> <span id="existingStatusText">Pending</span>
+      </div>
+      <p>You can check your loyalty points, orders, and active rewards on the customer portal.</p>
+      <a href="/points/" class="bk-btn bk-btn--primary" style="margin-top:16px;">
+        View My Points & Rewards →
+      </a>
+    </div>
+  </main>
+
+  <footer class="bk-foot">
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="/offers/">Bro Perks</a>
+      <a href="/sample/">Free Sample</a>
+      <a href="/points/">My Points</a>
+      <a href="/r/">Feedback</a>
+      <a href="/privacy/">Privacy</a>
+    </nav>
+    <p class="bk-small">
+      BROSKI · Nangloi, West Delhi – 110041 · <a id="footContactLink" href="#">Contact WhatsApp</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('sampleForm');
+  const alertEl = document.getElementById('formAlert');
+  const submitBtn = document.getElementById('submitBtn');
+  const claimCard = document.getElementById('claimCard');
+  const successCard = document.getElementById('successCard');
+  const alreadyClaimedCard = document.getElementById('alreadyClaimedCard');
+  const footContactLink = document.getElementById('footContactLink');
+
+  // Sync contact link in footer
+  if (footContactLink && window.BroskiPortal) {
+    const act = window.BroskiPortal.getContactAction('Hi BROSKI! I have a question about the free sample.');
+    footContactLink.href = act.url;
+    footContactLink.textContent = act.type === 'whatsapp' ? 'WhatsApp' : 'support@broskipetfood.com';
+    if (act.type === 'whatsapp') footContactLink.target = '_blank';
+  }
+
+  // Fire GA4 start event on first interaction
+  let started = false;
+  function onFirstStart() {
+    if (!started && window.BroskiPortal) {
+      started = true;
+      window.BroskiPortal.trackGA('sample_claim_start');
+    }
+  }
+  form.addEventListener('focusin', onFirstStart, { once: true });
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    alertEl.style.display = 'none';
+    alertEl.textContent = '';
+
+    const name = document.getElementById('custName').value.trim();
+    const rawPhone = document.getElementById('custPhone').value.trim();
+    const pincode = document.getElementById('custPincode').value.trim();
+    const flavour = document.querySelector('input[name="flavour"]:checked')?.value || 'bites';
+    const consent = document.getElementById('custConsent').checked;
+
+    if (!name || name.length < 2) {
+      showAlert('Please enter your name.');
+      return;
+    }
+
+    const cleanPhone = window.BroskiPortal ? window.BroskiPortal.normalizePhone(rawPhone) : ('+91' + rawPhone.replace(/\D/g, '').slice(-10));
+    if (!cleanPhone || !/^\+91[6-9][0-9]{9}$/.test(cleanPhone)) {
+      showAlert('Please enter a valid 10-digit Indian mobile number (e.g. 9821563468).');
+      return;
+    }
+
+    if (!/^[0-9]{6}$/.test(pincode)) {
+      showAlert('Please enter a valid 6-digit Delhi pincode (e.g. 110041).');
+      return;
+    }
+
+    if (!consent) {
+      showAlert('Please check the consent box to receive your free sample and track your points.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Generating Claim Code...';
+
+    const deviceId = window.BroskiPortal ? window.BroskiPortal.getDeviceId() : 'browser-dev';
+    const source = window.BroskiPortal ? window.BroskiPortal.getSource() : 'direct';
+
+    try {
+      const supabase = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
+      if (!supabase) throw new Error('Portal client initialisation error.');
+
+      const { data, error } = await supabase.rpc('claim_sample', {
+        p_phone: cleanPhone,
+        p_name: name,
+        p_pincode: pincode,
+        p_flavour: flavour,
+        p_consent: true,
+        p_device: deviceId,
+        p_source: source
+      });
+
+      if (error) throw error;
+
+      if (data && data.status === 'ok') {
+        // Successful claim
+        if (window.BroskiPortal) {
+          window.BroskiPortal.trackGA('sample_claim_success', { flavour: flavour });
+        }
+        document.getElementById('displayClaimCode').textContent = data.claim_code;
+
+        // Configure WhatsApp button
+        const confirmMsg = `BROSKI sample code ${data.claim_code}`;
+        const act = window.BroskiPortal ? window.BroskiPortal.getContactAction(confirmMsg, `BROSKI Sample Code ${data.claim_code}`) : null;
+        const confirmBtn = document.getElementById('waConfirmBtn');
+        if (confirmBtn && act) {
+          confirmBtn.href = act.url;
+          confirmBtn.textContent = act.type === 'whatsapp' ? 'Send on WhatsApp to confirm' : 'Send via Email to confirm';
+        }
+
+        claimCard.style.display = 'none';
+        successCard.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (data && data.status === 'already_claimed') {
+        // Already claimed
+        if (window.BroskiPortal) {
+          window.BroskiPortal.trackGA('sample_claim_duplicate');
+        }
+        const statusMap = {
+          'pending': 'Pending Collection / Verification',
+          'verified': 'Verified (Ready for Pickup / Dispatch)',
+          'handed': 'Handed Over / Delivered',
+          'rejected': 'Not Approved'
+        };
+        document.getElementById('existingStatusText').textContent = statusMap[data.claim_status] || data.claim_status || 'Active';
+        claimCard.style.display = 'none';
+        alreadyClaimedCard.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (data && data.status === 'bad_phone') {
+        showAlert('The phone number entered is invalid. Please check and try again.');
+      } else if (data && data.status === 'no_consent') {
+        showAlert('Consent is required to claim your sample.');
+      } else {
+        showAlert('Unable to process claim right now. Please try again or message us on WhatsApp.');
+      }
+    } catch (err) {
+      console.error('[SampleClaim] Error:', err);
+      // Helpful fallback if Supabase project is not yet active or keys are placeholder
+      const cfg = window.BROSKI_CONFIG || {};
+      if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.includes('xyzcompany')) {
+        showAlert('Notice: Portal database connection is undergoing launch configuration. Please message us on WhatsApp to claim your sample directly!');
+      } else {
+        showAlert('Unable to submit claim at this moment. Please check your connection or contact support.');
+      }
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Get My Free Sample Code';
+    }
+  });
+
+  function showAlert(msg) {
+    alertEl.textContent = msg;
+    alertEl.style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>
