@@ -2063,12 +2063,6 @@ function renderInvoice() {
             <td style="color:var(--text-muted);">Subtotal (Total Value):</td>
             <td style="text-align:right; font-family:var(--font-mono);">₹${grossTotal.toFixed(2)}</td>
           </tr>
-          ${discount > 0 ? `
-            <tr>
-              <td style="color:var(--accent); font-weight:600;">Trade Discount:</td>
-              <td style="text-align:right; font-family:var(--font-mono); color:var(--accent);">-₹${discount.toFixed(2)}</td>
-            </tr>
-          ` : ''}
           <tr class="grand-row">
             <td>${isChallan ? 'Total Declared Value (₹):' : 'Grand Total (₹):'}</td>
             <td style="text-align:right; font-family:var(--font-mono);">₹${grandTotal.toFixed(2)}</td>
