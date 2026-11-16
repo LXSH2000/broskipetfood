@@ -46,8 +46,8 @@ window.BROSKI_CONFIG = {
       size: '2 × 400 g',
       price: 299,
       save: 29,
-      img: null,
-      alt: 'BROSKI Bro Combo 2 pack',
+      img: '/broski-combo-duo.webp',
+      alt: 'BROSKI Bro Combo 2 pack (Classic Crunch + Happy Mix)',
       button: 'Order the Combo',
       msg: 'Hi BROSKI! I want the Bro Combo (₹299)'
     }
