@@ -58,15 +58,16 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
       return;
     }
 
-    const cleanPhoneDigits = phone.replace(/\D/g, '').slice(-10);
-    if (cleanPhoneDigits.length !== 10) {
-      setErrorMsg('Please enter a valid 10-digit mobile number.');
+    const cleanPhoneDigits = phone.replace(/\D/g, '');
+    if (cleanPhoneDigits.length !== 10 || !/^[6-9][0-9]{9}$/.test(cleanPhoneDigits)) {
+      setErrorMsg('Please enter a valid 10-digit mobile number (e.g. 85XXXXXXXX).');
       return;
     }
     const cleanPhone = `+91${cleanPhoneDigits}`;
 
-    if (!/^[0-9]{6}$/.test(pincode.trim())) {
-      setErrorMsg('Please enter a valid 6-digit Delhi pincode.');
+    const cleanPinDigits = pincode.replace(/\D/g, '');
+    if (cleanPinDigits.length !== 6 || !/^[1-9][0-9]{5}$/.test(cleanPinDigits)) {
+      setErrorMsg('Please enter a valid 6-digit Delhi pincode (e.g. 110041).');
       return;
     }
 
@@ -252,7 +253,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                   <input
                     id="ord-name"
                     type="text"
-                    placeholder="e.g. Lakshay"
+                    placeholder="e.g. Rahul / Priya"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     required
@@ -260,17 +261,17 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                 </div>
 
                 <div className="bk-field">
-                  <label htmlFor="ord-phone">WhatsApp Number</label>
+                  <label htmlFor="ord-phone">WhatsApp Number (10 Digits)</label>
                   <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1.5px solid var(--border)', borderRadius: '12px' }}>
                     <span style={{ padding: '0 10px', fontWeight: '700', color: '#555', fontSize: '14px' }}>+91</span>
                     <input
                       id="ord-phone"
                       type="tel"
-                      placeholder="9821563468"
+                      placeholder="85XXXXXXXX"
                       inputMode="numeric"
-                      maxLength={14}
+                      maxLength={10}
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                       style={{ border: 0, paddingLeft: 0, width: '100%' }}
                       required
                     />

@@ -57,21 +57,22 @@
       <form id="sampleForm" novalidate>
         <div class="bk-form-group">
           <label class="bk-label" for="custName">Your Name</label>
-          <input class="bk-input" type="text" id="custName" name="name" placeholder="e.g. Lakshay" autocomplete="name" required minlength="2">
+          <input class="bk-input" type="text" id="custName" name="name" placeholder="e.g. Rahul / Priya" autocomplete="name" required minlength="2">
         </div>
 
         <div class="bk-form-group">
           <label class="bk-label" for="custPhone">WhatsApp Number</label>
           <div class="bk-phone-wrap">
             <span class="bk-phone-prefix">+91</span>
-            <input class="bk-input" type="tel" id="custPhone" name="phone" placeholder="9821563468" inputmode="numeric" maxlength="14" autocomplete="tel" required>
+            <input class="bk-input" type="tel" id="custPhone" name="phone" placeholder="85XXXXXXXX" inputmode="numeric" maxlength="10" autocomplete="tel" required>
           </div>
-          <span class="bk-small" style="display:block; margin-top:4px;">10-digit mobile number for claim verification.</span>
+          <span class="bk-small" style="display:block; margin-top:4px;">Enter exactly 10 digits (e.g. 85XXXXXXXX).</span>
         </div>
 
         <div class="bk-form-group">
           <label class="bk-label" for="custPincode">Delhi Pincode (6 Digits)</label>
           <input class="bk-input" type="text" id="custPincode" name="pincode" placeholder="110041" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required>
+          <span class="bk-small" style="display:block; margin-top:4px;">Enter your 6-digit Delhi pincode.</span>
         </div>
 
         <div class="bk-form-group">
@@ -196,6 +197,20 @@ window.addEventListener('DOMContentLoaded', function () {
   }
   form.addEventListener('focusin', onFirstStart, { once: true });
 
+  // Restrict phone to digits only (max 10) & pincode to digits only (max 6)
+  const phoneEl = document.getElementById('custPhone');
+  if (phoneEl) {
+    phoneEl.addEventListener('input', function() {
+      this.value = this.value.replace(/\D/g, '').slice(0, 10);
+    });
+  }
+  const pinEl = document.getElementById('custPincode');
+  if (pinEl) {
+    pinEl.addEventListener('input', function() {
+      this.value = this.value.replace(/\D/g, '').slice(0, 6);
+    });
+  }
+
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
     alertEl.style.display = 'none';
@@ -203,7 +218,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     const name = document.getElementById('custName').value.trim();
     const rawPhone = document.getElementById('custPhone').value.trim();
-    const pincode = document.getElementById('custPincode').value.trim();
+    const rawPin = document.getElementById('custPincode').value.trim();
     const flavour = document.querySelector('input[name="flavour"]:checked')?.value || 'bites';
     const consent = document.getElementById('custConsent').checked;
 
@@ -212,16 +227,19 @@ window.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    const cleanPhone = window.BroskiPortal ? window.BroskiPortal.normalizePhone(rawPhone) : ('+91' + rawPhone.replace(/\D/g, '').slice(-10));
-    if (!cleanPhone || !/^\+91[6-9][0-9]{9}$/.test(cleanPhone)) {
-      showAlert('Please enter a valid 10-digit Indian mobile number (e.g. 9821563468).');
+    const phoneDigits = rawPhone.replace(/\D/g, '');
+    if (phoneDigits.length !== 10 || !/^[6-9][0-9]{9}$/.test(phoneDigits)) {
+      showAlert('Please enter a valid 10-digit Indian mobile number (e.g. 85XXXXXXXX).');
       return;
     }
+    const cleanPhone = '+91' + phoneDigits;
 
-    if (!/^[0-9]{6}$/.test(pincode)) {
+    const pinDigits = rawPin.replace(/\D/g, '');
+    if (pinDigits.length !== 6 || !/^[1-9][0-9]{5}$/.test(pinDigits)) {
       showAlert('Please enter a valid 6-digit Delhi pincode (e.g. 110041).');
       return;
     }
+    const pincode = pinDigits;
 
     if (!consent) {
       showAlert('Please check the consent box to receive your free sample and track your points.');

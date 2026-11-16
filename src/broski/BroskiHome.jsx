@@ -88,7 +88,7 @@ export function PincodeChecker() {
           inputMode="numeric"
           autoComplete="postal-code"
           maxLength={6}
-          placeholder="Enter pincode"
+          placeholder="e.g. 110041"
           value={pin}
           onChange={(e) => {
             setPin(e.target.value.replace(/\D/g, '').slice(0, 6));
