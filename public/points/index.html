@@ -63,9 +63,9 @@
         </div>
 
         <div class="bk-form-group">
-          <label class="bk-label" for="codeInput">Customer Code (6 Characters)</label>
-          <input class="bk-input" type="text" id="codeInput" placeholder="e.g. A1B2C3" maxlength="6" style="text-transform:uppercase; font-family:'JetBrains Mono', monospace; letter-spacing:0.1em; font-weight:700;" required>
-          <span class="bk-small" style="display:block; margin-top:4px;">Printed on your WhatsApp confirmation or sample card.</span>
+          <label class="bk-label" for="codeInput">Customer Code <span style="font-weight:400; color:var(--brown-2);">(Optional)</span></label>
+          <input class="bk-input" type="text" id="codeInput" placeholder="e.g. A1B2C3" maxlength="6" style="text-transform:uppercase; font-family:'JetBrains Mono', monospace; letter-spacing:0.1em; font-weight:700;">
+          <span class="bk-small" style="display:block; margin-top:4px;">Leave blank to look up by WhatsApp number directly, or enter if you have it.</span>
         </div>
 
         <div id="lookupAlert" class="bk-alert bk-alert--error" style="display:none;" role="alert"></div>
@@ -192,13 +192,8 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     const cleanPhone = `+91${phoneDigits}`;
 
-    if (!code || code.length < 4) {
-      showAlert('Please enter your customer code.');
-      return;
-    }
-
     checkBtn.disabled = true;
-    checkBtn.textContent = 'Verifying Code...';
+    checkBtn.textContent = 'Verifying Account...';
 
     try {
       const supabase = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
@@ -206,7 +201,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
       const { data, error } = await supabase.rpc('get_my_summary', {
         p_phone: cleanPhone,
-        p_code: code
+        p_code: code || null
       });
 
       if (error) throw error;

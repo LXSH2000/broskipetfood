@@ -97,6 +97,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
       if (error) throw error;
 
       const orderId = (data && data.order_id) || 'DIRECT';
+      const customerCode = (data && data.customer_code) || '';
 
       // Safe GA4 event: STRICTLY NO PHONE, NO NAME, NO CODE
       try {
@@ -134,6 +135,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
 
       setOrderConfirmed({
         id: orderId,
+        customerCode,
         itemsText: summary,
         total,
         contactUrl,
@@ -349,9 +351,17 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
           <div className="bk-gateway-confirmed" style={{ textAlign: 'center', padding: '24px 16px' }}>
             <div className="bk-conf-paw" style={{ fontSize: '40px', marginBottom: '8px' }}>🐾</div>
             <h3 style={{ fontSize: '22px', margin: '0 0 6px' }}>Order Request Saved!</h3>
-            <p className="bk-conf-id" style={{ fontSize: '15px' }}>
+            <p className="bk-conf-id" style={{ fontSize: '15px', margin: '4px 0' }}>
               Order Reference: <strong>#{orderConfirmed.id}</strong>
             </p>
+            {orderConfirmed.customerCode && (
+              <p style={{ fontSize: '13.5px', color: '#974324', margin: '4px 0' }}>
+                Your Customer Code: <strong style={{ fontFamily: 'monospace', letterSpacing: '1px', background: '#fdf3ed', padding: '2px 6px', borderRadius: '4px' }}>{orderConfirmed.customerCode}</strong>
+                <span style={{ display: 'block', fontSize: '11px', color: '#776754', marginTop: '2px' }}>
+                  Use this to check your points anytime on <a href="/points/" style={{ color: 'inherit', textDecoration: 'underline' }}>broskipetfood.com/points</a>
+                </span>
+              </p>
+            )}
             <p style={{ fontSize: '13.5px', color: '#666', margin: '8px 0 16px' }}>
               We saved your request. Click below to send your details directly on WhatsApp to confirm delivery!
             </p>

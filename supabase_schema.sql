@@ -135,9 +135,14 @@ create or replace function public.submit_feedback(p_flavour text, p_batch text, 
 returns json language plpgsql security definer set search_path = public as $$
 declare v_cust_id uuid;
 begin
-  if p_phone is not null and p_code is not null then
-    select id into v_cust_id from public.customers
-    where phone = public.norm_phone(p_phone) and customer_code = upper(trim(p_code));
+  if p_phone is not null and trim(p_phone) <> '' then
+    if p_code is not null and trim(p_code) <> '' then
+      select id into v_cust_id from public.customers
+      where phone = public.norm_phone(p_phone) and customer_code = upper(trim(p_code));
+    else
+      select id into v_cust_id from public.customers
+      where phone = public.norm_phone(p_phone);
+    end if;
   end if;
   insert into public.feedback(customer_id, flavour, batch_no, rating, comments, quote_ok)
   values (v_cust_id, p_flavour, left(p_batch,30), p_rating, left(p_comments,1000), coalesce(p_quote_ok,false));
@@ -157,19 +162,25 @@ begin
     values (v_phone, left(trim(p_name),60), p_pincode, public.new_code(), now()) returning * into v_cust;
   end if;
   insert into public.orders(customer_id, items, total) values (v_cust.id, p_items, p_total) returning * into v_order;
-  return json_build_object('status','ok','order_id', left(v_order.id::text,8));
+  return json_build_object('status','ok','order_id', left(v_order.id::text,8), 'customer_code', v_cust.customer_code);
 end $$;
 
-create or replace function public.get_my_summary(p_phone text, p_code text)
+create or replace function public.get_my_summary(p_phone text, p_code text default null)
 returns json language plpgsql security definer set search_path = public as $$
 declare v_cust public.customers;
 begin
-  select * into v_cust from public.customers
-  where phone = public.norm_phone(p_phone) and customer_code = upper(trim(p_code));
+  if p_code is not null and trim(p_code) <> '' then
+    select * into v_cust from public.customers
+    where phone = public.norm_phone(p_phone) and customer_code = upper(trim(p_code));
+  else
+    select * into v_cust from public.customers
+    where phone = public.norm_phone(p_phone);
+  end if;
   if not found then return json_build_object('status','not_found'); end if;
   return json_build_object(
     'status','ok',
     'name', v_cust.name,
+    'customer_code', v_cust.customer_code,
     'points', coalesce((select sum(delta) from public.points_ledger where customer_id = v_cust.id),0),
     'sample', (select status from public.sample_claims where customer_id = v_cust.id),
     'orders', coalesce((select json_agg(json_build_object('date',created_at,'items',items,'total',total,'status',status) order by created_at desc)
