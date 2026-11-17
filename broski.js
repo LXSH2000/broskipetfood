@@ -1,14 +1,16 @@
-/* BROSKI helpers for the static pages (/offers/, /r/, /privacy/). No dependencies, ~2 KB.
+/* BROSKI helpers for the static pages (/offers/, /r/, /privacy/, /terms/, etc.). No dependencies, ~2 KB.
    Markup hooks:
      <a data-wa="combo">          -> WhatsApp link with BROSKI_CONFIG.MSG.combo
      <a data-wa-text="Hi ...">    -> WhatsApp link with that exact text
-     <a data-tally>               -> TALLY_FORM_URL (same tab)
+     <span data-gstin>            -> " · GSTIN: <GSTIN>" if present, else empty
      <a data-email> / <span data-email-text> -> email link / text            */
 (function () {
   var C = window.BROSKI_CONFIG || {};
 
   function wa(text) {
-    return 'https://wa.me/' + C.WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text || '');
+    var num = C.WHATSAPP_NUMBER || '';
+    if (!num) return 'mailto:' + (C.EMAIL || 'support@broskipetfood.com');
+    return 'https://wa.me/' + num + '?text=' + encodeURIComponent(text || '');
   }
   window.broskiWa = wa;
 
@@ -21,9 +23,17 @@
       a.target = '_blank';
       a.rel = 'noopener';
     });
-    root.querySelectorAll('[data-tally]').forEach(function (a) { a.href = C.TALLY_FORM_URL; });
     root.querySelectorAll('[data-email]').forEach(function (a) { a.href = 'mailto:' + C.EMAIL; if (!a.textContent.trim()) a.textContent = C.EMAIL; });
     root.querySelectorAll('[data-email-text]').forEach(function (s) { s.textContent = C.EMAIL; });
+    root.querySelectorAll('[data-gstin]').forEach(function (s) {
+      if (C.GSTIN && C.GSTIN.trim()) {
+        s.textContent = ' · GSTIN: ' + C.GSTIN.trim();
+        s.style.display = '';
+      } else {
+        s.textContent = '';
+        s.style.display = 'none';
+      }
+    });
   }
 
   function banner() {
