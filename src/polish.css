@@ -12,6 +12,12 @@
   width: auto !important;
 }
 
+/* Authentic BROSKI signature typography */
+.hero-v2 .hero-title,
+.footer-word {
+  font-family: 'Gaegu', cursive, sans-serif !important;
+}
+
 /* 1a. Mobile: footer links were floating over the logo (a generic `nav` rule made them absolute) */
 .bk-h-foot nav { position: static !important; display: flex !important; width: auto !important;
   background: none !important; padding: 0 !important; border: 0 !important; }
