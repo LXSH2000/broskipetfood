@@ -270,6 +270,11 @@ export default function LiquidButton({
   const btnRef = useRef(null);
 
   useEffect(() => {
+    // Skip WebGL canvas rendering on mobile or with reduced-motion; pure CSS button handles it at 60fps
+    if (window.innerWidth <= 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     const stage = stageRef.current;
     const cv = canvasRef.current;
     const btn = btnRef.current;

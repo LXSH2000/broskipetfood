@@ -14,15 +14,16 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BROSKI · Bro Voice & Review Portal | Free 50g Sample Reward</title>
-<meta name="description" content="Share your dog's honest review via voice or text. Get a free 50g sample pouch of crunchy Broski biscuits on your next order.">
+<title>BROSKI · How was the crunch? | Feedback</title>
+<meta name="description" content="Tell us honestly how your dog liked Broski biscuits. Takes a minute.">
+<link rel="canonical" href="https://broskipetfood.com/r/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <script src="/config.js"></script>
 <script src="/supabase.js" defer></script>
 <script src="/portal-shared.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@400;600&family=Gaegu:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --primary: #352016;
@@ -36,13 +37,9 @@
   --text: #221c18;
   --text-muted: #6f6259;
   --green: #15803d;
-  --green-bg: #dcfce7;
-  --amber: #b45309;
-  --amber-bg: #fef3c7;
   --font-main: 'DM Sans', -apple-system, sans-serif;
   --font-display: 'Outfit', -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-hand: 'Gaegu', cursive;
   --spring-snappy: cubic-bezier(0.16, 1, 0.3, 1);
   --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -87,6 +84,9 @@ body {
   font-weight: 700;
   color: var(--primary);
   text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* Main Feedback Card */
@@ -151,6 +151,7 @@ body {
 .reward-text strong {
   color: var(--accent);
   font-weight: 800;
+  font-size: 14px;
 }
 
 .reward-text p {
@@ -213,126 +214,14 @@ body {
   font-family: var(--font-mono);
 }
 
-/* Mode Switcher Tabs */
-.mode-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: var(--cream-dark);
-  padding: 4px;
-  border-radius: 14px;
-  gap: 6px;
-  margin-bottom: 22px;
-}
-
-.mode-tab-btn {
-  background: transparent;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.mode-tab-btn.active {
-  background: var(--surface);
-  color: var(--primary);
-  box-shadow: 0 2px 10px rgba(53, 32, 22, 0.08);
-}
-
-/* Voice Recording Box */
-.voice-box {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  text-align: center;
-  margin-bottom: 22px;
-  background: #faf6f0;
-}
-
-.record-mic-btn {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  box-shadow: 0 8px 24px rgba(53, 32, 22, 0.2);
-  transition: transform 0.25s var(--spring-bounce), background-color 0.25s var(--spring-bounce);
-}
-
-.record-mic-btn:hover {
-  transform: scale(1.08);
-  background: var(--accent);
-}
-
-.record-mic-btn.recording {
-  background: #dc2626;
-  animation: pulse-mic 1.2s infinite ease-in-out;
-}
-
-@keyframes pulse-mic {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
-  50% { transform: scale(1.1); box-shadow: 0 0 0 16px rgba(220, 38, 38, 0); }
-}
-
-.waveform-anim {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  height: 24px;
-  margin: 10px 0;
-}
-
-.wave-bar {
-  width: 4px;
-  height: 6px;
-  background: var(--accent);
-  border-radius: 2px;
-  transition: height 0.15s ease;
-}
-
-.recording .wave-bar {
-  animation: wave-bounce 0.8s infinite ease-in-out alternate;
-}
-.recording .wave-bar:nth-child(2) { animation-delay: 0.15s; }
-.recording .wave-bar:nth-child(3) { animation-delay: 0.3s; }
-.recording .wave-bar:nth-child(4) { animation-delay: 0.45s; }
-.recording .wave-bar:nth-child(5) { animation-delay: 0.2s; }
-
-@keyframes wave-bounce {
-  0% { height: 6px; }
-  100% { height: 24px; }
-}
-
-/* Audio Player Preview */
-.audio-preview-player {
-  margin-top: 14px;
-  width: 100%;
-  display: none;
-}
-
 /* Form Inputs */
 .field-row {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .field-label {
   display: block;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--primary);
   margin-bottom: 6px;
@@ -385,17 +274,23 @@ body {
   justify-content: center;
   gap: 8px;
   box-shadow: 0 10px 24px rgba(53, 32, 22, 0.2);
-  transition: background-color 0.25s var(--spring-snappy), transform 0.25s var(--spring-snappy), box-shadow 0.25s var(--spring-snappy);
+  transition: background-color 0.25s var(--spring-snappy), transform 0.25s var(--spring-snappy), opacity 0.2s ease;
 }
 
-.submit-review-btn:hover {
+.submit-review-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.submit-review-btn:not(:disabled):hover {
   background: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(184, 69, 43, 0.3);
 }
 
-/* Reward Success Screen */
-.success-screen {
+/* Success & Fallback Screens */
+.state-screen {
   display: none;
   text-align: center;
   padding: 20px 0;
@@ -415,13 +310,11 @@ body {
   margin: 20px 0;
   border: 1px solid rgba(255, 248, 237, 0.2);
   box-shadow: 0 16px 40px rgba(0,0,0,0.3);
-  position: relative;
-  overflow: hidden;
 }
 
 .voucher-title {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
   color: #d4a373;
 }
@@ -455,38 +348,29 @@ body {
   font-weight: 800;
   margin-top: 10px;
   box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+  min-height: 44px;
 }
 
-/* Back Sticker QR Inspector Section */
-.qr-preview-section {
-  margin-top: 36px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 20px;
+.error-fallback-box {
+  background: #fdf2f2;
+  border: 1.5px solid #f8b4b4;
+  border-radius: 16px;
+  padding: 22px;
+  margin-top: 16px;
   text-align: center;
 }
 
-.qr-preview-section h4 {
+.error-fallback-box h3 {
   font-family: var(--font-display);
+  font-size: 18px;
+  color: #9b1c1c;
+  margin-bottom: 8px;
+}
+
+.error-fallback-box p {
   font-size: 14px;
-  color: var(--primary);
-  margin-bottom: 6px;
-}
-
-.qr-holder {
-  display: inline-block;
-  background: #fff;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin: 10px 0;
-}
-
-.qr-holder img {
-  width: 140px;
-  height: 140px;
-  display: block;
+  color: #771d1d;
+  margin-bottom: 16px;
 }
 
 @media (max-width: 500px) {
@@ -500,8 +384,8 @@ body {
 <div class="portal-wrap">
 
   <header class="portal-head">
-    <a href="/" class="portal-logo">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <a href="/" class="portal-logo" aria-label="Broski Home">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <ellipse cx="12" cy="16" rx="5" ry="4"/>
         <ellipse cx="5" cy="10" rx="2" ry="3" transform="rotate(-25 5 10)"/>
         <ellipse cx="10" cy="6" rx="2" ry="3"/>
@@ -514,98 +398,68 @@ body {
   </header>
 
   <main class="feedback-card">
-    <span class="card-badge">✨ Bro Feedback Loop</span>
+    <span class="card-badge">✨ Honest Feedback</span>
     <h1 class="card-title">How was the crunch?</h1>
-    <p class="card-lead">Tell us honestly what your best bro thought of Broski biscuits. Good or bad—it shapes our next bake.</p>
+    <p class="card-lead">Tell us honestly how your dog liked Broski biscuits. Takes a minute.</p>
 
-    <!-- Reward Callout -->
-    <div class="reward-banner">
+    <!-- Reward Callout (shown if feedback-taste-pack enabled) -->
+    <div class="reward-banner" id="rewardBanner">
       <div class="reward-icon">🎁</div>
       <div class="reward-text">
-        <strong>Instant Reward: FREE 50 g Sample Pouch</strong>
-        <p>Complete this 60-second review and instantly unlock a free 50g trial pack with your next order.</p>
+        <strong>Free 50 g taste pack with your next order</strong>
+        <p>Free 50 g taste pack with your next order for any honest feedback – good or bad. One per WhatsApp number per month.</p>
       </div>
     </div>
 
     <!-- Active Form View -->
     <div id="formSection">
-      <!-- 5-Paw Interactive Rating -->
+      <!-- 5-Paw Interactive Rating (starts empty) -->
       <div class="rating-section">
-        <label class="rating-label">Rate Your Dog's Excitement</label>
+        <label class="rating-label">Rate Your Dog's Excitement (Pick 1 to 5 paws)</label>
         <div class="paws-row" id="pawsRow">
-          <button type="button" class="paw-btn" data-val="1" onclick="setRating(1)">
+          <button type="button" class="paw-btn" data-val="1" onclick="setRating(1)" aria-label="1 paw">
             <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
           </button>
-          <button type="button" class="paw-btn" data-val="2" onclick="setRating(2)">
+          <button type="button" class="paw-btn" data-val="2" onclick="setRating(2)" aria-label="2 paws">
             <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
           </button>
-          <button type="button" class="paw-btn" data-val="3" onclick="setRating(3)">
+          <button type="button" class="paw-btn" data-val="3" onclick="setRating(3)" aria-label="3 paws">
             <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
           </button>
-          <button type="button" class="paw-btn" data-val="4" onclick="setRating(4)">
+          <button type="button" class="paw-btn" data-val="4" onclick="setRating(4)" aria-label="4 paws">
             <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
           </button>
-          <button type="button" class="paw-btn active" data-val="5" onclick="setRating(5)">
+          <button type="button" class="paw-btn" data-val="5" onclick="setRating(5)" aria-label="5 paws">
             <svg viewBox="0 0 24 24"><path d="M12 16c2.5 0 4.5-1.5 4.5-3.5S14.5 9 12 9s-4.5 1.5-4.5 3.5S9.5 16 12 16zm-5-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm10 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-7.5-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm5 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
           </button>
         </div>
-        <div class="rating-caption" id="ratingCaption">5 / 5 — "Loud Crunch, Empty Bowl!" 🐾</div>
+        <div class="rating-caption" id="ratingCaption">Please tap a paw to rate</div>
       </div>
 
-      <!-- Mode Selector -->
-      <div class="mode-tabs">
-        <button type="button" class="mode-tab-btn active" id="tabVoice" onclick="switchMode('voice')">
-          🎙️ Voice Review Mode
-        </button>
-        <button type="button" class="mode-tab-btn" id="tabText" onclick="switchMode('text')">
-          ✍️ Written Review Mode
-        </button>
-      </div>
-
-      <!-- Mode A: Voice Review Box -->
-      <div class="voice-box" id="voiceBox">
-        <button type="button" class="record-mic-btn" id="recordBtn" onclick="toggleRecording()">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
-          </svg>
-        </button>
-        <div style="font-size:13px; font-weight:700; color:var(--primary);" id="voiceStatusText">
-          Tap Mic to Record Your Voice Note
-        </div>
-        <div class="waveform-anim" id="waveformAnim">
-          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-        </div>
-        <div style="font-size:11px; color:var(--text-muted);">
-          Speak about your dog's reaction, crunchiness, or favourite flavour.
-        </div>
-        <audio controls class="audio-preview-player" id="audioPlayer"></audio>
-      </div>
-
-      <!-- Mode B: Written Review Box -->
-      <div class="field-row" id="textBox" style="display:none;">
-        <label class="field-label">Written Feedback</label>
-        <textarea id="writtenReview" class="textarea-box" placeholder="e.g. My Labrador heard the crunch from the other room and rushed over. Loved the bone shape..."></textarea>
-      </div>
-
-      <!-- Flavour Selector -->
+      <!-- Flavour Selector (Pick Pack) -->
       <div class="field-row">
-        <label class="field-label">Which Pack Did Your Bro Taste?</label>
+        <label class="field-label">Which Pack Did Your Bro Taste? *</label>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;">
           <label style="display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; border:1.5px solid var(--border); border-radius:12px; background:#fff; cursor:pointer; font-weight:700; font-size:14px; min-height:48px;">
-            <input type="radio" name="feedbackFlavour" value="bites" checked style="accent-color:var(--accent);">
-            <span>Bro Bites (Yellow)</span>
+            <input type="radio" name="feedbackFlavour" value="bites" onchange="onPackChanged()" style="accent-color:var(--accent);">
+            <span>Bro Bites – Classic Crunch</span>
           </label>
           <label style="display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; border:1.5px solid var(--border); border-radius:12px; background:#fff; cursor:pointer; font-weight:700; font-size:14px; min-height:48px;">
-            <input type="radio" name="feedbackFlavour" value="mix" style="accent-color:var(--accent);">
-            <span>Bro Mix (White)</span>
+            <input type="radio" name="feedbackFlavour" value="mix" onchange="onPackChanged()" style="accent-color:var(--accent);">
+            <span>Bro Mix – Happy Mix</span>
           </label>
         </div>
+      </div>
+
+      <!-- Written Review Box -->
+      <div class="field-row">
+        <label class="field-label" for="writtenReview">Your Review (Optional)</label>
+        <textarea id="writtenReview" class="textarea-box" placeholder="Tell us what your dog loved, how the crunch sounded, or any suggestions..."></textarea>
       </div>
 
       <!-- Batch Number (Optional) -->
       <div class="field-row">
-        <label class="field-label" for="batchNo">Batch Number <span style="font-weight:400; font-size:12px; color:var(--text-muted);">(optional; printed on the back, e.g. B-01)</span></label>
+        <label class="field-label" for="batchNo">Batch Number <span style="font-weight:400; font-size:12px; color:var(--text-muted);">(optional; printed on the back label, e.g. B-01)</span></label>
         <input type="text" id="batchNo" class="input-box" placeholder="e.g. B-01" maxlength="30">
       </div>
 
@@ -617,16 +471,19 @@ body {
         </div>
         <div class="field-row">
           <label class="field-label" for="dogBreed">Breed / Age</label>
-          <input type="text" id="dogBreed" class="input-box" placeholder="e.g. Golden Retriever, 2 yrs">
+          <input type="text" id="dogBreed" class="input-box" placeholder="e.g. Indie, 2 yrs">
         </div>
       </div>
 
       <!-- Quote Consent Checkbox -->
       <div class="field-row">
-        <label style="display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--text); cursor:pointer; min-height:44px; padding:8px 0;">
+        <label style="display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--text); cursor:pointer; min-height:44px; padding:6px 0;">
           <input type="checkbox" id="quoteOk" checked style="width:20px; height:20px; min-width:20px; margin-top:2px; accent-color:var(--accent); cursor:pointer;">
           <span>OK to quote my words (first name only)</span>
         </label>
+        <p style="font-size:12px; color:var(--text-muted); margin-left:30px; margin-top:-2px;">
+          We only quote with your permission. Reviews shared after a free taste pack are marked as such.
+        </p>
       </div>
 
       <!-- Optional Points Linking Details -->
@@ -640,41 +497,42 @@ body {
         <div class="grid-2">
           <div>
             <label class="field-label" for="userPhone">WhatsApp Number (10 Digits)</label>
-            <input type="tel" id="userPhone" class="input-box" placeholder="e.g. 85XXXXXXXX" maxlength="10" inputmode="numeric">
+            <input type="tel" id="userPhone" class="input-box" placeholder="85XXXXXXXX" maxlength="10" inputmode="numeric">
           </div>
           <div>
             <label class="field-label" for="custCode">Customer Code</label>
-            <input type="text" id="custCode" class="input-box" placeholder="e.g. 6-digit code" maxlength="6" style="text-transform:uppercase;">
+            <input type="text" id="custCode" class="input-box" placeholder="6-digit code" maxlength="6" style="text-transform:uppercase;">
           </div>
         </div>
       </div>
 
       <div id="feedbackAlert" style="display:none; padding:12px 14px; border-radius:10px; background:#fdf2f2; border:1px solid #f8b4b4; color:#9b1c1c; font-size:13.5px; margin-top:14px;"></div>
 
-      <button type="button" id="submitFeedbackBtn" class="submit-review-btn" onclick="submitFeedback()" style="margin-top:18px;">
+      <!-- Submit disabled until rating and pack chosen -->
+      <button type="button" id="submitFeedbackBtn" class="submit-review-btn" onclick="submitFeedback()" disabled style="margin-top:18px;">
         <span>Submit Review</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </button>
     </div>
 
     <!-- Success Screen -->
-    <div class="success-screen" id="successSection">
+    <div class="state-screen" id="successSection">
       <div style="font-size:44px; margin-bottom:10px;">🎉</div>
       <h2 style="font-family:var(--font-display); font-size:28px; color:var(--primary); font-weight:800;">
         Thank you – we read every message.
       </h2>
       <p style="color:var(--text-muted); font-size:14px; max-width:440px; margin:8px auto 0;">
-        Your honest feedback shapes our very next bake in Nangloi.
+        Your honest feedback shapes our next batch in Nangloi.
       </p>
 
       <div id="linkedNotice" style="display:none; margin:14px auto 0; max-width:440px; padding:10px 14px; border-radius:10px; background:#dcfce7; border:1px solid #bbf7d0; font-size:13.5px; font-weight:700; color:#15803d;">
         ✓ Your review has been linked to your account for rewards points!
       </div>
 
-      <div class="voucher-card" style="margin-top:20px;">
-        <div class="voucher-title">FREE 50G SAMPLE REWARD</div>
+      <div class="voucher-card" id="rewardVoucherCard" style="margin-top:20px;">
+        <div class="voucher-title">FREE 50G TASTE PACK REWARD</div>
         <div class="voucher-code" id="voucherCodeDisplay">BRO50-REVIEW</div>
         <p style="font-size:12px; color:#aaa;">Valid on your next order across West Delhi.</p>
       </div>
@@ -686,32 +544,36 @@ body {
         <a href="/points/" style="font-size:14px; font-weight:700; color:var(--accent); text-decoration:none;">Check My Points Balance →</a>
       </div>
     </div>
+
+    <!-- Error Fallback Screen (shown on offline or RPC failure) -->
+    <div class="state-screen" id="errorFallbackSection">
+      <div class="error-fallback-box">
+        <h3>Couldn't save – please send your feedback on WhatsApp</h3>
+        <p id="errorFallbackReason">We couldn't connect to our database right now. Please tap below to send your honest review directly to our WhatsApp team:</p>
+        <a href="#" class="claim-wa-btn" id="errorWaFallbackBtn" target="_blank" rel="noopener">
+          Send Feedback on WhatsApp →
+        </a>
+      </div>
+    </div>
   </main>
 
-  <!-- Back Sticker QR Preview Generator -->
-  <section class="qr-preview-section">
-    <h4>Packaging Back Sticker QR Target</h4>
-    <p style="font-size:12px; color:var(--text-muted);">This QR code links directly to this page (<code>broskipetfood.com/r/</code>) for printing on our A6 compliance label.</p>
-    <div class="qr-holder">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fbroskipetfood.com%2Fr%2F" alt="Scan to Review Broski">
-    </div>
-    <div style="font-size:11px; font-weight:700; color:var(--accent);">
-      "Scan to review your Bro's crunch & claim a FREE 50g sample"
-    </div>
-  </section>
-
-  <footer style="margin-top:32px; padding:20px 0; border-top:1px solid var(--border); font-size:13.5px; color:var(--text-muted); text-align:center;">
-    <p>BROSKI · Nangloi, West Delhi – 110041 · <a href="/" style="color:var(--primary); font-weight:700;">Home</a> · <a href="/sample/" style="color:var(--primary); font-weight:700;">Free Sample</a> · <a href="/points/" style="color:var(--primary); font-weight:700;">My Points</a> · <a href="/privacy/" style="color:var(--primary); font-weight:700;">Privacy</a></p>
+  <footer style="margin-top:32px; padding:20px 0; border-top:1px solid var(--border); font-size:13px; color:var(--text-muted); text-align:center;">
+    <nav aria-label="Footer" style="margin-bottom:8px; display:flex; flex-wrap:wrap; justify-content:center; gap:12px;">
+      <a href="/" style="color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">Home</a>
+      <a href="/offers/" style="color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">Bro Perks</a>
+      <a href="/sample/" style="color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">Free Sample</a>
+      <a href="/points/" style="color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">My Points</a>
+      <a href="/terms/" style="color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">Terms</a>
+      <a href="/privacy/" style="color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">Privacy</a>
+    </nav>
+    <p>BROSKI · Nangloi, West Delhi – 110041 · <a data-email href="mailto:support@broskipetfood.com" style="color:inherit;">support@broskipetfood.com</a><span data-gstin></span></p>
   </footer>
 
 </div>
 
 <script>
-let currentRating = 5;
-let currentMode = 'voice';
-let mediaRecorder = null;
-let audioChunks = [];
-let isRecording = false;
+let currentRating = 0;
+let currentPack = '';
 
 const ratingTexts = {
   1: '1 / 5 — "Needs More Crunch"',
@@ -721,6 +583,13 @@ const ratingTexts = {
   5: '5 / 5 — "Loud Crunch, Empty Bowl!" 🐾'
 };
 
+function updateSubmitState() {
+  const btn = document.getElementById('submitFeedbackBtn');
+  if (btn) {
+    btn.disabled = !(currentRating > 0 && currentPack);
+  }
+}
+
 function setRating(val) {
   currentRating = val;
   const btns = document.querySelectorAll('.paw-btn');
@@ -728,64 +597,33 @@ function setRating(val) {
     btn.classList.toggle('active', idx < val);
   });
   document.getElementById('ratingCaption').innerText = ratingTexts[val] || '';
+  updateSubmitState();
 }
 
-function switchMode(mode) {
-  currentMode = mode;
-  document.getElementById('tabVoice').classList.toggle('active', mode === 'voice');
-  document.getElementById('tabText').classList.toggle('active', mode === 'text');
-  document.getElementById('voiceBox').style.display = mode === 'voice' ? 'block' : 'none';
-  document.getElementById('textBox').style.display = mode === 'text' ? 'block' : 'none';
+function onPackChanged() {
+  const sel = document.querySelector('input[name="feedbackFlavour"]:checked');
+  currentPack = sel ? sel.value : '';
+  updateSubmitState();
 }
 
-async function toggleRecording() {
-  const btn = document.getElementById('recordBtn');
-  const status = document.getElementById('voiceStatusText');
-  const waveform = document.getElementById('waveformAnim');
-  const player = document.getElementById('audioPlayer');
-
-  if (!isRecording) {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
-      audioChunks = [];
-
-      mediaRecorder.ondataavailable = e => {
-        if (e.data.size > 0) audioChunks.push(e.data);
-      };
-
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        player.src = audioUrl;
-        player.style.display = 'block';
-        status.innerText = "Voice Note Recorded! (Tap to re-record)";
-      };
-
-      mediaRecorder.start();
-      isRecording = true;
-      btn.classList.add('recording');
-      waveform.classList.add('recording');
-      status.innerText = "Recording... Speak now (Tap to stop)";
-    } catch (err) {
-      alert("Microphone permission denied or not supported. You can switch to Written Review Mode!");
-      switchMode('text');
-    }
-  } else {
-    mediaRecorder.stop();
-    isRecording = false;
-    btn.classList.remove('recording');
-    waveform.classList.remove('recording');
-  }
-}
+// Reward line visibility based on OFFERS_ENABLED in config
+document.addEventListener('DOMContentLoaded', () => {
+  const cfg = window.BROSKI_CONFIG || {};
+  const offers = cfg.OFFERS_ENABLED || [];
+  const showReward = offers.includes('feedback-taste-pack');
+  const banner = document.getElementById('rewardBanner');
+  if (banner && !showReward) banner.style.display = 'none';
+  const voucher = document.getElementById('rewardVoucherCard');
+  if (voucher && !showReward) voucher.style.display = 'none';
+});
 
 async function submitFeedback() {
   const alertEl = document.getElementById('feedbackAlert');
   alertEl.style.display = 'none';
   alertEl.textContent = '';
 
-  const flavour = document.querySelector('input[name="feedbackFlavour"]:checked')?.value || 'bites';
-  const batch = document.getElementById('batchNo')?.value.trim() || null;
+  const flavour = currentPack || document.querySelector('input[name="feedbackFlavour"]:checked')?.value || '';
+  const batch = document.getElementById('batchNo')?.value.trim() || '';
   const written = document.getElementById('writtenReview')?.value.trim() || '';
   const dog = document.getElementById('dogName')?.value.trim() || '';
   const breed = document.getElementById('dogBreed')?.value.trim() || '';
@@ -793,18 +631,18 @@ async function submitFeedback() {
   const rawPhone = document.getElementById('userPhone')?.value.trim() || '';
   const code = document.getElementById('custCode')?.value.trim() || null;
 
-  // Build comment text
+  if (currentRating === 0 || !flavour) {
+    alertEl.textContent = 'Please pick a rating and select a pack.';
+    alertEl.style.display = 'block';
+    return;
+  }
+
+  // Build comment text; empty string if none provided (strictly no fake fallback)
   let comments = written;
   if (!comments && dog) {
     comments = `Dog: ${dog}${breed ? ' (' + breed + ')' : ''}`;
   } else if (dog && !comments.includes(dog)) {
     comments = `[Dog: ${dog}${breed ? ', ' + breed : ''}] ${comments}`;
-  }
-
-  if (!comments && currentRating === 0) {
-    alertEl.textContent = 'Please select a rating or share your comments.';
-    alertEl.style.display = 'block';
-    return;
   }
 
   let cleanPhone = null;
@@ -822,25 +660,26 @@ async function submitFeedback() {
   btn.disabled = true;
   btn.innerText = 'Submitting Feedback...';
 
+  const packName = flavour === 'bites' ? 'Bro Bites – Classic Crunch' : 'Bro Mix – Happy Mix';
+  const cfg = window.BROSKI_CONFIG || {};
+
   try {
     const supabase = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
-    let result = null;
+    if (!supabase) throw new Error('Supabase client unavailable');
 
-    if (supabase) {
-      const { data, error } = await supabase.rpc('submit_feedback', {
-        p_flavour: flavour,
-        p_batch: batch,
-        p_rating: currentRating,
-        p_comments: comments ? comments.slice(0, 1000) : 'Dog tested biscuits.',
-        p_quote_ok: quoteOk,
-        p_phone: cleanPhone,
-        p_code: code
-      });
-      if (error) console.warn('[Feedback RPC] Error:', error);
-      result = data;
-    }
+    const { data, error } = await supabase.rpc('submit_feedback', {
+      p_flavour: flavour,
+      p_batch: batch || null,
+      p_rating: currentRating,
+      p_comments: comments,
+      p_quote_ok: quoteOk,
+      p_phone: cleanPhone,
+      p_code: code
+    });
 
-    // GA4 event: strictly no phone, name, or code
+    if (error) throw error;
+
+    // GA4 event: strictly no personal data
     if (window.BroskiPortal) {
       window.BroskiPortal.trackGA('feedback_submit', {
         rating: currentRating,
@@ -848,29 +687,32 @@ async function submitFeedback() {
       });
     }
 
-    if (result && result.linked) {
+    if (data && data.linked) {
       document.getElementById('linkedNotice').style.display = 'block';
     }
 
-    // Generate voucher display
     const voucher = 'BRO50-' + Math.random().toString(36).substring(2, 7).toUpperCase();
     document.getElementById('voucherCodeDisplay').innerText = voucher;
 
-    const waMsg = `Hi BROSKI! I left feedback for ${flavour === 'bites' ? 'Bro Bites' : 'Bro Mix'}. Rating: ${currentRating}/5 paws. Here is my 50g voucher code: ${voucher}.`;
-    const act = window.BroskiPortal ? window.BroskiPortal.getContactAction(waMsg, `BROSKI Feedback Voucher ${voucher}`) : null;
-    if (act) {
-      document.getElementById('claimWaBtn').href = act.url;
-      document.getElementById('claimWaBtn').textContent = act.type === 'whatsapp' ? 'Send Review Voucher on WhatsApp →' : 'Send Voucher via Email →';
-    }
+    const waMsg = `Hi BROSKI! I left feedback for ${packName}. Rating: ${currentRating}/5 paws.${comments ? ' Comment: ' + comments : ''} Voucher: ${voucher}`;
+    const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+    const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}` : `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}?subject=BROSKI Feedback Voucher&body=${encodeURIComponent(waMsg)}`;
+    document.getElementById('claimWaBtn').href = waUrl;
 
     document.getElementById('formSection').style.display = 'none';
     document.getElementById('successSection').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (err) {
-    console.error('[Feedback] Submission error:', err);
-    // Still show thank you if network fails so user is not blocked
+    console.error('[Feedback] RPC failed or offline:', err);
+    // Show WhatsApp fallback prefilled with pack, batch, rating, comment
+    const waMsg = `Hi BROSKI! Feedback for ${packName}${batch ? ' (Batch: ' + batch + ')' : ''}: ${currentRating}/5 paws.${comments ? ' ' + comments : ''}`;
+    const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+    const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}` : `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}?subject=BROSKI Feedback&body=${encodeURIComponent(waMsg)}`;
+
+    document.getElementById('errorWaFallbackBtn').href = waUrl;
     document.getElementById('formSection').style.display = 'none';
-    document.getElementById('successSection').style.display = 'block';
+    document.getElementById('errorFallbackSection').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } finally {
     btn.disabled = false;
     btn.innerHTML = '<span>Submit Review</span>';

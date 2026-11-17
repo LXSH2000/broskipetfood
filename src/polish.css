@@ -24,10 +24,62 @@
 /* 1c. Video section: the main button was almost invisible on the dark panel */
 .everyday-editorial .button.light { background: #fff8ed !important; color: #30180f !important; border-color: #fff8ed !important; }
 
-/* 1d. Tap targets below 44 px */
+/* 1d. Tap targets below 44 px & accessibility */
 .bk-card-wa-link { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; }
+footer a, .footer-top a, .footer-top button, .bk-foot a, .bk-nav a {
+  display: inline-flex !important;
+  min-height: 44px !important;
+  align-items: center !important;
+  padding: 0 8px !important;
+}
 
-/* 1e. WhatsApp bubble steps aside when it would cover a button (class set by polish.js) */
+/* 1e. Skip link visually hidden until focus-visible */
+.skip {
+  position: absolute !important;
+  left: -9999px !important;
+  top: auto !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  z-index: 100 !important;
+  padding: 12px 18px !important;
+  background: #352016 !important;
+  color: white !important;
+  border-radius: 8px !important;
+}
+.skip:focus-visible {
+  position: fixed !important;
+  left: 12px !important;
+  top: 12px !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  outline: 3px solid #974324 !important;
+  outline-offset: 3px !important;
+}
+
+/* 1f. Minimum 12px typography across UI */
+.eyebrow, .hero-v2 .eyebrow, .announcement, .announcement button, .footer-top a, .footer-top p, .footer-bottom, .bk-shop-eyebrow, .cinema-caption > span, .hero-end, .hero-end > span, .hero-price-chip {
+  font-size: 12px !important;
+}
+
+/* 1g. Viewport containment: zero horizontal scroll */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* 1h. Launch banner high contrast */
+.bk-banner {
+  background: #974324 !important;
+  color: #ffffff !important;
+}
+.bk-banner p {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* 1i. WhatsApp bubble steps aside when it would cover a button (class set by polish.js) */
 .whatsapp-float { transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease; }
 .whatsapp-float.pz-away { opacity: 0; transform: translateY(12px) scale(.9); pointer-events: none; }
 
@@ -49,7 +101,7 @@ html.pz-on [data-pz-img].pz-in img { clip-path: inset(0 0 0 0); transform: scale
 /* 2c. Hero entrance on phones (desktop already has the GSAP version) */
 @media (max-width: 799px), (hover: none) {
   html.pz-on:not(.broski-intro-active) .hero-title span { display: inline-block;
-    animation: pz-rise .9s var(--pz-ease) both; animation-delay: calc(var(--letter, 0) * 60ms); }
+    animation: pz-rise .75s var(--pz-ease) both; animation-delay: calc(var(--letter, 0) * 45ms); }
   html.pz-on:not(.broski-intro-active) .hero .eyebrow { animation: pz-fade .8s ease both; }
   html.pz-on:not(.broski-intro-active) .hero-intro { animation: pz-up .9s var(--pz-ease) .35s both; }
   html.pz-on:not(.broski-intro-active) .cinema-frame { animation: pz-up 1s var(--pz-ease) .55s both; }

@@ -1,15 +1,16 @@
-export const LOCAL_PINS = ['110041', '110087', '110063', '110027', '110058', '110015', '110026', '110034', '110056'];
+export const LOCAL_PINS = ['110041', '110087', '110063'];
+export const OTHER_WEST_DELHI_PINS = ['110015', '110018', '110026', '110027', '110058', '110059', '110064'];
 
 export function checkPincode(pin, localPins = LOCAL_PINS) {
   const p = String(pin || '').trim();
   if (!/^\d{6}$/.test(p)) return { kind: 'error', text: 'Please enter a 6-digit pincode.' };
   if (localPins.includes(p)) {
-    return { kind: 'local', text: '✅ Fast local delivery available! Dispatched fresh from Nangloi within 24 hours. Free delivery on orders ₹299+.' };
+    return { kind: 'local', text: '✅ Free delivery on orders ₹299+ within 5 km of Nangloi. Confirmed on WhatsApp.' };
   }
-  if (p.startsWith('110')) {
-    return { kind: 'delhi', text: '🐾 We deliver across Delhi by local courier (24–48 hours). Delivery charge is confirmed on WhatsApp before you pay.' };
+  if (OTHER_WEST_DELHI_PINS.includes(p)) {
+    return { kind: 'delhi', text: '🐾 Delivery ₹20, confirmed on WhatsApp.' };
   }
-  return { kind: 'outside', text: 'We deliver only in Delhi right now. WhatsApp us and we will tell you when we reach your area.' };
+  return { kind: 'outside', text: 'Not in your area yet – WhatsApp us.' };
 }
 
 export const UPI_RE = /^[a-zA-Z0-9._-]{2,256}@[a-zA-Z][a-zA-Z0-9]{1,63}$/;

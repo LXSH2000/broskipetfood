@@ -8,7 +8,7 @@
 .broski-pouch-box.small .broski-pouch-img{width:100%;height:100%;object-fit:cover;border-radius:6px}
 .detail-art .broski-pouch-box{padding:0;height:100%;max-height:480px;border-radius:14px;overflow:hidden}
 .detail-art .broski-pouch-img{width:100%;height:100%;object-fit:cover;object-position:center 25%}
-.broski-pack-art{width:240px;height:270px;max-width:100%;background-image:url('/broski-products.png');background-size:300% 200%;background-repeat:no-repeat;flex-shrink:0;position:relative;transition:transform .5s cubic-bezier(.2,.75,.3,1);border-radius:8px}
+.broski-pack-art{width:240px;height:270px;max-width:100%;background-color:#efe5d3;flex-shrink:0;position:relative;transition:transform .5s cubic-bezier(.2,.75,.3,1);border-radius:8px}
 .product-visual .broski-pack-art{width:100%;height:100%;position:absolute;inset:0;border-radius:0}
 .product-visual:hover .broski-pack-art{transform:scale(1.035)}
 .product-visual .product-tag,.product-visual .view-product{z-index:2}.product-visual .loose-bone{display:none}

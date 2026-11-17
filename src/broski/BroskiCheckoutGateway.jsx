@@ -7,15 +7,15 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
   const products = cfg.PRODUCTS || [];
 
   // Product prices directly from public/config.js
-  const bitesPrice = products.find(p => p.id === 'non-veg')?.price || 149;
-  const mixPrice = products.find(p => p.id === 'mix')?.price || 179;
-  const comboPrice = products.find(p => p.id === 'combo')?.price || 299;
+  const bitesPrice = products.find(p => p.id === 'bro-bites')?.price || 149;
+  const mixPrice = products.find(p => p.id === 'bro-mix')?.price || 179;
+  const comboPrice = products.find(p => p.id === 'combo' || p.id === 'bro-combo')?.price || 299;
 
   // Cart quantities
   const [quantities, setQuantities] = useState(() => {
     const q = { bites: 0, mix: 0, combo: 0 };
-    if (initialProduct === 'non-veg' || initialProduct === 'bites') q.bites = 1;
-    else if (initialProduct === 'mix') q.mix = 1;
+    if (initialProduct === 'bro-bites' || initialProduct === 'bites') q.bites = 1;
+    else if (initialProduct === 'bro-mix' || initialProduct === 'mix') q.mix = 1;
     else q.combo = 1;
     return q;
   });
@@ -24,7 +24,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
   const [pincode, setPincode] = useState('110041');
-  const [consent, setConsent] = useState(true);
+  const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [orderConfirmed, setOrderConfirmed] = useState(null);
@@ -96,7 +96,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
 
       if (error) throw error;
 
-      const orderId = (data && data.order_id) || Math.random().toString(36).substring(2, 8).toUpperCase();
+      const orderId = (data && data.order_id) || 'DIRECT';
 
       // Safe GA4 event: STRICTLY NO PHONE, NO NAME, NO CODE
       try {
@@ -110,14 +110,16 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
         }
       } catch (_) {}
 
-      // Build items text for WhatsApp
-      const lines = [];
-      if (bQty > 0) lines.push(`• Bro Bites – Classic Crunch ×${bQty} (₹${bQty * bitesPrice})`);
-      if (mQty > 0) lines.push(`• Bro Mix – Happy Mix ×${mQty} (₹${mQty * mixPrice})`);
-      if (cQty > 0) lines.push(`• Bro Combo ×${cQty} (₹${cQty * comboPrice})`);
-      const itemsText = lines.join('\n');
+      // Build items summary for WhatsApp: "Bro Bites ×n, Bro Mix ×n, Combo ×n"
+      const summaryParts = [];
+      if (bQty > 0) summaryParts.push(`Bro Bites ×${bQty}`);
+      if (mQty > 0) summaryParts.push(`Bro Mix ×${mQty}`);
+      if (cQty > 0) summaryParts.push(`Combo ×${cQty}`);
+      const summary = summaryParts.join(', ');
 
-      const waMsg = `Hi BROSKI! Order Request #${orderId}\n\n${itemsText}\n\nEstimated Total: ₹${total}\nName: ${customerName.trim()}\nPincode: ${pincode.trim()}\n\nPlease confirm delivery in West Delhi. Thank you!`;
+      const waMsg = orderId !== 'DIRECT'
+        ? `Hi BROSKI! Order ${orderId}: ${summary} = ₹${total}. Pincode: ${cleanPinDigits}`
+        : `Hi BROSKI! ${summary} = ₹${total}. Pincode: ${cleanPinDigits}`;
 
       // Contact action: WhatsApp or mailto
       let contactUrl = '#';
@@ -125,42 +127,44 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
       if (waNum && waNum.length >= 10) {
         contactUrl = `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`;
       } else {
-        const sub = encodeURIComponent(`BROSKI Order Request #${orderId}`);
+        const sub = encodeURIComponent(orderId !== 'DIRECT' ? `BROSKI Order Request #${orderId}` : 'BROSKI Order Request');
         const body = encodeURIComponent(waMsg);
         contactUrl = `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}?subject=${sub}&body=${body}`;
       }
 
       setOrderConfirmed({
         id: orderId,
-        itemsText,
+        itemsText: summary,
         total,
         contactUrl,
         customerName: customerName.trim(),
-        pincode: pincode.trim()
+        pincode: cleanPinDigits
       });
 
       // Automatically open WhatsApp / mailto link
       window.open(contactUrl, '_blank', 'noopener,noreferrer');
     } catch (err) {
-      console.error('[OrderRequest] Error:', err);
-      // Fallback: If database is placeholder, still generate order request and open WhatsApp
-      const fallbackId = Math.random().toString(36).substring(2, 8).toUpperCase();
-      const lines = [];
-      if (bQty > 0) lines.push(`• Bro Bites – Classic Crunch ×${bQty}`);
-      if (mQty > 0) lines.push(`• Bro Mix – Happy Mix ×${mQty}`);
-      if (cQty > 0) lines.push(`• Bro Combo ×${cQty}`);
-      const itemsText = lines.join('\n');
-      const waMsg = `Hi BROSKI! Order Request #${fallbackId}\n\n${itemsText}\n\nEstimated Total: ₹${total}\nName: ${customerName.trim()}\nPincode: ${pincode.trim()}`;
+      console.error('[OrderRequest] RPC failed or offline:', err);
+      // Fallback: If RPC fails, still open WhatsApp without the order id
+      const summaryParts = [];
+      if (bQty > 0) summaryParts.push(`Bro Bites ×${bQty}`);
+      if (mQty > 0) summaryParts.push(`Bro Mix ×${mQty}`);
+      if (cQty > 0) summaryParts.push(`Combo ×${cQty}`);
+      const summary = summaryParts.join(', ');
+
+      const waMsg = `Hi BROSKI! ${summary} = ₹${total}. Pincode: ${cleanPinDigits}`;
       const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
-      const contactUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}` : `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}?subject=BROSKI Order #${fallbackId}&body=${encodeURIComponent(waMsg)}`;
+      const contactUrl = waNum
+        ? `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`
+        : `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}?subject=BROSKI Order&body=${encodeURIComponent(waMsg)}`;
 
       setOrderConfirmed({
-        id: fallbackId,
-        itemsText,
+        id: 'DIRECT',
+        itemsText: summary,
         total,
         contactUrl,
         customerName: customerName.trim(),
-        pincode: pincode.trim()
+        pincode: cleanPinDigits
       });
       window.open(contactUrl, '_blank', 'noopener,noreferrer');
     } finally {
@@ -176,7 +180,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
           <div>
             <span className="bk-gateway-badge">ORDER ON WHATSAPP</span>
             <h2 id="gw-title" style={{ fontSize: '22px' }}>
-              {orderConfirmed ? 'Order Request Sent! 🐾' : 'Order Direct from Bakery'}
+              {orderConfirmed ? 'Order Request Sent! 🐾' : 'Order Direct from Nangloi'}
             </h2>
           </div>
           <button type="button" className="bk-gateway-close" onClick={onClose} aria-label="Close order form">
@@ -295,13 +299,14 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                 <div className="bk-field" style={{ gridColumn: '1 / -1' }}>
                   <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', cursor: 'pointer', minHeight: '44px', padding: '6px 0' }}>
                     <input
+                      id="ord-consent"
                       type="checkbox"
                       checked={consent}
                       onChange={(e) => setConsent(e.target.checked)}
                       style={{ width: '18px', height: '18px', marginTop: '2px', accentColor: '#b8452b' }}
                       required
                     />
-                    <span>I agree that BROSKI saves my order request, name, phone and pincode to process delivery.</span>
+                    <span>I agree that BROSKI saves my name, phone and pincode to process my order and track my points. I can ask for deletion at <a href="mailto:support@broskipetfood.com" style={{ color: 'inherit' }}>support@broskipetfood.com</a>.</span>
                   </label>
                 </div>
               </div>

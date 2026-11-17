@@ -9,7 +9,7 @@
   const GSAP_OWNED = '.story-copy, .ritual-grid article, .faq, .newsletter, .everyday-editorial > div';
 
   const REVEAL = [
-    '.bk-shop-head', '.bk-pcard', '.bk-shop__unit', '.bk-pin', '.bk-fresh-item', '.bk-partner', '.bk-h-foot',
+    '.bk-shop-head', '.bk-pcard', '.bk-shop__unit', '.bk-pin', '.bk-quality-item', '.bk-partner', '.bk-h-foot',
     '.ritual > .eyebrow', '.ritual > h2', '.photo-note', '.hero-end',
     GSAP_OWNED,
   ].join(',');

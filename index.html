@@ -1,23 +1,36 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-WHMRKDWX"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ89P0X3QH"></script>
+  <!-- Google tag (gtag.js) - loaded on interaction / idle to maximize performance -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-YJ89P0X3QH');
-    gtag('config', 'GTM-WHMRKDWX');
+
+    function loadAnalytics() {
+      if (window.__gaLoaded) return;
+      window.__gaLoaded = true;
+      const s = document.createElement('script');
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-YJ89P0X3QH';
+      s.async = true;
+      document.head.appendChild(s);
+    }
+    window.addEventListener('scroll', loadAnalytics, { once: true, passive: true });
+    window.addEventListener('click', loadAnalytics, { once: true });
+    window.addEventListener('touchstart', loadAnalytics, { once: true, passive: true });
+    if ('requestIdleCallback' in window) {
+      setTimeout(() => requestIdleCallback(loadAnalytics), 4000);
+    } else {
+      setTimeout(loadAnalytics, 5000);
+    }
   </script>
 
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#f5efe4"/>
-  <title>BROSKI – Crunchy dog biscuits from Nangloi, Delhi | Order on WhatsApp</title>
-  <meta name="description" content="BROSKI – crunchy dog biscuits from Nangloi, Delhi. Non-Veg ₹149 and Mix ₹179, 400 g. Order on WhatsApp.">
+  <title>BROSKI – Crunchy dog biscuits from Nangloi, West Delhi | Order on WhatsApp</title>
+  <meta name="description" content="BROSKI – crunchy dog biscuits from Nangloi, West Delhi. Bro Bites – Classic Crunch ₹149 and Bro Mix – Happy Mix ₹179, 400 g. Bro Combo ₹299. Order on WhatsApp.">
   <link rel="canonical" href="https://broskipetfood.com/">
 
   <!-- Robots & Social Discovery -->
@@ -27,8 +40,8 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="BROSKI">
-  <meta property="og:title" content="BROSKI – Crunchy dog biscuits from Nangloi, Delhi | Order on WhatsApp">
-  <meta property="og:description" content="BROSKI – crunchy dog biscuits from Nangloi, Delhi. Bro Bites ₹149 and Bro Mix ₹179, 400 g. Order on WhatsApp.">
+  <meta property="og:title" content="BROSKI – Crunchy dog biscuits from Nangloi, West Delhi | Order on WhatsApp">
+  <meta property="og:description" content="BROSKI – crunchy dog biscuits from Nangloi, West Delhi. Bro Bites – Classic Crunch ₹149 and Bro Mix – Happy Mix ₹179, 400 g. Bro Combo ₹299. Order on WhatsApp.">
   <meta property="og:url" content="https://broskipetfood.com/">
   <meta property="og:image" content="https://broskipetfood.com/og-share.jpg">
   <meta property="og:image:width" content="1200">
@@ -39,18 +52,18 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="BROSKI – Treats for your best bro">
-  <meta name="twitter:description" content="BROSKI – crunchy dog biscuits from Nangloi, Delhi. Bro Bites ₹149 and Bro Mix ₹179, 400 g. Order on WhatsApp.">
+  <meta name="twitter:description" content="BROSKI – crunchy dog biscuits from Nangloi, West Delhi. Bro Bites – Classic Crunch ₹149 and Bro Mix – Happy Mix ₹179, 400 g. Bro Combo ₹299. Order on WhatsApp.">
   <meta name="twitter:image" content="https://broskipetfood.com/og-share.jpg">
   <meta name="twitter:image:alt" content="BROSKI Dog Biscuits 400g Stand-up Pouch">
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Gaegu:wght@400;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 
   <!-- Shared configuration & UTM Analytics Engine -->
   <script src="/config.js"></script>
-  <script src="/analytics.js"></script>
+  <script defer src="/analytics.js"></script>
 
   <!-- Google Analytics 4 (GA4) config via Google Tag -->
   <script>
@@ -70,11 +83,11 @@
     "url": "https://broskipetfood.com/",
     "logo": "https://broskipetfood.com/og-share.jpg",
     "image": "https://broskipetfood.com/og-share.jpg",
-    "description": "BROSKI – crunchy dog biscuits packed by hand in Nangloi, West Delhi – 110041. 400g stand-up zip pouches in Bro Bites – Classic Crunch and Bro Mix – Happy Mix.",
+    "description": "BROSKI – crunchy dog biscuits packed in Nangloi, West Delhi – 110041. 400g stand-up zip pouches in Bro Bites – Classic Crunch and Bro Mix – Happy Mix.",
     "email": "support@broskipetfood.com",
     "priceRange": "₹149 - ₹299",
     "currenciesAccepted": "INR",
-    "paymentAccepted": "Cash, UPI, Net Banking",
+    "paymentAccepted": "Cash, UPI",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Nangloi",
@@ -137,23 +150,31 @@
   }
   </script>
 
-  <!-- Self-heal guard for GitHub Pages cache -->
+  <!-- Self-heal guard for GitHub Pages stale chunk cache -->
   <script>
   window.addEventListener('error', function (e) {
     var t = e.target;
-    if (t && (t.tagName === 'SCRIPT' || t.tagName === 'LINK') && !sessionStorage.getItem('bk-reloaded')) {
+    if (!t) return;
+    var url = t.src || t.href || '';
+    // Only self-heal when our own /assets/ bundles fail to load, NEVER for external resources (adblockers/fonts)
+    if ((t.tagName === 'SCRIPT' || t.tagName === 'LINK') && url.indexOf('/assets/') !== -1 && !sessionStorage.getItem('bk-reloaded')) {
       sessionStorage.setItem('bk-reloaded', '1');
       location.replace(location.pathname + '?v=' + Date.now());
     }
   }, true);
-  window.addEventListener('vite:preloadError', function () { location.reload(); });
+  window.addEventListener('vite:preloadError', function () {
+    if (!sessionStorage.getItem('bk-reloaded')) {
+      sessionStorage.setItem('bk-reloaded', '1');
+      location.replace(location.pathname + '?v=' + Date.now());
+    }
+  });
   </script>
 </head>
 <body>
   <noscript>
     <div style="padding:24px;text-align:center;font-family:sans-serif;background:#f5efe4;color:#352016;">
       <h1>Broski — Treats for your best bro.</h1>
-      <p>Crunchy dog biscuits packed by hand in Nangloi, Delhi 110041. Non-Veg and Mix in a 400 g zip pouch.</p>
+      <p>Crunchy dog biscuits packed in Nangloi, West Delhi – 110041. Bro Bites – Classic Crunch and Bro Mix – Happy Mix in a 400 g zip pouch.</p>
       <p>Order on WhatsApp or contact: <a href="mailto:support@broskipetfood.com">support@broskipetfood.com</a></p>
     </div>
   </noscript>

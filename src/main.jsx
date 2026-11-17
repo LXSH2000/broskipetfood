@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 import './redesign.css';
@@ -16,6 +16,87 @@ import BroskiWordmark from './BroskiWordmark.jsx';
 import './broski/broski-home.css';
 import './polish.css';
 import './polish.js';
+
+function HeroMedia() {
+  const [isMobile, setIsMobile] = useState(true);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const isSmall = window.matchMedia('(max-width: 768px)').matches;
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      const isSlow = conn && (conn.saveData || conn.effectiveType === '2g' || conn.effectiveType === '3g');
+      return Boolean(isSmall || isSlow);
+    };
+
+    const mobile = checkMobile();
+    setIsMobile(mobile);
+
+    if (!mobile) {
+      const vid = videoRef.current;
+      if (!vid) return;
+
+      const startVideo = () => {
+        if (!('IntersectionObserver' in window)) {
+          if (!vid.src) vid.src = '/broski-hero-desktop-720.mp4';
+          vid.play().catch(() => {});
+          return;
+        }
+        const io = new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting) {
+            if (!vid.src) vid.src = '/broski-hero-desktop-720.mp4';
+            vid.play().catch(() => {});
+          } else {
+            vid.pause();
+          }
+        }, { threshold: 0.1 });
+        io.observe(vid);
+      };
+
+      if (document.readyState === 'complete') {
+        startVideo();
+      } else {
+        window.addEventListener('load', startVideo, { once: true });
+      }
+    }
+  }, []);
+
+  return (
+    <div className="cinema-frame">
+      <div className="cinema-window">
+        {isMobile ? (
+          <img
+            src="/broski-hero-mobile-poster.webp"
+            alt="A golden retriever enjoying crunchy Broski treats alongside the authentic 400g trial pouches"
+            className="cinema-image"
+            width="720"
+            height="720"
+            fetchPriority="high"
+          />
+        ) : (
+          <video
+            ref={videoRef}
+            className="cinema-image cinema-video"
+            poster="/broski-hero-desktop-poster.webp"
+            loop
+            muted
+            playsInline
+            preload="none"
+            aria-label="A golden retriever enjoying crunchy Broski treats alongside the authentic 400g trial pouches"
+          />
+        )}
+        <div className="video-live-pill" aria-label="Moments in motion">
+          <span className="live-dot" />
+          <span>Moments in Motion</span>
+        </div>
+        <div className="cinema-caption">
+          <span>AUTHENTIC TRIAL PACKS</span>
+          <p>Sealed for your<br /><em>best bro.</em></p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Icon({ type, ...props }) {
   return (
@@ -46,8 +127,6 @@ function Bone({ className = '' }) {
 function App() {
   useStoreMotion();
   const [menu, setMenu] = useState(false);
-  const [email, setEmail] = useState('');
-  const [newsletterMsg, setNewsletterMsg] = useState('');
 
   useEffect(() => {
     const playMedia = () => {
@@ -80,19 +159,6 @@ function App() {
     document.addEventListener('keydown', close);
     return () => document.removeEventListener('keydown', close);
   }, [menu]);
-
-  function newsletter(e) {
-    e.preventDefault();
-    if (!email || !email.includes('@')) {
-      setNewsletterMsg('Please enter a valid email address.');
-      return;
-    }
-    const subject = encodeURIComponent('Notify me when Broski launches');
-    const body = encodeURIComponent(`Please notify me when Broski launches in West Delhi.\n\nEmail: ${email.trim()}`);
-    window.location.href = `mailto:support@broskipetfood.com?subject=${subject}&body=${body}`;
-    setNewsletterMsg('Your email app opened. Press send to join our launch list.');
-    setEmail('');
-  }
 
   return (
     <>
@@ -140,7 +206,7 @@ function App() {
               <p className="hero-manifesto" style={{ textAlign: 'center', marginInline: 'auto' }}>
                 Treats for your<br /><em>best bro.</em>
               </p>
-              <div className="hero-price-chip" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#352016', color: '#fff8ed', padding: '5px 13px', borderRadius: '20px', fontSize: '11.5px', fontWeight: '600', margin: '0 auto 14px auto', letterSpacing: '.3px' }}>
+              <div className="hero-price-chip" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#352016', color: '#fff8ed', padding: '5px 13px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', margin: '0 auto 14px auto', letterSpacing: '.3px', flexWrap: 'wrap' }}>
                 <span>400 g Pouch</span><span>·</span><span>Bro Bites – Classic Crunch ₹149 · Bro Mix – Happy Mix ₹179</span>
               </div>
               <p className="hero-description" style={{ textAlign: 'center', marginInline: 'auto' }}>
@@ -164,31 +230,7 @@ function App() {
               </div>
             </div>
           </div>
-          <div className="cinema-frame">
-            <div className="cinema-window">
-              <video
-                className="cinema-image cinema-video"
-                poster="/broski-hero-desktop-poster.jpg"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                aria-label="A golden retriever enjoying crunchy Broski treats alongside the authentic 400g trial pouches"
-              >
-                <source src="/broski-hero-mobile-720.mp4" media="(max-width: 760px)" type="video/mp4" />
-                <source src="/broski-hero-desktop-720.mp4" type="video/mp4" />
-              </video>
-              <div className="video-live-pill" aria-label="Moments in motion">
-                <span className="live-dot" />
-                <span>Moments in Motion</span>
-              </div>
-              <div className="cinema-caption">
-                <span>AUTHENTIC TRIAL PACKS</span>
-                <p>Sealed for your<br /><em>best bro.</em></p>
-              </div>
-            </div>
-          </div>
+          <HeroMedia />
           <div className="hero-end">
             <span>TREATS FOR YOUR BEST BRO</span>
             <a href="#shop">Explore our launch treats ↓</a>
@@ -258,7 +300,7 @@ function App() {
               ['How do I order?', 'Tap Order on WhatsApp on any pack – we confirm delivery and payment in the chat.'],
               ["What's in the treats?", 'Every ingredient is printed transparently on our back label: Bro Bites (Classic Crunch) contains Real Chicken, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Permitted Colours. Bro Mix (Happy Mix) contains Chicken Powder, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Colour. Both contain chicken and egg. Complementary pet treat – break into pieces for smaller dogs and always keep fresh water nearby.'],
               ['How does delivery work?', 'We deliver in West Delhi to start. Delivery day and any charge are confirmed by WhatsApp or email before you pay.'],
-              ['I run a pet shop – can I stock Broski?', "WhatsApp us or email at support@broskipetfood.com; we'll share our 11+1 wholesale offer and drop off complimentary tasting packs."]
+              ['I run a pet shop – can I stock Broski?', "WhatsApp us or email at support@broskipetfood.com; we'll share trade terms and drop off complimentary tasting packs."]
             ].map(([q, a]) => (
               <details key={q}>
                 <summary>{q}<span>+</span></summary>
@@ -273,18 +315,21 @@ function App() {
         <section className="newsletter section">
           <div>
             <span className="eyebrow">LET’S STAY IN THE LOOP</span>
-            <h2>Good things.<br />Straight to your inbox.</h2>
-            <p>New treats, little stories, and plenty of dog energy.</p>
+            <h2>Get offers on WhatsApp</h2>
+            <p>New flavours and Bro Perks, straight to your chat. No spam.</p>
           </div>
-          <form onSubmit={newsletter}>
-            <label htmlFor="newsletter">Your email address</label>
-            <div className="email-field">
-              <input id="newsletter" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
-              <button aria-label="Subscribe to launch updates" type="submit"><Icon type="arrow" /></button>
-            </div>
-            <small>We'll write once, on launch day. No spam.</small>
-            <p className="form-message" role="status">{newsletterMsg}</p>
-          </form>
+          <div style={{ marginTop: '20px' }}>
+            <a
+              className="button"
+              href={waLink('Hi BROSKI! Please add me to offers.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}
+            >
+              <span>Get offers on WhatsApp</span>
+              <Icon type="arrow" />
+            </a>
+          </div>
         </section>
       </main>
 

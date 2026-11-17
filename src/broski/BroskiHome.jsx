@@ -107,8 +107,8 @@ export function PincodeChecker() {
 /* 1. Product cards with Online Checkout Gateway */
 export function ProductCards() {
   const { PRODUCTS = [], UNIT_PRICE_LINE } = C();
-  const nv = PRODUCTS.find((p) => p.id === 'non-veg');
-  const mx = PRODUCTS.find((p) => p.id === 'mix');
+  const nv = PRODUCTS.find((p) => p.id === 'bro-bites');
+  const mx = PRODUCTS.find((p) => p.id === 'bro-mix');
   const [activeGatewayProduct, setActiveGatewayProduct] = useState(null);
 
   return (
@@ -177,13 +177,45 @@ export function ProductCards() {
       </div>
       {UNIT_PRICE_LINE && <p className="bk-shop__unit">{UNIT_PRICE_LINE}</p>}
 
+      {/* Product Details Section (Legal Metrology & E-Commerce Rules) */}
+      <div className="bk-product-details-card" style={{
+        margin: '24px auto 0',
+        padding: '20px',
+        background: '#fff',
+        border: '1.5px solid var(--border)',
+        borderRadius: '16px',
+        maxWidth: '860px',
+        textAlign: 'left',
+        fontSize: '13px',
+        lineHeight: '1.6',
+        color: 'var(--text)'
+      }}>
+        <h4 style={{ margin: '0 0 10px', fontSize: '15px', fontWeight: '800', color: 'var(--brown)', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+          Product Details
+        </h4>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
+          <div>
+            <strong>Manufactured by:</strong> Scoobee Pet Foods Pvt. Ltd., HSIIDC Industrial Estate, Rai – 131029, Sonepat, Haryana
+          </div>
+          <div>
+            <strong>Packed & marketed by:</strong> BROSKI, Nangloi, West Delhi – 110041
+          </div>
+          <div>
+            <strong>Net quantity:</strong> 400 g · <strong>MRP:</strong> incl. of all taxes · <strong>Best before:</strong> 12 months from packing (see pack)
+          </div>
+          <div>
+            <strong>Country of origin:</strong> India · <strong>Consumer care:</strong> <a href="mailto:support@broskipetfood.com" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: '600' }}>support@broskipetfood.com</a>
+          </div>
+        </div>
+      </div>
+
       <PincodeChecker />
 
-      {/* Honest 3-point freshness transparency (F1) */}
+      {/* Honest 3-point transparency (F1) */}
       <div className="bk-transparency-card">
-        <div className="bk-freshness-grid">
-          <div className="bk-fresh-item">
-            <span className="bk-fresh-icon">
+        <div className="bk-quality-grid">
+          <div className="bk-quality-item">
+            <span className="bk-quality-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
@@ -192,24 +224,24 @@ export function ProductCards() {
             <strong>Clear window pouch – you see the biscuits</strong>
             <p>Every bone biscuit is visible before you buy. Nothing hidden inside foil.</p>
           </div>
-          <div className="bk-fresh-item">
-            <span className="bk-fresh-icon">
+          <div className="bk-quality-item">
+            <span className="bk-quality-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
             </span>
             <strong>Packed in Nangloi, West Delhi</strong>
-            <p>Sealed and dispatched fresh locally in West Delhi (PIN 110041).</p>
+            <p>Packed and sealed in Nangloi, West Delhi – 110041.</p>
           </div>
-          <div className="bk-fresh-item">
-            <span className="bk-fresh-icon">
+          <div className="bk-quality-item">
+            <span className="bk-quality-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
               </svg>
             </span>
             <strong>A treat, not a meal – keep fresh water nearby</strong>
-            <p>Nutritious reward biscuits for training and treat time. Always keep clean water available.</p>
+            <p>Crunchy reward biscuits for training and treat time. A treat, not a meal – always keep fresh water nearby.</p>
           </div>
         </div>
       </div>
@@ -232,17 +264,13 @@ export function PartnerSection() {
     <section className="bk-partner" aria-labelledby="partner-h">
       <h2 id="partner-h">Run a Pet Shop or Grooming Salon in West Delhi?</h2>
       <p className="bk-partner__offer">
-        We are onboarding our first 11 retail partners across Nangloi, Paschim Vihar, Punjabi Bagh, Janakpuri, and Rajouri Garden. Every partner gets 1 bonus tasting pack for every 11 packs stocked (₹1,100 investment, ₹688 retail profit @ 38.5% margin) with our 15-day 100% cash buyback guarantee.
+        Trade terms for pet shops – WhatsApp us and we'll share the current wholesale price and launch offer.
       </p>
       <ul>
         <li>Counter marketing cards</li>
         <li>Complimentary 50g taste packs with QR review cards</li>
-        <li>Zero-risk 15-day 100% cash buyback guarantee</li>
       </ul>
-      <WaButton text={MSG.shop}>WhatsApp Lakshay for the Launch Box</WaButton>
-      <p className="bk-partner__small">
-        Profit shown at MRP ₹149 per pack. Buyback covers unopened, undamaged packs returned within 15 days. First 11 shops only.
-      </p>
+      <WaButton text={MSG.shop || 'Hi BROSKI! We run a pet shop in West Delhi and want to know trade terms.'}>WhatsApp us</WaButton>
     </section>
   );
 }
@@ -256,7 +284,7 @@ export function SiteFooter() {
         <a className="logo" href="/" style={{ color: '#fcf7ee', textDecoration: 'none', display: 'flex', alignItems: 'center' }} aria-label="Broski home">
           <BroskiWordmark height={26} style={{ color: '#fcf7ee' }} />
         </a>
-        <p>Crunchy dog biscuits packed by hand in Nangloi, West Delhi – 110041.<br />Treats for your best bro.</p>
+        <p>Crunchy dog biscuits packed in Nangloi, West Delhi – 110041.<br />Treats for your best bro.</p>
         <div>
           <a href="/#shop">Shop treats</a>
           <a href="/#story">Our story</a>
@@ -266,6 +294,7 @@ export function SiteFooter() {
         <div>
           <a href="/partner/">Retail & Pet Shops</a>
           <a href="/r/">Feedback</a>
+          <a href="/terms/">Terms</a>
           <a href="/privacy/">Privacy</a>
           <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp</a>
         </div>
@@ -277,7 +306,7 @@ export function SiteFooter() {
         </svg>
       </div>
       <div className="footer-bottom">
-        <span>© 2026 Broski · Nangloi, Delhi 110041 · <a href={`mailto:${EMAIL}`} style={{ color: 'inherit' }}>{EMAIL}</a> · Udyam UDYAM-DL-11-0177908{GSTIN ? ` · GSTIN: ${GSTIN}` : ''}</span>
+        <span>© 2026 Broski · Nangloi, West Delhi – 110041 · <a href={`mailto:${EMAIL}`} style={{ color: 'inherit' }}>{EMAIL}</a> · Udyam UDYAM-DL-11-0177908{GSTIN ? ` · GSTIN: ${GSTIN}` : ''}</span>
         <span>Made for the ones with paws. ♡</span>
         <span>IN / INR ₹</span>
       </div>

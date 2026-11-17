@@ -5,11 +5,9 @@ export const CONFIG = {
   BRAND_NAME: 'Broski',
   TAGLINE: 'Treats for your best bro.',
   SUPPORT_EMAIL: 'support@broskipetfood.com',
-  GA_MEASUREMENT_ID: '', // Set when verified GA4 ID is available
+  GA_MEASUREMENT_ID: 'G-YJ89P0X3QH',
   WHATSAPP_NUMBER: '919821563468',
-  FORM_ENDPOINT: 'https://api.web3forms.com/submit',
-  FORM_ACCESS_KEY: '',
-  LAUNCH_STATUS: 'coming',
+  LAUNCH_STATUS: 'live',
   LAUNCH_DATE: 'November 2026',
   LAUNCH_LOCATION: 'West Delhi (Nangloi)',
   UDYAM_REGISTRATION: 'UDYAM-DL-11-0177908',
@@ -20,7 +18,7 @@ export const CONFIG = {
 
   PRODUCTS: [
     {
-      id: 'non-veg',
+      id: 'bro-bites',
       name: 'Bro Bites – Classic Crunch',
       price: 14900,
       weight: '400g',
@@ -31,7 +29,7 @@ export const CONFIG = {
       shortDesc: 'Crunchy bone-shaped biscuits in our yellow zip pouch with transparent window.'
     },
     {
-      id: 'mix',
+      id: 'bro-mix',
       name: 'Bro Mix – Happy Mix',
       price: 17900,
       weight: '400g',
@@ -40,6 +38,17 @@ export const CONFIG = {
       image: '/broski-pouch-mix.webp',
       tag: '400g Stand-up Pouch · ₹179',
       shortDesc: 'A crunchy blend in our white zip pouch with transparent window.'
+    },
+    {
+      id: 'combo',
+      name: 'Bro Combo',
+      price: 29900,
+      weight: '2 × 400g',
+      category: 'biscuits',
+      pouchColor: 'duo',
+      image: '/broski-combo-duo.webp',
+      tag: '2 × 400g Pouch · ₹299',
+      shortDesc: 'One Bro Bites – Classic Crunch + one Bro Mix – Happy Mix.'
     }
   ]
 };

@@ -11,15 +11,15 @@ const customer = { name: 'Test Person', email: 'test@example.com', phone: '98765
 test('helpers: checkPincode validates local, Delhi, outside and invalid formats', () => {
   const local = checkPincode('110041');
   assert.equal(local.kind, 'local');
-  assert.ok(local.text.includes('Fast local delivery'));
+  assert.ok(local.text.includes('Free delivery'));
 
-  const delhi = checkPincode('110001');
-  assert.equal(delhi.kind, 'delhi');
-  assert.ok(delhi.text.includes('local courier'));
+  const otherWestDelhi = checkPincode('110015');
+  assert.equal(otherWestDelhi.kind, 'delhi');
+  assert.ok(otherWestDelhi.text.includes('Delivery ₹20, confirmed on WhatsApp'));
 
-  const outside = checkPincode('400001');
+  const outside = checkPincode('110001');
   assert.equal(outside.kind, 'outside');
-  assert.ok(outside.text.includes('only in Delhi'));
+  assert.ok(outside.text.includes('Not in your area yet – WhatsApp us'));
 
   const bad = checkPincode('12');
   assert.equal(bad.kind, 'error');

@@ -1,24 +1,24 @@
 /* BROSKI site config: the ONLY place to change numbers, links and offer dates. */
 window.BROSKI_CONFIG = {
   WHATSAPP_NUMBER: '919821563468',     // 91XXXXXXXXXX: country code, no +, no spaces
-  TALLY_FORM_URL: 'https://tally.so/r/mB0pEq',       // feedback form link
   EMAIL: 'support@broskipetfood.com',
   GA_MEASUREMENT_ID: 'G-YJ89P0X3QH',   // Live verified GA4 ID
-  GSTIN: '07BONPL7742A1ZW',            // Official GSTIN
+  GSTIN: '',                           // Empty if not issued
 
   // Supabase Portal Config (Only public anon/publishable key in frontend, never service_role)
   SUPABASE_URL: window.__BROSKI_SUPABASE_URL__ || 'https://gnunhiqahhnrkroqtxib.supabase.co',
   SUPABASE_ANON_KEY: window.__BROSKI_SUPABASE_ANON_KEY__ || 'sb_publishable_RM2Nr1mk-KjUeVt9SPQmzA_ZWFyYNGG',
 
+  OFFERS_ENABLED: ['combo', 'free-delivery-299', 'feedback-taste-pack'],
   DELIVERY_PINCODES: ['110041', '110087', '110063', '110027', '110058', '110015', '110026', '110034', '110056'],
 
-  // Launch banner: shown until this moment (India time), then hidden automatically
-  BANNER_TEXT: '🐾 Launch week: free 50 g taste pack + free delivery in West Delhi for the first 50 orders – till 22 Nov',
+  // Launch banner: empty text hides the banner completely
+  BANNER_TEXT: '',
   BANNER_HIDE_FROM: '2026-11-23T00:00:00+05:30',
 
   PRODUCTS: [
     {
-      id: 'non-veg',
+      id: 'bro-bites',
       title: 'Bro Bites – Classic Crunch',
       note: 'Yellow pack',
       size: '400 g',
@@ -29,7 +29,7 @@ window.BROSKI_CONFIG = {
       msg: 'Hi BROSKI! I want to order Bro Bites – Classic Crunch 400 g ×1'
     },
     {
-      id: 'mix',
+      id: 'bro-mix',
       title: 'Bro Mix – Happy Mix',
       note: 'White pack',
       size: '400 g',
@@ -58,7 +58,7 @@ window.BROSKI_CONFIG = {
     combo: 'Hi BROSKI! I want the Bro Combo (₹299)',
     referral: 'Hi BROSKI! My friend [name] referred me.',
     video: "Hi BROSKI! Here's my Bro's video 🎥 Batch no: ____ Bro word: ____",
-    shop: 'Hi BROSKI! I run a pet shop and want to know about the Launch Partner offer. Shop name: ____ Area: ____',
+    shop: 'Hi BROSKI! I run a pet shop and want to know about trade terms. Shop name: ____ Area: ____',
     hello: 'Hi BROSKI!'
   }
 };

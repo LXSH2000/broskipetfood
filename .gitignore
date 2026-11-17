@@ -4,3 +4,21 @@ data/
 .env
 *.log
 backups/
+
+# Test scripts & automated verification
+test_*.cjs
+test_*.js
+test_*.py
+test_*.png
+test_*.pdf
+verify_*.cjs
+check_*.cjs
+check_*.py
+run_*.py
+
+# Lighthouse & QA artifacts
+screenshots/
+qa_screenshots/
+qa_report.json
+test_results.json
+lighthouse_*.json
