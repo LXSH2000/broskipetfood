@@ -14,7 +14,8 @@
 
 /* Authentic BROSKI signature typography */
 .hero-v2 .hero-title,
-.footer-word {
+.footer-word,
+.bintro-word-text {
   font-family: 'Gaegu', cursive, sans-serif !important;
 }
 

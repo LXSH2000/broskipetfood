@@ -39,6 +39,8 @@ export default function Intro() {
     const el = root.current;
     const html = document.documentElement;
     let killed = false;
+    let ctx = null;
+    let failsafe = null;
 
     const finish = () => {
       if (killed) return;
@@ -49,16 +51,21 @@ export default function Intro() {
       setShow(false);
     };
 
-    let ctx = null;
-    let failsafe = null;
     const skip = () => {
       const tl = tlRef.current;
       if (!tl) return finish();
-      if (tl.time() < tl.labels.exit) tl.seek('exit').play();
+      if (tl.time() < tl.labels.exit) {
+        tl.seek('exit').play();
+      } else {
+        finish();
+      }
     };
     const onKey = e => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip(); };
 
-    import('gsap').then(({ default: gsap }) => {
+    Promise.all([
+      import('gsap'),
+      document.fonts?.load ? document.fonts.load('700 120px Gaegu').catch(() => {}) : Promise.resolve()
+    ]).then(([{ default: gsap }]) => {
       if (killed || !root.current) return;
       const q = s => el.querySelectorAll(s);
 
@@ -80,6 +87,7 @@ export default function Intro() {
           .to(q('.bintro-word-text'), { fillOpacity: 1, duration: .55, ease: 'power1.out' }, 1.25)
           .to(q('.bintro-word-text'), { strokeOpacity: 0, duration: .4 }, 1.6)
           .to(q('.bintro-swoosh'), { strokeDashoffset: 0, duration: .6, ease: 'power3.inOut' }, 1.35)
+          // the biscuit drops, squashes, hops once and settles
           .addLabel('drop', 1.6)
           .set(q('.bintro-biscuit'), { autoAlpha: 1 }, 'drop')
           .to(q('.bintro-biscuit'), { y: 0, rotation: -8, duration: .42, ease: 'power2.in' }, 'drop')
@@ -88,13 +96,17 @@ export default function Intro() {
           .to(q('.bintro-biscuit'), { y: 0, scaleX: 1, scaleY: 1, rotation: -14, duration: .24, ease: 'power2.in' })
           .to(q('.bintro-biscuit'), { scaleX: 1.14, scaleY: .86, duration: .07 })
           .to(q('.bintro-biscuit'), { scaleX: 1, scaleY: 1, rotation: -18, duration: .5, ease: 'elastic.out(1, .45)' })
+          // the logo wags at the impact
           .to(q('.bintro-word'), { rotation: -2.5, duration: .1, transformOrigin: '50% 90%', ease: 'power1.out' }, 'drop+=.44')
           .to(q('.bintro-word'), { rotation: 2, duration: .14, ease: 'sine.inOut', yoyo: true, repeat: 2 }, '>')
           .to(q('.bintro-word'), { rotation: 0, duration: .25, ease: 'back.out(3)' }, '>')
+          // paw prints trot across
           .to(q('.bintro-paw > g'), { scale: 1, opacity: 1, duration: .32, ease: 'back.out(3)', stagger: .12 }, 'drop+=.55')
           .to(q('.bintro-paw > g'), { opacity: 0, duration: .5, stagger: .12 }, 'drop+=1.5')
+          // tagline rises word by word
           .to(q('.bintro-tag span'), { yPercent: 0, duration: .7, ease: 'power4.out', stagger: .07 }, 'drop+=.6')
           .fromTo(q('.bintro-skip'), { opacity: 0 }, { opacity: 1, duration: .4 }, .6)
+          // exit: content lifts, cream wipes up over a rust band, site appears
           .addLabel('exit', '+=.25')
           .to(q('.bintro-stage'), { y: -46, opacity: 0, duration: .5, ease: 'power3.in' }, 'exit')
           .to(q('.bintro-skip'), { opacity: 0, duration: .25 }, 'exit')
@@ -102,9 +114,7 @@ export default function Intro() {
           .to(q('.bintro-sweep'), { clipPath: 'inset(0% 0% 100% 0%)', duration: .9, ease: 'expo.inOut' }, 'exit+=.44');
       }, el);
 
-      const fontReady = document.fonts?.load ? document.fonts.load('700 120px Gaegu').catch(() => {}) : Promise.resolve();
-      const timeout = new Promise(r => setTimeout(r, 350));
-      Promise.race([fontReady, timeout]).then(() => { if (!killed) tlRef.current?.play(); });
+      if (!killed) tlRef.current?.play();
 
       el.addEventListener('click', skip);
       window.addEventListener('keydown', onKey);
@@ -125,37 +135,36 @@ export default function Intro() {
   return (
     <div className="bintro" ref={root} role="region" aria-label="Broski intro">
       <div className="bintro-sweep" aria-hidden="true" />
-      <div className="bintro-bg" aria-hidden="true" />
-      <div className="bintro-stage">
-        <span className="bintro-eyebrow">WEST DELHI &bull; BATCH 01</span>
-        <div className="bintro-mark-wrap">
-          <div className="bintro-glow" aria-hidden="true" />
-          <svg className="bintro-svg" viewBox="0 0 980 440" fill="none">
-            <Paw x="110" y="340" r="-18" />
-            <Paw x="220" y="270" r="14" />
-            <Paw x="760" y="270" r="-12" />
-            <Paw x="870" y="340" r="22" />
-            <g className="bintro-biscuit">
-              <path d="M-64 -32 C-80 -44 -86 -66 -72 -80 C-58 -94 -36 -88 -24 -72 L24 -72 C36 -88 58 -94 72 -80 C86 -66 80 -44 64 -32 C80 -20 86 2 72 16 C58 30 36 24 24 8 L-24 8 C-36 24 -58 30 -72 16 C-86 2 -80 -20 -64 -32 Z" fill="#b8452b" />
-              <circle cx="-32" cy="-32" r="3.5" fill="#fdfaf3" opacity=".9" />
-              <circle cx="0" cy="-32" r="3.5" fill="#fdfaf3" opacity=".9" />
-              <circle cx="32" cy="-32" r="3.5" fill="#fdfaf3" opacity=".9" />
-            </g>
-            <path className="bintro-swoosh" d="M 160 380 Q 490 430 820 380" stroke="#b8452b" strokeWidth="6" strokeLinecap="round" />
+      <div className="bintro-bg" aria-hidden="true">
+        <div className="bintro-glow" />
+        <div className="bintro-grain" />
+        <div className="bintro-stage">
+          <p className="bintro-eyebrow">For your favourite kind of company</p>
+          <svg className="bintro-logo" viewBox="0 0 720 300" role="presentation">
             <g className="bintro-word">
-              <text className="bintro-word-text" x="490" y="290" textAnchor="middle">BROSKI</text>
+              <text className="bintro-word-text" x="320" y="182" textAnchor="middle">Broski</text>
             </g>
+            <path className="bintro-swoosh" pathLength="1" d="M150 214 C 260 238, 420 232, 530 202" />
+            <g transform="translate(628 182)">
+              <g className="bintro-biscuit">
+                <path d="M27 10C15-9-7 9 7 23-7 40 17 57 28 37h43c12 20 35 2 22-14C108 8 84-9 73 10Z" transform="translate(-50 -48)" />
+                <circle cx="-22" cy="-26" r="2.4" /><circle cx="-2" cy="-20" r="2.4" /><circle cx="18" cy="-27" r="2.4" />
+              </g>
+            </g>
+            <Paw x={170} y={272} r={70} />
+            <Paw x={250} y={256} r={80} />
+            <Paw x={330} y={274} r={70} />
+            <Paw x={410} y={258} r={80} />
+            <Paw x={490} y={276} r={70} />
           </svg>
+          <p className="bintro-tag">
+            <span>Treats</span> <span>for</span> <span>your</span> <span className="bintro-em">best</span> <span className="bintro-em">bro.</span>
+          </p>
         </div>
-        <p className="bintro-tag" aria-label="Crunchy dog treats for your best bro.">
-          <span>CRUNCHY</span> <span>DOG</span> <span>TREATS</span> <span>FOR</span> <span>YOUR</span> <span>BEST</span> <span>BRO.</span>
-        </p>
       </div>
-      <button type="button" className="bintro-skip" onClick={() => {
-        try { sessionStorage.setItem(KEY, '1'); } catch {}
-        document.documentElement.classList.remove('broski-intro-active');
-        setShow(false);
-      }}>Skip &rarr;</button>
+      <button type="button" className="bintro-skip" onClick={e => { e.stopPropagation(); skip(); }}>
+        Skip intro <span aria-hidden="true">&rarr;</span>
+      </button>
     </div>
   );
 }
