@@ -19,6 +19,8 @@ import './polish.js';
 
 function HeroMedia() {
   const [isMobile, setIsMobile] = useState(true);
+  const [isPlayingMobile, setIsPlayingMobile] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -38,13 +40,13 @@ function HeroMedia() {
 
       const startVideo = () => {
         if (!('IntersectionObserver' in window)) {
-          if (!vid.src) vid.src = '/broski-hero-desktop-720.mp4';
+          if (!vid.src) vid.src = '/broski-product-motion-ad-720.mp4';
           vid.play().catch(() => {});
           return;
         }
         const io = new IntersectionObserver(([entry]) => {
           if (entry.isIntersecting) {
-            if (!vid.src) vid.src = '/broski-hero-desktop-720.mp4';
+            if (!vid.src) vid.src = '/broski-product-motion-ad-720.mp4';
             vid.play().catch(() => {});
           } else {
             vid.pause();
@@ -61,38 +63,88 @@ function HeroMedia() {
     }
   }, []);
 
+  const toggleSound = (e) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      const nextMuted = !videoRef.current.muted;
+      videoRef.current.muted = nextMuted;
+      setIsMuted(nextMuted);
+    }
+  };
+
   return (
     <div className="cinema-frame">
-      <div className="cinema-window">
+      <div className={`cinema-window ${isPlayingMobile ? 'is-playing' : ''}`}>
         {isMobile ? (
-          <img
-            src="/broski-hero-mobile-poster.webp"
-            alt="A golden retriever enjoying crunchy Broski treats alongside the authentic 400g trial pouches"
-            className="cinema-image"
-            width="720"
-            height="720"
-            fetchPriority="high"
-          />
+          isPlayingMobile ? (
+            <video
+              ref={videoRef}
+              className="cinema-image cinema-video"
+              src="/broski-product-motion-ad-720.mp4"
+              poster="/broski-hero-mobile-poster.webp"
+              autoPlay
+              playsInline
+              controls
+              data-user-playing="true"
+              aria-label="Official BROSKI product motion ad showcasing 400g trial pouches"
+            />
+          ) : (
+            <>
+              <img
+                src="/broski-hero-mobile-poster.webp"
+                alt="Official BROSKI product motion ad showcasing 400g trial pouches"
+                className="cinema-image"
+                width="720"
+                height="720"
+                fetchPriority="high"
+              />
+              <button
+                type="button"
+                className="cinema-play-badge"
+                aria-label="Play official BROSKI launch motion ad"
+                onClick={() => setIsPlayingMobile(true)}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <span>Watch Launch Ad</span>
+              </button>
+            </>
+          )
         ) : (
-          <video
-            ref={videoRef}
-            className="cinema-image cinema-video"
-            poster="/broski-hero-desktop-poster.webp"
-            loop
-            muted
-            playsInline
-            preload="none"
-            aria-label="A golden retriever enjoying crunchy Broski treats alongside the authentic 400g trial pouches"
-          />
+          <>
+            <video
+              ref={videoRef}
+              className="cinema-image cinema-video"
+              poster="/broski-hero-desktop-poster.webp"
+              loop
+              muted={isMuted}
+              playsInline
+              preload="none"
+              aria-label="Official BROSKI product motion ad showcasing 400g trial pouches"
+            />
+            <button
+              type="button"
+              className="cinema-sound-btn"
+              onClick={toggleSound}
+              aria-label={isMuted ? "Turn sound on" : "Mute sound"}
+            >
+              <span>{isMuted ? "Sound On 🔊" : "Mute 🔇"}</span>
+            </button>
+          </>
         )}
-        <div className="video-live-pill" aria-label="Moments in motion">
-          <span className="live-dot" />
-          <span>Moments in Motion</span>
-        </div>
-        <div className="cinema-caption">
-          <span>AUTHENTIC TRIAL PACKS</span>
-          <p>Sealed for your<br /><em>best bro.</em></p>
-        </div>
+        {!isPlayingMobile && (
+          <>
+            <div className="video-live-pill" aria-label="Moments in motion">
+              <span className="live-dot" />
+              <span>Moments in Motion</span>
+            </div>
+            <div className="cinema-caption">
+              <span>AUTHENTIC TRIAL PACKS</span>
+              <p>Sealed for your<br /><em>best bro.</em></p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -131,6 +183,7 @@ function App() {
   useEffect(() => {
     const playMedia = () => {
       document.querySelectorAll('video').forEach(v => {
+        if (v.controls || v.dataset.userPlaying === 'true') return;
         v.muted = true;
         v.defaultMuted = true;
         v.playsInline = true;

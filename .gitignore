@@ -22,3 +22,5 @@ qa_screenshots/
 qa_report.json
 test_results.json
 lighthouse_*.json
+lh-*.json
+inspect_video.py
