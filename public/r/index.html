@@ -504,6 +504,9 @@ body {
             <input type="text" id="custCode" class="input-box" placeholder="6-digit code" maxlength="6" style="text-transform:uppercase;">
           </div>
         </div>
+        <div id="codeHint" style="display:none; font-size:12.5px; color:var(--accent); margin-top:8px; font-weight:700;">
+          Add your customer code to earn points for this feedback
+        </div>
       </div>
 
       <div id="feedbackAlert" style="display:none; padding:12px 14px; border-radius:10px; background:#fdf2f2; border:1px solid #f8b4b4; color:#9b1c1c; font-size:13.5px; margin-top:14px;"></div>
@@ -615,6 +618,34 @@ document.addEventListener('DOMContentLoaded', () => {
   if (banner && !showReward) banner.style.display = 'none';
   const voucher = document.getElementById('rewardVoucherCard');
   if (voucher && !showReward) voucher.style.display = 'none';
+
+  const userPhoneInput = document.getElementById('userPhone');
+  const custCodeInput = document.getElementById('custCode');
+  const codeHintEl = document.getElementById('codeHint');
+
+  function checkCodeHint() {
+    if (!userPhoneInput || !custCodeInput || !codeHintEl) return;
+    const pDigits = userPhoneInput.value.replace(/\D/g, '');
+    const cVal = custCodeInput.value.trim();
+    if (pDigits.length > 0 && !cVal) {
+      codeHintEl.style.display = 'block';
+    } else {
+      codeHintEl.style.display = 'none';
+    }
+  }
+
+  if (userPhoneInput) {
+    userPhoneInput.addEventListener('input', function() {
+      this.value = this.value.replace(/\D/g, '').slice(0, 10);
+      checkCodeHint();
+    });
+  }
+  if (custCodeInput) {
+    custCodeInput.addEventListener('input', function() {
+      this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+      checkCodeHint();
+    });
+  }
 });
 
 async function submitFeedback() {

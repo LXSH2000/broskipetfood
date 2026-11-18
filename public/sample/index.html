@@ -127,6 +127,10 @@
         <p class="bk-small" style="margin:0;">One free sample per number.</p>
       </div>
 
+      <div id="newCustCodeNotice" style="display:none; margin:16px 0; padding:12px 14px; background:#fff7f4; border:1.5px solid var(--rust); border-radius:12px; font-size:14px; color:var(--rust-dark); text-align:center;">
+        Your customer code: <strong id="displayCustCode" style="font-family:'JetBrains Mono',monospace; letter-spacing:1px; background:#fff; padding:2px 8px; border-radius:4px; border:1px solid var(--rust);">------</strong> – save it to check points at <a href="/points/" style="color:inherit; font-weight:700; text-decoration:underline;">broskipetfood.com/points</a>
+      </div>
+
       <a id="waConfirmBtn" href="#" class="bk-btn bk-btn--wa bk-btn--big" target="_blank" rel="noopener noreferrer">
         Send on WhatsApp to confirm
       </a>
@@ -275,6 +279,16 @@ window.addEventListener('DOMContentLoaded', function () {
           window.BroskiPortal.trackGA('sample_claim_success', { flavour: flavour });
         }
         document.getElementById('displayClaimCode').textContent = data.claim_code;
+
+        // If brand-new customer, display customer code with save instructions
+        const custCodeNoticeEl = document.getElementById('newCustCodeNotice');
+        const custCodeDisplayEl = document.getElementById('displayCustCode');
+        if (data.customer_code && custCodeNoticeEl && custCodeDisplayEl) {
+          custCodeDisplayEl.textContent = data.customer_code;
+          custCodeNoticeEl.style.display = 'block';
+        } else if (custCodeNoticeEl) {
+          custCodeNoticeEl.style.display = 'none';
+        }
 
         // Display the specific sample pouch reserved
         const sampleImg = document.getElementById('sampleReservedImg');

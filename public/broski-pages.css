@@ -43,6 +43,7 @@ h3 { font-size: 20px; font-weight: 700; }
 .bk-btn--wa { background: var(--wa); color: #fff; }
 .bk-btn--ghost { background: transparent; color: var(--brown); border: 2px solid var(--brown); }
 .bk-btn--big { min-height: 60px; font-size: 19px; }
+.bk-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 .bk-btn + .bk-btn { margin-top: 10px; }
 
 /* cards */

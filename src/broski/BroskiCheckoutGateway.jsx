@@ -354,12 +354,13 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
             <p className="bk-conf-id" style={{ fontSize: '15px', margin: '4px 0' }}>
               Order Reference: <strong>#{orderConfirmed.id}</strong>
             </p>
-            {orderConfirmed.customerCode && (
-              <p style={{ fontSize: '13.5px', color: '#974324', margin: '4px 0' }}>
-                Your Customer Code: <strong style={{ fontFamily: 'monospace', letterSpacing: '1px', background: '#fdf3ed', padding: '2px 6px', borderRadius: '4px' }}>{orderConfirmed.customerCode}</strong>
-                <span style={{ display: 'block', fontSize: '11px', color: '#776754', marginTop: '2px' }}>
-                  Use this to check your points anytime on <a href="/points/" style={{ color: 'inherit', textDecoration: 'underline' }}>broskipetfood.com/points</a>
-                </span>
+            {orderConfirmed.customerCode ? (
+              <p style={{ fontSize: '13.5px', color: '#974324', margin: '6px 0' }}>
+                Your customer code: <strong style={{ fontFamily: 'monospace', letterSpacing: '1px', background: '#fdf3ed', padding: '2px 6px', borderRadius: '4px' }}>{orderConfirmed.customerCode}</strong> – save it to check points at <a href="/points/" style={{ color: 'inherit', textDecoration: 'underline' }}>broskipetfood.com/points</a>
+              </p>
+            ) : (
+              <p style={{ fontSize: '13px', color: '#776754', margin: '6px 0' }}>
+                Check your points at <a href="/points/" style={{ color: 'inherit', textDecoration: 'underline' }}>broskipetfood.com/points</a> with your customer code.
               </p>
             )}
             <p style={{ fontSize: '13.5px', color: '#666', margin: '8px 0 16px' }}>
