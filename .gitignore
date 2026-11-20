@@ -17,6 +17,7 @@ check_*.py
 run_*.py
 
 # Lighthouse & QA artifacts
+scripts/
 screenshots/
 qa_screenshots/
 qa_report.json

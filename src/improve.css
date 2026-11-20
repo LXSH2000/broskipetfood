@@ -1,0 +1,334 @@
+/* BROSKI Improvement Pack (21 Nov 2026)
+   Tokens, motion, accessibility, and trust blocks.
+   Imported last in src/main.jsx.
+*/
+
+:root {
+  --bk-cream: #f5efe4;
+  --bk-paper: #fbf7ef;
+  --bk-brown: #352016;
+  --bk-brown-2: #5a4033;
+  --bk-rust: #b8452b;
+  --bk-mustard: #e2a72e;
+  --bk-line: #e6dccb;
+  --bk-wa: #187741;
+  --pz-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  interpolate-size: allow-keywords;
+}
+
+/* Page transitions */
+header {
+  view-transition-name: bk-header;
+}
+.logo {
+  view-transition-name: bk-logo;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+}
+
+/* --- B3. Conversion & Content Pieces --- */
+.bk-sample-link {
+  color: var(--bk-rust) !important;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* What's Inside Toggle */
+.bk-inside {
+  margin-top: 10px;
+  border-top: 1px dashed var(--bk-line);
+  padding-top: 4px;
+}
+.bk-inside summary {
+  font-size: 14px;
+  color: var(--bk-brown-2);
+  min-height: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.bk-inside summary::-webkit-details-marker {
+  display: none;
+}
+.bk-inside summary span {
+  transition: transform 0.3s var(--pz-ease);
+  display: inline-block;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--bk-brown);
+}
+.bk-inside[open] summary span {
+  transform: rotate(45deg);
+}
+.bk-inside p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--bk-brown-2);
+  margin: 0 0 8px;
+}
+
+/* Founder Note Signature */
+.bk-founder__sign {
+  font-family: 'Gaegu', cursive;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--bk-rust);
+  display: block;
+  margin-top: 4px;
+}
+
+/* --- B6. Accessibility & Contrast Polish --- */
+body .footer-bottom,
+body .footer-bottom a,
+body .footer-bottom span {
+  color: var(--bk-brown-2) !important;
+}
+
+/* Tap targets (min 44px height) */
+.footer-bottom a,
+.bk-product-details-card a,
+.text-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding-block: 6px;
+}
+
+/* Minimum 12px text across visible site copy */
+.ticker span,
+.video-live-pill,
+.cinema-caption > span,
+.hero-end,
+.hero-end span,
+.hero-end a,
+.eyebrow,
+.hero-v2 .eyebrow,
+.bk-shop-eyebrow,
+.card-badge,
+.bk-badge,
+.footer-bottom,
+.footer-bottom span,
+.footer-bottom a {
+  font-size: 12px !important;
+}
+.hero-cta .button.light span {
+  font-size: 13px !important;
+}
+
+/* Phone spacing tightening (padding only, layout unchanged) */
+@media (max-width: 700px) {
+  .story.section,
+  .ritual.section {
+    padding-top: 38px !important;
+    padding-bottom: 38px !important;
+  }
+}
+
+/* --- B8. Motion and Transitions --- */
+@media (prefers-reduced-motion: no-preference) {
+  /* M1: Order Sheet Exit & Bottom Sheet */
+  .bk-gateway-overlay {
+    transition: opacity 0.22s var(--pz-ease);
+  }
+  .bk-gateway-overlay.is-closing {
+    opacity: 0;
+  }
+  .bk-gateway-overlay.is-closing .bk-gateway-modal {
+    transform: translateY(24px);
+    transition: transform 0.22s var(--pz-ease);
+  }
+
+  @media (max-width: 700px) {
+    .bk-gateway-overlay {
+      align-items: flex-end !important;
+      padding: 0 !important;
+    }
+    .bk-gateway-modal {
+      width: 100% !important;
+      max-width: 100% !important;
+      border-radius: 20px 20px 0 0 !important;
+      max-height: 90vh !important;
+      animation: bk-sheet-up 0.35s var(--pz-ease) both !important;
+      position: relative;
+    }
+    .bk-gateway-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--bk-line);
+      border-radius: 99px;
+      margin: 10px auto 4px auto;
+      display: block;
+    }
+    .bk-gateway-overlay.is-closing .bk-gateway-modal {
+      transform: translateY(100%) !important;
+      transition: transform 0.22s var(--pz-ease) !important;
+    }
+  }
+
+  @keyframes bk-sheet-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  /* M2: Bone Toss Success */
+  .bk-bone-toss {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    height: 32px;
+    margin-bottom: 4px;
+    pointer-events: none;
+  }
+  .bk-toss-bone {
+    display: inline-block;
+    width: 28px;
+    height: 14px;
+    animation: bk-toss 0.9s var(--pz-ease) forwards;
+  }
+  .bk-toss-bone-1 { animation-delay: 0ms; }
+  .bk-toss-bone-2 { animation-delay: 80ms; }
+  .bk-toss-bone-3 { animation-delay: 160ms; }
+
+  @keyframes bk-toss {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    50% { transform: translateY(-60px) rotate(35deg); opacity: 1; }
+    100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  }
+
+  /* M3: FAQ & Inside Smooth Height */
+  .questions details::details-content,
+  .bk-inside::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size 0.4s var(--pz-ease), content-visibility 0.4s allow-discrete;
+  }
+  .questions details[open]::details-content,
+  .bk-inside[open]::details-content {
+    block-size: auto;
+  }
+
+  /* M4: Mobile Menu Stagger */
+  @media (max-width: 760px) {
+    header > nav {
+      transition: opacity 0.3s var(--pz-ease), transform 0.35s var(--pz-ease);
+    }
+    header > nav:not(.open) {
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+    }
+    header > nav.open a {
+      animation: bk-nav-item-fade 0.3s var(--pz-ease) both;
+      animation-delay: calc(var(--i, 0) * 40ms);
+    }
+  }
+  @keyframes bk-nav-item-fade {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* M6: Pincode Result Slide & SVG Tick */
+  .bk-pin__msg.is-shown {
+    animation: bk-pin-in 300ms var(--pz-ease) both;
+  }
+  @keyframes bk-pin-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+  .bk-tick-svg polyline {
+    stroke: var(--bk-wa);
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    animation: bk-tick-draw 400ms var(--pz-ease) forwards;
+  }
+  @keyframes bk-tick-draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* M7: Copy Button Pop */
+  .bk-copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    min-height: 44px;
+    border-radius: 999px;
+    border: 1.5px solid var(--bk-brown);
+    background: transparent;
+    color: var(--bk-brown);
+    font: 700 13px 'Outfit', sans-serif;
+    cursor: pointer;
+    transition: transform 0.2s var(--pz-ease), background 0.2s ease, color 0.2s ease;
+  }
+  .bk-copy:active {
+    transform: scale(0.96);
+  }
+  .bk-copy.is-copied {
+    background: var(--bk-brown);
+    color: #fff;
+    animation: bk-pop 0.2s var(--pz-ease);
+  }
+  @keyframes bk-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+  }
+
+  /* M10: Serif Slide In */
+  [data-pz-serif] {
+    opacity: 0;
+    transform: translateX(-10px);
+    display: inline-block;
+  }
+  [data-pz-serif].pz-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s var(--pz-ease) 0.12s, transform 0.7s var(--pz-ease) 0.12s;
+  }
+
+  /* M11: WhatsApp Float Manners */
+  .whatsapp-float {
+    transition: opacity 300ms var(--pz-ease), transform 300ms var(--pz-ease) !important;
+  }
+  .whatsapp-float.wa-hide {
+    opacity: 0 !important;
+    transform: translateY(16px) scale(0.9) !important;
+    pointer-events: none !important;
+  }
+}
+
+/* M5: Press feedback on Touch (No Hover) */
+@media (hover: none) {
+  .bk-h-btn:active,
+  .button:active,
+  .bk-gateway-trigger-btn:active,
+  .bk-pcard:active {
+    transform: scale(0.97) !important;
+    transition: transform 0.12s ease-out !important;
+  }
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .bk-gateway-modal,
+  .bk-toss-bone,
+  .bk-pin__msg,
+  .bk-tick-svg polyline,
+  .bk-copy,
+  [data-pz-serif],
+  .whatsapp-float {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

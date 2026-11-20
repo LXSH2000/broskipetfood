@@ -98,6 +98,11 @@ export function PincodeChecker() {
         <button type="submit" className="bk-h-btn bk-pin__btn">Check</button>
       </div>
       <p className={`bk-pin__msg ${result ? `bk-pin__msg--${result.kind} is-shown` : ''}`} role="status" aria-live="polite">
+        {result && result.kind === 'local' && (
+          <svg className="bk-tick-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        )}
         {result ? result.text : ''}
       </p>
     </form>
@@ -126,7 +131,7 @@ export function ProductCards() {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
           </svg>
-          Order now
+          Order the combo
         </button>
       </div>
 
@@ -135,7 +140,16 @@ export function ProductCards() {
           <article key={p.id} className={`bk-pcard ${p.id === 'combo' ? 'bk-pcard--combo' : ''}`}>
             <div className="bk-pcard__img">
               {p.img ? (
-                <img src={p.img} alt={p.alt} width="600" height="600" loading="lazy" decoding="async" />
+                <img
+                  src={p.img}
+                  srcSet={`${p.img400 || p.img} 400w, ${p.img} 764w`}
+                  sizes="(max-width: 700px) 90vw, 360px"
+                  alt={p.alt}
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                  decoding="async"
+                />
               ) : (
                 <div className="bk-pcard__duo" aria-hidden="true">
                   {nv && <img src={nv.img} alt="" width="300" height="300" loading="lazy" decoding="async" />}
@@ -147,6 +161,13 @@ export function ProductCards() {
             <div className="bk-pcard__body">
               <h3>{p.title}</h3>
               <p className="bk-pcard__note">{p.note} · {p.size}</p>
+              {p.ingredients && (
+                <details className="bk-inside" onToggle={(e) => { if (e.currentTarget.open) try { window.BroskiAnalytics?.trackEvent('ingredients_open', { product: p.id }); } catch {} }}>
+                  <summary>What's inside <span aria-hidden="true">+</span></summary>
+                  <p>{p.ingredients}</p>
+                  <p><strong>{p.allergens}</strong> A treat, not a meal – follow the guide on the pack.</p>
+                </details>
+              )}
               <p className="bk-pcard__price">
                 <strong>₹{p.price}</strong> <span>MRP incl. of all taxes</span>
               </p>
@@ -160,7 +181,7 @@ export function ProductCards() {
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginRight: '6px'}}>
                     <path d="M5 7h14l1 14H4L5 7Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/>
                   </svg>
-                  Order on WhatsApp
+                  Order now
                 </button>
                 <a
                   className="bk-card-wa-link"
@@ -168,7 +189,7 @@ export function ProductCards() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span>Or order via WhatsApp →</span>
+                  <span>or just message us on WhatsApp</span>
                 </a>
               </div>
             </div>
@@ -176,6 +197,9 @@ export function ProductCards() {
         ))}
       </div>
       {UNIT_PRICE_LINE && <p className="bk-shop__unit">{UNIT_PRICE_LINE}</p>}
+      <p style={{ textAlign: 'center', margin: '8px auto 0', fontSize: '14px', color: 'var(--bk-brown-2)' }}>
+        Not sure which one? <a className="text-link" href="/sample/?utm_source=site&utm_medium=shop" onClick={() => { try { window.BroskiAnalytics?.trackEvent('sample_cta_click', { place: 'shop' }); } catch {} }}>Try a free taste pack first →</a>
+      </p>
 
       {/* Product Details Section (Legal Metrology & E-Commerce Rules) */}
       <div className="bk-product-details-card" style={{
@@ -246,6 +270,31 @@ export function ProductCards() {
         </div>
       </div>
 
+      {/* Shops trust block (shown only if SHOPS is populated) */}
+      {C().SHOPS && C().SHOPS.length > 0 && (
+        <div className="bk-product-details-card bk-shops-card" style={{
+          margin: '24px auto 0',
+          padding: '20px',
+          background: '#fff',
+          border: '1.5px solid var(--border)',
+          borderRadius: '16px',
+          maxWidth: '860px',
+          textAlign: 'left'
+        }}>
+          <h4 style={{ margin: '0 0 10px', fontSize: '15px', fontWeight: '800', color: 'var(--brown)', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+            Find us at
+          </h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+            {C().SHOPS.map((s, idx) => (
+              <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span><strong>{s.name}</strong> · {s.area}</span>
+                {s.map && <a href={s.map} target="_blank" rel="noopener noreferrer" className="text-link">Map →</a>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* The D2C Direct Checkout Gateway */}
       {activeGatewayProduct && (
         <BroskiCheckoutGateway
@@ -287,6 +336,8 @@ export function SiteFooter() {
         <p>Crunchy dog biscuits packed in Nangloi, West Delhi – 110041.<br />Treats for your best bro.</p>
         <div>
           <a href="/#shop">Shop treats</a>
+          <a href="/sample/">Free sample</a>
+          <a href="/points/">My points</a>
           <a href="/#story">Our story</a>
           <a href="/#faq">FAQs</a>
           <a href="/offers/">Bro Perks</a>
@@ -296,6 +347,9 @@ export function SiteFooter() {
           <a href="/r/">Feedback</a>
           <a href="/terms/">Terms</a>
           <a href="/privacy/">Privacy</a>
+          {C().INSTAGRAM_URL ? (
+            <a href={C().INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Instagram</a>
+          ) : null}
           <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp</a>
         </div>
       </div>

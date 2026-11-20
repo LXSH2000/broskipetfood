@@ -16,6 +16,9 @@ import BroskiWordmark from './BroskiWordmark.jsx';
 import './broski/broski-home.css';
 import './polish.css';
 import './polish.js';
+import './improve.css';
+
+const C = () => window.BROSKI_CONFIG || {};
 
 function HeroMedia() {
   const [isMobile, setIsMobile] = useState(true);
@@ -101,7 +104,7 @@ function HeroMedia() {
               <button
                 type="button"
                 className="cinema-play-badge"
-                aria-label="Play official BROSKI launch motion ad"
+                aria-label="Watch Launch Ad"
                 onClick={() => setIsPlayingMobile(true)}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -224,12 +227,14 @@ function App() {
         </a>
         <span className="concept-watermark">Est. 2026 · West Delhi</span>
         <nav className={menu ? 'open' : ''} id="main-navigation" aria-label="Main navigation">
-          <a href="#shop" onClick={() => setMenu(false)}>Shop</a>
-          <a href="/offers/" onClick={() => setMenu(false)}>Bro Perks</a>
-          <a href="/r/" onClick={() => setMenu(false)}>Feedback</a>
-          <a href="#story" onClick={() => setMenu(false)}>Our story</a>
-          <a href="#faq" onClick={() => setMenu(false)}>Good to know</a>
-          <a href="/?intro=1" onClick={() => { try { sessionStorage.removeItem('broski-intro-seen'); } catch {} }}>Watch intro ↺</a>
+          <a href="#shop" onClick={() => setMenu(false)} style={{ '--i': 0 }}>Shop</a>
+          <a href="/sample/" onClick={() => setMenu(false)} style={{ '--i': 1 }}>Free sample</a>
+          <a href="/offers/" onClick={() => setMenu(false)} style={{ '--i': 2 }}>Bro Perks</a>
+          <a href="/r/" onClick={() => setMenu(false)} style={{ '--i': 3 }}>Feedback</a>
+          <a href="/points/" onClick={() => setMenu(false)} style={{ '--i': 4 }}>My points</a>
+          <a href="#story" onClick={() => setMenu(false)} style={{ '--i': 5 }}>Our story</a>
+          <a href="#faq" onClick={() => setMenu(false)} style={{ '--i': 6 }}>Good to know</a>
+          <a href="/?intro=1" onClick={() => { try { sessionStorage.removeItem('broski-intro-seen'); } catch {} }} style={{ '--i': 7 }}>Watch intro ↺</a>
         </nav>
         <div className="nav-actions">
           <button
@@ -281,6 +286,14 @@ function App() {
                   <span>Order on WhatsApp</span>
                 </a>
               </div>
+              <a
+                className="text-link bk-sample-link"
+                href="/sample/?utm_source=site&utm_medium=hero"
+                style={{ marginTop: '14px', fontSize: '14px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', color: 'var(--bk-rust)' }}
+                onClick={() => { try { window.BroskiAnalytics?.trackEvent('sample_cta_click', { place: 'hero' }); } catch {} }}
+              >
+                🎁 New here? Get a free 50 g taste pack →
+              </a>
             </div>
           </div>
           <HeroMedia />
@@ -291,8 +304,8 @@ function App() {
           </div>
         </section>
 
-        <div className="ticker" aria-label="For happy dogs and everyday adventures">
-          <span>SMALL BITES</span><Bone /><span>BIG FEELINGS</span><Bone /><span>HAPPY TAILS</span><Bone /><span>EVERYDAY ADVENTURES</span><Bone /><span>SMALL BITES</span>
+        <div className="ticker" role="img" aria-label="For happy dogs and everyday adventures">
+          <span aria-hidden="true">SMALL BITES</span><Bone aria-hidden="true" /><span aria-hidden="true">BIG FEELINGS</span><Bone aria-hidden="true" /><span aria-hidden="true">HAPPY TAILS</span><Bone aria-hidden="true" /><span aria-hidden="true">EVERYDAY ADVENTURES</span><Bone aria-hidden="true" /><span aria-hidden="true">SMALL BITES</span>
         </div>
 
         <ProductCards />
@@ -312,6 +325,22 @@ function App() {
             <h2>They make life<br />better. Let’s return<br /><span className="serif">the favour.</span></h2>
             <p>The morning walk. The welcome-home dance. That hopeful look when a cupboard opens. We’re here for the little rituals that make a life with dogs so good.</p>
             <p>Broski is for the friend who is always up for a walk, always happy to see you, and always convinced the next biscuit is theirs. Treats for your best bro. It’s that simple.</p>
+            {C().FOUNDER_NOTE && (
+              <p className="bk-founder">
+                {C().FOUNDER_PHOTO && (
+                  <img
+                    src={C().FOUNDER_PHOTO}
+                    alt="Lakshay"
+                    className="bk-founder__img"
+                    width="56"
+                    height="56"
+                    style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', display: 'inline-block', verticalAlign: 'middle', marginRight: '12px' }}
+                  />
+                )}
+                <span>"{C().FOUNDER_NOTE}"</span>
+                <span className="bk-founder__sign">— Lakshay, founder · Nangloi</span>
+              </p>
+            )}
             <a className="button light" href="#shop">A treat for your best friend <Icon type="arrow" /></a>
           </div>
         </section>
@@ -341,6 +370,24 @@ function App() {
           </div>
         </section>
 
+        {C().REVIEWS && C().REVIEWS.length > 0 && (
+          <section className="ritual section reviews-section">
+            <div className="eyebrow">FROM REAL BROS</div>
+            <h2>Happy tails,<br /><span className="serif">in their words.</span></h2>
+            <div className="ritual-grid">
+              {C().REVIEWS.slice(0, 3).map((rev, idx) => (
+                <article key={idx}>
+                  <p>"{rev.text}"</p>
+                  <div style={{ marginTop: '12px', fontSize: '13px', color: 'var(--bk-brown-2)' }}>
+                    — {rev.name}, {rev.area} · {rev.dog}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <p style={{ marginTop: '16px', fontSize: '13px', color: 'var(--bk-brown-2)', textAlign: 'center' }}>Shared with permission.</p>
+          </section>
+        )}
+
         <section id="faq" className="faq section">
           <div>
             <div className="eyebrow">GOOD TO KNOW</div>
@@ -349,7 +396,7 @@ function App() {
           </div>
           <div className="questions">
             {[
-              ['When can I buy Broski?', 'Available now in West Delhi via WhatsApp, with delivery from 15 Nov.'],
+              ['When can I buy Broski?', "Available now in West Delhi – tap Order now on any pack and we'll confirm delivery on WhatsApp."],
               ['How do I order?', 'Tap Order on WhatsApp on any pack – we confirm delivery and payment in the chat.'],
               ["What's in the treats?", 'Every ingredient is printed transparently on our back label: Bro Bites (Classic Crunch) contains Real Chicken, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Permitted Colours. Bro Mix (Happy Mix) contains Chicken Powder, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Colour. Both contain chicken and egg. Complementary pet treat – break into pieces for smaller dogs and always keep fresh water nearby.'],
               ['How does delivery work?', 'We deliver in West Delhi to start. Delivery day and any charge are confirmed by WhatsApp or email before you pay.'],

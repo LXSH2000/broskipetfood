@@ -31,7 +31,17 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Outfit:wght@700;800&display=swap" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="/broski-pages.css">
 <script src="/config.js" defer></script>
+<script src="/portal-shared.js" defer></script>
 <script src="/broski.js" defer></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (window.BroskiPortal) {
+      window.BroskiPortal.trackGA('offers_view');
+    } else if (typeof gtag === 'function') {
+      gtag('event', 'offers_view');
+    }
+  });
+</script>
 </head>
 <body>
 <div class="bk-wrap">
@@ -47,7 +57,7 @@
 
     <!-- 1. Feedback Taste Pack -->
     <article class="bk-card" data-offer="feedback-taste-pack">
-      <h3><span class="bk-num">1</span>Scan, tell, get a free taste</h3>
+      <h2 class="bk-card-title"><span class="bk-num">1</span>Scan, tell, get a free taste</h2>
       <div style="display:flex; align-items:center; gap:16px; margin: 10px 0;">
         <img src="/broski-sample-bites.webp" alt="Free 50g taste pack" width="100" height="100" style="width:84px; height:84px; object-fit:cover; border-radius:12px; border:1px solid rgba(53,32,22,0.15);">
         <p style="margin:0;">Scan the QR on your pack, tell us honestly how your Bro liked it, and get a free 50 g taste pack of our other flavour with your next order.</p>
@@ -58,7 +68,7 @@
 
     <!-- 2. Bro Combo -->
     <article class="bk-card" data-offer="combo">
-      <h3><span class="bk-num">2</span>Bro Combo ₹299</h3>
+      <h2 class="bk-card-title"><span class="bk-num">2</span>Bro Combo ₹299</h2>
       <img src="/broski-combo-duo.webp" alt="Bro Combo 800g" width="300" height="300" style="width:100%; max-width:280px; height:auto; border-radius:14px; margin:10px 0; border:1px solid rgba(53,32,22,0.15);">
       <p>One Bro Bites – Classic Crunch + one Bro Mix – Happy Mix, save ₹29.</p>
       <a class="bk-btn bk-btn--wa" data-wa="combo" href="#">Order the Combo on WhatsApp</a>
@@ -67,7 +77,7 @@
 
     <!-- 3. Free Delivery from 299 -->
     <article class="bk-card" data-offer="free-delivery-299">
-      <h3><span class="bk-num">3</span>Free delivery from ₹299</h3>
+      <h2 class="bk-card-title"><span class="bk-num">3</span>Free delivery from ₹299</h2>
       <p>Within 5 km of Nangloi. Below ₹299, delivery is ₹20.</p>
       <p class="bk-terms" style="margin-top:10px;"><a href="/terms/#delivery" style="color:inherit; text-decoration:underline;">Terms →</a> Delivery day and any charge confirmed on WhatsApp before payment.</p>
     </article>

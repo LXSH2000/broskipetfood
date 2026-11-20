@@ -41,6 +41,13 @@
       el.setAttribute('data-pz-img', '');
       io.observe(el);
     });
+    // M10: Tag serif words in section headings below hero
+    root.querySelectorAll('section:not(.hero) h2 .serif').forEach((el) => {
+      if (seen.has(el)) return;
+      seen.add(el);
+      el.setAttribute('data-pz-serif', '');
+      io.observe(el);
+    });
   }
 
   function marquee() {
@@ -87,12 +94,42 @@
     });
   }
 
+  // M11: WhatsApp float manners – hide over hero and near footer
+  function setupWaObserver() {
+    const wa = document.querySelector('.whatsapp-float');
+    if (!wa) return;
+    const hero = document.querySelector('.hero');
+    const footer = document.querySelector('footer');
+    let heroInView = false;
+    let footerInView = false;
+
+    const updateWaVisibility = () => {
+      if (heroInView || footerInView) {
+        wa.classList.add('wa-hide');
+      } else {
+        wa.classList.remove('wa-hide');
+      }
+    };
+
+    const waIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.target === hero) heroInView = e.isIntersecting;
+        if (e.target === footer) footerInView = e.isIntersecting;
+      });
+      updateWaVisibility();
+    }, { threshold: 0.05 });
+
+    if (hero) waIO.observe(hero);
+    if (footer) waIO.observe(footer);
+  }
+
   function start() {
     const root = document.getElementById('root') || document.body;
     html.classList.add('pz-on');
     tag(root);
     marquee();
     progress();
+    setupWaObserver();
     onScroll();
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', onScroll, { passive: true });

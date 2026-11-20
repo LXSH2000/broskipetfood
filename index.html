@@ -73,80 +73,128 @@
     }
   </script>
 
-  <!-- Schema.org JSON-LD Structured Data for LocalBusiness & Organization -->
+  <!-- Schema.org JSON-LD Structured Data: LocalBusiness, Products & FAQPage -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "BROSKI Pet Food",
-    "alternateName": "BROSKI",
-    "url": "https://broskipetfood.com/",
-    "logo": "https://broskipetfood.com/og-share.jpg",
-    "image": "https://broskipetfood.com/og-share.jpg",
-    "description": "BROSKI – crunchy dog biscuits packed in Nangloi, West Delhi – 110041. 400g stand-up zip pouches in Bro Bites – Classic Crunch and Bro Mix – Happy Mix.",
-    "email": "support@broskipetfood.com",
-    "priceRange": "₹149 - ₹299",
-    "currenciesAccepted": "INR",
-    "paymentAccepted": "Cash, UPI",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Nangloi",
-      "addressRegion": "West Delhi",
-      "postalCode": "110041",
-      "addressCountry": "IN"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 28.6826,
-      "longitude": 77.0655
-    },
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      "opens": "09:00",
-      "closes": "20:00"
-    },
-    "founder": {
-      "@type": "Person",
-      "name": "Lakshay"
-    },
-    "identifier": "UDYAM-DL-11-0177908",
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "BROSKI Dog Biscuits Catalog",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Product",
-            "name": "BROSKI Bro Bites – Classic Crunch (400g)",
-            "description": "Crunchy bone-shaped dog biscuits in 400g yellow stand-up pouch with transparent window.",
-            "sku": "BR-NV-400G",
-            "offers": {
-              "@type": "Offer",
-              "price": "149.00",
-              "priceCurrency": "INR",
-              "availability": "https://schema.org/InStock"
-            }
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Product",
-            "name": "BROSKI Bro Mix – Happy Mix (400g)",
-            "description": "Crunchy dog biscuit blend in 400g white stand-up pouch with transparent window.",
-            "sku": "BR-MX-400G",
-            "offers": {
-              "@type": "Offer",
-              "price": "179.00",
-              "priceCurrency": "INR",
-              "availability": "https://schema.org/InStock"
-            }
-          }
+    "@graph": [
+      {
+        "@type": "LocalBusiness",
+        "name": "BROSKI",
+        "url": "https://broskipetfood.com/",
+        "logo": "https://broskipetfood.com/broski-wordmark-brown.svg",
+        "image": "https://broskipetfood.com/og-share.jpg",
+        "email": "support@broskipetfood.com",
+        "priceRange": "₹149–₹299",
+        "areaServed": "West Delhi",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Nangloi",
+          "addressRegion": "West Delhi",
+          "addressCountry": "IN",
+          "postalCode": "110041"
         }
-      ]
-    }
+      },
+      {
+        "@type": "Product",
+        "name": "Bro Bites – Classic Crunch",
+        "image": "https://broskipetfood.com/broski-pouch-nonveg.webp",
+        "description": "Crunchy bone-shaped dog biscuits in 400 g yellow stand-up pouch.",
+        "brand": {
+          "@type": "Brand",
+          "name": "BROSKI"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "149",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://broskipetfood.com/#shop",
+          "areaServed": "West Delhi"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Bro Mix – Happy Mix",
+        "image": "https://broskipetfood.com/broski-pouch-mix.webp",
+        "description": "Crunchy dog biscuit blend in 400 g white stand-up pouch.",
+        "brand": {
+          "@type": "Brand",
+          "name": "BROSKI"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "179",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://broskipetfood.com/#shop",
+          "areaServed": "West Delhi"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Bro Combo",
+        "image": "https://broskipetfood.com/broski-combo-duo.webp",
+        "description": "Bro Combo pack with one 400 g Bro Bites and one 400 g Bro Mix.",
+        "brand": {
+          "@type": "Brand",
+          "name": "BROSKI"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "299",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://broskipetfood.com/#shop",
+          "areaServed": "West Delhi"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "When can I buy Broski?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Available now in West Delhi – tap Order now on any pack and we'll confirm delivery on WhatsApp."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I order?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Tap Order on WhatsApp on any pack – we confirm delivery and payment in the chat."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's in the treats?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Every ingredient is printed transparently on our back label: Bro Bites (Classic Crunch) contains Real Chicken, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Permitted Colours. Bro Mix (Happy Mix) contains Chicken Powder, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Colour. Both contain chicken and egg. Complementary pet treat – break into pieces for smaller dogs and always keep fresh water nearby."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does delivery work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We deliver in West Delhi to start. Delivery day and any charge are confirmed by WhatsApp or email before you pay."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "I run a pet shop – can I stock Broski?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WhatsApp us or email at support@broskipetfood.com; we'll share trade terms and drop off complimentary tasting packs."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
 

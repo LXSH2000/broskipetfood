@@ -65,6 +65,13 @@ create table if not exists public.admins (
   user_id uuid primary key references auth.users(id) on delete cascade
 );
 
+create table if not exists public.code_attempts (
+  phone text not null,
+  at timestamptz not null default now()
+);
+alter table public.code_attempts enable row level security;   -- no policies: only functions can touch it
+create index if not exists code_attempts_phone_at on public.code_attempts(phone, at);
+
 -- 2. Row Level Security (RLS)
 alter table public.customers enable row level security;
 alter table public.sample_claims enable row level security;
@@ -166,24 +173,23 @@ end $$;
 
 create or replace function public.get_my_summary(p_phone text, p_code text default null)
 returns json language plpgsql security definer set search_path = public as $$
-declare v_cust public.customers;
+declare v_cust public.customers; v_phone text := public.norm_phone(p_phone); v_fails int;
 begin
-  if p_code is null or trim(p_code) = '' then
-    return json_build_object('status','code_required');
+  if p_code is null or trim(p_code) = '' then return json_build_object('status','code_required'); end if;
+  select count(*) into v_fails from public.code_attempts where phone = v_phone and at > now() - interval '1 hour';
+  if v_fails >= 10 then return json_build_object('status','too_many'); end if;
+  select * into v_cust from public.customers where phone = v_phone and customer_code = upper(trim(p_code));
+  if not found then
+    insert into public.code_attempts(phone) values (v_phone);
+    delete from public.code_attempts where at < now() - interval '1 day';
+    return json_build_object('status','not_found');
   end if;
-  select * into v_cust from public.customers
-  where phone = public.norm_phone(p_phone) and customer_code = upper(trim(p_code));
-  if not found then return json_build_object('status','not_found'); end if;
   return json_build_object(
-    'status','ok',
-    'name', v_cust.name,
+    'status','ok','name', v_cust.name,
     'points', coalesce((select sum(delta) from public.points_ledger where customer_id = v_cust.id),0),
     'sample', (select status from public.sample_claims where customer_id = v_cust.id),
-    'orders', coalesce((select json_agg(json_build_object('date',created_at,'items',items,'total',total,'status',status) order by created_at desc)
-                        from public.orders where customer_id = v_cust.id),'[]'::json),
-    'history', coalesce((select json_agg(json_build_object('date',created_at,'delta',delta,'reason',reason) order by created_at desc)
-                         from public.points_ledger where customer_id = v_cust.id),'[]'::json)
-  );
+    'orders', coalesce((select json_agg(json_build_object('date',created_at,'items',items,'total',total,'status',status) order by created_at desc) from public.orders where customer_id = v_cust.id),'[]'::json),
+    'history', coalesce((select json_agg(json_build_object('date',created_at,'delta',delta,'reason',reason) order by created_at desc) from public.points_ledger where customer_id = v_cust.id),'[]'::json));
 end $$;
 
 -- 5. Permissions

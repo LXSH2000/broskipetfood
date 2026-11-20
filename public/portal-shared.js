@@ -9,27 +9,32 @@
 
 (function () {
   window.BroskiPortal = {
-    // 1. Get or create Supabase client using frontend anon key only
+    // 1. Light database helper (~2 KB) instead of full 211 KB Supabase library
     client: null,
     getClient: function () {
       if (this.client) return this.client;
       const cfg = window.BROSKI_CONFIG || {};
-      const url = cfg.SUPABASE_URL;
-      const key = cfg.SUPABASE_ANON_KEY;
-
-      if (!url || !key || url.includes('xyzcompany')) {
-        console.warn('[BroskiPortal] Supabase credentials not configured in public/config.js');
-      }
-
-      if (typeof window.createSupabaseClient === 'function') {
-        this.client = window.createSupabaseClient(url, key);
-        return this.client;
-      }
-      if (window.supabase && typeof window.supabase.createClient === 'function') {
-        this.client = window.supabase.createClient(url, key);
-        return this.client;
-      }
-      throw new Error('Supabase client library not loaded. Make sure /supabase.js is loaded.');
+      const url = cfg.SUPABASE_URL, key = cfg.SUPABASE_ANON_KEY;
+      this.client = {
+        rpc: async (fn, args) => {
+          try {
+            const r = await fetch(`${url}/rest/v1/rpc/${fn}`, {
+              method: 'POST',
+              headers: {
+                apikey: key,
+                Authorization: `Bearer ${key}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(args || {})
+            });
+            const body = await r.json().catch(() => null);
+            return r.ok ? { data: body, error: null } : { data: null, error: body || { message: r.statusText } };
+          } catch (e) {
+            return { data: null, error: { message: e.message } };
+          }
+        }
+      };
+      return this.client;
     },
 
     // 2. Safe random UUID stored in localStorage for device tracking

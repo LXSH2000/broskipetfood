@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const C = () => window.BROSKI_CONFIG || {};
 
@@ -28,6 +28,34 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [orderConfirmed, setOrderConfirmed] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const orig = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = orig;
+    };
+  }, []);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 240);
+  };
+
+  const handleCopyCode = () => {
+    if (orderConfirmed && orderConfirmed.customerCode) {
+      try {
+        navigator.clipboard.writeText(orderConfirmed.customerCode).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1500);
+        }).catch(() => {});
+      } catch (_) {}
+    }
+  };
 
   const bQty = quantities.bites || 0;
   const mQty = quantities.mix || 0;
@@ -79,20 +107,41 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
     setLoading(true);
 
     try {
-      // Dynamic import of Supabase so initial page load remains ultra-light
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
-
       const itemsPayload = { bites: bQty, mix: mQty, combo: cQty };
+      let data = null, error = null;
 
-      const { data, error } = await supabase.rpc('create_order_request', {
-        p_phone: cleanPhone,
-        p_name: customerName.trim(),
-        p_pincode: pincode.trim(),
-        p_items: itemsPayload,
-        p_total: total,
-        p_consent: true
-      });
+      const portalClient = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
+      if (portalClient) {
+        const res = await portalClient.rpc('create_order_request', {
+          p_phone: cleanPhone,
+          p_name: customerName.trim(),
+          p_pincode: pincode.trim(),
+          p_items: itemsPayload,
+          p_total: total,
+          p_consent: true
+        });
+        data = res.data;
+        error = res.error;
+      } else {
+        const r = await fetch(`${cfg.SUPABASE_URL}/rest/v1/rpc/create_order_request`, {
+          method: 'POST',
+          headers: {
+            apikey: cfg.SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${cfg.SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            p_phone: cleanPhone,
+            p_name: customerName.trim(),
+            p_pincode: pincode.trim(),
+            p_items: itemsPayload,
+            p_total: total,
+            p_consent: true
+          })
+        });
+        data = await r.json().catch(() => null);
+        if (!r.ok) error = data || { message: r.statusText };
+      }
 
       if (error) throw error;
 
@@ -101,14 +150,12 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
 
       // Safe GA4 event: STRICTLY NO PHONE, NO NAME, NO CODE
       try {
-        if (typeof window.gtag === 'function') {
-          const src = (window.BroskiPortal && window.BroskiPortal.getSource()) || 'direct';
-          window.gtag('event', 'order_request', {
-            source: src,
-            total: total,
-            items_count: totalItems
-          });
-        }
+        const src = (window.BroskiPortal && window.BroskiPortal.getSource()) || 'direct';
+        window.BroskiAnalytics?.trackEvent('order_request', {
+          source: src,
+          total: total,
+          items_count: totalItems
+        });
       } catch (_) {}
 
       // Build items summary for WhatsApp: "Bro Bites ×n, Bro Mix ×n, Combo ×n"
@@ -175,8 +222,15 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
   };
 
   return (
-    <div className="bk-gateway-overlay" role="dialog" aria-modal="true" aria-labelledby="gw-title">
+    <div
+      className={`bk-gateway-overlay ${isClosing ? 'is-closing' : ''}`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="gw-title"
+      onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
+    >
       <div className="bk-gateway-modal" style={{ maxWidth: '500px' }}>
+        <div className="bk-gateway-handle" aria-hidden="true" />
         {/* Header */}
         <div className="bk-gateway-header">
           <div>
@@ -185,7 +239,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
               {orderConfirmed ? 'Order Request Sent! 🐾' : 'Order Direct from Nangloi'}
             </h2>
           </div>
-          <button type="button" className="bk-gateway-close" onClick={onClose} aria-label="Close order form">
+          <button type="button" className="bk-gateway-close" onClick={handleClose} aria-label="Close order form">
             ✕
           </button>
         </div>
@@ -349,15 +403,36 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
         ) : (
           /* Confirmation Screen */
           <div className="bk-gateway-confirmed" style={{ textAlign: 'center', padding: '24px 16px' }}>
-            <div className="bk-conf-paw" style={{ fontSize: '40px', marginBottom: '8px' }}>🐾</div>
+            <div className="bk-bone-toss" aria-hidden="true">
+              <svg className="bk-toss-bone bk-toss-bone-1" viewBox="0 0 100 48" fill="var(--bk-mustard)">
+                <path d="M27 10C15-9-7 9 7 23-7 40 17 57 28 37h43c12 20 35 2 22-14C108 8 84-9 73 10Z" />
+              </svg>
+              <svg className="bk-toss-bone bk-toss-bone-2" viewBox="0 0 100 48" fill="var(--bk-rust)">
+                <path d="M27 10C15-9-7 9 7 23-7 40 17 57 28 37h43c12 20 35 2 22-14C108 8 84-9 73 10Z" />
+              </svg>
+              <svg className="bk-toss-bone bk-toss-bone-3" viewBox="0 0 100 48" fill="var(--bk-brown)">
+                <path d="M27 10C15-9-7 9 7 23-7 40 17 57 28 37h43c12 20 35 2 22-14C108 8 84-9 73 10Z" />
+              </svg>
+            </div>
+            <div className="bk-conf-paw" style={{ fontSize: '36px', marginBottom: '8px' }}>🐾</div>
             <h3 style={{ fontSize: '22px', margin: '0 0 6px' }}>Order Request Saved!</h3>
             <p className="bk-conf-id" style={{ fontSize: '15px', margin: '4px 0' }}>
               Order Reference: <strong>#{orderConfirmed.id}</strong>
             </p>
             {orderConfirmed.customerCode ? (
-              <p style={{ fontSize: '13.5px', color: '#974324', margin: '6px 0' }}>
-                Your customer code: <strong style={{ fontFamily: 'monospace', letterSpacing: '1px', background: '#fdf3ed', padding: '2px 6px', borderRadius: '4px' }}>{orderConfirmed.customerCode}</strong> – save it to check points at <a href="/points/" style={{ color: 'inherit', textDecoration: 'underline' }}>broskipetfood.com/points</a>
-              </p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '8px 0', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '13.5px', color: '#974324' }}>
+                  Your customer code: <strong style={{ fontFamily: 'monospace', letterSpacing: '1px', background: '#fdf3ed', padding: '3px 8px', borderRadius: '4px' }}>{orderConfirmed.customerCode}</strong>
+                </span>
+                <button
+                  type="button"
+                  className={`bk-copy ${copied ? 'is-copied' : ''}`}
+                  onClick={handleCopyCode}
+                  aria-label="Copy customer code"
+                >
+                  {copied ? 'Copied ✓' : 'Copy code'}
+                </button>
+              </div>
             ) : (
               <p style={{ fontSize: '13px', color: '#776754', margin: '6px 0' }}>
                 Check your points at <a href="/points/" style={{ color: 'inherit', textDecoration: 'underline' }}>broskipetfood.com/points</a> with your customer code.
@@ -395,7 +470,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
             <button
               type="button"
               className="bk-conf-done-btn"
-              onClick={onClose}
+              onClick={handleClose}
               style={{ marginTop: '12px', background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', padding: '10px', fontSize: '14px' }}
             >
               Close and back to site

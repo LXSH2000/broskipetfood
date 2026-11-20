@@ -180,10 +180,11 @@ html.pz-on [data-pz-img].pz-in img { clip-path: inset(0 0 0 0); transform: scale
   html.pz-on:not(.broski-intro-active) .hero-title span { display: inline-block;
     animation: pz-rise .75s var(--pz-ease) both; animation-delay: calc(var(--letter, 0) * 45ms); }
   html.pz-on:not(.broski-intro-active) .hero .eyebrow { animation: pz-fade .8s ease both; }
-  html.pz-on:not(.broski-intro-active) .hero-intro { animation: pz-up .9s var(--pz-ease) .35s both; }
+  html.pz-on:not(.broski-intro-active) .hero-intro { animation: pz-up-soft .9s var(--pz-ease) .35s both; }
   html.pz-on:not(.broski-intro-active) .cinema-frame { animation: pz-up 1s var(--pz-ease) .55s both; }
 }
-@keyframes pz-rise { from { opacity: 0; transform: translateY(60%) rotate(4deg); } to { opacity: 1; transform: none; } }
+@keyframes pz-rise { from { transform: translateY(40%) rotate(4deg); filter: blur(6px); } to { transform: none; filter: none; } }
+@keyframes pz-up-soft { from { transform: translateY(18px); filter: blur(4px); } to { transform: none; filter: none; } }
 @keyframes pz-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 @keyframes pz-fade { from { opacity: 0; } to { opacity: 1; } }
 

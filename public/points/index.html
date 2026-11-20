@@ -29,7 +29,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Gaegu:wght@700&display=swap">
 <link rel="stylesheet" href="/broski-pages.css">
 <script src="/config.js"></script>
-<script src="/supabase.js" defer></script>
 <script src="/portal-shared.js" defer></script>
 </head>
 <body>
@@ -70,6 +69,13 @@
 
         <div id="lookupAlert" class="bk-alert bk-alert--error" style="display:none;" role="alert"></div>
 
+        <!-- M8: Shimmer Placeholder Bars while request runs -->
+        <div id="pointsLoading" class="bk-shimmer-wrap" style="display:none; margin:16px 0;">
+          <div class="bk-shimmer-bar" style="height:28px;"></div>
+          <div class="bk-shimmer-bar" style="height:52px;"></div>
+          <div class="bk-shimmer-bar" style="height:24px;"></div>
+        </div>
+
         <button type="submit" id="checkBtn" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%;" disabled>
           View My Points & Orders
         </button>
@@ -90,6 +96,10 @@
           <div>
             <span class="bk-small" style="text-transform:uppercase; letter-spacing:0.08em; color:var(--rust-dark); font-weight:700;">Bro Member</span>
             <h2 id="dispName" style="margin:4px 0 0; font-size:26px;">Hello Bro!</h2>
+            <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
+              <span class="bk-small" style="color:var(--brown-2);">Code: <strong id="dispCode" style="font-family:'JetBrains Mono',monospace; letter-spacing:1px; background:#fff; padding:2px 6px; border-radius:4px; border:1px solid var(--line);"></strong></span>
+              <button type="button" id="copyCodeBtn" class="bk-copy" style="min-height:36px; padding:4px 10px; font-size:12px;">Copy</button>
+            </div>
           </div>
           <button type="button" id="logoutBtn" class="bk-btn bk-btn--ghost" style="min-height:38px; padding:6px 14px; font-size:13px; border-radius:8px;">
             Check Another
@@ -234,6 +244,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
     checkBtn.disabled = true;
     checkBtn.textContent = 'Verifying Account...';
+    const shimmerEl = document.getElementById('pointsLoading');
+    if (shimmerEl) shimmerEl.style.display = 'flex';
 
     try {
       const supabase = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
@@ -252,10 +264,15 @@ window.addEventListener('DOMContentLoaded', function () {
       }
 
       if (data && data.status === 'ok') {
-        renderSummary(data);
+        renderSummary(data, code);
         lookupCard.style.display = 'none';
         summaryView.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (data && data.status === 'too_many') {
+        showAlert("Too many tries for this number. Please WhatsApp us and we'll help.");
+        if (forgotCodeBtn) {
+          forgotCodeBtn.style.display = 'flex';
+        }
       } else {
         // Both 'code_required' and 'not_found' return the exact same generic message
         showAlert("Number and code don't match. Your code was shown when you first claimed a sample or ordered.");
@@ -264,6 +281,7 @@ window.addEventListener('DOMContentLoaded', function () {
       console.error('[Points] Lookup error:', err);
       showAlert("Number and code don't match. Your code was shown when you first claimed a sample or ordered.");
     } finally {
+      if (shimmerEl) shimmerEl.style.display = 'none';
       updateCheckBtnState();
       checkBtn.textContent = 'View My Points & Orders';
     }
@@ -277,9 +295,28 @@ window.addEventListener('DOMContentLoaded', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  function renderSummary(data) {
+  const copyCodeBtn = document.getElementById('copyCodeBtn');
+  if (copyCodeBtn) {
+    copyCodeBtn.addEventListener('click', function() {
+      const c = document.getElementById('dispCode').textContent.trim();
+      if (!c) return;
+      navigator.clipboard.writeText(c).then(() => {
+        copyCodeBtn.textContent = 'Copied ✓';
+        copyCodeBtn.classList.add('is-copied');
+        setTimeout(() => {
+          copyCodeBtn.textContent = 'Copy';
+          copyCodeBtn.classList.remove('is-copied');
+        }, 1500);
+      }).catch(() => {});
+    });
+  }
+
+  function renderSummary(data, code) {
     document.getElementById('dispName').textContent = data.name ? `Welcome, ${data.name}!` : 'Hello Bro!';
     document.getElementById('dispPoints').textContent = (data.points || 0) + ' pts';
+    if (document.getElementById('dispCode')) {
+      document.getElementById('dispCode').textContent = code || '';
+    }
 
     // Sample status badge
     const badgeEl = document.getElementById('dispSampleBadge');
