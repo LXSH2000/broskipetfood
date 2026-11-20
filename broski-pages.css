@@ -3,7 +3,7 @@
 :root {
   --cream: #f5efe4; --paper: #fbf7ef; --brown: #352016; --brown-2: #5a4033;
   --rust: #b8452b; --rust-dark: #9a3620; --mustard: #e2a72e; --line: #e6dccb;
-  --wa: #1f8f4e; --radius: 18px;
+  --wa: #187741; --radius: 18px;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -43,6 +43,7 @@ h3 { font-size: 20px; font-weight: 700; }
 .bk-btn--wa { background: var(--wa); color: #fff; }
 .bk-btn--ghost { background: transparent; color: var(--brown); border: 2px solid var(--brown); }
 .bk-btn--big { min-height: 60px; font-size: 19px; }
+.bk-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 .bk-btn + .bk-btn { margin-top: 10px; }
 
 /* cards */
@@ -143,3 +144,90 @@ h3 { font-size: 20px; font-weight: 700; }
 .bk-table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
 .bk-table th { font: 700 13px/1.2 "Outfit", sans-serif; text-transform: uppercase; letter-spacing: .05em; color: var(--brown-2); padding: 10px 8px; border-bottom: 2px solid var(--line); }
 .bk-table td { padding: 12px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+
+/* Page transitions (M9) */
+.bk-head { view-transition-name: bk-header; }
+.bk-logo { view-transition-name: bk-logo; }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+}
+
+/* Heading hierarchy on /offers (B6.5) */
+.bk-card h2.bk-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+/* Tap targets (B6.2) */
+.bk-terms a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding-block: 8px;
+}
+.bk-foot a[href^="mailto:"],
+a[href^="mailto:"] {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Copy button (M7) */
+.bk-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1.5px solid var(--brown);
+  background: transparent;
+  color: var(--brown);
+  font: 700 13px "Outfit", sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, color 0.2s ease;
+}
+.bk-copy:active {
+  transform: scale(0.96);
+}
+.bk-copy.is-copied {
+  background: var(--brown);
+  color: #fff;
+  animation: bk-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes bk-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* Shimmer placeholder loading bars (M8) */
+.bk-shimmer-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+.bk-shimmer-bar {
+  height: 22px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--line) 25%, rgba(255, 255, 255, 0.7) 50%, var(--line) 75%);
+  background-size: 200% 100%;
+  animation: bk-shimmer 1.2s infinite linear;
+}
+@keyframes bk-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bk-shimmer-bar, .bk-copy {
+    animation: none !important;
+    transition: none !important;
+  }
+}

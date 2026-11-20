@@ -29,7 +29,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=Gaegu:wght@700&display=swap">
 <link rel="stylesheet" href="/broski-pages.css">
 <script src="/config.js"></script>
-<script src="/supabase.js" defer></script>
 <script src="/portal-shared.js" defer></script>
 </head>
 <body>
@@ -123,8 +122,19 @@
 
       <div class="bk-code-card">
         <span class="bk-small" style="letter-spacing:0.08em; text-transform:uppercase;">Official Claim Code</span>
-        <div class="bk-code-display" id="displayClaimCode">------</div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin:12px 0;">
+          <div class="bk-code-display" id="displayClaimCode" style="margin:0;">------</div>
+          <button type="button" id="copyClaimCodeBtn" class="bk-copy" aria-label="Copy claim code">Copy</button>
+        </div>
         <p class="bk-small" style="margin:0;">One free sample per number.</p>
+      </div>
+
+      <div id="newCustCodeNotice" style="display:none; margin:16px 0; padding:12px 14px; background:#fff7f4; border:1.5px solid var(--rust); border-radius:12px; font-size:14px; color:var(--rust-dark); text-align:center;">
+        <div style="display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;">
+          <span>Your customer code: <strong id="displayCustCode" style="font-family:'JetBrains Mono',monospace; letter-spacing:1px; background:#fff; padding:2px 8px; border-radius:4px; border:1px solid var(--rust);">------</strong></span>
+          <button type="button" id="copyCustCodeBtn" class="bk-copy" style="min-height:36px; padding:4px 10px; font-size:12px;" aria-label="Copy customer code">Copy</button>
+        </div>
+        <div style="margin-top:6px; font-size:13px;">Save it to check points at <a href="/points/" style="color:inherit; font-weight:700; text-decoration:underline;">broskipetfood.com/points</a></div>
       </div>
 
       <a id="waConfirmBtn" href="#" class="bk-btn bk-btn--wa bk-btn--big" target="_blank" rel="noopener noreferrer">
@@ -276,6 +286,16 @@ window.addEventListener('DOMContentLoaded', function () {
         }
         document.getElementById('displayClaimCode').textContent = data.claim_code;
 
+        // If brand-new customer, display customer code with save instructions
+        const custCodeNoticeEl = document.getElementById('newCustCodeNotice');
+        const custCodeDisplayEl = document.getElementById('displayCustCode');
+        if (data.customer_code && custCodeNoticeEl && custCodeDisplayEl) {
+          custCodeDisplayEl.textContent = data.customer_code;
+          custCodeNoticeEl.style.display = 'block';
+        } else if (custCodeNoticeEl) {
+          custCodeNoticeEl.style.display = 'none';
+        }
+
         // Display the specific sample pouch reserved
         const sampleImg = document.getElementById('sampleReservedImg');
         const sampleBadge = document.getElementById('sampleReservedBadge');
@@ -340,6 +360,26 @@ window.addEventListener('DOMContentLoaded', function () {
     alertEl.textContent = msg;
     alertEl.style.display = 'block';
   }
+
+  function wireCopy(btnId, targetId) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      const el = document.getElementById(targetId);
+      const val = el ? el.textContent.trim() : '';
+      if (!val || val === '------') return;
+      navigator.clipboard.writeText(val).then(() => {
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('is-copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('is-copied');
+        }, 1500);
+      }).catch(() => {});
+    });
+  }
+  wireCopy('copyClaimCodeBtn', 'displayClaimCode');
+  wireCopy('copyCustCodeBtn', 'displayCustCode');
 });
 </script>
 </body>

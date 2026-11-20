@@ -29,7 +29,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Gaegu:wght@700&display=swap">
 <link rel="stylesheet" href="/broski-pages.css">
 <script src="/config.js"></script>
-<script src="/supabase.js" defer></script>
 <script src="/portal-shared.js" defer></script>
 </head>
 <body>
@@ -63,16 +62,29 @@
         </div>
 
         <div class="bk-form-group">
-          <label class="bk-label" for="codeInput">Customer Code <span style="font-weight:400; color:var(--brown-2);">(Optional)</span></label>
-          <input class="bk-input" type="text" id="codeInput" placeholder="e.g. A1B2C3" maxlength="6" style="text-transform:uppercase; font-family:'JetBrains Mono', monospace; letter-spacing:0.1em; font-weight:700;">
-          <span class="bk-small" style="display:block; margin-top:4px;">Leave blank to look up by WhatsApp number directly, or enter if you have it.</span>
+          <label class="bk-label" for="codeInput">Customer Code</label>
+          <input class="bk-input" type="text" id="codeInput" placeholder="e.g. A1B2C3" maxlength="6" required style="text-transform:uppercase; font-family:'JetBrains Mono', monospace; letter-spacing:0.1em; font-weight:700;">
+          <span class="bk-small" style="display:block; margin-top:4px;">Enter the 6-character code shown when you first claimed a sample or ordered.</span>
         </div>
 
         <div id="lookupAlert" class="bk-alert bk-alert--error" style="display:none;" role="alert"></div>
 
-        <button type="submit" id="checkBtn" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%;">
+        <!-- M8: Shimmer Placeholder Bars while request runs -->
+        <div id="pointsLoading" class="bk-shimmer-wrap" style="display:none; margin:16px 0;">
+          <div class="bk-shimmer-bar" style="height:28px;"></div>
+          <div class="bk-shimmer-bar" style="height:52px;"></div>
+          <div class="bk-shimmer-bar" style="height:24px;"></div>
+        </div>
+
+        <button type="submit" id="checkBtn" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%;" disabled>
           View My Points & Orders
         </button>
+
+        <div style="margin-top:14px; text-align:center;">
+          <a id="forgotCodeBtn" href="#" class="bk-btn bk-btn--ghost" style="width:100%; font-size:14.5px; min-height:48px;" target="_blank" rel="noopener noreferrer">
+            Forgot your code? WhatsApp us from your number
+          </a>
+        </div>
       </form>
     </div>
 
@@ -84,6 +96,10 @@
           <div>
             <span class="bk-small" style="text-transform:uppercase; letter-spacing:0.08em; color:var(--rust-dark); font-weight:700;">Bro Member</span>
             <h2 id="dispName" style="margin:4px 0 0; font-size:26px;">Hello Bro!</h2>
+            <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
+              <span class="bk-small" style="color:var(--brown-2);">Code: <strong id="dispCode" style="font-family:'JetBrains Mono',monospace; letter-spacing:1px; background:#fff; padding:2px 6px; border-radius:4px; border:1px solid var(--line);"></strong></span>
+              <button type="button" id="copyCodeBtn" class="bk-copy" style="min-height:36px; padding:4px 10px; font-size:12px;">Copy</button>
+            </div>
           </div>
           <button type="button" id="logoutBtn" class="bk-btn bk-btn--ghost" style="min-height:38px; padding:6px 14px; font-size:13px; border-radius:8px;">
             Check Another
@@ -162,38 +178,74 @@ window.addEventListener('DOMContentLoaded', function () {
     if (act.type === 'whatsapp') footContactLink.target = '_blank';
   }
 
-  // Pre-fill from query params if present (e.g. /points?phone=...&code=...)
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('phone')) {
-    document.getElementById('phoneInput').value = params.get('phone').replace(/^\+91/, '');
-  }
-  if (params.get('code')) {
-    document.getElementById('codeInput').value = params.get('code').toUpperCase();
+  const phoneInputEl = document.getElementById('phoneInput');
+  const codeInputEl = document.getElementById('codeInput');
+  const forgotCodeBtn = document.getElementById('forgotCodeBtn');
+
+  function waLink(text) {
+    if (window.BroskiPortal) {
+      const act = window.BroskiPortal.getContactAction(text, 'BROSKI Customer Code Request');
+      return act ? act.url : '#';
+    }
+    const cfg = window.BROSKI_CONFIG || {};
+    const phone = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+    return phone ? `https://wa.me/${phone}?text=${encodeURIComponent(text)}` : '#';
   }
 
-  const phoneInputEl = document.getElementById('phoneInput');
+  if (forgotCodeBtn) {
+    forgotCodeBtn.href = waLink('Hi BROSKI! I forgot my customer code. My number is this WhatsApp number.');
+  }
+
+  function updateCheckBtnState() {
+    const pDigits = phoneInputEl ? phoneInputEl.value.replace(/\D/g, '') : '';
+    const cVal = codeInputEl ? codeInputEl.value.trim() : '';
+    // Disabled until phone (10 digits) and code (6 characters) are filled
+    const isValid = pDigits.length === 10 && /^[6-9][0-9]{9}$/.test(pDigits) && cVal.length === 6;
+    checkBtn.disabled = !isValid;
+  }
+
+  // Pre-fill from query params if present (e.g. /points?phone=...&code=...)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('phone') && phoneInputEl) {
+    phoneInputEl.value = params.get('phone').replace(/^\+91/, '').slice(0, 10);
+  }
+  if (params.get('code') && codeInputEl) {
+    codeInputEl.value = params.get('code').toUpperCase().slice(0, 6);
+  }
+
   if (phoneInputEl) {
     phoneInputEl.addEventListener('input', function() {
       this.value = this.value.replace(/\D/g, '').slice(0, 10);
+      updateCheckBtnState();
     });
   }
+  if (codeInputEl) {
+    codeInputEl.addEventListener('input', function() {
+      this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+      updateCheckBtnState();
+    });
+  }
+
+  updateCheckBtnState();
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
     alertEl.style.display = 'none';
 
-    const rawPhone = document.getElementById('phoneInput').value.trim();
-    const code = document.getElementById('codeInput').value.trim().toUpperCase();
+    const rawPhone = phoneInputEl.value.trim();
+    const code = codeInputEl.value.trim().toUpperCase();
 
     const phoneDigits = rawPhone.replace(/\D/g, '');
-    if (phoneDigits.length !== 10 || !/^[6-9][0-9]{9}$/.test(phoneDigits)) {
-      showAlert('Please enter a valid 10-digit mobile number (e.g. 85XXXXXXXX).');
+    if (phoneDigits.length !== 10 || !/^[6-9][0-9]{9}$/.test(phoneDigits) || code.length !== 6) {
+      showAlert("Number and code don't match. Your code was shown when you first claimed a sample or ordered.");
       return;
     }
     const cleanPhone = `+91${phoneDigits}`;
 
     checkBtn.disabled = true;
     checkBtn.textContent = 'Verifying Account...';
+    const shimmerEl = document.getElementById('pointsLoading');
+    if (shimmerEl) shimmerEl.style.display = 'flex';
 
     try {
       const supabase = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
@@ -201,7 +253,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
       const { data, error } = await supabase.rpc('get_my_summary', {
         p_phone: cleanPhone,
-        p_code: code || null
+        p_code: code
       });
 
       if (error) throw error;
@@ -212,23 +264,25 @@ window.addEventListener('DOMContentLoaded', function () {
       }
 
       if (data && data.status === 'ok') {
-        renderSummary(data);
+        renderSummary(data, code);
         lookupCard.style.display = 'none';
         summaryView.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (data && data.status === 'too_many') {
+        showAlert("Too many tries for this number. Please WhatsApp us and we'll help.");
+        if (forgotCodeBtn) {
+          forgotCodeBtn.style.display = 'flex';
+        }
       } else {
-        showAlert('Account not found. Please check your phone number and customer code.');
+        // Both 'code_required' and 'not_found' return the exact same generic message
+        showAlert("Number and code don't match. Your code was shown when you first claimed a sample or ordered.");
       }
     } catch (err) {
       console.error('[Points] Lookup error:', err);
-      const cfg = window.BROSKI_CONFIG || {};
-      if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.includes('xyzcompany')) {
-        showAlert('Notice: Loyalty database is currently undergoing launch setup. Please message us on WhatsApp to verify points directly.');
-      } else {
-        showAlert('Account not found. Please verify your details or contact support.');
-      }
+      showAlert("Number and code don't match. Your code was shown when you first claimed a sample or ordered.");
     } finally {
-      checkBtn.disabled = false;
+      if (shimmerEl) shimmerEl.style.display = 'none';
+      updateCheckBtnState();
       checkBtn.textContent = 'View My Points & Orders';
     }
   });
@@ -236,13 +290,33 @@ window.addEventListener('DOMContentLoaded', function () {
   logoutBtn.addEventListener('click', function () {
     summaryView.style.display = 'none';
     lookupCard.style.display = 'block';
-    document.getElementById('codeInput').value = '';
+    if (codeInputEl) codeInputEl.value = '';
+    updateCheckBtnState();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  function renderSummary(data) {
+  const copyCodeBtn = document.getElementById('copyCodeBtn');
+  if (copyCodeBtn) {
+    copyCodeBtn.addEventListener('click', function() {
+      const c = document.getElementById('dispCode').textContent.trim();
+      if (!c) return;
+      navigator.clipboard.writeText(c).then(() => {
+        copyCodeBtn.textContent = 'Copied ✓';
+        copyCodeBtn.classList.add('is-copied');
+        setTimeout(() => {
+          copyCodeBtn.textContent = 'Copy';
+          copyCodeBtn.classList.remove('is-copied');
+        }, 1500);
+      }).catch(() => {});
+    });
+  }
+
+  function renderSummary(data, code) {
     document.getElementById('dispName').textContent = data.name ? `Welcome, ${data.name}!` : 'Hello Bro!';
     document.getElementById('dispPoints').textContent = (data.points || 0) + ' pts';
+    if (document.getElementById('dispCode')) {
+      document.getElementById('dispCode').textContent = code || '';
+    }
 
     // Sample status badge
     const badgeEl = document.getElementById('dispSampleBadge');
