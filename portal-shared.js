@@ -22,14 +22,18 @@
               method: 'POST',
               headers: {
                 apikey: key,
-                Authorization: `Bearer ${key}`,
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify(args || {})
             });
             const body = await r.json().catch(() => null);
-            return r.ok ? { data: body, error: null } : { data: null, error: body || { message: r.statusText } };
+            if (!r.ok) {
+              console.warn('[BROSKI rpc]', fn, r.status, body);
+              return { data: null, error: body || { message: r.statusText } };
+            }
+            return { data: body, error: null };
           } catch (e) {
+            console.warn('[BROSKI rpc]', fn, 'network_error', e.message);
             return { data: null, error: { message: e.message } };
           }
         }

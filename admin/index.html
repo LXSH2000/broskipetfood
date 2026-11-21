@@ -382,6 +382,7 @@ function renderSamples() {
     html += `<tr>
       <td>
         <strong style="font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--adm-rust);">${escapeHtml(s.claim_code)}</strong>
+        <div style="font-size:12px; color:var(--brown); font-weight:700;">BROSKI: ${escapeHtml(cust.customer_code || '-')}</div>
         <div class="bk-small" style="color:var(--brown-2);">${d}</div>
       </td>
       <td>
@@ -599,7 +600,7 @@ function openManualOrderModal() {
                 <input class="bk-input" type="number" id="manMix" value="0" min="0">
               </div>
               <div>
-                <span class="bk-small">Combo (₹299)</span>
+                <span class="bk-small">Combo (₹295)</span>
                 <input class="bk-input" type="number" id="manCombo" value="0" min="0">
               </div>
             </div>
@@ -636,7 +637,7 @@ function openManualOrderModal() {
     const m = parseInt(document.getElementById('manMix').value) || 0;
     const c = parseInt(document.getElementById('manCombo').value) || 0;
 
-    const total = (b * 149) + (m * 179) + (c * 299);
+    const total = (b * 149) + (m * 179) + (c * 295);
     if (total <= 0) {
       alert('Please select at least 1 product.');
       return;
