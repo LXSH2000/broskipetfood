@@ -18,7 +18,7 @@ try {
   const parent = execSync('git rev-parse origin/gh-pages').toString().trim();
   console.log('Parent:', parent);
 
-  const commit = execSync(`git commit-tree ${tree} -p ${parent} -m "release(site): phase 1 fixes and enhancements - P1 to P9 (22 Nov 2026)"`).toString().trim();
+  const commit = execSync(`git commit-tree ${tree} -p ${parent} -m "release(site): sub-page mobile header dropdown, phone video play button position, and 12.5px font floor (22 Nov 2026)"`).toString().trim();
   console.log('Created commit:', commit);
 
   execSync(`git push origin ${commit}:refs/heads/gh-pages`, { stdio: 'inherit' });
