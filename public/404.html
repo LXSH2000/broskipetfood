@@ -14,11 +14,15 @@
   <div class="bk-wrap" style="min-height: 80vh; display: flex; flex-direction: column; justify-content: space-between;">
     <header class="bk-head">
       <a class="bk-logo" href="/" aria-label="BROSKI Home">
-        <img src="/broski-wordmark-brown.svg" alt="BROSKI" style="height: 28px; width: auto; display: block;">
+        <img src="/broski-wordmark-brown.svg" alt="BROSKI" height="26" style="height:26px; width:auto; display:block; flex-shrink:0;">
       </a>
-      <nav class="bk-nav" aria-label="Navigation">
-        <a href="/">Home</a>
+      <button type="button" class="bk-menu-btn" aria-expanded="false" aria-controls="bk-nav" aria-label="Toggle menu">Menu</button>
+      <nav id="bk-nav" class="bk-nav" aria-label="Main">
+        <a href="/#shop">Shop</a>
+        <a href="/sample/">Free sample</a>
+        <a href="/points/">My points</a>
         <a href="/offers/">Bro Perks</a>
+        <a href="/r/">Feedback</a>
       </nav>
     </header>
 

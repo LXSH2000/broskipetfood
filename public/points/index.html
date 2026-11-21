@@ -30,14 +30,16 @@
 </script>
 <script src="/config.js"></script>
 <script src="/portal-shared.js" defer></script>
+<script src="/broski.js" defer></script>
 </head>
 <body>
 <div class="bk-wrap">
   <header class="bk-head">
     <a class="bk-logo" href="/" aria-label="BROSKI Home">
-      <img src="/broski-wordmark-brown.svg" alt="BROSKI" height="26" style="height:26px; width:auto; display:block;">
+      <img src="/broski-wordmark-brown.svg" alt="BROSKI" height="26" style="height:26px; width:auto; display:block; flex-shrink:0;">
     </a>
-    <nav class="bk-nav" aria-label="Main">
+    <button type="button" class="bk-menu-btn" aria-expanded="false" aria-controls="bk-nav" aria-label="Toggle menu">Menu</button>
+    <nav id="bk-nav" class="bk-nav" aria-label="Main">
       <a href="/#shop">Shop</a>
       <a href="/sample/">Free sample</a>
       <a href="/points/">My points</a>

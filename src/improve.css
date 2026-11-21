@@ -435,16 +435,108 @@ body .footer-bottom span {
   pointer-events: none !important;
 }
 
-/* B7: Minimum font baseline of 12.5px */
+/* Home page video play button on phones: sits inside video box, 16px from bottom, never cut off */
+@media (max-width: 768px) {
+  .cinema-play-badge {
+    top: auto !important;
+    bottom: 16px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    max-width: calc(100% - 32px) !important;
+    width: auto !important;
+    white-space: nowrap !important;
+    padding: 10px 18px !important;
+    font-size: 13px !important;
+    min-height: 44px !important;
+    z-index: 10 !important;
+    box-sizing: border-box !important;
+  }
+  .cinema-play-badge:hover,
+  .cinema-play-badge:focus-visible {
+    transform: translateX(-50%) scale(1.04) !important;
+    background: #352016 !important;
+  }
+  .hero.hero-v2 .cinema-caption,
+  .cinema-caption {
+    bottom: 74px !important;
+  }
+}
+
+/* Minimum font baseline of 12.5px: raise every visible text under 12px */
+.eyebrow,
+.hero-v2 .eyebrow,
+.hero .eyebrow,
+.section-heading .eyebrow,
+.ritual-picker .eyebrow,
+.detail-grid .eyebrow,
+.bintro-eyebrow,
+.everyday-editorial .eyebrow,
 .bk-shop-eyebrow,
+.cinema-caption,
+.cinema-caption > span,
+.cinema-caption span,
+.cinema-sound-btn,
+.cinema-sound-btn span,
+.hero-end,
+.hero-end > span,
+.hero-end a,
+.hero-price-chip,
+.ritual-grid .text-link,
+.concept-watermark,
+header > nav a,
+header nav a,
+.announcement,
+.announcement span,
+.announcement button,
+.ticker,
+.ticker span,
+.floating-treat,
+.floating-treat > span,
+.product-tag,
+.product-meta,
+.product-meta span,
+.product-bottom p,
+.product-bottom .add-button,
+.view-product,
+.shop-results,
+.shop-results span,
+.filters button,
+.footer-top a,
+.footer-top p,
+.footer-bottom,
+.footer-bottom span,
+.footer-bottom a,
+.dock-txt-mob,
+.dock-txt-desk,
+.dock-item,
+.dock-item span,
+.broski-liquid-dock a span,
+.broski-pack-art span,
+.broski-pack-art small,
+.stamp,
+.stage-note,
+.loose-bone-note,
+.photo-note,
+.sample-reviews-label,
+.sample-reviews-label span,
 .bk-pack-meta,
 .bk-gateway-guarantee,
-.hero-end span,
-.ritual-grid .text-link,
-.photo-note,
-.everyday-editorial .eyebrow,
-.sample-reviews-label,
-.sample-reviews-label span {
+.toast,
+.toast button,
+.product-visual span,
+.product-visual small,
+.bc-experience-top,
+.bc-experience-top span,
+.bc-experience-bottom,
+.bc-experience-bottom span,
+.bc-experience small,
+.bc-trail-pack,
+.bc-trail-pack small,
+.bc-trail-pack span,
+.bc-trail-stamp,
+.bc-trail-stamp small,
+.bc-experience-decoration-right small,
+.scene-controls button {
   font-size: max(12.5px, 1em) !important;
 }
 

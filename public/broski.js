@@ -69,6 +69,43 @@
     document.body.insertBefore(bar, document.body.firstChild);
   }
 
-  function ready() { banner(); hydrate(); }
+  function initNav() {
+    var btn = document.querySelector('.bk-menu-btn');
+    var nav = document.querySelector('.bk-nav');
+    if (!btn || !nav || btn.dataset.bound) return;
+    btn.dataset.bound = 'true';
+
+    function closeNav() {
+      nav.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleNav(e) {
+      if (e) e.stopPropagation();
+      var isOpen = nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    btn.addEventListener('click', toggleNav);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+        closeNav();
+        btn.focus();
+      }
+    });
+
+    document.addEventListener('click', function (e) {
+      if (nav.classList.contains('is-open') && !nav.contains(e.target) && !btn.contains(e.target)) {
+        closeNav();
+      }
+    });
+
+    nav.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', closeNav);
+    });
+  }
+
+  function ready() { banner(); hydrate(); initNav(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
 })();
