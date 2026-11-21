@@ -21,50 +21,59 @@ import './improve.css';
 const C = () => window.BROSKI_CONFIG || {};
 
 function HeroMedia() {
-  const [isMobile, setIsMobile] = useState(true);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const isSmall = window.matchMedia('(max-width: 768px)').matches;
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const isSlow = conn && (conn.saveData || conn.effectiveType === '2g' || conn.effectiveType === '3g');
+    return Boolean(isSmall || isSlow);
+  });
   const [isPlayingMobile, setIsPlayingMobile] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
 
   useEffect(() => {
-    const checkMobile = () => {
-      const isSmall = window.matchMedia('(max-width: 768px)').matches;
-      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-      const isSlow = conn && (conn.saveData || conn.effectiveType === '2g' || conn.effectiveType === '3g');
-      return Boolean(isSmall || isSlow);
+    if (isMobile) return;
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    vid.muted = true;
+    vid.defaultMuted = true;
+
+    const playVideo = () => {
+      const p = vid.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {
+          setAutoplayBlocked(true);
+        });
+      }
     };
 
-    const mobile = checkMobile();
-    setIsMobile(mobile);
-
-    if (!mobile) {
-      const vid = videoRef.current;
-      if (!vid) return;
-
-      const startVideo = () => {
-        if (!('IntersectionObserver' in window)) {
-          if (!vid.src) vid.src = '/broski-product-motion-ad-720.mp4';
-          vid.play().catch(() => {});
-          return;
-        }
-        const io = new IntersectionObserver(([entry]) => {
-          if (entry.isIntersecting) {
-            if (!vid.src) vid.src = '/broski-product-motion-ad-720.mp4';
-            vid.play().catch(() => {});
-          } else {
-            vid.pause();
-          }
-        }, { threshold: 0.1 });
-        io.observe(vid);
-      };
-
-      if (document.readyState === 'complete') {
-        startVideo();
-      } else {
-        window.addEventListener('load', startVideo, { once: true });
-      }
+    if (!('IntersectionObserver' in window)) {
+      playVideo();
+      return;
     }
-  }, []);
+
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        playVideo();
+      } else {
+        vid.pause();
+      }
+    }, { threshold: 0.1 });
+
+    io.observe(vid);
+    return () => io.disconnect();
+  }, [isMobile]);
+
+  const handleManualPlay = () => {
+    setAutoplayBlocked(false);
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(() => {});
+    }
+  };
 
   const toggleSound = (e) => {
     e.stopPropagation();
@@ -120,20 +129,38 @@ function HeroMedia() {
               ref={videoRef}
               className="cinema-image cinema-video"
               poster="/broski-hero-desktop-poster.webp"
-              loop
-              muted={isMuted}
+              autoPlay
+              muted
               playsInline
-              preload="none"
+              loop
+              preload="metadata"
               aria-label="Official BROSKI product motion ad showcasing 400g trial pouches"
-            />
-            <button
-              type="button"
-              className="cinema-sound-btn"
-              onClick={toggleSound}
-              aria-label={isMuted ? "Turn sound on" : "Mute sound"}
             >
-              <span>{isMuted ? "Sound On 🔊" : "Mute 🔇"}</span>
-            </button>
+              <source src="/broski-product-motion-ad-720.mp4" type="video/mp4" />
+            </video>
+            {autoplayBlocked ? (
+              <button
+                type="button"
+                className="cinema-play-badge"
+                aria-label="Watch Launch Ad"
+                onClick={handleManualPlay}
+                style={{ zIndex: 10 }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <span>Watch Launch Ad</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="cinema-sound-btn"
+                onClick={toggleSound}
+                aria-label={isMuted ? "Turn sound on" : "Mute sound"}
+              >
+                <span>{isMuted ? "Sound On 🔊" : "Mute 🔇"}</span>
+              </button>
+            )}
           </>
         )}
         {!isPlayingMobile && (
@@ -264,8 +291,10 @@ function App() {
               <p className="hero-manifesto" style={{ textAlign: 'center', marginInline: 'auto' }}>
                 Treats for your<br /><em>best bro.</em>
               </p>
-              <div className="hero-price-chip" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#352016', color: '#fff8ed', padding: '5px 13px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', margin: '0 auto 14px auto', letterSpacing: '.3px', flexWrap: 'wrap' }}>
-                <span>400 g Pouch</span><span>·</span><span>Bro Bites – Classic Crunch ₹149 · Bro Mix – Happy Mix ₹179</span>
+              <div className="hero-price-chip">
+                <span>400 g pouch</span>
+                <span className="chip-dot" aria-hidden="true">·</span>
+                <span>Bro Bites ₹149 · Bro Mix ₹179</span>
               </div>
               <p className="hero-description" style={{ textAlign: 'center', marginInline: 'auto' }}>
                 For the muddy paws. The happy hellos.<br />And the friend who makes every day better.

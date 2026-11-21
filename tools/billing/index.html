@@ -1494,7 +1494,7 @@ body {
 
         <button type="button" class="scheme-card-btn" id="btnSchemeCombo" onclick="loadPreset('d2ccombo')">
           <span class="scheme-card-title">🐕 Bro Combo D2C</span>
-          <span class="scheme-card-sub">1 Non-Veg + 1 Mix (₹299)</span>
+          <span class="scheme-card-sub">1 Non-Veg + 1 Mix (₹295)</span>
           <span class="scheme-card-badge">Free Local Delivery</span>
         </button>
 
@@ -2184,10 +2184,10 @@ function loadPreset(type) {
     setDocMode('bill');
     items = [
       { ...ITEM_PRESETS.nv400, qty: 1, freeQty: 0, rate: 149.00, scheme: 'Bro Combo Launch' },
-      { ...ITEM_PRESETS.mx400, qty: 1, freeQty: 0, rate: 150.00, scheme: 'Bro Combo Launch' }
+      { ...ITEM_PRESETS.mx400, qty: 1, freeQty: 0, rate: 146.00, scheme: 'Bro Combo Launch' }
     ];
-    document.getElementById('billNotes').value = "BROSKI 2-Pack Launch Combo (Non-Veg + Bro Mix) @ ₹299. Fast local West Delhi delivery.";
-    showToast("🐕 Loaded D2C Bro Combo (₹299)");
+    document.getElementById('billNotes').value = "BROSKI 2-Pack Launch Combo (Non-Veg + Bro Mix) @ ₹295. Fast local West Delhi delivery.";
+    showToast("🐕 Loaded D2C Bro Combo (₹295)");
   } else if (type === 'sampledrop') {
     document.getElementById('btnSchemeSample')?.classList.add('active');
     setDocMode('challan');

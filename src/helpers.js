@@ -5,10 +5,10 @@ export function checkPincode(pin, localPins = LOCAL_PINS) {
   const p = String(pin || '').trim();
   if (!/^\d{6}$/.test(p)) return { kind: 'error', text: 'Please enter a 6-digit pincode.' };
   if (localPins.includes(p)) {
-    return { kind: 'local', text: '✅ Free delivery on orders ₹299+ within 5 km of Nangloi. Confirmed on WhatsApp.' };
+    return { kind: 'local', text: '✅ Free delivery on orders from ₹295 within 5 km of Nangloi.' };
   }
   if (OTHER_WEST_DELHI_PINS.includes(p)) {
-    return { kind: 'delhi', text: '🐾 Delivery ₹20, confirmed on WhatsApp.' };
+    return { kind: 'delhi', text: '🐾 We deliver here – delivery charges shown at checkout.' };
   }
   return { kind: 'outside', text: 'Not in your area yet – WhatsApp us.' };
 }

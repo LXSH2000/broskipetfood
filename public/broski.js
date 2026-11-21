@@ -25,6 +25,16 @@
     });
     root.querySelectorAll('[data-email]').forEach(function (a) { a.href = 'mailto:' + C.EMAIL; if (!a.textContent.trim()) a.textContent = C.EMAIL; });
     root.querySelectorAll('[data-email-text]').forEach(function (s) { s.textContent = C.EMAIL; });
+    root.querySelectorAll('[data-instagram]').forEach(function (a) {
+      if (C.INSTAGRAM_URL && C.INSTAGRAM_URL.trim()) {
+        a.href = C.INSTAGRAM_URL.trim();
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.style.display = '';
+      } else {
+        a.style.display = 'none';
+      }
+    });
     root.querySelectorAll('[data-gstin]').forEach(function (s) {
       if (C.GSTIN && C.GSTIN.trim()) {
         s.textContent = ' · GSTIN: ' + C.GSTIN.trim();

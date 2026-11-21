@@ -317,6 +317,137 @@ body .footer-bottom span {
   }
 }
 
+/* B1: Hero Price Chip (Responsive 2 lines on phone, 1 line on desktop) */
+.hero-price-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--bk-brown, #352016);
+  color: #fff8ed;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin: 0 auto 14px;
+  letter-spacing: .3px;
+}
+.hero-price-chip .chip-dot {
+  display: inline;
+}
+@media (max-width: 600px) {
+  .hero-price-chip {
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px 16px;
+    text-align: center;
+  }
+  .hero-price-chip .chip-dot {
+    display: none;
+  }
+}
+
+/* P6: Product Details Card & Definition List */
+.bk-details-card {
+  max-width: 720px;
+  margin: 28px auto 0;
+  padding: 18px 22px;
+  background: #ffffff;
+  border: 1.5px solid var(--border, #e6dccb);
+  border-radius: 16px;
+  color: var(--text, #352016);
+  text-align: left;
+}
+.bk-details-title {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--bk-brown, #352016);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.bk-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+.bk-details-row {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 10px;
+  align-items: baseline;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.bk-details-row dt {
+  font-weight: 700;
+  color: var(--bk-brown, #352016);
+  margin: 0;
+}
+.bk-details-row dd {
+  margin: 0;
+  color: var(--text, #5a4033);
+}
+.bk-details-email {
+  color: var(--bk-rust, #b8452b);
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+@media (max-width: 360px) {
+  .bk-details-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+/* A3: Desktop Dock Clearances (so nothing hides under dock) */
+@media (min-width: 769px) {
+  #shop {
+    padding-bottom: 110px !important;
+  }
+  .story.section,
+  .ritual.section,
+  .faq.section {
+    padding-bottom: 100px !important;
+  }
+}
+
+/* A4/A5: WhatsApp Bubble Manners & Desktop Position */
+@media (min-width: 769px) {
+  .whatsapp-float {
+    bottom: 96px !important;
+    right: 24px !important;
+    min-width: 52px !important;
+    min-height: 52px !important;
+    padding: 12px !important;
+    border-radius: 50% !important;
+  }
+  .whatsapp-float span {
+    display: none !important;
+  }
+}
+.whatsapp-float.wa-hide {
+  opacity: 0 !important;
+  transform: translateY(16px) scale(0.9) !important;
+  pointer-events: none !important;
+}
+
+/* B7: Minimum font baseline of 12.5px */
+.bk-shop-eyebrow,
+.bk-pack-meta,
+.bk-gateway-guarantee,
+.hero-end span,
+.ritual-grid .text-link,
+.photo-note,
+.everyday-editorial .eyebrow,
+.sample-reviews-label,
+.sample-reviews-label span {
+  font-size: max(12.5px, 1em) !important;
+}
+
 /* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   .bk-gateway-modal,

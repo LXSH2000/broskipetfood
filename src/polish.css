@@ -178,7 +178,7 @@ html.pz-on [data-pz-img].pz-in img { clip-path: inset(0 0 0 0); transform: scale
 /* 2c. Hero entrance on phones (desktop already has the GSAP version) */
 @media (max-width: 799px), (hover: none) {
   html.pz-on:not(.broski-intro-active) .hero-title span { display: inline-block;
-    animation: pz-rise .75s var(--pz-ease) both; animation-delay: calc(var(--letter, 0) * 45ms); }
+    animation: pz-rise .75s var(--pz-ease) both; }
   html.pz-on:not(.broski-intro-active) .hero .eyebrow { animation: pz-fade .8s ease both; }
   html.pz-on:not(.broski-intro-active) .hero-intro { animation: pz-up-soft .9s var(--pz-ease) .35s both; }
   html.pz-on:not(.broski-intro-active) .cinema-frame { animation: pz-up 1s var(--pz-ease) .55s both; }

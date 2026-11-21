@@ -156,7 +156,7 @@ export function ProductCards() {
                   {mx && <img src={mx.img} alt="" width="300" height="300" loading="lazy" decoding="async" />}
                 </div>
               )}
-              {p.save ? <span className="bk-pcard__save">Save ₹{p.save}</span> : null}
+              {p.badge ? <span className="bk-pcard__save">{p.badge}</span> : null}
             </div>
             <div className="bk-pcard__body">
               <h3>{p.title}</h3>
@@ -202,35 +202,31 @@ export function ProductCards() {
       </p>
 
       {/* Product Details Section (Legal Metrology & E-Commerce Rules) */}
-      <div className="bk-product-details-card" style={{
-        margin: '24px auto 0',
-        padding: '20px',
-        background: '#fff',
-        border: '1.5px solid var(--border)',
-        borderRadius: '16px',
-        maxWidth: '860px',
-        textAlign: 'left',
-        fontSize: '13px',
-        lineHeight: '1.6',
-        color: 'var(--text)'
-      }}>
-        <h4 style={{ margin: '0 0 10px', fontSize: '15px', fontWeight: '800', color: 'var(--brown)', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
-          Product Details
-        </h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
-          <div>
-            <strong>Manufactured by:</strong> Scoobee Pet Foods Pvt. Ltd., HSIIDC Industrial Estate, Rai – 131029, Sonepat, Haryana
+      {/* Product details (statutory legal metrology & consumer care) */}
+      <div className="bk-details-card">
+        <h4 className="bk-details-title">Product Details</h4>
+        <dl className="bk-details">
+          <div className="bk-details-row">
+            <dt>Packed & marketed by:</dt>
+            <dd>BROSKI, Nangloi, West Delhi – 110041</dd>
           </div>
-          <div>
-            <strong>Packed & marketed by:</strong> BROSKI, Nangloi, West Delhi – 110041
+          <div className="bk-details-row">
+            <dt>Manufactured by:</dt>
+            <dd>Scoobee Pet Foods Pvt. Ltd., HSIIDC Industrial Estate, Rai – 131029, Sonepat, Haryana</dd>
           </div>
-          <div>
-            <strong>Net quantity:</strong> 400 g · <strong>MRP:</strong> incl. of all taxes · <strong>Best before:</strong> 12 months from packing (see pack)
+          <div className="bk-details-row">
+            <dt>Net quantity / MRP:</dt>
+            <dd>400 g · MRP incl. of all taxes · Best before: 12 months from packing (see pack)</dd>
           </div>
-          <div>
-            <strong>Country of origin:</strong> India · <strong>Consumer care:</strong> <a href="mailto:support@broskipetfood.com" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: '600' }}>support@broskipetfood.com</a>
+          <div className="bk-details-row">
+            <dt>Country of origin:</dt>
+            <dd>India</dd>
           </div>
-        </div>
+          <div className="bk-details-row">
+            <dt>Consumer care:</dt>
+            <dd><a href="mailto:support@broskipetfood.com" className="bk-details-email">support@broskipetfood.com</a></dd>
+          </div>
+        </dl>
       </div>
 
       <PincodeChecker />

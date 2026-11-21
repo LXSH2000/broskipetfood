@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-WHMRKDWX"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ89P0X3QH"></script>
@@ -12,8 +14,6 @@
   gtag('config', 'G-YJ89P0X3QH');
   gtag('config', 'GTM-WHMRKDWX');
 </script>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f5efe4">
 <title>Claim Free 50g Sample Pouch – BROSKI dog biscuits, Nangloi, West Delhi</title>
 <meta name="description" content="Try crunchy Broski dog biscuits for free. Claim your complimentary 50g sample pouch in West Delhi. One per customer.">
@@ -34,10 +34,15 @@
 <body>
 <div class="bk-wrap">
   <header class="bk-head">
-    <a class="bk-logo" href="/">broski</a>
+    <a class="bk-logo" href="/" aria-label="BROSKI Home">
+      <img src="/broski-wordmark-brown.svg" alt="BROSKI" height="26" style="height:26px; width:auto; display:block;">
+    </a>
     <nav class="bk-nav" aria-label="Main">
+      <a href="/#shop">Shop</a>
+      <a href="/sample/">Free sample</a>
+      <a href="/points/">My points</a>
       <a href="/offers/">Bro Perks</a>
-      <a href="/points/">My Points</a>
+      <a href="/r/">Feedback</a>
     </nav>
   </header>
 
@@ -120,21 +125,18 @@
         </div>
       </div>
 
-      <div class="bk-code-card">
-        <span class="bk-small" style="letter-spacing:0.08em; text-transform:uppercase;">Official Claim Code</span>
+      <div class="bk-code-card" id="newCodeBox">
+        <span class="bk-small" style="letter-spacing:0.08em; text-transform:uppercase;">Your BROSKI Code</span>
         <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin:12px 0;">
-          <div class="bk-code-display" id="displayClaimCode" style="margin:0;">------</div>
-          <button type="button" id="copyClaimCodeBtn" class="bk-copy" aria-label="Copy claim code">Copy</button>
+          <div class="bk-code-display" id="displayBroskiCode" style="margin:0;">------</div>
+          <button type="button" id="copyBroskiCodeBtn" class="bk-copy" aria-label="Copy BROSKI code">Copy</button>
         </div>
-        <p class="bk-small" style="margin:0;">One free sample per number.</p>
+        <p class="bk-small" style="margin:0;">Save this code to check your points and orders at <a href="/points/" style="color:inherit; font-weight:700; text-decoration:underline;">broskipetfood.com/points</a></p>
       </div>
 
-      <div id="newCustCodeNotice" style="display:none; margin:16px 0; padding:12px 14px; background:#fff7f4; border:1.5px solid var(--rust); border-radius:12px; font-size:14px; color:var(--rust-dark); text-align:center;">
-        <div style="display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;">
-          <span>Your customer code: <strong id="displayCustCode" style="font-family:'JetBrains Mono',monospace; letter-spacing:1px; background:#fff; padding:2px 8px; border-radius:4px; border:1px solid var(--rust);">------</strong></span>
-          <button type="button" id="copyCustCodeBtn" class="bk-copy" style="min-height:36px; padding:4px 10px; font-size:12px;" aria-label="Copy customer code">Copy</button>
-        </div>
-        <div style="margin-top:6px; font-size:13px;">Save it to check points at <a href="/points/" style="color:inherit; font-weight:700; text-decoration:underline;">broskipetfood.com/points</a></div>
+      <div id="existingCustomerNotice" style="display:none; margin:16px 0; padding:14px; background:#fff7f4; border:1.5px solid var(--rust); border-radius:12px; font-size:14px; color:var(--rust-dark); text-align:center;">
+        <p style="margin:0 0 8px; font-weight:600;">You already have a BROSKI code – it was shown when you first ordered or claimed.</p>
+        <p style="margin:0; font-size:13px;">Forgot it? <a id="forgotCodeWaBtn" href="#" style="color:inherit; font-weight:700; text-decoration:underline;">WhatsApp us</a> and we'll look it up for you.</p>
       </div>
 
       <a id="waConfirmBtn" href="#" class="bk-btn bk-btn--wa bk-btn--big" target="_blank" rel="noopener noreferrer">
@@ -173,6 +175,7 @@
       <a href="/r/">Feedback</a>
       <a href="/terms/">Terms</a>
       <a href="/privacy/">Privacy</a>
+      <a data-instagram href="#" style="display:none;">Instagram</a>
     </nav>
     <p class="bk-small">
       BROSKI · Nangloi, West Delhi – 110041 · <a id="footContactLink" href="#">Contact WhatsApp</a>
@@ -279,21 +282,31 @@ window.addEventListener('DOMContentLoaded', function () {
 
       if (error) throw error;
 
-      if (data && data.status === 'ok') {
+      if (data && (data.status === 'ok' || data.status === 'ok_existing')) {
         // Successful claim
         if (window.BroskiPortal) {
           window.BroskiPortal.trackGA('sample_claim_success', { flavour: flavour });
         }
-        document.getElementById('displayClaimCode').textContent = data.claim_code;
 
-        // If brand-new customer, display customer code with save instructions
-        const custCodeNoticeEl = document.getElementById('newCustCodeNotice');
-        const custCodeDisplayEl = document.getElementById('displayCustCode');
-        if (data.customer_code && custCodeNoticeEl && custCodeDisplayEl) {
-          custCodeDisplayEl.textContent = data.customer_code;
-          custCodeNoticeEl.style.display = 'block';
-        } else if (custCodeNoticeEl) {
-          custCodeNoticeEl.style.display = 'none';
+        const newCodeBox = document.getElementById('newCodeBox');
+        const existingNotice = document.getElementById('existingCustomerNotice');
+        const codeDisplay = document.getElementById('displayBroskiCode');
+        const code = data.customer_code || '';
+
+        if (data.status === 'ok' && code) {
+          if (codeDisplay) codeDisplay.textContent = code;
+          if (newCodeBox) newCodeBox.style.display = 'block';
+          if (existingNotice) existingNotice.style.display = 'none';
+        } else {
+          if (newCodeBox) newCodeBox.style.display = 'none';
+          if (existingNotice) existingNotice.style.display = 'block';
+          const forgotLink = document.getElementById('forgotCodeWaBtn');
+          if (forgotLink) {
+            const cfg = window.BROSKI_CONFIG || {};
+            const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+            const msg = encodeURIComponent(`Hi BROSKI! I claimed my free sample for +91${phone} but forgot my BROSKI code.`);
+            forgotLink.href = waNum ? `https://wa.me/${waNum}?text=${msg}` : `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}`;
+          }
         }
 
         // Display the specific sample pouch reserved
@@ -307,9 +320,12 @@ window.addEventListener('DOMContentLoaded', function () {
           if (sampleBadge) sampleBadge.textContent = '50 g Complimentary Pouch Reserved: Bro Bites (Classic Crunch)';
         }
 
-        // Configure WhatsApp button
-        const confirmMsg = `BROSKI sample code ${data.claim_code}`;
-        const act = window.BroskiPortal ? window.BroskiPortal.getContactAction(confirmMsg, `BROSKI Sample Code ${data.claim_code}`) : null;
+        // Configure WhatsApp button:
+        // "Hi BROSKI! I claimed my free sample. My BROSKI code is XXXXXX."
+        const confirmMsg = code
+          ? `Hi BROSKI! I claimed my free sample. My BROSKI code is ${code}.`
+          : `Hi BROSKI! I claimed my free sample for +91${phone}.`;
+        const act = window.BroskiPortal ? window.BroskiPortal.getContactAction(confirmMsg, 'BROSKI Free Sample') : null;
         const confirmBtn = document.getElementById('waConfirmBtn');
         if (confirmBtn && act) {
           confirmBtn.href = act.url;
@@ -378,8 +394,7 @@ window.addEventListener('DOMContentLoaded', function () {
       }).catch(() => {});
     });
   }
-  wireCopy('copyClaimCodeBtn', 'displayClaimCode');
-  wireCopy('copyCustCodeBtn', 'displayCustCode');
+  wireCopy('copyBroskiCodeBtn', 'displayBroskiCode');
 });
 </script>
 </body>

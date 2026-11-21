@@ -9,7 +9,7 @@ window.BROSKI_CONFIG = {
   SUPABASE_URL: window.__BROSKI_SUPABASE_URL__ || 'https://gnunhiqahhnrkroqtxib.supabase.co',
   SUPABASE_ANON_KEY: window.__BROSKI_SUPABASE_ANON_KEY__ || 'sb_publishable_RM2Nr1mk-KjUeVt9SPQmzA_ZWFyYNGG',
 
-  OFFERS_ENABLED: ['combo', 'free-delivery-299', 'feedback-taste-pack'],
+  OFFERS_ENABLED: ['combo', 'free-delivery-295', 'feedback-taste-pack'],
   DELIVERY_PINCODES: ['110041', '110087', '110063', '110027', '110058', '110015', '110026', '110034', '110056'],
 
   // Launch banner: empty text hides the banner completely
@@ -56,21 +56,21 @@ window.BROSKI_CONFIG = {
       title: 'Bro Combo',
       note: '1 Classic Crunch + 1 Happy Mix',
       size: '2 × 400 g',
-      price: 299,
-      save: 29,
+      price: 295,
+      badge: '10% off',
       img: '/broski-combo-duo.webp',
       img400: '/broski-combo-duo-400.webp',
       alt: 'BROSKI Bro Combo 2 pack (Classic Crunch + Happy Mix)',
       ingredients: 'One pack each of Bro Bites – Classic Crunch and Bro Mix – Happy Mix (see each pack).',
       allergens: 'Contains chicken, egg, wheat.',
       button: 'Order the Combo',
-      msg: 'Hi BROSKI! I want the Bro Combo (₹299)'
+      msg: 'Hi BROSKI! I want the Bro Combo (₹295)'
     }
   ],
-  UNIT_PRICE_LINE: 'Unit price: Bro Bites – Classic Crunch ₹0.37/g · Bro Mix – Happy Mix ₹0.45/g · Combo ₹0.37/g. Free delivery within 5 km of Nangloi on orders from ₹299, otherwise ₹20.',
+  UNIT_PRICE_LINE: 'Unit price: Bro Bites – Classic Crunch ₹0.37/g · Bro Mix – Happy Mix ₹0.45/g. Free delivery within 5 km of Nangloi on orders from ₹295; otherwise applicable delivery charges apply (shown at checkout).',
 
   MSG: {
-    combo: 'Hi BROSKI! I want the Bro Combo (₹299)',
+    combo: 'Hi BROSKI! I want the Bro Combo (₹295)',
     referral: 'Hi BROSKI! My friend [name] referred me.',
     video: "Hi BROSKI! Here's my Bro's video 🎥 Batch no: ____ Bro word: ____",
     shop: 'Hi BROSKI! I run a pet shop and want to know about trade terms. Shop name: ____ Area: ____',

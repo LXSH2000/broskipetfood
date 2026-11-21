@@ -135,7 +135,8 @@ begin
   values (v_cust.id, public.new_code(), p_flavour, left(p_device,64))
   returning * into v_claim;
 
-  return json_build_object('status','ok','claim_code',v_claim.claim_code,
+  return json_build_object('status', case when v_new then 'ok' else 'ok_existing' end,
+    'claim_code', v_claim.claim_code,
     'customer_code', case when v_new then v_cust.customer_code else null end);
 end $$;
 

@@ -14,11 +14,17 @@ export default function useStoreMotion() {
 
     let isDisposed = false;
     let cleanup = null;
+    let loaded = false;
 
-    Promise.all([
-      import('gsap'),
-      import('gsap/ScrollTrigger')
-    ]).then(([{ default: gsap }, { ScrollTrigger }]) => {
+    const startGsap = () => {
+      if (loaded || isDisposed) return;
+      loaded = true;
+      cleanupListeners();
+
+      Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger')
+      ]).then(([{ default: gsap }, { ScrollTrigger }]) => {
       if (isDisposed || !root) return;
       gsap.registerPlugin(ScrollTrigger);
 
@@ -62,8 +68,8 @@ export default function useStoreMotion() {
           const title = root.querySelectorAll('.hero-title span');
           const intro = root.querySelectorAll('.hero-intro');
           const timeline = gsap.timeline({ defaults: { ease: 'power3.out', clearProps: 'transform,opacity' } });
-          if (title.length) timeline.from(title, { y: desktop ? 55 : 24, rotation: 2, opacity: .1, duration: .7, stagger: .05 });
-          if (intro.length) timeline.from(intro, { y: 18, opacity: .4, duration: .5 }, .2);
+          if (title.length) timeline.from(title, { y: desktop ? 55 : 24, rotation: 2, opacity: .1, duration: .6 });
+          if (intro.length) timeline.from(intro, { y: 18, opacity: .4, duration: .5 }, .1);
           if (document.documentElement.classList.contains('broski-intro-active')) {
             timeline.pause();
             const play = () => timeline.play();
@@ -133,11 +139,31 @@ export default function useStoreMotion() {
         };
       }, root);
 
-      cleanup = () => media.revert();
-    }).catch(err => console.error('[Motion] GSAP load failed:', err));
+        cleanup = () => media.revert();
+      }).catch(err => console.error('[Motion] GSAP load failed:', err));
+    };
+
+    const triggerEl = document.querySelector('#shop') || root;
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some(e => e.isIntersecting)) {
+        startGsap();
+      }
+    }, { rootMargin: '300px' });
+    io.observe(triggerEl);
+
+    const onScrollOrPointer = () => startGsap();
+    window.addEventListener('scroll', onScrollOrPointer, { once: true, passive: true });
+    window.addEventListener('pointerdown', onScrollOrPointer, { once: true, passive: true });
+
+    function cleanupListeners() {
+      io.disconnect();
+      window.removeEventListener('scroll', onScrollOrPointer);
+      window.removeEventListener('pointerdown', onScrollOrPointer);
+    }
 
     return () => {
       isDisposed = true;
+      cleanupListeners();
       if (cleanup) cleanup();
     };
   }, []);

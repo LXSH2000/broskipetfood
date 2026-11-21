@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BROSKI · How was the crunch? | Feedback</title>
+<meta name="description" content="Tell us honestly how your dog liked Broski biscuits. Takes a minute.">
+<link rel="canonical" href="https://broskipetfood.com/r/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-WHMRKDWX"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ89P0X3QH"></script>
@@ -12,17 +18,11 @@
   gtag('config', 'G-YJ89P0X3QH');
   gtag('config', 'GTM-WHMRKDWX');
 </script>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BROSKI · How was the crunch? | Feedback</title>
-<meta name="description" content="Tell us honestly how your dog liked Broski biscuits. Takes a minute.">
-<link rel="canonical" href="https://broskipetfood.com/r/">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <script src="/config.js"></script>
 <script src="/portal-shared.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --primary: #352016;
@@ -38,7 +38,7 @@
   --green: #15803d;
   --font-main: 'DM Sans', -apple-system, sans-serif;
   --font-display: 'Outfit', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-mono: 'DM Sans', -apple-system, sans-serif;
   --spring-snappy: cubic-bezier(0.16, 1, 0.3, 1);
   --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -210,7 +210,7 @@ body {
   color: var(--accent);
   margin-top: 8px;
   min-height: 18px;
-  font-family: var(--font-mono);
+  font-family: var(--font-main);
 }
 
 /* Form Inputs */
@@ -319,7 +319,7 @@ body {
 }
 
 .voucher-code {
-  font-family: var(--font-mono);
+  font-family: var(--font-main);
   font-size: 26px;
   font-weight: 700;
   background: rgba(255, 255, 255, 0.1);
@@ -327,7 +327,7 @@ body {
   border-radius: 10px;
   display: inline-block;
   margin: 14px 0;
-  letter-spacing: 2px;
+  letter-spacing: 0.15em;
   color: #fef08a;
   border: 1px dashed rgba(254, 240, 138, 0.4);
 }
@@ -382,18 +382,17 @@ body {
 
 <div class="portal-wrap">
 
-  <header class="portal-head">
-    <a href="/" class="portal-logo" aria-label="Broski Home">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-        <ellipse cx="12" cy="16" rx="5" ry="4"/>
-        <ellipse cx="5" cy="10" rx="2" ry="3" transform="rotate(-25 5 10)"/>
-        <ellipse cx="10" cy="6" rx="2" ry="3"/>
-        <ellipse cx="16" cy="6" rx="2" ry="3"/>
-        <ellipse cx="20" cy="11" rx="2" ry="3" transform="rotate(25 20 11)"/>
-      </svg>
-      BROSKI
+  <header class="portal-head" style="margin-bottom: 24px;">
+    <a href="/" class="portal-logo" aria-label="BROSKI Home" style="min-height:44px; display:inline-flex; align-items:center;">
+      <img src="/broski-wordmark-brown.svg" alt="BROSKI" height="26" style="height:26px; width:auto; display:block;">
     </a>
-    <a href="/offers/" class="nav-link">Bro Perks →</a>
+    <nav class="bk-nav" aria-label="Main" style="display:flex; gap:6px; flex-wrap:wrap;">
+      <a href="/#shop" class="nav-link" style="padding:10px 8px;">Shop</a>
+      <a href="/sample/" class="nav-link" style="padding:10px 8px;">Free sample</a>
+      <a href="/points/" class="nav-link" style="padding:10px 8px;">My points</a>
+      <a href="/offers/" class="nav-link" style="padding:10px 8px;">Bro Perks</a>
+      <a href="/r/" class="nav-link" style="padding:10px 8px;">Feedback</a>
+    </nav>
   </header>
 
   <main class="feedback-card">
@@ -477,7 +476,7 @@ body {
       <!-- Quote Consent Checkbox -->
       <div class="field-row">
         <label style="display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--text); cursor:pointer; min-height:44px; padding:6px 0;">
-          <input type="checkbox" id="quoteOk" checked style="width:20px; height:20px; min-width:20px; margin-top:2px; accent-color:var(--accent); cursor:pointer;">
+          <input type="checkbox" id="quoteOk" style="width:20px; height:20px; min-width:20px; margin-top:2px; accent-color:var(--accent); cursor:pointer;">
           <span>OK to quote my words (first name only)</span>
         </label>
         <p style="font-size:12px; color:var(--text-muted); margin-left:30px; margin-top:-2px;">
@@ -570,6 +569,7 @@ body {
       <a href="/points/" style="color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">My Points</a>
       <a href="/terms/" style="color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">Terms</a>
       <a href="/privacy/" style="color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">Privacy</a>
+      <a data-instagram href="#" style="display:none; color:var(--primary); font-weight:700; text-decoration:none; min-height:44px; display:inline-flex; align-items:center;">Instagram</a>
     </nav>
     <p>BROSKI · Nangloi, West Delhi – 110041 · <a data-email href="mailto:support@broskipetfood.com" style="color:inherit;">support@broskipetfood.com</a><span data-gstin></span></p>
   </footer>

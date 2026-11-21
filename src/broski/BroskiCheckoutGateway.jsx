@@ -9,7 +9,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
   // Product prices directly from public/config.js
   const bitesPrice = products.find(p => p.id === 'bro-bites')?.price || 149;
   const mixPrice = products.find(p => p.id === 'bro-mix')?.price || 179;
-  const comboPrice = products.find(p => p.id === 'combo' || p.id === 'bro-combo')?.price || 299;
+  const comboPrice = products.find(p => p.id === 'combo' || p.id === 'bro-combo')?.price || 295;
 
   // Cart quantities
   const [quantities, setQuantities] = useState(() => {
@@ -23,7 +23,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
   // Customer details
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
-  const [pincode, setPincode] = useState('110041');
+  const [pincode, setPincode] = useState('');
   const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -127,7 +127,6 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
           method: 'POST',
           headers: {
             apikey: cfg.SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${cfg.SUPABASE_ANON_KEY}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -140,7 +139,10 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
           })
         });
         data = await r.json().catch(() => null);
-        if (!r.ok) error = data || { message: r.statusText };
+        if (!r.ok) {
+          console.warn('[BROSKI rpc]', 'create_order_request', r.status, data);
+          error = data || { message: r.statusText };
+        }
       }
 
       if (error) throw error;
@@ -193,29 +195,8 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
       // Automatically open WhatsApp / mailto link
       window.open(contactUrl, '_blank', 'noopener,noreferrer');
     } catch (err) {
-      console.error('[OrderRequest] RPC failed or offline:', err);
-      // Fallback: If RPC fails, still open WhatsApp without the order id
-      const summaryParts = [];
-      if (bQty > 0) summaryParts.push(`Bro Bites ×${bQty}`);
-      if (mQty > 0) summaryParts.push(`Bro Mix ×${mQty}`);
-      if (cQty > 0) summaryParts.push(`Combo ×${cQty}`);
-      const summary = summaryParts.join(', ');
-
-      const waMsg = `Hi BROSKI! ${summary} = ₹${total}. Pincode: ${cleanPinDigits}`;
-      const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
-      const contactUrl = waNum
-        ? `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}`
-        : `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}?subject=BROSKI Order&body=${encodeURIComponent(waMsg)}`;
-
-      setOrderConfirmed({
-        id: 'DIRECT',
-        itemsText: summary,
-        total,
-        contactUrl,
-        customerName: customerName.trim(),
-        pincode: cleanPinDigits
-      });
-      window.open(contactUrl, '_blank', 'noopener,noreferrer');
+      console.warn('[BROSKI rpc]', 'create_order_request', 'failed', err);
+      setErrorMsg("Couldn't save – please try again or WhatsApp us");
     } finally {
       setLoading(false);
     }
@@ -234,7 +215,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
         {/* Header */}
         <div className="bk-gateway-header">
           <div>
-            <span className="bk-gateway-badge">ORDER ON WHATSAPP</span>
+            <span className="bk-gateway-badge">QUICK ORDER</span>
             <h2 id="gw-title" style={{ fontSize: '22px' }}>
               {orderConfirmed ? 'Order Request Sent! 🐾' : 'Order Direct from Nangloi'}
             </h2>
@@ -286,8 +267,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                 <div className={`bk-pack-row combo ${cQty > 0 ? 'selected' : ''}`}>
                   <div className="bk-pack-info">
                     <div className="bk-pack-combo-tags">
-                      <span className="bk-pack-tag cb">POPULAR COMBO</span>
-                      <span className="bk-save-tag">SAVE ₹29</span>
+                      <span className="bk-pack-tag cb">POPULAR COMBO · 10% OFF</span>
                     </div>
                     <strong>Bro Combo (1 Bites + 1 Mix)</strong>
                     <span className="bk-pack-meta">₹{comboPrice} · 2 × 400 g</span>
@@ -345,7 +325,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                     type="text"
                     inputMode="numeric"
                     maxLength={6}
-                    placeholder="110041"
+                    placeholder="e.g. 110041"
                     value={pincode}
                     onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     required
@@ -374,7 +354,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
 
               <div className="bk-summary-box">
                 <div className="bk-sum-row">
-                  <span>Selected items ({totalItems} packs):</span>
+                  <span>Selected items ({totalItems} {totalItems === 1 ? 'pack' : 'packs'}):</span>
                   <span>₹{total}</span>
                 </div>
                 <div className="bk-sum-total">

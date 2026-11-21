@@ -96,31 +96,47 @@
 
   // M11: WhatsApp float manners – hide over hero and near footer
   function setupWaObserver() {
-    const wa = document.querySelector('.whatsapp-float');
-    if (!wa) return;
-    const hero = document.querySelector('.hero');
-    const footer = document.querySelector('footer');
     let heroInView = false;
     let footerInView = false;
+    let heroObserved = false;
+    let footerObserved = false;
+    let waEl = null;
 
     const updateWaVisibility = () => {
+      waEl = waEl || document.querySelector('.whatsapp-float');
+      if (!waEl) return;
       if (heroInView || footerInView) {
-        wa.classList.add('wa-hide');
+        waEl.classList.add('wa-hide');
       } else {
-        wa.classList.remove('wa-hide');
+        waEl.classList.remove('wa-hide');
       }
     };
 
     const waIO = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        if (e.target === hero) heroInView = e.isIntersecting;
-        if (e.target === footer) footerInView = e.isIntersecting;
+        if (e.target.matches('.hero, .hero-v2')) heroInView = e.isIntersecting;
+        if (e.target.tagName.toLowerCase() === 'footer') footerInView = e.isIntersecting;
       });
       updateWaVisibility();
     }, { threshold: 0.05 });
 
-    if (hero) waIO.observe(hero);
-    if (footer) waIO.observe(footer);
+    function tryObserve() {
+      waEl = waEl || document.querySelector('.whatsapp-float');
+      const hero = document.querySelector('.hero, .hero-v2');
+      const footer = document.querySelector('footer');
+      if (hero && !heroObserved) {
+        waIO.observe(hero);
+        heroObserved = true;
+      }
+      if (footer && !footerObserved) {
+        waIO.observe(footer);
+        footerObserved = true;
+      }
+      updateWaVisibility();
+    }
+
+    tryObserve();
+    return tryObserve;
   }
 
   function start() {
@@ -129,14 +145,21 @@
     tag(root);
     marquee();
     progress();
-    setupWaObserver();
+    let tryWa = setupWaObserver();
     onScroll();
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', onScroll, { passive: true });
     // React may render sections a moment later – pick those up as well
     let t = 0;
-    new MutationObserver(() => { clearTimeout(t); t = setTimeout(() => { tag(root); marquee(); }, 80); })
-      .observe(root, { childList: true, subtree: true });
+    new MutationObserver(() => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        tag(root);
+        marquee();
+        if (tryWa) tryWa();
+        else tryWa = setupWaObserver();
+      }, 80);
+    }).observe(root, { childList: true, subtree: true });
     // Safety net: if anything is still hidden after 6 s on screen, show it
     setTimeout(() => document.querySelectorAll('[data-pz]:not(.pz-in), [data-pz-img]:not(.pz-in)').forEach((el) => {
       const r = el.getBoundingClientRect();

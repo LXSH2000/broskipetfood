@@ -42,12 +42,12 @@ export const CONFIG = {
     {
       id: 'combo',
       name: 'Bro Combo',
-      price: 29900,
+      price: 29500,
       weight: '2 × 400g',
       category: 'biscuits',
       pouchColor: 'duo',
       image: '/broski-combo-duo.webp',
-      tag: '2 × 400g Pouch · ₹299',
+      tag: '2 × 400g Pouch · ₹295',
       shortDesc: 'One Bro Bites – Classic Crunch + one Bro Mix – Happy Mix.'
     }
   ]
