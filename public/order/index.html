@@ -78,7 +78,7 @@
     color: #352016;
   }
 
-  /* Printable Confirmation Slip (A5) */
+  /* Printable Confirmation Slip (A4) */
   .order-slip {
     background: var(--bk-slip-bg);
     border: 1.5px solid var(--bk-slip-border);
@@ -185,7 +185,7 @@
     margin-top: 16px;
   }
 
-  /* Print Styles: A5 Order Confirmation Slip ONLY */
+  /* Print Styles: A4 Order Confirmation Slip ONLY */
   @media print {
     body {
       background: #ffffff !important;
@@ -204,7 +204,7 @@
       border: 1px solid #000000 !important;
       box-shadow: none !important;
       border-radius: 0 !important;
-      padding: 20px !important;
+      padding: 24px !important;
       margin: 0 !important;
       page-break-inside: avoid;
     }
@@ -212,8 +212,8 @@
       color: #333333 !important;
     }
     @page {
-      size: A5 portrait;
-      margin: 10mm;
+      size: A4 portrait;
+      margin: 15mm;
     }
   }
 </style>
