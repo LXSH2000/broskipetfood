@@ -87,6 +87,7 @@ alter table public.orders add column if not exists updated_at timestamptz defaul
 
 -- Update check constraints on orders
 alter table public.orders drop constraint if exists orders_status_check;
+alter table public.orders alter column status set default 'placed';
 alter table public.orders add constraint orders_status_check
   check (status in ('requested','placed','confirmed','out_for_delivery','delivered','cancelled'));
 
@@ -103,11 +104,15 @@ alter table public.orders add constraint orders_payment_status_check
   check (payment_status in ('unpaid','paid','refunded'));
 
 -- 8. Update Sample Claims Table Structure
+-- Drop existing constraint first so old statuses can be updated to new ones
+alter table public.sample_claims drop constraint if exists sample_claims_status_check;
+
 -- Migrate old statuses
 update public.sample_claims set status = 'reserved' where status in ('pending','verified');
 update public.sample_claims set status = 'given' where status = 'handed';
 
-alter table public.sample_claims drop constraint if exists sample_claims_status_check;
+-- Update default and add new status check constraint
+alter table public.sample_claims alter column status set default 'reserved';
 alter table public.sample_claims add constraint sample_claims_status_check
   check (status in ('reserved','added','given','expired','rejected'));
 
