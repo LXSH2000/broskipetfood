@@ -133,8 +133,8 @@
 
     <form id="loginForm" style="margin-top:20px;">
       <div class="bk-form-group">
-        <label class="bk-label" for="loginEmail">Email Address</label>
-        <input class="bk-input" type="email" id="loginEmail" placeholder="support@broskipetfood.com" autocomplete="username" required>
+        <label class="bk-label" for="loginUsername">Username</label>
+        <input class="bk-input" type="text" id="loginUsername" placeholder="itslxshay" autocomplete="username" required>
       </div>
 
       <div class="bk-form-group">
@@ -653,7 +653,9 @@ async function initAuth() {
     const alertEl = document.getElementById('loginAlert');
     alertEl.style.display = 'none';
 
-    const email = document.getElementById('loginEmail').value.trim();
+    const usernameInput = document.getElementById('loginUsername') || document.getElementById('loginEmail');
+    const rawUsername = usernameInput.value.trim().toLowerCase();
+    const email = rawUsername.includes('@') ? rawUsername : (rawUsername + '@broskipetfood.com');
     const password = document.getElementById('loginPassword').value;
     const btn = document.getElementById('loginSubmitBtn');
     btn.disabled = true;
@@ -696,7 +698,8 @@ async function verifyAdmin(user) {
     }
 
     currentUser = user;
-    document.getElementById('adminUserEmail').textContent = user.email;
+    const displayUser = user.email ? user.email.replace('@broskipetfood.com', '') : 'Admin';
+    document.getElementById('adminUserEmail').textContent = displayUser;
     document.getElementById('adminLogoutBtn').style.display = 'inline-block';
     document.getElementById('loginCard').style.display = 'none';
     document.getElementById('dashboardWrap').style.display = 'block';
