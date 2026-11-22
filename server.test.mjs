@@ -8,22 +8,22 @@ import { checkPincode, UPI_RE, esc } from './src/helpers.js';
 
 const customer = { name: 'Test Person', email: 'test@example.com', phone: '9876543210', address: '123 Test Street', city: 'Delhi', pincode: '110001' };
 
-test('helpers: checkPincode validates local, Delhi, outside and invalid formats', () => {
-  const local = checkPincode('110041');
-  assert.equal(local.kind, 'local');
-  assert.ok(local.text.includes('Free delivery'));
+test('helpers: checkPincode validates deliverable, waitlist, and invalid formats', async () => {
+  const local = await checkPincode('110041');
+  assert.equal(local.ok, true);
+  assert.equal(local.deliverable, true);
 
-  const otherWestDelhi = checkPincode('110015');
-  assert.equal(otherWestDelhi.kind, 'delhi');
-  assert.ok(otherWestDelhi.text.includes('Delivery ₹20, confirmed on WhatsApp'));
+  const nonLocal = await checkPincode('110087');
+  assert.equal(nonLocal.ok, true);
+  assert.equal(nonLocal.deliverable, false);
 
-  const outside = checkPincode('110001');
-  assert.equal(outside.kind, 'outside');
-  assert.ok(outside.text.includes('Not in your area yet – WhatsApp us'));
+  const outside = await checkPincode('110092');
+  assert.equal(outside.ok, true);
+  assert.equal(outside.deliverable, false);
 
-  const bad = checkPincode('12');
-  assert.equal(bad.kind, 'error');
-  assert.ok(bad.text.includes('6-digit'));
+  const bad = await checkPincode('12');
+  assert.equal(bad.ok, false);
+  assert.ok(bad.error.includes('6-digit'));
 });
 
 test('helpers: UPI_RE and esc sanitize billing inputs safely', () => {

@@ -3,7 +3,7 @@ import { LoadingSpinner } from './LoadingSpinner';
 
 const C = () => window.BROSKI_CONFIG || {};
 
-export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
+export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1, initialPincode = '110041', onClose }) {
   const cfg = C();
   const products = cfg.PRODUCTS || [];
 
@@ -13,7 +13,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
   const comboPrice = products.find(p => p.id === 'combo' || p.id === 'bro-combo')?.price || 295;
 
   // Stepper state: 1 = Packs, 2 = Pincode, 3 = Details, 4 = Review, 5 = Done
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(initialStep);
 
   // Cart quantities
   const [quantities, setQuantities] = useState(() => {
@@ -25,7 +25,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
   });
 
   // Delivery & Customer inputs
-  const [pincode, setPincode] = useState('110041');
+  const [pincode, setPincode] = useState(initialPincode || '110041');
   const [pincodeStatus, setPincodeStatus] = useState({ checked: false, deliverable: true, waitlistCount: 0, checking: false });
   const [waitlistJoined, setWaitlistJoined] = useState(false);
   const [waitlistLoading, setWaitlistLoading] = useState(false);

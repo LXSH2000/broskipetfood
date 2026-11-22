@@ -74,9 +74,21 @@
 .bk-pin__msg { min-height:24px; margin:12px 0 0; font-size:15px; opacity:0; transform:translateY(4px);
   transition:opacity .25s ease, transform .25s ease; }
 .bk-pin__msg.is-shown { opacity:1; transform:none; }
-.bk-pin__msg--local { color:#1d6b3a; font-weight:600; }
-.bk-pin__msg--delhi, .bk-pin__msg--outside { color:#352016; }
-.bk-pin__msg--error { color:#a4281d; }
+.bk-pin__result { padding:14px 16px; border-radius:12px; display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:8px; }
+.bk-pin__result--deliverable { background:#eaf5ec; border:1.5px solid #b7e4be; }
+.bk-pin__result--deliverable .bk-pin__text { color:#1d6b3a; font-weight:700; font-size:14.5px; line-height:1.45; margin:0; }
+.bk-pin__result--waitlist { background:#fdf5f0; border:1.5px solid #f6d8ca; }
+.bk-pin__result--waitlist .bk-pin__text { color:#8e3820; font-weight:700; font-size:14.5px; line-height:1.45; margin:0; }
+.bk-pin__result--error { background:#fee2e2; border:1.5px solid #fca5a5; }
+.bk-pin__result--error .bk-pin__text { color:#991b1b; font-size:14px; margin:0; }
+.bk-pin-action-btn { min-height:42px; padding:0 22px; font-size:14px; font-weight:700; font-family:"Outfit",sans-serif; border-radius:10px; border:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:background .15s ease, transform .15s ease; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+.bk-pin-action-btn--order { background:#b8452b; color:#fff; }
+.bk-pin-action-btn--order:hover { background:#9d361f; transform:translateY(-1px); }
+.bk-pin-action-btn--waitlist { background:#8e3820; color:#fff; }
+.bk-pin-action-btn--waitlist:hover { background:#712914; transform:translateY(-1px); }
+@media (prefers-reduced-motion: reduce) {
+  .bk-pin-action-btn { transition:none; transform:none !important; }
+}
 
 .bk-partner__offer { max-width:560px; margin:0 auto 14px; font-size:17px; line-height:1.5; color:var(--bk-brown-2); }
 

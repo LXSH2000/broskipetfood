@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import BroskiWordmark from '../BroskiWordmark.jsx';
 import BroskiCheckoutGateway from './BroskiCheckoutGateway';
-import { checkPincode, LOCAL_PINS } from '../helpers';
+import { checkPincode } from '../helpers';
 import './broski-checkout.css';
 
 const C = () => window.BROSKI_CONFIG || {};
@@ -66,16 +66,27 @@ export function LaunchBanner() {
   );
 }
 
-/* Pincode Checker Component (Task 4) */
-export function PincodeChecker() {
+/* Pincode Checker Component */
+export function PincodeChecker({ onOpenOrder }) {
   const [pin, setPin] = useState('');
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const onSubmit = (e) => {
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const r = checkPincode(pin, C().DELIVERY_PINCODES || LOCAL_PINS);
+    if (loading) return;
+    setLoading(true);
+    const r = await checkPincode(pin);
     setResult(r);
-    try { window.BroskiAnalytics?.trackEvent('pincode_check', { result: r.kind }); } catch {}
+    setLoading(false);
+    try {
+      window.BroskiAnalytics?.trackEvent('pincode_check', {
+        deliverable: r.deliverable,
+        pin: r.pin
+      });
+    } catch {}
   };
+
   return (
     <form className="bk-pin" onSubmit={onSubmit} aria-labelledby="pin-h" noValidate>
       <h3 id="pin-h" className="bk-pin__title">Check Delivery in Your Area</h3>
@@ -95,16 +106,46 @@ export function PincodeChecker() {
             setResult(null);
           }}
         />
-        <button type="submit" className="bk-h-btn bk-pin__btn">Check</button>
+        <button type="submit" className="bk-h-btn bk-pin__btn" disabled={loading}>
+          {loading ? 'Checking…' : 'Check'}
+        </button>
       </div>
-      <p className={`bk-pin__msg ${result ? `bk-pin__msg--${result.kind} is-shown` : ''}`} role="status" aria-live="polite">
-        {result && result.kind === 'local' && (
-          <svg className="bk-tick-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        )}
-        {result ? result.text : ''}
-      </p>
+
+      {result && (
+        <div className="bk-pin__msg is-shown" role="status" aria-live="polite">
+          {result.error ? (
+            <div className="bk-pin__result bk-pin__result--error">
+              <p className="bk-pin__text">{result.error}</p>
+            </div>
+          ) : result.deliverable ? (
+            <div className="bk-pin__result bk-pin__result--deliverable">
+              <p className="bk-pin__text">
+                ✅ We deliver to {result.pin} – free delivery, today or tomorrow.
+              </p>
+              <button
+                type="button"
+                className="bk-pin-action-btn bk-pin-action-btn--order"
+                onClick={() => onOpenOrder?.({ product: 'combo', pincode: result.pin, step: 1 })}
+              >
+                Order now
+              </button>
+            </div>
+          ) : (
+            <div className="bk-pin__result bk-pin__result--waitlist">
+              <p className="bk-pin__text">
+                🐾 Arriving soon in {result.pin} – {result.waitlist_count} neighbours waiting.
+              </p>
+              <button
+                type="button"
+                className="bk-pin-action-btn bk-pin-action-btn--waitlist"
+                onClick={() => onOpenOrder?.({ product: 'combo', pincode: result.pin, step: 2 })}
+              >
+                Join the waitlist
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </form>
   );
 }
@@ -114,7 +155,26 @@ export function ProductCards() {
   const { PRODUCTS = [], UNIT_PRICE_LINE } = C();
   const nv = PRODUCTS.find((p) => p.id === 'bro-bites');
   const mx = PRODUCTS.find((p) => p.id === 'bro-mix');
-  const [activeGatewayProduct, setActiveGatewayProduct] = useState(null);
+  const [gatewayConfig, setGatewayConfig] = useState(null);
+
+  const openGateway = (opts = {}) => {
+    const config = typeof opts === 'string'
+      ? { product: opts, step: 1, pincode: '110041' }
+      : { product: 'combo', step: 1, pincode: '110041', ...opts };
+    setGatewayConfig(config);
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const orderParam = params.get('order');
+      if (orderParam) {
+        const valid = ['combo', 'bro-combo', 'bro-bites', 'bites', 'bro-mix', 'mix'];
+        const p = valid.includes(orderParam) ? (orderParam.includes('bites') ? 'bro-bites' : orderParam.includes('mix') ? 'bro-mix' : 'combo') : 'combo';
+        openGateway({ product: p, step: 1 });
+      }
+    }
+  }, []);
 
   return (
     <section id="shop" className="bk-shop" aria-labelledby="shop-h">
@@ -126,7 +186,7 @@ export function ProductCards() {
         <button
           type="button"
           className="bk-gateway-trigger-btn"
-          onClick={() => setActiveGatewayProduct('combo')}
+          onClick={() => openGateway({ product: 'combo', step: 1 })}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
@@ -176,7 +236,7 @@ export function ProductCards() {
                 <button
                   type="button"
                   className="bk-h-btn bk-h-btn--order"
-                  onClick={() => setActiveGatewayProduct(p.id)}
+                  onClick={() => openGateway({ product: p.id, step: 1 })}
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{marginRight: '6px'}}>
                     <path d="M5 7h14l1 14H4L5 7Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/>
@@ -189,7 +249,7 @@ export function ProductCards() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span>or just message us on WhatsApp</span>
+                  <span>Questions? WhatsApp us</span>
                 </a>
               </div>
             </div>
@@ -229,7 +289,7 @@ export function ProductCards() {
         </dl>
       </div>
 
-      <PincodeChecker />
+      <PincodeChecker onOpenOrder={openGateway} />
 
       {/* Honest 3-point transparency (F1) */}
       <div className="bk-transparency-card">
@@ -292,10 +352,12 @@ export function ProductCards() {
       )}
 
       {/* The D2C Direct Checkout Gateway */}
-      {activeGatewayProduct && (
+      {gatewayConfig && (
         <BroskiCheckoutGateway
-          initialProduct={activeGatewayProduct}
-          onClose={() => setActiveGatewayProduct(null)}
+          initialProduct={gatewayConfig.product || 'combo'}
+          initialStep={gatewayConfig.step || 1}
+          initialPincode={gatewayConfig.pincode || '110041'}
+          onClose={() => setGatewayConfig(null)}
         />
       )}
     </section>
