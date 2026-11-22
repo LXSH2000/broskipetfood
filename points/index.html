@@ -389,7 +389,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const ordContainer = document.getElementById('ordersContainer');
     const orders = data.orders || [];
     if (orders.length === 0) {
-      ordContainer.innerHTML = '<p class="bk-small" style="color:var(--brown-2); margin:0;">No orders found yet. <a href="/#shop" style="color:var(--rust-dark); font-weight:700;">Order fresh crunch today!</a></p>';
+      ordContainer.innerHTML = '<p class="bk-small" style="color:var(--brown-2); margin:0;">No orders found yet. <a href="/#shop" style="color:var(--rust-dark); font-weight:700;">Order your Bro\'s crunch today!</a></p>';
     } else {
       let html = '<div class="bk-table-wrap"><table class="bk-table"><thead><tr><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr></thead><tbody>';
       orders.forEach(function (o) {
