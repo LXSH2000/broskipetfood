@@ -12,6 +12,10 @@ Allow: /
 Disallow: /api/
 Disallow: /admin
 Disallow: /admin/
+Disallow: /order/
+Disallow: /order
+Disallow: /doc/
+Disallow: /doc
 Disallow: /app/
 Disallow: /private/
 Disallow: /*.json$
@@ -34,6 +38,10 @@ Allow: /privacy/
 Disallow: /api/
 Disallow: /admin
 Disallow: /admin/
+Disallow: /order/
+Disallow: /order
+Disallow: /doc/
+Disallow: /doc
 Disallow: /app/
 Disallow: /private/
 Disallow: /*.json$
@@ -44,6 +52,10 @@ Allow: /
 Disallow: /api/
 Disallow: /admin
 Disallow: /admin/
+Disallow: /order/
+Disallow: /order
+Disallow: /doc/
+Disallow: /doc
 Disallow: /app/
 Disallow: /private/
 Disallow: /*.json$

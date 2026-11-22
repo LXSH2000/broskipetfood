@@ -34,7 +34,7 @@ window.BROSKI_CONFIG = {
       alt: 'BROSKI Bro Bites – Classic Crunch dog biscuits, yellow 400 g pack',
       ingredients: 'Real Chicken, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, Permitted Colours.',
       allergens: 'Contains chicken, egg, wheat.',
-      button: 'Order on WhatsApp',
+      button: 'Order now',
       msg: 'Hi BROSKI! I want to order Bro Bites – Classic Crunch 400 g ×1'
     },
     {
@@ -48,7 +48,7 @@ window.BROSKI_CONFIG = {
       alt: 'BROSKI Bro Mix – Happy Mix dog biscuits, white 400 g pack',
       ingredients: 'Chicken Powder, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, Colour.',
       allergens: 'Contains chicken, egg, wheat.',
-      button: 'Order on WhatsApp',
+      button: 'Order now',
       msg: 'Hi BROSKI! I want to order Bro Mix – Happy Mix 400 g ×1'
     },
     {

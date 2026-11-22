@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f5efe4">
+<title>Track Order & Confirmation · BROSKI Dog Biscuits</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="/broski-pages.css">
+<style>
+  :root {
+    --bk-slip-bg: #ffffff;
+    --bk-slip-border: #e6dcce;
+  }
+  .track-wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 16px 16px 60px;
+  }
+  .timeline {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 24px 0 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 20px;
+    right: 20px;
+    height: 3px;
+    background: #e2d5c3;
+    z-index: 1;
+  }
+  .timeline-step {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    flex: 1;
+  }
+  .step-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #e2d5c3;
+    color: #705544;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 13px;
+    transition: all .2s ease;
+  }
+  .timeline-step.completed .step-dot {
+    background: #166534;
+    color: #fff;
+  }
+  .timeline-step.current .step-dot {
+    background: #b8452b;
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(184, 69, 43, 0.2);
+  }
+  .step-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #705544;
+  }
+  .timeline-step.completed .step-label,
+  .timeline-step.current .step-label {
+    color: #352016;
+  }
+
+  /* Printable Confirmation Slip (A5) */
+  .order-slip {
+    background: var(--bk-slip-bg);
+    border: 1.5px solid var(--bk-slip-border);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(53, 32, 22, 0.06);
+    margin-bottom: 24px;
+    color: #352016;
+  }
+  .slip-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1.5px solid #ebdccb;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+  .slip-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #352016;
+    margin: 4px 0 0 0;
+  }
+  .slip-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    font-size: 13.5px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed #ebdccb;
+  }
+  .slip-grid dt {
+    color: #886248;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .slip-grid dd {
+    margin: 2px 0 0 0;
+    font-weight: 500;
+  }
+  .slip-items {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .slip-items th {
+    text-align: left;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    color: #886248;
+    padding: 6px 0;
+    border-bottom: 1px solid #ebdccb;
+  }
+  .slip-items td {
+    padding: 10px 0;
+    border-bottom: 1px solid #f2e8dc;
+  }
+  .slip-totals {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid #ebdccb;
+    margin-bottom: 14px;
+  }
+  .slip-totals-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  .slip-totals-row.grand {
+    font-size: 17px;
+    font-weight: 800;
+    padding-top: 6px;
+    border-top: 1px dashed #ebdccb;
+  }
+  .slip-foot {
+    font-size: 12px;
+    color: #705544;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* GST Bill Box */
+  .gst-bill-box {
+    background: #fdfbf7;
+    border: 1.5px solid #ebdccb;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  /* Actions Toolbar */
+  .track-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  /* Print Styles: A5 Order Confirmation Slip ONLY */
+  @media print {
+    body {
+      background: #ffffff !important;
+      color: #000000 !important;
+      font-size: 12pt;
+    }
+    .bk-head, .bk-foot, .timeline, .track-actions, .gst-bill-box, .no-print {
+      display: none !important;
+    }
+    .track-wrap {
+      max-width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .order-slip {
+      border: 1px solid #000000 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 20px !important;
+      margin: 0 !important;
+      page-break-inside: avoid;
+    }
+    .order-slip dt, .order-slip th {
+      color: #333333 !important;
+    }
+    @page {
+      size: A5 portrait;
+      margin: 10mm;
+    }
+  }
+</style>
+<script src="/config.js"></script>
+<script src="/portal-shared.js"></script>
+</head>
+<body>
+<div class="bk-wrap">
+  <header class="bk-head no-print">
+    <a class="bk-logo" href="/" aria-label="BROSKI Home">
+      <img src="/broski-wordmark-brown.svg" alt="BROSKI" height="26" style="height:26px; width:auto; display:block; flex-shrink:0;">
+    </a>
+    <button type="button" class="bk-menu-btn" aria-expanded="false" aria-controls="bk-nav" aria-label="Toggle menu">Menu</button>
+    <nav id="bk-nav" class="bk-nav" aria-label="Main">
+      <a href="/#shop">Shop</a>
+      <a href="/sample/">Free sample</a>
+      <a href="/points/">My points</a>
+      <a href="/offers/">Bro Perks</a>
+      <a href="/r/">Feedback</a>
+    </nav>
+  </header>
+
+  <main id="main" class="track-wrap">
+    <!-- State: Loading -->
+    <div id="loadingState" style="text-align:center; padding:60px 0;">
+      <p class="bk-lead">Looking up your order details…</p>
+    </div>
+
+    <!-- State: Not Found -->
+    <div id="notFoundState" class="bk-card" style="display:none; text-align:center; padding:40px 20px;">
+      <span class="bk-badge bk-badge--rejected">Not Found</span>
+      <h1 style="font-size:24px; margin:14px 0 8px;">Order Not Found</h1>
+      <p class="bk-lead">The requested order number or security link is invalid or expired.</p>
+      <a href="/#shop" class="bk-btn bk-btn--primary" style="margin-top:16px;">Browse BROSKI Treats</a>
+    </div>
+
+    <!-- State: Order Loaded -->
+    <div id="orderContent" style="display:none;">
+      <span class="bk-eyebrow no-print">Order Status & Confirmation</span>
+      <h1 class="no-print" style="margin-top:4px; font-size:26px;" id="orderHeading">Order Details</h1>
+
+      <!-- Status Timeline -->
+      <div class="timeline no-print" id="statusTimeline" aria-label="Order Progress">
+        <div class="timeline-step" id="step-placed">
+          <div class="step-dot">1</div>
+          <span class="step-label">Placed</span>
+        </div>
+        <div class="timeline-step" id="step-confirmed">
+          <div class="step-dot">2</div>
+          <span class="step-label">Confirmed</span>
+        </div>
+        <div class="timeline-step" id="step-out_for_delivery">
+          <div class="step-dot">3</div>
+          <span class="step-label">Out for Delivery</span>
+        </div>
+        <div class="timeline-step" id="step-delivered">
+          <div class="step-dot">4</div>
+          <span class="step-label">Delivered</span>
+        </div>
+      </div>
+
+      <!-- Printable Order Confirmation Slip -->
+      <article class="order-slip" id="printableSlip">
+        <div class="slip-head">
+          <div>
+            <img src="/broski-wordmark-brown.svg" alt="BROSKI" height="26" style="height:26px; width:auto; margin-bottom:4px;">
+            <div class="slip-title">Order Confirmation</div>
+            <span style="font-size:12px; color:#705544;">Nangloi, West Delhi – 110041</span>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'JetBrains Mono',monospace; font-weight:700; font-size:16px; color:#b8452b;" id="slipOrderNo">BRK-ORDER</div>
+            <div style="font-size:12px; color:#705544;" id="slipOrderDate">Date</div>
+          </div>
+        </div>
+
+        <div class="slip-grid">
+          <div>
+            <dt>Customer Details</dt>
+            <dd id="slipCustomerName">Customer Name</dd>
+            <dd id="slipCustomerPhone" style="font-family:'JetBrains Mono',monospace;">••••••XXXX</dd>
+          </div>
+          <div>
+            <dt>Delivery Address & Slot</dt>
+            <dd id="slipAddress">Nangloi, West Delhi – 110041</dd>
+            <dd id="slipSlot" style="font-weight:700; color:#b8452b;">Slot</dd>
+          </div>
+        </div>
+
+        <table class="slip-items">
+          <thead>
+            <tr>
+              <th>Item Description</th>
+              <th style="text-align:center;">Qty</th>
+              <th style="text-align:right;">Rate</th>
+              <th style="text-align:right;">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="slipItemsBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+
+        <div class="slip-totals">
+          <div class="slip-totals-row">
+            <span>Subtotal</span>
+            <span id="slipSubtotal">₹0</span>
+          </div>
+          <div class="slip-totals-row">
+            <span>Delivery Fee (Nangloi Express)</span>
+            <span style="color:#166534; font-weight:700;">FREE</span>
+          </div>
+          <div class="slip-totals-row grand">
+            <span>Total Payable</span>
+            <span id="slipTotal">₹0</span>
+          </div>
+        </div>
+
+        <div class="slip-grid" style="border:none; margin-bottom:8px; padding-bottom:8px;">
+          <div>
+            <dt>Payment Method</dt>
+            <dd id="slipPayment">Cash/UPI on delivery (Unpaid)</dd>
+          </div>
+          <div>
+            <dt>Support & Inquiries</dt>
+            <dd><a href="mailto:support@broskipetfood.com" style="color:inherit;">support@broskipetfood.com</a></dd>
+          </div>
+        </div>
+
+        <div class="slip-foot">
+          This is an order confirmation, not a tax invoice. GST bill available on request.
+        </div>
+      </article>
+
+      <!-- Action Buttons -->
+      <div class="track-actions no-print">
+        <button type="button" class="bk-btn bk-btn--primary" onclick="window.print()">
+          🖨️ Download Order Confirmation (PDF)
+        </button>
+        <button type="button" class="bk-btn bk-btn--ghost" id="requestBillBtn" onclick="handleRequestBill()">
+          🧾 Need a GST bill?
+        </button>
+      </div>
+
+      <!-- GST Bill Section (Shown if requested or issued) -->
+      <div id="gstBillSection" class="gst-bill-box no-print" style="display:none; margin-top:20px;">
+        <h3 style="font-size:17px; margin:0 0 8px;">GST Bill of Supply</h3>
+        <p class="bk-small" id="gstBillStatusText">
+          GST bill generated for this order.
+        </p>
+        <div id="gstBillActions" style="margin-top:12px; display:none;">
+          <a id="viewDocLink" href="#" class="bk-btn bk-btn--secondary" target="_blank" rel="noopener noreferrer">
+            📄 View & Print Bill of Supply (<span id="billDocNoDisplay"></span>) →
+          </a>
+        </div>
+      </div>
+
+      <!-- WhatsApp Help -->
+      <div class="no-print" style="margin-top:24px; text-align:center;">
+        <a id="helpWaLink" href="#" target="_blank" rel="noopener noreferrer" class="bk-small" style="color:var(--bk-rust); font-weight:700;">
+          💬 Have a question about this delivery? WhatsApp us
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bk-foot no-print">
+    <p class="bk-small">
+      BROSKI · Nangloi, West Delhi – 110041 · <a href="mailto:support@broskipetfood.com">support@broskipetfood.com</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+let currentOrder = null;
+let currentPublicNo = '';
+let currentToken = '';
+
+window.addEventListener('DOMContentLoaded', async function () {
+  const params = new URLSearchParams(window.location.search);
+  currentPublicNo = (params.get('no') || '').trim();
+  currentToken = (params.get('t') || params.get('token') || '').trim();
+
+  if (!currentPublicNo || !currentToken) {
+    showNotFound();
+    return;
+  }
+
+  try {
+    const portal = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
+    if (!portal) throw new Error('Portal client not available');
+
+    const { data, error } = await portal.rpc('get_order', {
+      p_no: currentPublicNo,
+      p_token: currentToken
+    });
+
+    if (error || !data || data.status === 'not_found') {
+      showNotFound();
+      return;
+    }
+
+    currentOrder = data;
+    renderOrder(data);
+  } catch (err) {
+    console.error('[get_order error]', err);
+    showNotFound();
+  }
+});
+
+function showNotFound() {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('notFoundState').style.display = 'block';
+  document.getElementById('orderContent').style.display = 'none';
+}
+
+function renderOrder(order) {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('orderContent').style.display = 'block';
+
+  document.getElementById('orderHeading').textContent = `Order ${order.public_no}`;
+  document.getElementById('slipOrderNo').textContent = order.public_no;
+  document.getElementById('slipOrderDate').textContent = new Date(order.date).toLocaleDateString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
+
+  document.getElementById('slipCustomerName').textContent = order.customer_name || 'Customer';
+  document.getElementById('slipCustomerPhone').textContent = order.masked_phone || '••••••••';
+  document.getElementById('slipAddress').textContent = `${order.address}${order.landmark ? ', Near ' + order.landmark : ''}, Nangloi – ${order.pincode}`;
+  document.getElementById('slipSlot').textContent = `Slot: ${order.slot || '11 am – 2 pm'}`;
+
+  // Render items table
+  const tbody = document.getElementById('slipItemsBody');
+  tbody.innerHTML = '';
+  (order.items || []).forEach(it => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${escapeHtml(it.name)}</strong></td>
+      <td style="text-align:center;">${it.qty}</td>
+      <td style="text-align:right;">₹${it.price}</td>
+      <td style="text-align:right; font-weight:700;">₹${it.amount !== undefined ? it.amount : (it.price * it.qty)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('slipSubtotal').textContent = `₹${order.subtotal || order.total}`;
+  document.getElementById('slipTotal').textContent = `₹${order.total}`;
+
+  const payStatus = order.payment_status === 'paid' ? 'Paid' : 'Unpaid';
+  document.getElementById('slipPayment').textContent = `Cash/UPI on delivery (${payStatus})`;
+
+  // Render Status Timeline
+  updateTimeline(order.order_status);
+
+  // Configure GST bill section
+  if (order.bill_requested || order.bill) {
+    const billSec = document.getElementById('gstBillSection');
+    billSec.style.display = 'block';
+    const reqBtn = document.getElementById('requestBillBtn');
+    if (reqBtn) reqBtn.style.display = 'none';
+
+    if (order.bill && order.bill.doc_no) {
+      document.getElementById('gstBillStatusText').textContent =
+        `Bill of Supply ${order.bill.doc_no} issued on ${order.bill.doc_date}.`;
+      document.getElementById('billDocNoDisplay').textContent = order.bill.doc_no;
+      document.getElementById('viewDocLink').href = `/doc/?no=${encodeURIComponent(order.bill.doc_no)}&t=${encodeURIComponent(order.bill.token)}`;
+      document.getElementById('gstBillActions').style.display = 'block';
+    } else {
+      document.getElementById('gstBillStatusText').textContent =
+        'GST bill requested. It will be generated automatically once your order is marked delivered.';
+    }
+  }
+
+  // Help WhatsApp link
+  const cfg = window.BROSKI_CONFIG || {};
+  const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+  if (waNum) {
+    const msg = encodeURIComponent(`Hi BROSKI! I have a question about my order ${order.public_no}.`);
+    document.getElementById('helpWaLink').href = `https://wa.me/${waNum}?text=${msg}`;
+  }
+}
+
+function updateTimeline(status) {
+  const steps = ['placed', 'confirmed', 'out_for_delivery', 'delivered'];
+  const curIdx = steps.indexOf(status);
+
+  steps.forEach((st, idx) => {
+    const el = document.getElementById(`step-${st}`);
+    if (!el) return;
+    el.classList.remove('completed', 'current');
+    if (idx < curIdx) {
+      el.classList.add('completed');
+    } else if (idx === curIdx) {
+      el.classList.add('current');
+    }
+  });
+}
+
+async function handleRequestBill() {
+  const btn = document.getElementById('requestBillBtn');
+  btn.disabled = true;
+  btn.textContent = 'Requesting bill…';
+
+  try {
+    const portal = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
+    if (!portal) throw new Error('Portal client not available');
+
+    const { data, error } = await portal.rpc('request_bill', {
+      p_no: currentPublicNo,
+      p_token: currentToken
+    });
+
+    if (error) throw error;
+
+    btn.style.display = 'none';
+    const billSec = document.getElementById('gstBillSection');
+    billSec.style.display = 'block';
+
+    if (data && data.bill_issued && data.doc_no) {
+      document.getElementById('gstBillStatusText').textContent =
+        `Bill of Supply ${data.doc_no} issued.`;
+      document.getElementById('billDocNoDisplay').textContent = data.doc_no;
+      document.getElementById('viewDocLink').href = `/doc/?no=${encodeURIComponent(data.doc_no)}&t=${encodeURIComponent(data.token)}`;
+      document.getElementById('gstBillActions').style.display = 'block';
+    } else {
+      document.getElementById('gstBillStatusText').textContent =
+        'GST bill requested. It will be generated automatically once your order is delivered.';
+    }
+  } catch (err) {
+    alert(err.message || 'Could not request bill. Please try again.');
+    btn.disabled = false;
+    btn.textContent = '🧾 Need a GST bill?';
+  }
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.toString().replace(/[&<>"']/g, function(m) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+  });
+}
+</script>
+</body>
+</html>

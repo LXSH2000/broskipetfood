@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#352016">
-<title>BROSKI Admin Portal · Restricted Access</title>
+<title>BROSKI Admin · Operations & Billing</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,63 +18,107 @@
     --adm-border: #e6dcce;
     --adm-dark: #352016;
     --adm-rust: #b8452b;
+    --adm-green: #166534;
   }
   body { background: var(--adm-bg); color: var(--adm-dark); }
+  .adm-wrap { max-width: 1100px; padding: 20px 16px 80px; margin: 0 auto; }
+  .adm-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 16px; border-bottom: 1.5px solid var(--adm-border); margin-bottom: 20px;
+    flex-wrap: wrap; gap: 12px;
+  }
   .adm-nav-tabs {
     display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
     padding: 6px 0 16px; border-bottom: 2px solid var(--adm-border); margin-bottom: 20px;
   }
   .adm-tab-btn {
-    flex: none; min-height: 44px; padding: 10px 18px; border-radius: 10px;
+    flex: none; min-height: 42px; padding: 8px 16px; border-radius: 10px;
     background: transparent; border: 1.5px solid var(--adm-border);
-    font: 700 14px/1 "Outfit", sans-serif; color: var(--adm-dark); cursor: pointer;
-    transition: all .15s ease;
+    font: 700 13.5px/1 "Outfit", sans-serif; color: var(--adm-dark); cursor: pointer;
+    transition: all .15s ease; display: inline-flex; align-items: center; gap: 6px;
   }
   .adm-tab-btn.active {
     background: var(--adm-dark); color: #fff7e9; border-color: var(--adm-dark);
   }
+  .adm-badge {
+    background: #e2d5c3; color: var(--adm-dark); font-size: 11px; font-weight: 700;
+    padding: 2px 6px; border-radius: 10px;
+  }
+  .adm-tab-btn.active .adm-badge { background: var(--adm-rust); color: #fff; }
+  .adm-kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px; margin-bottom: 24px;
+  }
+  .adm-kpi-card {
+    background: var(--adm-panel); border: 1px solid var(--adm-border); border-radius: 14px;
+    padding: 14px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .adm-kpi-label { font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: #886248; }
+  .adm-kpi-value { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 800; color: var(--adm-dark); }
   .adm-toolbar {
     display: flex; justify-content: space-between; align-items: center;
     flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
   }
   .adm-search {
-    flex: 1; min-width: 200px; max-width: 380px; min-height: 44px; padding: 10px 14px;
-    border: 1.5px solid var(--adm-border); border-radius: 10px; font-size: 14px;
-  }
-  .adm-flag {
-    display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px;
-    background: #fef2f2; border: 1px solid #f87171; color: #b91c1c;
-    border-radius: 6px; font: 700 11px/1 "Outfit", sans-serif; text-transform: uppercase;
+    flex: 1; min-width: 200px; max-width: 360px; min-height: 40px; padding: 8px 12px;
+    border: 1.5px solid var(--adm-border); border-radius: 10px; font-size: 13.5px;
   }
   .adm-action-btn {
     min-height: 38px; padding: 6px 12px; font-size: 13px; font-weight: 700;
     border-radius: 8px; cursor: pointer; border: 1px solid var(--adm-border);
-    background: #ffffff; color: var(--adm-dark);
+    background: #ffffff; color: var(--adm-dark); display: inline-flex; align-items: center; gap: 4px;
   }
   .adm-action-btn--primary { background: var(--adm-dark); color: #fff; border-color: var(--adm-dark); }
-  .adm-action-btn--wa { background: #166534; color: #fff; border-color: #166534; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+  .adm-action-btn--rust { background: var(--adm-rust); color: #fff; border-color: var(--adm-rust); }
+  .adm-action-btn--green { background: #166534; color: #fff; border-color: #166534; text-decoration: none; }
   .adm-action-btn--danger { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+  .adm-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .adm-table th {
+    background: #f0e9df; border: 1px solid var(--adm-border); padding: 8px 10px;
+    font-size: 11.5px; text-transform: uppercase; text-align: left; font-weight: 700;
+  }
+  .adm-table td { border: 1px solid var(--adm-border); padding: 8px 10px; background: #fff; vertical-align: top; }
   .adm-modal-backdrop {
-    position: fixed; inset: 0; background: rgba(53, 32, 22, 0.6);
+    position: fixed; inset: 0; background: rgba(53, 32, 22, 0.65);
     display: flex; align-items: center; justify-content: center; padding: 16px;
     z-index: 9999; backdrop-filter: blur(4px);
   }
   .adm-modal {
-    background: #ffffff; border-radius: 18px; max-width: 520px; width: 100%;
-    padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;
+    background: #ffffff; border-radius: 18px; max-width: 640px; width: 100%;
+    padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto;
+  }
+  .adm-warning-banner {
+    background: #fef3c7; border: 1.5px solid #f59e0b; color: #92400e;
+    padding: 12px 16px; border-radius: 12px; font-size: 13.5px; margin-bottom: 16px;
+  }
+  .adm-meter {
+    height: 10px; background: #ebdccb; border-radius: 5px; overflow: hidden; margin-top: 4px;
+  }
+  .adm-meter-fill { height: 100%; background: var(--adm-rust); border-radius: 5px; }
+
+  /* Packing Slip print styling */
+  @media print {
+    body { background: #fff !important; color: #000 !important; }
+    .adm-header, .adm-nav-tabs, .adm-toolbar, .no-print { display: none !important; }
+    .adm-wrap { max-width: 100% !important; padding: 0 !important; }
+    .print-packing-slip {
+      border: 2px solid #000 !important; padding: 20px !important;
+      page-break-inside: avoid;
+    }
   }
 </style>
 <script src="/config.js"></script>
-<script src="/supabase.js" defer></script>
-<script src="/portal-shared.js" defer></script>
+<script src="/supabase.js"></script>
+<script src="/portal-shared.js"></script>
 </head>
 <body>
-<div class="bk-wrap" style="max-width:1040px; padding:20px 16px 80px;">
+<div class="adm-wrap">
   <!-- Admin Header -->
-  <header style="display:flex; justify-content:space-between; align-items:center; padding-bottom:16px; border-bottom:1px solid var(--line); margin-bottom:20px;">
+  <header class="adm-header">
     <div>
       <span class="bk-badge bk-badge--rejected" style="margin-bottom:4px;">Restricted</span>
-      <h1 style="font-size:24px; margin:0;">BROSKI Admin · Operations</h1>
+      <h1 style="font-size:24px; margin:0;">BROSKI Operations & Billing</h1>
+      <span class="bk-small" style="color:var(--adm-rust);">Nangloi Express · Live Hub</span>
     </div>
     <div id="authStatusWrap" style="display:flex; align-items:center; gap:10px;">
       <span id="adminUserEmail" class="bk-small" style="font-weight:700;"></span>
@@ -106,305 +150,707 @@
     </form>
   </div>
 
-  <!-- Dashboard Container (Shown when authenticated as admin) -->
+  <!-- Dashboard Container (Authenticated) -->
   <main id="dashboardWrap" style="display:none;">
+    <!-- System Warning if GSTIN / Address not set -->
+    <div id="settingsNotice" class="adm-warning-banner" style="display:none;">
+      ⚠️ <strong>Notice:</strong> Business GSTIN or Bill Address is not set in Settings. GST bills will display <em>"GSTIN: [set in Settings]"</em>. Update under the <strong>Settings</strong> tab.
+    </div>
+
     <!-- Navigation Tabs -->
-    <nav class="adm-nav-tabs" aria-label="Admin Tabs">
-      <button type="button" class="adm-tab-btn active" data-tab="samples">🎁 Sample Claims (<span id="countSamples">0</span>)</button>
+    <nav class="adm-nav-tabs" aria-label="Admin Navigation Tabs">
+      <button type="button" class="adm-tab-btn active" data-tab="today">☀️ Today (<span id="countTodayOrders">0</span>)</button>
       <button type="button" class="adm-tab-btn" data-tab="orders">📦 Orders (<span id="countOrders">0</span>)</button>
-      <button type="button" class="adm-tab-btn" data-tab="feedback">💬 Feedback (<span id="countFeedback">0</span>)</button>
+      <button type="button" class="adm-tab-btn" data-tab="packing">📋 Packing List</button>
+      <button type="button" class="adm-tab-btn" data-tab="samples">🎁 Samples (<span id="countSamples">0</span>)</button>
       <button type="button" class="adm-tab-btn" data-tab="customers">👥 Customers (<span id="countCustomers">0</span>)</button>
+      <button type="button" class="adm-tab-btn" data-tab="waitlist">🐾 Waitlist (<span id="countWaitlist">0</span>)</button>
+      <button type="button" class="adm-tab-btn" data-tab="billing">🧾 Billing & Bills</button>
+      <button type="button" class="adm-tab-btn" data-tab="feedback">💬 Feedback (<span id="countFeedback">0</span>)</button>
+      <button type="button" class="adm-tab-btn" data-tab="reports">📊 Reports</button>
+      <button type="button" class="adm-tab-btn" data-tab="export">📥 Export CSV</button>
+      <button type="button" class="adm-tab-btn" data-tab="settings">⚙️ Settings</button>
     </nav>
 
-    <!-- Tab 1: Samples -->
-    <section id="tab-samples" class="adm-tab-content">
-      <div class="adm-toolbar">
-        <input type="text" id="sampleSearchInput" class="adm-search" placeholder="Search by phone, name or claim code...">
-        <div style="display:flex; gap:8px;">
-          <button type="button" class="adm-action-btn" onclick="exportSamplesCSV()">📥 Export CSV</button>
-          <button type="button" class="adm-action-btn" onclick="loadSamples()">🔄 Refresh</button>
+    <!-- TAB 1: TODAY -->
+    <section id="tab-today" class="adm-tab-content">
+      <div class="adm-kpi-grid">
+        <div class="adm-kpi-card">
+          <span class="adm-kpi-label">Orders Today</span>
+          <span class="adm-kpi-value" id="kpiTodayCount">0</span>
+        </div>
+        <div class="adm-kpi-card">
+          <span class="adm-kpi-label">Sales Today</span>
+          <span class="adm-kpi-value" id="kpiTodaySales">₹0</span>
+        </div>
+        <div class="adm-kpi-card">
+          <span class="adm-kpi-label">To Pack</span>
+          <span class="adm-kpi-value" id="kpiToPack" style="color:var(--adm-rust);">0</span>
+        </div>
+        <div class="adm-kpi-card">
+          <span class="adm-kpi-label">To Deliver</span>
+          <span class="adm-kpi-value" id="kpiToDeliver" style="color:#0284c7;">0</span>
+        </div>
+        <div class="adm-kpi-card">
+          <span class="adm-kpi-label">Unpaid COD</span>
+          <span class="adm-kpi-value" id="kpiUnpaidCod">₹0</span>
+        </div>
+        <div class="adm-kpi-card">
+          <span class="adm-kpi-label">Samples to Add</span>
+          <span class="adm-kpi-value" id="kpiSamplesToAdd">0</span>
+        </div>
+        <div class="adm-kpi-card">
+          <span class="adm-kpi-label">New Waitlist</span>
+          <span class="adm-kpi-value" id="kpiWaitlistToday">0</span>
         </div>
       </div>
-      <div id="samplesTableWrap" class="bk-table-wrap">
-        <p class="bk-small">Loading sample claims...</p>
+
+      <div class="adm-toolbar">
+        <div style="font-weight:700; font-size:16px;">Today's Live Orders</div>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="adm-action-btn adm-action-btn--rust" onclick="handleCloseDay()">
+            🌙 Close Day (Consolidate &lt;₹200)
+          </button>
+          <button type="button" class="adm-action-btn" onclick="loadTodayData()">
+            🔄 Refresh
+          </button>
+        </div>
+      </div>
+
+      <div id="todayOrdersWrap" class="bk-table-wrap">
+        <p class="bk-small">Loading today's activity…</p>
       </div>
     </section>
 
-    <!-- Tab 2: Orders -->
+    <!-- TAB 2: ORDERS -->
     <section id="tab-orders" class="adm-tab-content" style="display:none;">
       <div class="adm-toolbar">
-        <input type="text" id="orderSearchInput" class="adm-search" placeholder="Search orders by phone, customer or status...">
-        <div style="display:flex; gap:8px;">
-          <button type="button" class="adm-action-btn adm-action-btn--primary" onclick="openManualOrderModal()">+ Add Manual Order</button>
-          <button type="button" class="adm-action-btn" onclick="exportOrdersCSV()">📥 Export CSV</button>
+        <input type="text" id="orderSearchInput" class="adm-search" placeholder="Search by order #, phone, customer, address…">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <select id="orderStatusFilter" class="adm-search" style="max-width:140px;" onchange="renderOrdersTable()">
+            <option value="all">All Statuses</option>
+            <option value="placed">Placed</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="out_for_delivery">Out for Delivery</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
           <button type="button" class="adm-action-btn" onclick="loadOrders()">🔄 Refresh</button>
         </div>
       </div>
       <div id="ordersTableWrap" class="bk-table-wrap">
-        <p class="bk-small">Loading orders...</p>
+        <p class="bk-small">Loading orders…</p>
       </div>
     </section>
 
-    <!-- Tab 3: Feedback -->
-    <section id="tab-feedback" class="adm-tab-content" style="display:none;">
+    <!-- TAB 3: PACKING LIST -->
+    <section id="tab-packing" class="adm-tab-content" style="display:none;">
       <div class="adm-toolbar">
-        <input type="text" id="feedbackSearchInput" class="adm-search" placeholder="Filter feedback by phone, rating or text...">
+        <div style="font-weight:700; font-size:16px;">Confirmed Orders for Today's Dispatch</div>
+        <button type="button" class="adm-action-btn adm-action-btn--primary" onclick="window.print()">
+          🖨️ Print Packing List
+        </button>
+      </div>
+
+      <div id="packingListWrap">
+        <!-- Aggregated Totals and Orders Table -->
+      </div>
+    </section>
+
+    <!-- TAB 4: SAMPLES -->
+    <section id="tab-samples" class="adm-tab-content" style="display:none;">
+      <div class="adm-toolbar">
+        <input type="text" id="sampleSearchInput" class="adm-search" placeholder="Search claims by phone, code, name…">
         <div style="display:flex; gap:8px;">
-          <button type="button" class="adm-action-btn" onclick="exportFeedbackCSV()">📥 Export CSV</button>
-          <button type="button" class="adm-action-btn" onclick="loadFeedback()">🔄 Refresh</button>
+          <select id="sampleStatusFilter" class="adm-search" style="max-width:140px;" onchange="renderSamplesTable()">
+            <option value="all">All Statuses</option>
+            <option value="reserved">Reserved</option>
+            <option value="added">Added</option>
+            <option value="given">Given</option>
+            <option value="expired">Expired</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <button type="button" class="adm-action-btn" onclick="handleExpireOldClaims()">⏰ Expire &gt;60d</button>
+          <button type="button" class="adm-action-btn" onclick="loadSamples()">🔄 Refresh</button>
         </div>
       </div>
-      <div id="feedbackTableWrap" class="bk-table-wrap">
-        <p class="bk-small">Loading feedback reviews...</p>
+      <div id="samplesTableWrap" class="bk-table-wrap">
+        <p class="bk-small">Loading sample claims…</p>
       </div>
     </section>
 
-    <!-- Tab 4: Customers -->
+    <!-- TAB 5: CUSTOMERS -->
     <section id="tab-customers" class="adm-tab-content" style="display:none;">
       <div class="adm-toolbar">
-        <input type="text" id="customerSearchInput" class="adm-search" placeholder="Search customers by phone, code or name...">
-        <div style="display:flex; gap:8px;">
-          <button type="button" class="adm-action-btn" onclick="exportCustomersCSV()">📥 Export CSV</button>
-          <button type="button" class="adm-action-btn" onclick="loadCustomers()">🔄 Refresh</button>
-        </div>
+        <input type="text" id="customerSearchInput" class="adm-search" placeholder="Search by phone, name or customer code…">
+        <button type="button" class="adm-action-btn" onclick="loadCustomers()">🔄 Refresh</button>
       </div>
       <div id="customersTableWrap" class="bk-table-wrap">
-        <p class="bk-small">Loading customers...</p>
+        <p class="bk-small">Loading customers…</p>
+      </div>
+    </section>
+
+    <!-- TAB 6: WAITLIST -->
+    <section id="tab-waitlist" class="adm-tab-content" style="display:none;">
+      <div class="adm-toolbar">
+        <div style="font-weight:700; font-size:16px;">Area Expansion Waitlist</div>
+        <button type="button" class="adm-action-btn" onclick="exportWaitlistCSV()">📥 Export Waitlist CSV</button>
+      </div>
+      <div id="waitlistWrap">
+        <!-- Area Progress Meters + Table -->
+      </div>
+    </section>
+
+    <!-- TAB 7: BILLING & DOCUMENTS -->
+    <section id="tab-billing" class="adm-tab-content" style="display:none;">
+      <div style="display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--adm-border); padding-bottom:8px;">
+        <button type="button" class="adm-tab-btn active" id="btnSubDocs" onclick="switchBillingSubTab('docs')">📄 All Documents</button>
+        <button type="button" class="adm-tab-btn" id="btnSubNewDoc" onclick="switchBillingSubTab('new')">+ New Document</button>
+        <button type="button" class="adm-tab-btn" id="btnSubDues" onclick="switchBillingSubTab('dues')">💰 Dues / Credit</button>
+        <button type="button" class="adm-tab-btn" id="btnSubCmp" onclick="switchBillingSubTab('cmp')">📑 CMP-08 Summary</button>
+      </div>
+
+      <!-- Sub-Tab 1: All Documents -->
+      <div id="subtab-docs">
+        <div class="adm-toolbar">
+          <input type="text" id="docSearchInput" class="adm-search" placeholder="Search by doc #, party name, phone…">
+          <div style="display:flex; gap:8px;">
+            <select id="docTypeFilter" class="adm-search" style="max-width:150px;" onchange="renderDocumentsTable()">
+              <option value="all">All Types</option>
+              <option value="bill">Bill of Supply (BRK/)</option>
+              <option value="estimate">Estimate / Cash Memo</option>
+              <option value="quotation">Quotation (QT/)</option>
+              <option value="challan">Delivery Challan (DC/)</option>
+              <option value="daily">Daily Bill (D-)</option>
+            </select>
+            <button type="button" class="adm-action-btn" onclick="loadDocuments()">🔄 Refresh</button>
+          </div>
+        </div>
+        <div id="docsTableWrap" class="bk-table-wrap">
+          <p class="bk-small">Loading documents…</p>
+        </div>
+      </div>
+
+      <!-- Sub-Tab 2: New Document Form -->
+      <div id="subtab-new" style="display:none;">
+        <div class="bk-card" style="max-width:760px; margin:0 auto; padding:24px;">
+          <h2 style="margin-top:0;">Create Offline Document</h2>
+          <form id="newDocForm" onsubmit="handleCreateDocument(event)">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+              <div>
+                <label class="bk-label" for="docTypeSelect">Document Type *</label>
+                <select id="docTypeSelect" class="bk-input" required onchange="onDocTypeChange()">
+                  <option value="estimate">Estimate / Cash Memo (EST/)</option>
+                  <option value="bill">Bill of Supply (BRK/)</option>
+                  <option value="quotation">Quotation (QT/)</option>
+                  <option value="challan">Delivery Challan (DC/)</option>
+                </select>
+              </div>
+              <div>
+                <label class="bk-label" for="partyTypeSelect">Party Kind *</label>
+                <select id="partyTypeSelect" class="bk-input" onchange="onPartyKindChange()">
+                  <option value="walkin">Walk-in Customer</option>
+                  <option value="shop">Saved / New Pet Shop</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Party Details -->
+            <div id="partyFields" style="background:#f7efe2; padding:16px; border-radius:12px; margin-bottom:16px;">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div>
+                  <label class="bk-label" for="partyName">Party Name *</label>
+                  <input type="text" id="partyName" class="bk-input" placeholder="Shop Name / Customer Name" required>
+                </div>
+                <div>
+                  <label class="bk-label" for="partyPhone">Phone Number</label>
+                  <input type="tel" id="partyPhone" class="bk-input" placeholder="10-digit mobile">
+                </div>
+                <div>
+                  <label class="bk-label" for="partyArea">Area / Colony</label>
+                  <input type="text" id="partyArea" class="bk-input" placeholder="e.g. Nangloi / Paschim Vihar">
+                </div>
+                <div>
+                  <label class="bk-label" for="partyGstin">Party GSTIN (Optional)</label>
+                  <input type="text" id="partyGstin" class="bk-input" placeholder="07AAAAA0000A1Z5">
+                </div>
+              </div>
+            </div>
+
+            <!-- Items Repeater -->
+            <div style="margin-bottom:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <label class="bk-label" style="margin:0;">Items / Products</label>
+                <button type="button" class="adm-action-btn" onclick="addDocItemRow()">+ Add Item</button>
+              </div>
+              <table class="adm-table" id="newDocItemsTable">
+                <thead>
+                  <tr>
+                    <th>Item Description</th>
+                    <th style="width:70px;">Rate (₹)</th>
+                    <th style="width:60px;">Qty</th>
+                    <th style="width:60px;">Free</th>
+                    <th style="width:70px;">Disc (₹)</th>
+                    <th style="width:80px; text-align:right;">Amount</th>
+                    <th style="width:40px;"></th>
+                  </tr>
+                </thead>
+                <tbody id="newDocItemsBody">
+                  <!-- Rows added dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Totals & Payment -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+              <div>
+                <label class="bk-label" for="docPayMethod">Payment Method</label>
+                <select id="docPayMethod" class="bk-input" onchange="onDocPaymentMethodChange()">
+                  <option value="cash">Cash</option>
+                  <option value="upi">UPI (Business Account)</option>
+                  <option value="credit">Credit (Pay Later)</option>
+                </select>
+                <div id="creditDueWrap" style="margin-top:8px; display:none;">
+                  <label class="bk-label" for="docDueDate">Due Date</label>
+                  <input type="date" id="docDueDate" class="bk-input">
+                </div>
+              </div>
+              <div style="text-align:right; font-size:14px; display:flex; flex-direction:column; justify-content:center; gap:4px;">
+                <div>Subtotal: <strong id="newDocSubtotal">₹0</strong></div>
+                <div>Discount: <strong id="newDocDiscount" style="color:var(--adm-rust);">-₹0</strong></div>
+                <div style="font-size:18px; font-weight:800; border-top:1px dashed var(--adm-border); padding-top:4px;">
+                  Grand Total: <span id="newDocTotal">₹0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notes (Empty by default, no auto text) -->
+            <div class="bk-form-group">
+              <label class="bk-label" for="docNotes">Notes (Optional)</label>
+              <textarea id="docNotes" class="bk-input" rows="2" placeholder="Leave blank unless special custom terms are agreed"></textarea>
+            </div>
+
+            <button type="submit" id="btnSaveDoc" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%;">
+              Save & Issue Document
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Sub-Tab 3: Dues (Credit) -->
+      <div id="subtab-dues" style="display:none;">
+        <div class="adm-toolbar">
+          <div style="font-weight:700; font-size:16px;">Pending Credit Balances (Shops)</div>
+          <button type="button" class="adm-action-btn" onclick="loadDocuments()">🔄 Refresh</button>
+        </div>
+        <div id="duesTableWrap" class="bk-table-wrap">
+          <p class="bk-small">Loading dues…</p>
+        </div>
+      </div>
+
+      <!-- Sub-Tab 4: CMP-08 Summary -->
+      <div id="subtab-cmp" style="display:none;">
+        <div class="bk-card" style="max-width:680px; margin:0 auto; padding:24px;">
+          <h2 style="margin-top:0;">GST CMP-08 Composition Sales Summary</h2>
+          <p class="bk-small">Aggregates online and offline sales (Bills + Estimates). Excludes quotations, delivery challans, and cancelled documents.</p>
+
+          <div style="display:flex; gap:12px; margin:16px 0;">
+            <select id="cmpMonthSelect" class="bk-input" onchange="renderCmpSummary()">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div id="cmpSummaryResults">
+            <!-- Results rendered here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 8: FEEDBACK -->
+    <section id="tab-feedback" class="adm-tab-content" style="display:none;">
+      <div class="adm-toolbar">
+        <input type="text" id="feedbackSearchInput" class="adm-search" placeholder="Search feedback reviews…">
+        <button type="button" class="adm-action-btn" onclick="loadFeedback()">🔄 Refresh</button>
+      </div>
+      <div id="feedbackTableWrap" class="bk-table-wrap">
+        <p class="bk-small">Loading feedback…</p>
+      </div>
+    </section>
+
+    <!-- TAB 9: REPORTS -->
+    <section id="tab-reports" class="adm-tab-content" style="display:none;">
+      <div class="adm-toolbar">
+        <div style="font-weight:700; font-size:16px;">Sales & Operations Reports</div>
+        <button type="button" class="adm-action-btn" onclick="loadReportsData()">🔄 Refresh</button>
+      </div>
+      <div id="reportsContent">
+        <!-- Daily sales, product breakdown, AOV -->
+      </div>
+    </section>
+
+    <!-- TAB 10: EXPORT CSV -->
+    <section id="tab-export" class="adm-tab-content" style="display:none;">
+      <div class="bk-card" style="max-width:640px; margin:0 auto; padding:24px;">
+        <h2 style="margin-top:0;">Export All Records (CSV)</h2>
+        <p class="bk-small">Download complete raw CSV datasets for accounting, auditing, and offline backups.</p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px;">
+          <button type="button" class="adm-action-btn" onclick="exportOrdersCSV()">📥 Orders CSV</button>
+          <button type="button" class="adm-action-btn" onclick="exportDocumentsCSV()">📥 Documents CSV</button>
+          <button type="button" class="adm-action-btn" onclick="exportCustomersCSV()">📥 Customers CSV</button>
+          <button type="button" class="adm-action-btn" onclick="exportSamplesCSV()">📥 Samples CSV</button>
+          <button type="button" class="adm-action-btn" onclick="exportWaitlistCSV()">📥 Waitlist CSV</button>
+          <button type="button" class="adm-action-btn" onclick="exportFeedbackCSV()">📥 Feedback CSV</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 11: SETTINGS -->
+    <section id="tab-settings" class="adm-tab-content" style="display:none;">
+      <div class="bk-card" style="max-width:760px; margin:0 auto; padding:24px;">
+        <h2 style="margin-top:0;">System Settings</h2>
+        <p class="bk-small">Manage prices, zones, GSTIN, and business configuration directly without code changes.</p>
+
+        <form id="settingsForm" onsubmit="handleSaveSettings(event)" style="margin-top:20px; display:flex; flex-direction:column; gap:16px;">
+          <!-- Prices -->
+          <div>
+            <h4 style="margin:0 0 8px; color:var(--adm-rust);">Pack Prices (₹)</h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+              <div>
+                <label class="bk-label" for="setBitesPrice">Bro Bites (400g)</label>
+                <input type="number" id="setBitesPrice" class="bk-input" required>
+              </div>
+              <div>
+                <label class="bk-label" for="setMixPrice">Bro Mix (400g)</label>
+                <input type="number" id="setMixPrice" class="bk-input" required>
+              </div>
+              <div>
+                <label class="bk-label" for="setComboPrice">Bro Combo (2×400g)</label>
+                <input type="number" id="setComboPrice" class="bk-input" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Business Details for Bills -->
+          <div>
+            <h4 style="margin:0 0 8px; color:var(--adm-rust);">Business Details (for GST Bills)</h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div>
+                <label class="bk-label" for="setBizName">Legal Name</label>
+                <input type="text" id="setBizName" class="bk-input" value="BROSKI">
+              </div>
+              <div>
+                <label class="bk-label" for="setBizGstin">GSTIN</label>
+                <input type="text" id="setBizGstin" class="bk-input" placeholder="07AAAAA0000A1Z5">
+              </div>
+              <div style="grid-column: 1 / -1;">
+                <label class="bk-label" for="setBizAddress">Registered Bill Address</label>
+                <input type="text" id="setBizAddress" class="bk-input" placeholder="Complete address for tax invoices">
+              </div>
+              <div>
+                <label class="bk-label" for="setBizState">State</label>
+                <input type="text" id="setBizState" class="bk-input" value="Delhi (07)">
+              </div>
+              <div>
+                <label class="bk-label" for="setBizHsn">HSN Code</label>
+                <input type="text" id="setBizHsn" class="bk-input" value="2309">
+              </div>
+            </div>
+          </div>
+
+          <!-- Business UPI -->
+          <div>
+            <h4 style="margin:0 0 8px; color:var(--adm-rust);">Business UPI (Current A/c only - Never Personal)</h4>
+            <div>
+              <label class="bk-label" for="setUpiVpa">Business UPI VPA</label>
+              <input type="text" id="setUpiVpa" class="bk-input" placeholder="e.g. broski@axisbank (leave empty to hide QR)">
+            </div>
+          </div>
+
+          <button type="submit" id="btnSaveSettings" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%; margin-top:8px;">
+            Save All Settings
+          </button>
+        </form>
       </div>
     </section>
   </main>
 
-  <footer style="margin-top:40px; padding-top:20px; border-top:1px solid var(--line); font-size:13px; color:var(--brown-2); text-align:center;">
+  <footer style="margin-top:40px; padding-top:20px; border-top:1px solid var(--adm-border); font-size:13px; color:var(--adm-dark); text-align:center;">
     BROSKI Admin · Nangloi, West Delhi – 110041 · Confidential
   </footer>
 </div>
 
-<!-- Modal Container for Dynamic Forms -->
+<!-- Modal Host -->
 <div id="modalHost" style="display:none;"></div>
 
 <script>
+let adminClient = null;
 let currentUser = null;
-let cachedSamples = [];
 let cachedOrders = [];
-let cachedFeedback = [];
+let cachedDocuments = [];
+let cachedSamples = [];
 let cachedCustomers = [];
-let activeTab = 'samples';
+let cachedWaitlist = [];
+let cachedFeedback = [];
+let cachedSettings = {};
+let activeTab = 'today';
+let billingSubTab = 'docs';
+let lastKnownOrderCount = 0;
+let pollTimer = null;
+
+function getSupabase() {
+  if (adminClient) return adminClient;
+  const cfg = window.BROSKI_CONFIG || {};
+  if (typeof supabaseBundle !== 'undefined' && supabaseBundle.createClient) {
+    adminClient = supabaseBundle.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+  }
+  return adminClient;
+}
+
+// 1. Audio Beep Synthesizer for new orders
+function playNewOrderSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+    osc.frequency.setValueAtTime(880.00, ctx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.4);
+  } catch (_) {}
+}
 
 window.addEventListener('DOMContentLoaded', async function () {
   initTabs();
   initAuth();
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission().catch(() => {});
+  }
 });
 
-function getClient() {
-  return window.BroskiPortal ? window.BroskiPortal.getClient() : null;
-}
-
-// 1. Auth & Session Management
+// 2. Authentication
 async function initAuth() {
-  const loginCard = document.getElementById('loginCard');
-  const dashboardWrap = document.getElementById('dashboardWrap');
-  const loginForm = document.getElementById('loginForm');
-  const loginAlert = document.getElementById('loginAlert');
-  const logoutBtn = document.getElementById('adminLogoutBtn');
-  const emailSpan = document.getElementById('adminUserEmail');
+  const sb = getSupabase();
+  if (!sb) return;
 
-  const supabase = getClient();
-  if (!supabase) return;
-
-  // Check existing session
   try {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session && session.user) {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session?.user) {
       await verifyAdmin(session.user);
     }
   } catch (e) {
-    console.warn('[Admin Auth] Session check:', e);
+    console.warn('[Admin Auth Check]', e);
   }
 
-  // Handle Login
-  loginForm.addEventListener('submit', async function (e) {
+  document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-    loginAlert.style.display = 'none';
+    const alertEl = document.getElementById('loginAlert');
+    alertEl.style.display = 'none';
 
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
-
     const btn = document.getElementById('loginSubmitBtn');
     btn.disabled = true;
-    btn.textContent = 'Authenticating...';
+    btn.textContent = 'Authenticating…';
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      if (data && data.user) {
+      if (data?.user) {
         await verifyAdmin(data.user);
       }
     } catch (err) {
-      console.error('[Admin Login] Error:', err);
-      loginAlert.textContent = err.message || 'Login failed. Check your email and password.';
-      loginAlert.style.display = 'block';
+      alertEl.textContent = err.message || 'Login failed. Please check credentials.';
+      alertEl.style.display = 'block';
     } finally {
       btn.disabled = false;
       btn.textContent = 'Sign In to Operations';
     }
   });
 
-  // Handle Logout
-  logoutBtn.addEventListener('click', async function () {
-    await supabase.auth.signOut();
+  document.getElementById('adminLogoutBtn').addEventListener('click', async function () {
+    if (pollTimer) clearInterval(pollTimer);
+    await sb.auth.signOut();
     currentUser = null;
-    dashboardWrap.style.display = 'none';
-    logoutBtn.style.display = 'none';
-    emailSpan.textContent = '';
-    loginCard.style.display = 'block';
+    document.getElementById('dashboardWrap').style.display = 'none';
+    document.getElementById('adminLogoutBtn').style.display = 'none';
+    document.getElementById('adminUserEmail').textContent = '';
+    document.getElementById('loginCard').style.display = 'block';
   });
+}
 
-  async function verifyAdmin(user) {
-    try {
-      // Check admin status in admins table
-      const { data, error } = await supabase.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
-      if (error || !data) {
-        // Not an admin in admins table
-        alert('Access denied: account does not have administrative privileges in public.admins.');
-        await supabase.auth.signOut();
-        return;
-      }
-
-      currentUser = user;
-      emailSpan.textContent = user.email;
-      logoutBtn.style.display = 'inline-block';
-      loginCard.style.display = 'none';
-      dashboardWrap.style.display = 'block';
-
-      // Load initial data
-      loadSamples();
-      loadOrders();
-      loadFeedback();
-      loadCustomers();
-    } catch (err) {
-      console.error('[Verify Admin] Error:', err);
-      alert('Authentication check error: ' + err.message);
+async function verifyAdmin(user) {
+  const sb = getSupabase();
+  try {
+    const { data, error } = await sb.from('admins').select('user_id').eq('user_id', user.id).maybeSingle();
+    if (error || !data) {
+      alert('Access denied: account does not have administrative privileges in public.admins.');
+      await sb.auth.signOut();
+      return;
     }
+
+    currentUser = user;
+    document.getElementById('adminUserEmail').textContent = user.email;
+    document.getElementById('adminLogoutBtn').style.display = 'inline-block';
+    document.getElementById('loginCard').style.display = 'none';
+    document.getElementById('dashboardWrap').style.display = 'block';
+
+    // Initial load
+    await loadSettings();
+    await loadTodayData();
+    await loadOrders();
+    await loadDocuments();
+    await loadSamples();
+    await loadCustomers();
+    await loadWaitlist();
+    await loadFeedback();
+
+    // Start 30s auto-refresh
+    if (!pollTimer) {
+      pollTimer = setInterval(pollTodayOrders, 30000);
+    }
+  } catch (err) {
+    alert('Verification error: ' + err.message);
   }
 }
 
-// 2. Tab Navigation
+// 3. Tab Navigation
 function initTabs() {
-  const tabs = document.querySelectorAll('.adm-tab-btn');
-  tabs.forEach(btn => {
+  document.querySelectorAll('.adm-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      tabs.forEach(b => b.classList.remove('active'));
+      const tab = btn.dataset.tab;
+      if (!tab) return;
+      document.querySelectorAll('.adm-nav-tabs .adm-tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      activeTab = btn.dataset.tab;
+      activeTab = tab;
       document.querySelectorAll('.adm-tab-content').forEach(c => c.style.display = 'none');
       const target = document.getElementById('tab-' + activeTab);
       if (target) target.style.display = 'block';
+
+      if (activeTab === 'packing') renderPackingList();
+      if (activeTab === 'reports') renderReports();
     });
   });
-
-  // Attach search listeners
-  document.getElementById('sampleSearchInput')?.addEventListener('input', renderSamples);
-  document.getElementById('orderSearchInput')?.addEventListener('input', renderOrders);
-  document.getElementById('feedbackSearchInput')?.addEventListener('input', renderFeedback);
-  document.getElementById('customerSearchInput')?.addEventListener('input', renderCustomers);
 }
 
-// 3. Tab: Samples
-async function loadSamples() {
-  const supabase = getClient();
-  if (!supabase) return;
-  const wrap = document.getElementById('samplesTableWrap');
-  wrap.innerHTML = '<p class="bk-small">Refreshing claims...</p>';
-
+// 4. Load Data Functions
+async function loadSettings() {
+  const sb = getSupabase();
   try {
-    const { data, error } = await supabase
-      .from('sample_claims')
-      .select('*, customers(*)')
-      .order('created_at', { ascending: false });
+    const { data } = await sb.from('settings').select('*');
+    if (data) {
+      cachedSettings = {};
+      data.forEach(row => { cachedSettings[row.k] = row.v; });
 
-    if (error) throw error;
-    cachedSamples = data || [];
-    document.getElementById('countSamples').textContent = cachedSamples.length;
-    renderSamples();
-  } catch (err) {
-    wrap.innerHTML = `<div class="bk-alert bk-alert--error">Error loading claims: ${escapeHtml(err.message)}</div>`;
+      // Populate Settings inputs
+      const p = cachedSettings.prices || {};
+      document.getElementById('setBitesPrice').value = p.bites || 149;
+      document.getElementById('setMixPrice').value = p.mix || 179;
+      document.getElementById('setComboPrice').value = p.combo || 295;
+
+      const b = cachedSettings.business || {};
+      document.getElementById('setBizName').value = b.name || 'BROSKI';
+      document.getElementById('setBizGstin').value = b.gstin || '';
+      document.getElementById('setBizAddress').value = b.bill_address || '';
+      document.getElementById('setBizState').value = b.state || 'Delhi (07)';
+      document.getElementById('setBizHsn').value = b.hsn || '2309';
+
+      const u = cachedSettings.upi || {};
+      document.getElementById('setUpiVpa').value = u.vpa || '';
+
+      // Check warning
+      const warn = document.getElementById('settingsNotice');
+      if (!b.gstin || !b.bill_address) {
+        warn.style.display = 'block';
+      } else {
+        warn.style.display = 'none';
+      }
+    }
+  } catch (e) {
+    console.warn('[loadSettings]', e);
   }
 }
 
-function renderSamples() {
-  const wrap = document.getElementById('samplesTableWrap');
-  const term = (document.getElementById('sampleSearchInput')?.value || '').toLowerCase().trim();
+async function loadTodayData() {
+  const sb = getSupabase();
+  try {
+    // Auto consolidate previous days
+    await sb.rpc('issue_daily_consolidated', { p_date: new Date(Date.now() - 86400000).toISOString().slice(0, 10) }).catch(() => {});
 
-  // Find duplicates across all samples for red flagging
-  const deviceCounts = {};
-  const namePinCounts = {};
-  cachedSamples.forEach(s => {
-    if (s.device_id) deviceCounts[s.device_id] = (deviceCounts[s.device_id] || 0) + 1;
-    const c = s.customers;
-    if (c && c.name && c.pincode) {
-      const key = `${c.name.toLowerCase()}_${c.pincode}`;
-      namePinCounts[key] = (namePinCounts[key] || 0) + 1;
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const { data: orders } = await sb.from('orders').select('*').order('created_at', { ascending: false });
+    if (orders) {
+      cachedOrders = orders;
+      document.getElementById('countOrders').textContent = orders.length;
+
+      const todayOrders = orders.filter(o => o.created_at && o.created_at.slice(0, 10) === todayStr);
+      document.getElementById('countTodayOrders').textContent = todayOrders.length;
+      document.getElementById('kpiTodayCount').textContent = todayOrders.length;
+
+      const todaySales = todayOrders.filter(o => o.status !== 'cancelled').reduce((s, o) => s + (o.total || 0), 0);
+      document.getElementById('kpiTodaySales').textContent = `₹${todaySales}`;
+
+      const toPack = orders.filter(o => o.status === 'confirmed').length;
+      document.getElementById('kpiToPack').textContent = toPack;
+
+      const toDeliver = orders.filter(o => o.status === 'out_for_delivery').length;
+      document.getElementById('kpiToDeliver').textContent = toDeliver;
+
+      const unpaidCod = orders.filter(o => o.payment_method === 'cod' && o.payment_status === 'unpaid' && o.status !== 'cancelled').reduce((s, o) => s + (o.total || 0), 0);
+      document.getElementById('kpiUnpaidCod').textContent = `₹${unpaidCod}`;
+
+      const samplesToAdd = orders.filter(o => o.sample_claim_id && o.status === 'placed').length;
+      document.getElementById('kpiSamplesToAdd').textContent = samplesToAdd;
+
+      renderTodayOrdersTable(todayOrders);
     }
-  });
+  } catch (e) {
+    console.warn('[loadTodayData]', e);
+  }
+}
 
-  const filtered = cachedSamples.filter(s => {
-    if (!term) return true;
-    const phone = (s.customers?.phone || '').toLowerCase();
-    const name = (s.customers?.name || '').toLowerCase();
-    const code = (s.claim_code || '').toLowerCase();
-    const status = (s.status || '').toLowerCase();
-    return phone.includes(term) || name.includes(term) || code.includes(term) || status.includes(term);
-  });
+async function pollTodayOrders() {
+  const sb = getSupabase();
+  try {
+    const { count } = await sb.from('orders').select('*', { count: 'exact', head: true });
+    if (count !== null && lastKnownOrderCount > 0 && count > lastKnownOrderCount) {
+      playNewOrderSound();
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('New BROSKI Order! 🐶', { body: 'A new order has just arrived!' });
+      }
+      loadTodayData();
+      loadOrders();
+    }
+    lastKnownOrderCount = count || lastKnownOrderCount;
+  } catch (_) {}
+}
 
-  if (filtered.length === 0) {
-    wrap.innerHTML = '<p class="bk-small" style="padding:16px 0;">No matching sample claims found.</p>';
+function renderTodayOrdersTable(orders) {
+  const wrap = document.getElementById('todayOrdersWrap');
+  if (!orders || orders.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No orders received yet today. Live orders will appear here automatically.</p>';
     return;
   }
 
-  let html = '<table class="bk-table"><thead><tr><th>Claim Code</th><th>Customer</th><th>Flavour</th><th>Status / Flags</th><th>Actions</th></tr></thead><tbody>';
+  let html = `<table class="adm-table"><thead><tr>
+    <th>Order #</th><th>Customer / Phone</th><th>Items</th><th>Total</th><th>Status</th><th>Slot</th><th>Actions</th>
+  </tr></thead><tbody>`;
 
-  filtered.forEach(s => {
-    const cust = s.customers || {};
-    const d = s.created_at ? new Date(s.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '-';
-    
-    // Duplicate detection flags
-    let isDeviceDup = s.device_id && deviceCounts[s.device_id] > 1;
-    let isNamePinDup = cust.name && cust.pincode && namePinCounts[`${cust.name.toLowerCase()}_${cust.pincode}`] > 1;
-
-    let flagBadges = '';
-    if (isDeviceDup) flagBadges += '<span class="adm-flag" title="Same device ID used in another claim">🚩 Device Dup</span> ';
-    if (isNamePinDup) flagBadges += '<span class="adm-flag" title="Same name and pincode in another claim">🚩 Name/Pin Dup</span> ';
-
-    const waPhone = cust.phone ? cust.phone.replace(/\D/g, '') : '';
-    const waText = encodeURIComponent(`Your BROSKI customer code is ${cust.customer_code || ''}. Use it on broskipetfood.com/points`);
-    const waLink = waPhone ? `https://wa.me/${waPhone}?text=${waText}` : '#';
-
+  orders.forEach(o => {
     html += `<tr>
-      <td>
-        <strong style="font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--adm-rust);">${escapeHtml(s.claim_code)}</strong>
-        <div style="font-size:12px; color:var(--brown); font-weight:700;">BROSKI: ${escapeHtml(cust.customer_code || '-')}</div>
-        <div class="bk-small" style="color:var(--brown-2);">${d}</div>
-      </td>
-      <td>
-        <strong>${escapeHtml(cust.name || 'Anonymous')}</strong>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:13px;">${escapeHtml(cust.phone || '-')}</div>
-        <div class="bk-small">Pin: ${escapeHtml(cust.pincode || '-')} · Code: <strong>${escapeHtml(cust.customer_code || '-')}</strong></div>
-      </td>
-      <td><span class="bk-badge">${s.flavour === 'bites' ? 'Bro Bites' : 'Bro Mix'}</span></td>
-      <td>
-        <span class="bk-badge bk-badge--${s.status}">${s.status}</span>
-        ${flagBadges ? '<div style="margin-top:4px;">' + flagBadges + '</div>' : ''}
-        ${s.handed_by ? `<div class="bk-small" style="margin-top:2px;">Handed by: ${escapeHtml(s.handed_by)}</div>` : ''}
-        ${s.note ? `<div class="bk-small" style="color:#b91c1c;">Note: ${escapeHtml(s.note)}</div>` : ''}
-      </td>
-      <td>
-        <div style="display:flex; flex-wrap:wrap; gap:6px;">
-          ${s.status === 'pending' ? `<button type="button" class="adm-action-btn adm-action-btn--primary" onclick="verifySample('${s.id}', '${s.customer_id}')">Verify</button>` : ''}
-          ${s.status !== 'handed' ? `<button type="button" class="adm-action-btn" onclick="handOverSample('${s.id}')">Handed</button>` : ''}
-          ${s.status !== 'rejected' ? `<button type="button" class="adm-action-btn adm-action-btn--danger" onclick="rejectSample('${s.id}')">Reject</button>` : ''}
-          ${waPhone ? `<a class="adm-action-btn adm-action-btn--wa" href="${waLink}" target="_blank" rel="noopener">WhatsApp Code</a>` : ''}
-        </div>
-      </td>
+      <td><strong>${escapeHtml(o.public_no || o.id.slice(0,8))}</strong></td>
+      <td>${escapeHtml(o.address || '')}<br><span style="font-family:'JetBrains Mono',monospace;">${escapeHtml(o.pincode || '')}</span></td>
+      <td>${formatItems(o.items)}</td>
+      <td><strong>₹${o.total}</strong><br><span style="font-size:11px;">${o.payment_method} · ${o.payment_status}</span></td>
+      <td><span class="bk-badge bk-badge--${o.status}">${o.status}</span></td>
+      <td>${escapeHtml(o.slot || '-')}</td>
+      <td>${renderOrderActionButtons(o)}</td>
     </tr>`;
   });
 
@@ -412,132 +858,62 @@ function renderSamples() {
   wrap.innerHTML = html;
 }
 
-async function verifySample(claimId, customerId) {
-  const supabase = getClient();
-  try {
-    const { error: cErr } = await supabase.from('customers').update({ wa_verified: true }).eq('id', customerId);
-    if (cErr) throw cErr;
-    const { error: sErr } = await supabase.from('sample_claims').update({ status: 'verified' }).eq('id', claimId);
-    if (sErr) throw sErr;
-    loadSamples();
-    loadCustomers();
-  } catch (e) {
-    alert('Verification error: ' + e.message);
-  }
-}
-
-async function handOverSample(claimId) {
-  const handedBy = prompt('Enter name of staff / partner who handed over the sample:', 'Lakshay');
-  if (handedBy === null) return;
-  const supabase = getClient();
-  try {
-    const { error } = await supabase.from('sample_claims').update({
-      status: 'handed',
-      handed_by: handedBy.trim() || 'Lakshay',
-      handed_at: new Date().toISOString()
-    }).eq('id', claimId);
-    if (error) throw error;
-    loadSamples();
-  } catch (e) {
-    alert('Error recording handover: ' + e.message);
-  }
-}
-
-async function rejectSample(claimId) {
-  const note = prompt('Reason for rejection (e.g. duplicate device, invalid number):');
-  if (note === null) return;
-  const supabase = getClient();
-  try {
-    const { error } = await supabase.from('sample_claims').update({
-      status: 'rejected',
-      note: note.trim()
-    }).eq('id', claimId);
-    if (error) throw error;
-    loadSamples();
-  } catch (e) {
-    alert('Error rejecting claim: ' + e.message);
-  }
-}
-
-// 4. Tab: Orders
+// 5. Orders Tab
 async function loadOrders() {
-  const supabase = getClient();
-  if (!supabase) return;
-  const wrap = document.getElementById('ordersTableWrap');
-  wrap.innerHTML = '<p class="bk-small">Refreshing orders...</p>';
-
+  const sb = getSupabase();
   try {
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*, customers(*)')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    cachedOrders = data || [];
-    document.getElementById('countOrders').textContent = cachedOrders.length;
-    renderOrders();
-  } catch (err) {
-    wrap.innerHTML = `<div class="bk-alert bk-alert--error">Error loading orders: ${escapeHtml(err.message)}</div>`;
+    const { data } = await sb.from('orders').select('*').order('created_at', { ascending: false });
+    if (data) {
+      cachedOrders = data;
+      lastKnownOrderCount = data.length;
+      document.getElementById('countOrders').textContent = data.length;
+      renderOrdersTable();
+    }
+  } catch (e) {
+    console.warn('[loadOrders]', e);
   }
 }
 
-function renderOrders() {
+function renderOrdersTable() {
   const wrap = document.getElementById('ordersTableWrap');
-  const term = (document.getElementById('orderSearchInput')?.value || '').toLowerCase().trim();
+  const query = (document.getElementById('orderSearchInput')?.value || '').toLowerCase().trim();
+  const statusFilter = document.getElementById('orderStatusFilter')?.value || 'all';
 
-  const filtered = cachedOrders.filter(o => {
-    if (!term) return true;
-    const phone = (o.customers?.phone || '').toLowerCase();
-    const name = (o.customers?.name || '').toLowerCase();
-    const status = (o.status || '').toLowerCase();
-    const id = (o.id || '').toLowerCase();
-    return phone.includes(term) || name.includes(term) || status.includes(term) || id.includes(term);
+  let list = cachedOrders.filter(o => {
+    if (statusFilter !== 'all' && o.status !== statusFilter) return false;
+    if (!query) return true;
+    const txt = `${o.public_no || ''} ${o.address || ''} ${o.pincode || ''} ${o.status || ''}`.toLowerCase();
+    return txt.includes(query);
   });
 
-  if (filtered.length === 0) {
-    wrap.innerHTML = '<p class="bk-small" style="padding:16px 0;">No matching orders found.</p>';
+  if (list.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No orders found matching criteria.</p>';
     return;
   }
 
-  let html = '<table class="bk-table"><thead><tr><th>Order ID / Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+  let html = `<table class="adm-table"><thead><tr>
+    <th>Order #</th><th>Address & Slot</th><th>Items Snapshot</th><th>Total</th><th>Status</th><th>Payment</th><th>Actions</th>
+  </tr></thead><tbody>`;
 
-  filtered.forEach(o => {
-    const cust = o.customers || {};
-    const d = o.created_at ? new Date(o.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '-';
-    
-    let itemsStr = '';
-    if (typeof o.items === 'object' && o.items !== null) {
-      const p = [];
-      if (o.items.bites) p.push(`Bites ×${o.items.bites}`);
-      if (o.items.mix) p.push(`Mix ×${o.items.mix}`);
-      if (o.items.combo) p.push(`Combo ×${o.items.combo}`);
-      itemsStr = p.join(', ') || JSON.stringify(o.items);
-    } else {
-      itemsStr = String(o.items || '-');
-    }
-
+  list.forEach(o => {
     html += `<tr>
       <td>
-        <strong style="font-family:'JetBrains Mono',monospace;">#${o.id.slice(0,8)}</strong>
-        <div class="bk-small" style="color:var(--brown-2);">${d}</div>
-        <span class="bk-badge">${escapeHtml(o.channel || 'site')}</span>
+        <strong style="font-family:'JetBrains Mono',monospace;">${escapeHtml(o.public_no || o.id.slice(0,8))}</strong><br>
+        <span style="font-size:11px; color:#777;">${new Date(o.created_at).toLocaleDateString('en-IN', {day:'numeric',month:'short'})}</span>
       </td>
       <td>
-        <strong>${escapeHtml(cust.name || 'Anonymous')}</strong>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:13px;">${escapeHtml(cust.phone || '-')}</div>
-        <div class="bk-small">Pin: ${escapeHtml(cust.pincode || '-')}</div>
+        <div>${escapeHtml(o.address || 'Direct')}</div>
+        <div style="font-size:12px; color:#777;">Landmark: ${escapeHtml(o.landmark || '-')} · Pincode: <strong>${escapeHtml(o.pincode || '')}</strong></div>
+        <div style="font-size:12px; font-weight:700; color:var(--adm-rust);">Slot: ${escapeHtml(o.slot || '-')}</div>
       </td>
-      <td>${escapeHtml(itemsStr)}</td>
-      <td style="font-weight:700; font-size:16px;">₹${o.total}</td>
+      <td>${formatItems(o.items)}</td>
+      <td><strong style="font-size:14px;">₹${o.total}</strong></td>
       <td><span class="bk-badge bk-badge--${o.status}">${o.status}</span></td>
       <td>
-        <select class="bk-select" style="min-height:36px; padding:4px 8px; font-size:13px;" onchange="updateOrderStatus('${o.id}', this.value)">
-          <option value="requested" ${o.status==='requested'?'selected':''}>requested</option>
-          <option value="confirmed" ${o.status==='confirmed'?'selected':''}>confirmed</option>
-          <option value="delivered" ${o.status==='delivered'?'selected':''}>delivered</option>
-          <option value="cancelled" ${o.status==='cancelled'?'selected':''}>cancelled</option>
-        </select>
+        <strong>${(o.payment_method || 'cod').toUpperCase()}</strong><br>
+        <span style="color:${o.payment_status === 'paid' ? '#166534' : '#b8452b'}; font-weight:700;">${(o.payment_status || 'unpaid').toUpperCase()}</span>
       </td>
+      <td>${renderOrderActionButtons(o)}</td>
     </tr>`;
   });
 
@@ -545,432 +921,147 @@ function renderOrders() {
   wrap.innerHTML = html;
 }
 
-async function updateOrderStatus(orderId, newStatus) {
-  const supabase = getClient();
+function renderOrderActionButtons(o) {
+  let btns = '<div style="display:flex; flex-direction:column; gap:4px;">';
+
+  if (o.status === 'placed') {
+    btns += `<button type="button" class="adm-action-btn adm-action-btn--primary" onclick="setOrderStatus('${o.id}', 'confirmed')">Confirm Order</button>`;
+  } else if (o.status === 'confirmed') {
+    btns += `<button type="button" class="adm-action-btn adm-action-btn--rust" onclick="setOrderStatus('${o.id}', 'out_for_delivery')">Dispatch</button>`;
+    btns += `<button type="button" class="adm-action-btn" onclick="openPackingSlipModal('${o.id}')">🖨️ Slip</button>`;
+  } else if (o.status === 'out_for_delivery') {
+    btns += `<button type="button" class="adm-action-btn adm-action-btn--green" onclick="setOrderStatus('${o.id}', 'delivered')">Mark Delivered</button>`;
+    btns += `<button type="button" class="adm-action-btn" onclick="openPackingSlipModal('${o.id}')">🖨️ Slip</button>`;
+  }
+
+  if (o.payment_status !== 'paid' && o.status !== 'cancelled') {
+    btns += `<button type="button" class="adm-action-btn" onclick="markOrderPaid('${o.id}', 'cash')">Mark Paid (Cash)</button>`;
+    btns += `<button type="button" class="adm-action-btn" onclick="markOrderPaid('${o.id}', 'upi')">Mark Paid (UPI)</button>`;
+  }
+
+  if (o.status !== 'cancelled' && o.status !== 'delivered') {
+    btns += `<button type="button" class="adm-action-btn adm-action-btn--danger" onclick="cancelOrderPrompt('${o.id}')">Cancel</button>`;
+  }
+
+  if (o.bill_no) {
+    btns += `<button type="button" class="adm-action-btn" onclick="openBillDoc('${o.bill_no}')">📄 View Bill (${o.bill_no})</button>`;
+  } else if (o.status === 'delivered' || o.payment_status === 'paid') {
+    btns += `<button type="button" class="adm-action-btn" onclick="adminIssueBill('${o.id}')">🧾 Issue Bill</button>`;
+  }
+
+  btns += '</div>';
+  return btns;
+}
+
+async function setOrderStatus(id, newStatus) {
+  const sb = getSupabase();
   try {
-    const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
+    const { data, error } = await sb.rpc('admin_set_status', { p_order_id: id, p_status: newStatus });
     if (error) throw error;
-    loadOrders();
+    await loadOrders();
+    await loadTodayData();
   } catch (e) {
-    alert('Error updating order: ' + e.message);
+    alert(e.message || 'Error updating order status');
   }
 }
 
-// Manual Order Modal
-function openManualOrderModal() {
+async function markOrderPaid(id, method) {
+  const sb = getSupabase();
+  const utr = method === 'upi' ? prompt('Enter UPI UTR / Reference Number (optional):') : null;
+  try {
+    const { error } = await sb.rpc('admin_mark_paid', { p_order_id: id, p_method: method, p_utr: utr });
+    if (error) throw error;
+    await loadOrders();
+    await loadTodayData();
+  } catch (e) {
+    alert(e.message || 'Error marking order as paid');
+  }
+}
+
+async function cancelOrderPrompt(id) {
+  const reason = prompt('Reason for order cancellation:');
+  if (!reason) return;
+  const sb = getSupabase();
+  try {
+    const { error } = await sb.rpc('admin_cancel_order', { p_order_id: id, p_reason: reason });
+    if (error) throw error;
+    await loadOrders();
+    await loadTodayData();
+  } catch (e) {
+    alert(e.message || 'Error cancelling order');
+  }
+}
+
+async function adminIssueBill(id) {
+  const sb = getSupabase();
+  try {
+    const { data, error } = await sb.rpc('admin_issue_bill', { p_order_id: id });
+    if (error) throw error;
+    alert(`Bill ${data.doc_no} issued successfully!`);
+    await loadOrders();
+    await loadDocuments();
+  } catch (e) {
+    alert(e.message || 'Error issuing bill');
+  }
+}
+
+function openPackingSlipModal(id) {
+  const o = cachedOrders.find(x => x.id === id);
+  if (!o) return;
+
   const host = document.getElementById('modalHost');
   host.style.display = 'block';
   host.innerHTML = `
     <div class="adm-modal-backdrop" onclick="if(event.target===this)closeModal()">
-      <div class="adm-modal">
-        <h3 style="margin-top:0;">Add Manual Order (Shop / WhatsApp)</h3>
-        <form id="manualOrderForm">
-          <div class="bk-form-group">
-            <label class="bk-label">Customer Mobile (10 Digits)</label>
-            <div class="bk-phone-wrap">
-              <span class="bk-phone-prefix">+91</span>
-              <input class="bk-input" type="tel" id="manPhone" placeholder="85XXXXXXXX" maxlength="10" inputmode="numeric" required>
-            </div>
+      <div class="adm-modal print-packing-slip" style="max-width:540px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #000; padding-bottom:12px; margin-bottom:14px;">
+          <div>
+            <img src="/broski-wordmark-brown.svg" alt="BROSKI" height="26" style="height:26px; width:auto;">
+            <div style="font-weight:800; font-size:16px; text-transform:uppercase; margin-top:2px;">Delivery Packing Slip</div>
+            <div style="font-size:12px;">Nangloi Express · 110041</div>
           </div>
-          <div class="bk-form-group">
-            <label class="bk-label">Customer Name</label>
-            <input class="bk-input" type="text" id="manName" placeholder="e.g. Pet Paradise / Rohit" required>
+          <div style="text-align:right;">
+            <div style="font-family:'JetBrains Mono',monospace; font-weight:800; font-size:16px;">${escapeHtml(o.public_no || '')}</div>
+            <div style="font-size:12px;">${new Date(o.created_at).toLocaleDateString('en-IN')}</div>
           </div>
-          <div class="bk-form-group">
-            <label class="bk-label">Pincode</label>
-            <input class="bk-input" type="text" id="manPincode" placeholder="110041" maxlength="6">
-          </div>
-          <div class="bk-form-group">
-            <label class="bk-label">Channel</label>
-            <select class="bk-select" id="manChannel">
-              <option value="shop">Pet Shop</option>
-              <option value="whatsapp">WhatsApp Direct</option>
-              <option value="site">Website</option>
-            </select>
-          </div>
-          <div class="bk-form-group">
-            <label class="bk-label">Quantities</label>
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
-              <div>
-                <span class="bk-small">Bites (₹149)</span>
-                <input class="bk-input" type="number" id="manBites" value="0" min="0">
-              </div>
-              <div>
-                <span class="bk-small">Mix (₹179)</span>
-                <input class="bk-input" type="number" id="manMix" value="0" min="0">
-              </div>
-              <div>
-                <span class="bk-small">Combo (₹295)</span>
-                <input class="bk-input" type="number" id="manCombo" value="0" min="0">
-              </div>
-            </div>
-          </div>
-          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
-            <button type="button" class="adm-action-btn" onclick="closeModal()">Cancel</button>
-            <button type="submit" class="adm-action-btn adm-action-btn--primary">Save Order</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  `;
-
-  document.getElementById('manualOrderForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const rawP = document.getElementById('manPhone').value.trim();
-    const pDigits = rawP.replace(/\D/g, '');
-    if (pDigits.length !== 10 || !/^[6-9][0-9]{9}$/.test(pDigits)) {
-      alert('Please enter a valid 10-digit mobile number (e.g. 85XXXXXXXX).');
-      return;
-    }
-    const cleanPhone = '+91' + pDigits;
-
-    const pinDigits = (document.getElementById('manPincode').value.trim() || '110041').replace(/\D/g, '');
-    if (pinDigits.length !== 6 || !/^[1-9][0-9]{5}$/.test(pinDigits)) {
-      alert('Please enter a valid 6-digit pincode (e.g. 110041).');
-      return;
-    }
-    const pincode = pinDigits;
-    const name = document.getElementById('manName').value.trim();
-    const channel = document.getElementById('manChannel').value;
-
-    const b = parseInt(document.getElementById('manBites').value) || 0;
-    const m = parseInt(document.getElementById('manMix').value) || 0;
-    const c = parseInt(document.getElementById('manCombo').value) || 0;
-
-    const total = (b * 149) + (m * 179) + (c * 295);
-    if (total <= 0) {
-      alert('Please select at least 1 product.');
-      return;
-    }
-
-    const supabase = getClient();
-    try {
-      // Find or create customer
-      let { data: cust } = await supabase.from('customers').select('*').eq('phone', cleanPhone).maybeSingle();
-      if (!cust) {
-        const randCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-        const { data: newCust, error: insErr } = await supabase.from('customers').insert({
-          phone: cleanPhone,
-          name: name,
-          pincode: pincode,
-          customer_code: randCode,
-          consent_at: new Date().toISOString(),
-          source: 'admin_manual'
-        }).select().single();
-        if (insErr) throw insErr;
-        cust = newCust;
-      }
-
-      const { error: ordErr } = await supabase.from('orders').insert({
-        customer_id: cust.id,
-        items: { bites: b, mix: m, combo: c },
-        total: total,
-        channel: channel,
-        status: 'confirmed'
-      });
-      if (ordErr) throw ordErr;
-
-      closeModal();
-      loadOrders();
-      loadCustomers();
-    } catch (err) {
-      alert('Error creating manual order: ' + err.message);
-    }
-  });
-}
-
-// 5. Tab: Feedback
-async function loadFeedback() {
-  const supabase = getClient();
-  if (!supabase) return;
-  const wrap = document.getElementById('feedbackTableWrap');
-  wrap.innerHTML = '<p class="bk-small">Refreshing feedback...</p>';
-
-  try {
-    const { data, error } = await supabase
-      .from('feedback')
-      .select('*, customers(*)')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    cachedFeedback = data || [];
-    document.getElementById('countFeedback').textContent = cachedFeedback.length;
-    renderFeedback();
-  } catch (err) {
-    wrap.innerHTML = `<div class="bk-alert bk-alert--error">Error loading feedback: ${escapeHtml(err.message)}</div>`;
-  }
-}
-
-function renderFeedback() {
-  const wrap = document.getElementById('feedbackTableWrap');
-  const term = (document.getElementById('feedbackSearchInput')?.value || '').toLowerCase().trim();
-
-  const filtered = cachedFeedback.filter(f => {
-    if (!term) return true;
-    const phone = (f.customers?.phone || '').toLowerCase();
-    const comments = (f.comments || '').toLowerCase();
-    const batch = (f.batch_no || '').toLowerCase();
-    return phone.includes(term) || comments.includes(term) || batch.includes(term);
-  });
-
-  if (filtered.length === 0) {
-    wrap.innerHTML = '<p class="bk-small" style="padding:16px 0;">No matching feedback found.</p>';
-    return;
-  }
-
-  let html = '<table class="bk-table"><thead><tr><th>Rating / Date</th><th>Customer</th><th>Pack / Batch</th><th>Comments</th><th>Quote?</th><th>Actions</th></tr></thead><tbody>';
-
-  filtered.forEach(f => {
-    const cust = f.customers || {};
-    const d = f.created_at ? new Date(f.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short' }) : '-';
-    const paws = '🐾'.repeat(f.rating || 5);
-
-    html += `<tr>
-      <td>
-        <div style="font-size:16px;">${paws} (${f.rating || 5}/5)</div>
-        <div class="bk-small" style="color:var(--brown-2);">${d}</div>
-      </td>
-      <td>
-        <strong>${escapeHtml(cust.name || 'Anonymous')}</strong>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:13px;">${escapeHtml(cust.phone || 'Unlinked')}</div>
-      </td>
-      <td>
-        <div>${f.flavour === 'bites' ? 'Bro Bites' : 'Bro Mix'}</div>
-        <div class="bk-small">Batch: ${escapeHtml(f.batch_no || 'None')}</div>
-      </td>
-      <td style="max-width:320px; font-size:13.5px;">${escapeHtml(f.comments || '-')}</td>
-      <td>${f.quote_ok ? '<span style="color:#166534; font-weight:700;">✓ Yes</span>' : '<span style="color:#888;">No</span>'}</td>
-      <td>
-        ${cust.id ? `<button type="button" class="adm-action-btn adm-action-btn--primary" onclick="givePointsModal('${cust.id}', '${f.id}')">Give Points</button>` : '<span class="bk-small" style="color:#888;">Unlinked</span>'}
-      </td>
-    </tr>`;
-  });
-
-  html += '</tbody></table>';
-  wrap.innerHTML = html;
-}
-
-function givePointsModal(customerId, feedbackId) {
-  const delta = prompt('Enter points to award for this review (e.g. 50):', '50');
-  if (!delta || isNaN(delta)) return;
-
-  const supabase = getClient();
-  supabase.from('points_ledger').insert({
-    customer_id: customerId,
-    delta: parseInt(delta),
-    reason: 'feedback',
-    ref: feedbackId
-  }).then(({ error }) => {
-    if (error) alert('Error awarding points: ' + error.message);
-    else {
-      alert(`Successfully awarded ${delta} points!`);
-      loadCustomers();
-    }
-  });
-}
-
-// 6. Tab: Customers
-async function loadCustomers() {
-  const supabase = getClient();
-  if (!supabase) return;
-  const wrap = document.getElementById('customersTableWrap');
-  wrap.innerHTML = '<p class="bk-small">Refreshing customers...</p>';
-
-  try {
-    const { data: custs, error: cErr } = await supabase.from('customers').select('*').order('created_at', { ascending: false });
-    if (cErr) throw cErr;
-
-    const { data: ledger, error: lErr } = await supabase.from('points_ledger').select('customer_id, delta');
-    if (lErr) throw lErr;
-
-    const pointsMap = {};
-    (ledger || []).forEach(l => {
-      pointsMap[l.customer_id] = (pointsMap[l.customer_id] || 0) + l.delta;
-    });
-
-    cachedCustomers = (custs || []).map(c => ({
-      ...c,
-      pointsTotal: pointsMap[c.id] || 0
-    }));
-
-    document.getElementById('countCustomers').textContent = cachedCustomers.length;
-    renderCustomers();
-  } catch (err) {
-    wrap.innerHTML = `<div class="bk-alert bk-alert--error">Error loading customers: ${escapeHtml(err.message)}</div>`;
-  }
-}
-
-function renderCustomers() {
-  const wrap = document.getElementById('customersTableWrap');
-  const term = (document.getElementById('customerSearchInput')?.value || '').toLowerCase().trim();
-
-  const filtered = cachedCustomers.filter(c => {
-    if (!term) return true;
-    const phone = (c.phone || '').toLowerCase();
-    const name = (c.name || '').toLowerCase();
-    const code = (c.customer_code || '').toLowerCase();
-    return phone.includes(term) || name.includes(term) || code.includes(term);
-  });
-
-  if (filtered.length === 0) {
-    wrap.innerHTML = '<p class="bk-small" style="padding:16px 0;">No matching customers found.</p>';
-    return;
-  }
-
-  let html = '<table class="bk-table"><thead><tr><th>Customer / Code</th><th>Phone / Pin</th><th>Points</th><th>Verified</th><th>Actions</th></tr></thead><tbody>';
-
-  filtered.forEach(c => {
-    html += `<tr>
-      <td>
-        <strong>${escapeHtml(c.name || 'Anonymous')}</strong>
-        <div><code style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--adm-rust);">${escapeHtml(c.customer_code)}</code></div>
-        <div class="bk-small">${c.source ? 'Source: ' + escapeHtml(c.source) : ''}</div>
-      </td>
-      <td>
-        <div style="font-family:'JetBrains Mono',monospace; font-weight:700;">${escapeHtml(c.phone)}</div>
-        <div class="bk-small">Pincode: ${escapeHtml(c.pincode || '-')}</div>
-      </td>
-      <td>
-        <strong style="font-size:16px; color:var(--adm-rust);">${c.pointsTotal} pts</strong>
-      </td>
-      <td>
-        ${c.wa_verified ? '<span class="bk-badge bk-badge--handed">✓ WA Verified</span>' : '<span class="bk-badge bk-badge--pending">Unverified</span>'}
-      </td>
-      <td>
-        <div style="display:flex; flex-wrap:wrap; gap:6px;">
-          <button type="button" class="adm-action-btn" onclick="openManualPointsModal('${c.id}', '${escapeHtml(c.name || c.phone)}')">+/- Points</button>
-          <button type="button" class="adm-action-btn adm-action-btn--danger" onclick="deleteCustomer('${c.id}', '${escapeHtml(c.phone)}')">Delete (DPDP)</button>
         </div>
-      </td>
-    </tr>`;
-  });
 
-  html += '</tbody></table>';
-  wrap.innerHTML = html;
-}
+        <div style="background:#fef2f2; border:2px solid #b8452b; border-radius:10px; padding:12px; text-align:center; margin-bottom:16px;">
+          <div style="font-size:12px; font-weight:700; text-transform:uppercase; color:#991b1b;">Amount to Collect at Door</div>
+          <div style="font-family:'Outfit',sans-serif; font-size:28px; font-weight:800; color:#b8452b;">
+            COLLECT ₹${o.total} (${(o.payment_method || 'COD').toUpperCase()})
+          </div>
+        </div>
 
-function openManualPointsModal(customerId, customerName) {
-  const host = document.getElementById('modalHost');
-  host.style.display = 'block';
-  host.innerHTML = `
-    <div class="adm-modal-backdrop" onclick="if(event.target===this)closeModal()">
-      <div class="adm-modal">
-        <h3 style="margin-top:0;">Manual Points Adjustment</h3>
-        <p class="bk-small">Customer: <strong>${customerName}</strong></p>
-        <form id="manualPointsForm">
-          <div class="bk-form-group">
-            <label class="bk-label">Delta (+ or -)</label>
-            <input class="bk-input" type="number" id="ptsDelta" placeholder="e.g. 50 or -20" required>
-          </div>
-          <div class="bk-form-group">
-            <label class="bk-label">Reason</label>
-            <input class="bk-input" type="text" id="ptsReason" placeholder="e.g. Shop referral bonus / return" required>
-          </div>
-          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
-            <button type="button" class="adm-action-btn" onclick="closeModal()">Cancel</button>
-            <button type="submit" class="adm-action-btn adm-action-btn--primary">Apply Points</button>
-          </div>
-        </form>
+        <div style="margin-bottom:14px; font-size:13.5px; line-height:1.4;">
+          <strong>Deliver To:</strong><br>
+          ${escapeHtml(o.address || '')}<br>
+          ${o.landmark ? 'Landmark: ' + escapeHtml(o.landmark) + '<br>' : ''}
+          Nangloi – <strong>${escapeHtml(o.pincode || '110041')}</strong><br>
+          Delivery Slot: <strong>${escapeHtml(o.slot || '')}</strong>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <strong style="font-size:13px; text-transform:uppercase; color:#777;">Items to Pack:</strong>
+          <table class="adm-table" style="margin-top:6px;">
+            <thead><tr><th>Item</th><th style="width:60px; text-align:center;">Qty</th><th style="width:80px; text-align:right;">Amount</th></tr></thead>
+            <tbody>
+              ${(o.items || []).map(it => `<tr>
+                <td><strong>${escapeHtml(it.name)}</strong></td>
+                <td style="text-align:center; font-weight:700;">${it.qty}</td>
+                <td style="text-align:right;">₹${it.price * it.qty}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="no-print" style="display:flex; justify-content:space-between; margin-top:20px;">
+          <button type="button" class="adm-action-btn" onclick="closeModal()">Close</button>
+          <button type="button" class="adm-action-btn adm-action-btn--primary" onclick="window.print()">🖨️ Print Packing Slip</button>
+        </div>
       </div>
     </div>
   `;
-
-  document.getElementById('manualPointsForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const delta = parseInt(document.getElementById('ptsDelta').value);
-    const reason = document.getElementById('ptsReason').value.trim();
-
-    if (isNaN(delta) || !reason) {
-      alert('Please fill out all fields.');
-      return;
-    }
-
-    const supabase = getClient();
-    try {
-      const { error } = await supabase.from('points_ledger').insert({
-        customer_id: customerId,
-        delta: delta,
-        reason: reason
-      });
-      if (error) throw error;
-      closeModal();
-      loadCustomers();
-    } catch (err) {
-      alert('Error updating points: ' + err.message);
-    }
-  });
-}
-
-async function deleteCustomer(customerId, phone) {
-  const conf = prompt(`WARNING: DPDP Deletion will PERMANENTLY erase this customer (${phone}) and cascade delete all their orders, sample claims, feedback and points ledger entries.\n\nType DELETE to confirm:`);
-  if (conf !== 'DELETE') return;
-
-  const supabase = getClient();
-  try {
-    const { error } = await supabase.from('customers').delete().eq('id', customerId);
-    if (error) throw error;
-    alert('Customer permanently deleted in compliance with DPDP request.');
-    loadCustomers();
-    loadSamples();
-    loadOrders();
-    loadFeedback();
-  } catch (err) {
-    alert('Error deleting customer: ' + err.message);
-  }
-}
-
-// 7. CSV Exports
-function exportCSV(headers, rows, filename) {
-  const content = [
-    headers.join(','),
-    ...rows.map(r => r.map(field => `"${String(field || '').replace(/"/g, '""')}"`).join(','))
-  ].join('\n');
-
-  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-
-function exportSamplesCSV() {
-  const headers = ['Claim Code', 'Flavour', 'Status', 'Date', 'Customer Name', 'Phone', 'Pincode', 'Customer Code', 'Handed By', 'Note', 'Device ID'];
-  const rows = cachedSamples.map(s => [
-    s.claim_code, s.flavour, s.status, s.created_at,
-    s.customers?.name, s.customers?.phone, s.customers?.pincode, s.customers?.customer_code,
-    s.handed_by, s.note, s.device_id
-  ]);
-  exportCSV(headers, rows, `BROSKI_Samples_${new Date().toISOString().slice(0,10)}.csv`);
-}
-
-function exportOrdersCSV() {
-  const headers = ['Order ID', 'Channel', 'Status', 'Total', 'Items', 'Date', 'Customer Name', 'Phone', 'Pincode'];
-  const rows = cachedOrders.map(o => [
-    o.id, o.channel, o.status, o.total, JSON.stringify(o.items), o.created_at,
-    o.customers?.name, o.customers?.phone, o.customers?.pincode
-  ]);
-  exportCSV(headers, rows, `BROSKI_Orders_${new Date().toISOString().slice(0,10)}.csv`);
-}
-
-function exportFeedbackCSV() {
-  const headers = ['Rating', 'Flavour', 'Batch', 'Quote OK', 'Comments', 'Date', 'Customer Name', 'Phone'];
-  const rows = cachedFeedback.map(f => [
-    f.rating, f.flavour, f.batch_no, f.quote_ok ? 'YES' : 'NO', f.comments, f.created_at,
-    f.customers?.name, f.customers?.phone
-  ]);
-  exportCSV(headers, rows, `BROSKI_Feedback_${new Date().toISOString().slice(0,10)}.csv`);
-}
-
-function exportCustomersCSV() {
-  const headers = ['Customer ID', 'Phone', 'Name', 'Pincode', 'Customer Code', 'Points Total', 'WA Verified', 'Consent Date', 'Source'];
-  const rows = cachedCustomers.map(c => [
-    c.id, c.phone, c.name, c.pincode, c.customer_code, c.pointsTotal,
-    c.wa_verified ? 'YES' : 'NO', c.consent_at, c.source
-  ]);
-  exportCSV(headers, rows, `BROSKI_Customers_${new Date().toISOString().slice(0,10)}.csv`);
 }
 
 function closeModal() {
@@ -979,10 +1070,762 @@ function closeModal() {
   host.innerHTML = '';
 }
 
+// 6. Packing List Tab
+function renderPackingList() {
+  const wrap = document.getElementById('packingListWrap');
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const confirmed = cachedOrders.filter(o => o.status === 'confirmed' || o.status === 'out_for_delivery');
+
+  if (confirmed.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No confirmed orders queued for packing today.</p>';
+    return;
+  }
+
+  let totalBites = 0, totalMix = 0, totalCombo = 0, totalSamples = 0;
+  confirmed.forEach(o => {
+    (o.items || []).forEach(it => {
+      if (it.id === 'bro-bites') totalBites += it.qty;
+      else if (it.id === 'bro-mix') totalMix += it.qty;
+      else if (it.id === 'combo') totalCombo += it.qty;
+      else if (it.id === 'sample') totalSamples += it.qty;
+    });
+  });
+
+  let html = `
+    <div class="adm-kpi-grid" style="margin-bottom:20px;">
+      <div class="adm-kpi-card"><span class="adm-kpi-label">Bro Bites to Pack</span><span class="adm-kpi-value">${totalBites}</span></div>
+      <div class="adm-kpi-card"><span class="adm-kpi-label">Bro Mix to Pack</span><span class="adm-kpi-value">${totalMix}</span></div>
+      <div class="adm-kpi-card"><span class="adm-kpi-label">Combos to Pack</span><span class="adm-kpi-value">${totalCombo}</span></div>
+      <div class="adm-kpi-card"><span class="adm-kpi-label">Free 50g Samples</span><span class="adm-kpi-value" style="color:var(--adm-rust);">${totalSamples}</span></div>
+    </div>
+
+    <table class="adm-table"><thead><tr>
+      <th>Order #</th><th>Slot</th><th>Items to Pack</th><th>Delivery Address</th><th>Collect ₹</th>
+    </tr></thead><tbody>
+  `;
+
+  confirmed.forEach(o => {
+    html += `<tr>
+      <td><strong>${escapeHtml(o.public_no || '')}</strong></td>
+      <td><strong>${escapeHtml(o.slot || '')}</strong></td>
+      <td>${formatItems(o.items)}</td>
+      <td>${escapeHtml(o.address || '')}, Nangloi – ${escapeHtml(o.pincode || '')}</td>
+      <td style="font-weight:700; color:var(--adm-rust);">₹${o.total}</td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+// 7. Samples Tab
+async function loadSamples() {
+  const sb = getSupabase();
+  try {
+    const { data } = await sb.from('sample_claims').select('*').order('created_at', { ascending: false });
+    if (data) {
+      cachedSamples = data;
+      document.getElementById('countSamples').textContent = data.length;
+      renderSamplesTable();
+    }
+  } catch (e) {
+    console.warn('[loadSamples]', e);
+  }
+}
+
+function renderSamplesTable() {
+  const wrap = document.getElementById('samplesTableWrap');
+  const query = (document.getElementById('sampleSearchInput')?.value || '').toLowerCase().trim();
+  const filter = document.getElementById('sampleStatusFilter')?.value || 'all';
+
+  let list = cachedSamples.filter(s => {
+    if (filter !== 'all' && s.status !== filter) return false;
+    if (!query) return true;
+    const txt = `${s.claim_code || ''} ${s.status || ''} ${s.flavour || ''}`.toLowerCase();
+    return txt.includes(query);
+  });
+
+  if (list.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No sample claims found.</p>';
+    return;
+  }
+
+  let html = `<table class="adm-table"><thead><tr>
+    <th>Claim Code</th><th>Flavour</th><th>Mode</th><th>Status</th><th>Linked Order</th><th>Date</th><th>Actions</th>
+  </tr></thead><tbody>`;
+
+  list.forEach(s => {
+    html += `<tr>
+      <td><strong style="font-family:'JetBrains Mono',monospace;">${escapeHtml(s.claim_code)}</strong></td>
+      <td><strong>${s.flavour === 'mix' ? 'Bro Mix (White)' : 'Bro Bites (Yellow)'}</strong></td>
+      <td><span class="bk-badge">${s.mode || 'with_order'}</span></td>
+      <td><span class="bk-badge bk-badge--${s.status}">${s.status}</span></td>
+      <td>${s.order_id ? s.order_id.slice(0,8) : '-'}</td>
+      <td>${new Date(s.created_at).toLocaleDateString('en-IN')}</td>
+      <td>
+        <div style="display:flex; gap:4px;">
+          ${s.status !== 'given' ? `<button type="button" class="adm-action-btn" onclick="markSampleStatus('${s.id}', 'given')">Mark Given</button>` : ''}
+          ${s.status !== 'rejected' ? `<button type="button" class="adm-action-btn adm-action-btn--danger" onclick="markSampleStatus('${s.id}', 'rejected')">Reject</button>` : ''}
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+async function markSampleStatus(id, st) {
+  const sb = getSupabase();
+  try {
+    const { error } = await sb.rpc('admin_mark_sample', { p_claim_id: id, p_status: st });
+    if (error) throw error;
+    await loadSamples();
+  } catch (e) {
+    alert(e.message || 'Error updating sample');
+  }
+}
+
+async function handleExpireOldClaims() {
+  const sb = getSupabase();
+  try {
+    const { data, error } = await sb.rpc('expire_old_sample_claims');
+    if (error) throw error;
+    alert(`Expired ${data} old reserved claims older than 60 days.`);
+    await loadSamples();
+  } catch (e) {
+    alert(e.message || 'Error expiring claims');
+  }
+}
+
+// 8. Customers Tab
+async function loadCustomers() {
+  const sb = getSupabase();
+  try {
+    const { data } = await sb.from('customers').select('*').order('created_at', { ascending: false });
+    if (data) {
+      cachedCustomers = data;
+      document.getElementById('countCustomers').textContent = data.length;
+      renderCustomersTable();
+    }
+  } catch (e) {
+    console.warn('[loadCustomers]', e);
+  }
+}
+
+function renderCustomersTable() {
+  const wrap = document.getElementById('customersTableWrap');
+  const query = (document.getElementById('customerSearchInput')?.value || '').toLowerCase().trim();
+
+  let list = cachedCustomers.filter(c => {
+    if (!query) return true;
+    const txt = `${c.name || ''} ${c.phone || ''} ${c.customer_code || ''}`.toLowerCase();
+    return txt.includes(query);
+  });
+
+  if (list.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No customers found.</p>';
+    return;
+  }
+
+  let html = `<table class="adm-table"><thead><tr>
+    <th>Customer Code</th><th>Name</th><th>Phone</th><th>Pincode</th><th>Created</th>
+  </tr></thead><tbody>`;
+
+  list.forEach(c => {
+    html += `<tr>
+      <td><strong style="font-family:'JetBrains Mono',monospace;">${escapeHtml(c.customer_code)}</strong></td>
+      <td>${escapeHtml(c.name || 'Anonymous')}</td>
+      <td style="font-family:'JetBrains Mono',monospace;">${escapeHtml(c.phone || '')}</td>
+      <td>${escapeHtml(c.pincode || '')}</td>
+      <td>${new Date(c.created_at).toLocaleDateString('en-IN')}</td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+// 9. Waitlist Tab
+async function loadWaitlist() {
+  const sb = getSupabase();
+  try {
+    const { data } = await sb.from('waitlist').select('*').order('created_at', { ascending: false });
+    if (data) {
+      cachedWaitlist = data;
+      document.getElementById('countWaitlist').textContent = data.length;
+      renderWaitlist();
+    }
+  } catch (e) {
+    console.warn('[loadWaitlist]', e);
+  }
+}
+
+function renderWaitlist() {
+  const wrap = document.getElementById('waitlistWrap');
+  if (!cachedWaitlist || cachedWaitlist.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No waitlist signups recorded.</p>';
+    return;
+  }
+
+  // Aggregate by pincode
+  const pinCounts = {};
+  cachedWaitlist.forEach(w => {
+    pinCounts[w.pincode] = (pinCounts[w.pincode] || 0) + 1;
+  });
+
+  const sortedPins = Object.entries(pinCounts).sort((a,b) => b[1] - a[1]);
+
+  let html = '<div style="margin-bottom:24px;"><h3 style="font-size:16px; margin:0 0 12px;">Area Unlock Progress (Target: 25 sign-ups)</h3>';
+  html += '<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">';
+  sortedPins.forEach(([pin, cnt]) => {
+    const pct = Math.min(100, Math.round((cnt / 25) * 100));
+    html += `
+      <div class="adm-kpi-card">
+        <div style="display:flex; justify-content:space-between; font-size:13px;">
+          <strong>Pincode ${pin}</strong>
+          <span>${cnt} / 25 (${pct}%)</span>
+        </div>
+        <div class="adm-meter"><div class="adm-meter-fill" style="width:${pct}%;"></div></div>
+      </div>
+    `;
+  });
+  html += '</div></div>';
+
+  html += `
+    <table class="adm-table"><thead><tr>
+      <th>Pincode</th><th>Customer Name</th><th>WhatsApp Phone</th><th>Date Joined</th>
+    </tr></thead><tbody>
+  `;
+  cachedWaitlist.forEach(w => {
+    html += `<tr>
+      <td><strong>${escapeHtml(w.pincode)}</strong></td>
+      <td>${escapeHtml(w.name || '-')}</td>
+      <td style="font-family:'JetBrains Mono',monospace;">${escapeHtml(w.phone)}</td>
+      <td>${new Date(w.created_at).toLocaleDateString('en-IN')}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+
+  wrap.innerHTML = html;
+}
+
+// 10. Billing & Documents Tab
+async function loadDocuments() {
+  const sb = getSupabase();
+  try {
+    const { data } = await sb.from('documents').select('*').order('created_at', { ascending: false });
+    if (data) {
+      cachedDocuments = data;
+      renderDocumentsTable();
+      renderDuesTable();
+      renderCmpSummary();
+    }
+  } catch (e) {
+    console.warn('[loadDocuments]', e);
+  }
+}
+
+function switchBillingSubTab(sub) {
+  billingSubTab = sub;
+  ['docs', 'new', 'dues', 'cmp'].forEach(s => {
+    const el = document.getElementById('subtab-' + s);
+    if (el) el.style.display = s === sub ? 'block' : 'none';
+  });
+  if (sub === 'new' && newDocItems.length === 0) {
+    addDocItemRow('Bro Bites (Classic Crunch)', 149, 1);
+  }
+}
+
+function renderDocumentsTable() {
+  const wrap = document.getElementById('docsTableWrap');
+  const query = (document.getElementById('docSearchInput')?.value || '').toLowerCase().trim();
+  const typeFilter = document.getElementById('docTypeFilter')?.value || 'all';
+
+  let list = cachedDocuments.filter(d => {
+    if (typeFilter !== 'all' && d.doc_type !== typeFilter) return false;
+    if (!query) return true;
+    const txt = `${d.doc_no || ''} ${d.doc_type || ''} ${d.status || ''}`.toLowerCase();
+    return txt.includes(query);
+  });
+
+  if (list.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No documents found.</p>';
+    return;
+  }
+
+  let html = `<table class="adm-table"><thead><tr>
+    <th>Doc #</th><th>Type</th><th>Date</th><th>Party / Billed To</th><th>Total</th><th>Payment</th><th>Status</th><th>Actions</th>
+  </tr></thead><tbody>`;
+
+  list.forEach(d => {
+    const partyName = d.meta?.customer_name || d.meta?.name || 'Customer';
+    html += `<tr>
+      <td><strong style="font-family:'JetBrains Mono',monospace;">${escapeHtml(d.doc_no)}</strong></td>
+      <td><span class="bk-badge">${d.doc_type.toUpperCase()}</span></td>
+      <td>${d.doc_date}</td>
+      <td>${escapeHtml(partyName)}</td>
+      <td><strong>₹${d.total}</strong></td>
+      <td>
+        <span style="color:${d.payment_status === 'paid' ? '#166534' : '#b8452b'}; font-weight:700;">${(d.payment_status || 'unpaid').toUpperCase()}</span><br>
+        <span style="font-size:11px;">${d.payment_method || 'cash'}</span>
+      </td>
+      <td><span class="bk-badge bk-badge--${d.status}">${d.status}</span></td>
+      <td>
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <a href="/doc/?no=${encodeURIComponent(d.doc_no)}&t=${encodeURIComponent(d.token)}" target="_blank" class="adm-action-btn">📄 View</a>
+          ${d.status === 'active' && d.doc_type === 'quotation' ? `<button type="button" class="adm-action-btn" onclick="convertDoc('${d.id}', 'bill')">Convert to Bill</button>` : ''}
+          ${d.status === 'active' && d.doc_type === 'estimate' ? `<button type="button" class="adm-action-btn" onclick="convertDoc('${d.id}', 'bill')">Convert to Bill</button>` : ''}
+          ${d.status === 'active' ? `<button type="button" class="adm-action-btn adm-action-btn--danger" onclick="cancelDocPrompt('${d.id}')">Cancel</button>` : ''}
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+function renderDuesTable() {
+  const wrap = document.getElementById('duesTableWrap');
+  const dues = cachedDocuments.filter(d => d.payment_method === 'credit' && d.payment_status === 'unpaid' && d.status === 'active');
+
+  if (dues.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No unpaid credit balances found. All clear!</p>';
+    return;
+  }
+
+  let html = `<table class="adm-table"><thead><tr>
+    <th>Doc #</th><th>Party</th><th>Phone</th><th>Due Date</th><th>Amount</th><th>Actions</th>
+  </tr></thead><tbody>`;
+
+  dues.forEach(d => {
+    const partyName = d.meta?.name || d.meta?.customer_name || 'Shop';
+    const phone = d.meta?.phone || '';
+    const cleanPhone = phone.replace(/\D/g, '');
+    const waText = encodeURIComponent(`Hi ${partyName}! A friendly reminder from BROSKI regarding pending invoice ${d.doc_no} for ₹${d.total} (Due date: ${d.due_date || 'immediate'}). Link: https://broskipetfood.com/doc/?no=${d.doc_no}&t=${d.token}`);
+
+    html += `<tr>
+      <td><strong>${escapeHtml(d.doc_no)}</strong></td>
+      <td>${escapeHtml(partyName)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;">${escapeHtml(phone)}</td>
+      <td style="color:var(--adm-rust); font-weight:700;">${d.due_date || '-'}</td>
+      <td><strong style="font-size:15px;">₹${d.total}</strong></td>
+      <td>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="adm-action-btn adm-action-btn--green" onclick="markDocPaid('${d.id}')">Mark Received</button>
+          ${cleanPhone ? `<a href="https://wa.me/91${cleanPhone}?text=${waText}" target="_blank" class="adm-action-btn">WhatsApp Reminder</a>` : ''}
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+async function markDocPaid(id) {
+  const sb = getSupabase();
+  try {
+    const { error } = await sb.rpc('admin_mark_doc_paid', { p_id: id, p_method: 'cash' });
+    if (error) throw error;
+    await loadDocuments();
+  } catch (e) {
+    alert(e.message || 'Error marking document paid');
+  }
+}
+
+async function convertDoc(id, toType) {
+  const sb = getSupabase();
+  try {
+    const { data, error } = await sb.rpc('admin_convert_document', { p_id: id, p_to_type: toType });
+    if (error) throw error;
+    alert(`Document converted to ${toType.toUpperCase()} ${data.doc_no}`);
+    await loadDocuments();
+  } catch (e) {
+    alert(e.message || 'Error converting document');
+  }
+}
+
+async function cancelDocPrompt(id) {
+  const reason = prompt('Reason for document cancellation:');
+  if (!reason) return;
+  const sb = getSupabase();
+  try {
+    const { error } = await sb.rpc('admin_cancel_document', { p_id: id, p_reason: reason });
+    if (error) throw error;
+    await loadDocuments();
+  } catch (e) {
+    alert(e.message || 'Error cancelling document');
+  }
+}
+
+// New Document Form Helpers
+let newDocItems = [];
+function addDocItemRow(name = 'Bro Bites (Classic Crunch)', rate = 149, qty = 1, free = 0, disc = 0) {
+  newDocItems.push({ name, rate, qty, free_qty: free, discount: disc });
+  renderDocItemsRows();
+}
+
+function renderDocItemsRows() {
+  const tbody = document.getElementById('newDocItemsBody');
+  tbody.innerHTML = '';
+  let subtotal = 0, totalDisc = 0;
+
+  newDocItems.forEach((it, idx) => {
+    const amt = Math.max(0, (it.rate * it.qty) - (it.discount || 0));
+    subtotal += (it.rate * it.qty);
+    totalDisc += (it.discount || 0);
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" class="bk-input" value="${escapeHtml(it.name)}" oninput="updateDocItem(${idx}, 'name', this.value)" style="padding:4px 8px; font-size:12.5px;"></td>
+      <td><input type="number" class="bk-input" value="${it.rate}" oninput="updateDocItem(${idx}, 'rate', parseInt(this.value)||0)" style="padding:4px 8px; font-size:12.5px;"></td>
+      <td><input type="number" class="bk-input" value="${it.qty}" oninput="updateDocItem(${idx}, 'qty', parseInt(this.value)||1)" style="padding:4px 8px; font-size:12.5px;"></td>
+      <td><input type="number" class="bk-input" value="${it.free_qty||0}" oninput="updateDocItem(${idx}, 'free_qty', parseInt(this.value)||0)" style="padding:4px 8px; font-size:12.5px;"></td>
+      <td><input type="number" class="bk-input" value="${it.discount||0}" oninput="updateDocItem(${idx}, 'discount', parseInt(this.value)||0)" style="padding:4px 8px; font-size:12.5px;"></td>
+      <td style="text-align:right; font-weight:700;">₹${amt}</td>
+      <td style="text-align:center;"><button type="button" class="adm-action-btn" onclick="removeDocItem(${idx})" style="min-height:26px; padding:2px 6px;">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const grand = Math.max(0, subtotal - totalDisc);
+  document.getElementById('newDocSubtotal').textContent = `₹${subtotal}`;
+  document.getElementById('newDocDiscount').textContent = `-₹${totalDisc}`;
+  document.getElementById('newDocTotal').textContent = `₹${grand}`;
+}
+
+function updateDocItem(idx, field, val) {
+  if (newDocItems[idx]) {
+    newDocItems[idx][field] = val;
+    renderDocItemsRows();
+  }
+}
+
+function removeDocItem(idx) {
+  newDocItems.splice(idx, 1);
+  renderDocItemsRows();
+}
+
+function onDocPaymentMethodChange() {
+  const m = document.getElementById('docPayMethod').value;
+  document.getElementById('creditDueWrap').style.display = m === 'credit' ? 'block' : 'none';
+}
+
+function onPartyKindChange() {
+  const k = document.getElementById('partyTypeSelect').value;
+  document.getElementById('partyFields').style.display = 'block';
+  if (k === 'walkin') {
+    document.getElementById('partyName').placeholder = 'Walk-in Customer';
+  } else {
+    document.getElementById('partyName').placeholder = 'e.g. Scoobee Pet Salon, Paschim Vihar';
+  }
+}
+
+function onDocTypeChange() {}
+
+async function handleCreateDocument(e) {
+  e.preventDefault();
+  const sb = getSupabase();
+  const btn = document.getElementById('btnSaveDoc');
+  btn.disabled = true;
+  btn.textContent = 'Generating document…';
+
+  try {
+    const docType = document.getElementById('docTypeSelect').value;
+    const partyName = document.getElementById('partyName').value.trim();
+    const partyPhone = document.getElementById('partyPhone').value.trim();
+    const partyArea = document.getElementById('partyArea').value.trim();
+    const partyGstin = document.getElementById('partyGstin').value.trim();
+    const payMethod = document.getElementById('docPayMethod').value;
+    const dueDate = payMethod === 'credit' ? document.getElementById('docDueDate').value || null : null;
+    const notes = document.getElementById('docNotes').value.trim();
+
+    let subtotal = 0, totalDisc = 0;
+    const formattedItems = newDocItems.map((it, idx) => {
+      const amt = Math.max(0, (it.rate * it.qty) - (it.discount || 0));
+      subtotal += (it.rate * it.qty);
+      totalDisc += (it.discount || 0);
+      return {
+        id: `item-${idx+1}`,
+        name: it.name,
+        hsn: '2309',
+        qty: it.qty,
+        free_qty: it.free_qty || 0,
+        rate: it.rate,
+        discount: it.discount || 0,
+        amount: amt
+      };
+    });
+
+    const total = Math.max(0, subtotal - totalDisc);
+
+    const partyData = {
+      kind: document.getElementById('partyTypeSelect').value,
+      name: partyName,
+      phone: partyPhone,
+      area: partyArea,
+      gstin: partyGstin
+    };
+
+    const { data, error } = await sb.rpc('admin_create_document', {
+      p_doc_type: docType,
+      p_party_id: null,
+      p_items: formattedItems,
+      p_subtotal: subtotal,
+      p_discount: totalDisc,
+      p_total: total,
+      p_payment_method: payMethod,
+      p_payment_status: payMethod === 'credit' ? 'unpaid' : 'paid',
+      p_due_date: dueDate,
+      p_notes: notes,
+      p_party_data: partyData
+    });
+
+    if (error) throw error;
+
+    alert(`Document ${data.doc_no} created successfully!`);
+    await loadDocuments();
+    switchBillingSubTab('docs');
+    // Open in new tab
+    window.open(`/doc/?no=${encodeURIComponent(data.doc_no)}&t=${encodeURIComponent(data.token)}`, '_blank');
+  } catch (err) {
+    alert(err.message || 'Error creating document');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save & Issue Document';
+  }
+}
+
+// CMP-08 Monthly Summary
+function renderCmpSummary() {
+  const results = document.getElementById('cmpSummaryResults');
+  // Monthly turnover from active bills & estimates (online + offline)
+  const salesDocs = cachedDocuments.filter(d =>
+    (d.doc_type === 'bill' || d.doc_type === 'estimate' || d.doc_type === 'daily') &&
+    d.status === 'active'
+  );
+
+  const totalTurnover = salesDocs.reduce((s, d) => s + (d.total || 0), 0);
+  const totalBills = salesDocs.length;
+
+  results.innerHTML = `
+    <div class="adm-kpi-grid" style="margin:16px 0;">
+      <div class="adm-kpi-card">
+        <span class="adm-kpi-label">Total Turnover (CMP-08)</span>
+        <span class="adm-kpi-value">₹${totalTurnover}</span>
+      </div>
+      <div class="adm-kpi-card">
+        <span class="adm-kpi-label">Sales Documents Issued</span>
+        <span class="adm-kpi-value">${totalBills}</span>
+      </div>
+    </div>
+    <div style="font-size:13.5px; color:#555; line-height:1.5;">
+      • Under GST Composition scheme (Notification 2/2019 / Sec 10), tax is calculated on aggregate turnover without ITC.<br>
+      • All numbers strictly match the unified sequential series.
+    </div>
+  `;
+}
+
+async function handleCloseDay() {
+  const sb = getSupabase();
+  const dateStr = prompt('Enter date to close (YYYY-MM-DD):', new Date().toISOString().slice(0, 10));
+  if (!dateStr) return;
+
+  try {
+    const { data, error } = await sb.rpc('issue_daily_consolidated', { p_date: dateStr });
+    if (error) throw error;
+    if (data.status === 'ok') {
+      alert(`Day closed! Consolidated bill ${data.doc_no} generated for ${data.count} orders totalling ₹${data.total}.`);
+    } else if (data.status === 'already_issued') {
+      alert(`Consolidated bill ${data.doc_no} has already been issued for ${dateStr}.`);
+    } else {
+      alert(data.message || 'No unbilled orders under ₹200 found for this date.');
+    }
+    await loadDocuments();
+  } catch (e) {
+    alert(e.message || 'Error closing day');
+  }
+}
+
+// 11. Feedback Tab
+async function loadFeedback() {
+  const sb = getSupabase();
+  try {
+    const { data } = await sb.from('feedback').select('*').order('created_at', { ascending: false });
+    if (data) {
+      cachedFeedback = data;
+      document.getElementById('countFeedback').textContent = data.length;
+      renderFeedbackTable();
+    }
+  } catch (e) {
+    console.warn('[loadFeedback]', e);
+  }
+}
+
+function renderFeedbackTable() {
+  const wrap = document.getElementById('feedbackTableWrap');
+  if (!cachedFeedback || cachedFeedback.length === 0) {
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No feedback reviews received.</p>';
+    return;
+  }
+
+  let html = `<table class="adm-table"><thead><tr>
+    <th>Flavour</th><th>Rating</th><th>Comments</th><th>Batch</th><th>Date</th>
+  </tr></thead><tbody>`;
+
+  cachedFeedback.forEach(f => {
+    html += `<tr>
+      <td><strong>${f.flavour === 'mix' ? 'Bro Mix' : 'Bro Bites'}</strong></td>
+      <td><strong>${f.rating || '-'} / 5</strong></td>
+      <td>${escapeHtml(f.comments || '')}</td>
+      <td>${escapeHtml(f.batch_no || '-')}</td>
+      <td>${new Date(f.created_at).toLocaleDateString('en-IN')}</td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+// 12. Reports Tab
+function loadReportsData() {
+  renderReports();
+}
+
+function renderReports() {
+  const wrap = document.getElementById('reportsContent');
+  const validOrders = cachedOrders.filter(o => o.status !== 'cancelled');
+  const totalRev = validOrders.reduce((s, o) => s + (o.total || 0), 0);
+  const aov = validOrders.length > 0 ? Math.round(totalRev / validOrders.length) : 0;
+
+  wrap.innerHTML = `
+    <div class="adm-kpi-grid" style="margin-bottom:20px;">
+      <div class="adm-kpi-card"><span class="adm-kpi-label">Total Revenue</span><span class="adm-kpi-value">₹${totalRev}</span></div>
+      <div class="adm-kpi-card"><span class="adm-kpi-label">Total Delivered Orders</span><span class="adm-kpi-value">${validOrders.length}</span></div>
+      <div class="adm-kpi-card"><span class="adm-kpi-label">Average Order Value (AOV)</span><span class="adm-kpi-value">₹${aov}</span></div>
+    </div>
+  `;
+}
+
+// 13. Settings Tab
+async function handleSaveSettings(e) {
+  e.preventDefault();
+  const sb = getSupabase();
+  const btn = document.getElementById('btnSaveSettings');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  try {
+    const prices = {
+      bites: parseInt(document.getElementById('setBitesPrice').value) || 149,
+      mix: parseInt(document.getElementById('setMixPrice').value) || 179,
+      combo: parseInt(document.getElementById('setComboPrice').value) || 295
+    };
+    const business = {
+      name: document.getElementById('setBizName').value.trim() || 'BROSKI',
+      gstin: document.getElementById('setBizGstin').value.trim(),
+      bill_address: document.getElementById('setBizAddress').value.trim(),
+      state: document.getElementById('setBizState').value.trim() || 'Delhi (07)',
+      hsn: document.getElementById('setBizHsn').value.trim() || '2309'
+    };
+    const upi = {
+      vpa: document.getElementById('setUpiVpa').value.trim(),
+      name: 'BROSKI'
+    };
+
+    await sb.rpc('admin_update_settings', { p_key: 'prices', p_val: prices });
+    await sb.rpc('admin_update_settings', { p_key: 'business', p_val: business });
+    await sb.rpc('admin_update_settings', { p_key: 'upi', p_val: upi });
+
+    alert('Settings saved successfully!');
+    await loadSettings();
+  } catch (err) {
+    alert(err.message || 'Error saving settings');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save All Settings';
+  }
+}
+
+// 14. CSV Exports
+function downloadCSV(filename, csvContent) {
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  link.click();
+}
+
+function exportOrdersCSV() {
+  if (!cachedOrders.length) return alert('No orders to export');
+  let csv = 'Order No,Date,Address,Pincode,Slot,Items,Total,Status,Payment Method,Payment Status\n';
+  cachedOrders.forEach(o => {
+    const items = (o.items || []).map(i => `${i.name}x${i.qty}`).join('; ');
+    csv += `"${o.public_no || o.id}","${o.created_at}","${(o.address||'').replace(/"/g, '""')}","${o.pincode}","${o.slot}","${items}",${o.total},"${o.status}","${o.payment_method}","${o.payment_status}"\n`;
+  });
+  downloadCSV(`broski_orders_${Date.now()}.csv`, csv);
+}
+
+function exportDocumentsCSV() {
+  if (!cachedDocuments.length) return alert('No documents to export');
+  let csv = 'Doc No,Type,Date,Party,Total,Payment Method,Payment Status,Status\n';
+  cachedDocuments.forEach(d => {
+    const party = d.meta?.name || d.meta?.customer_name || '';
+    csv += `"${d.doc_no}","${d.doc_type}","${d.doc_date}","${party.replace(/"/g, '""')}",${d.total},"${d.payment_method}","${d.payment_status}","${d.status}"\n`;
+  });
+  downloadCSV(`broski_documents_${Date.now()}.csv`, csv);
+}
+
+function exportCustomersCSV() {
+  if (!cachedCustomers.length) return alert('No customers to export');
+  let csv = 'Customer Code,Name,Phone,Pincode,Created At\n';
+  cachedCustomers.forEach(c => {
+    csv += `"${c.customer_code}","${(c.name||'').replace(/"/g, '""')}","${c.phone}","${c.pincode}","${c.created_at}"\n`;
+  });
+  downloadCSV(`broski_customers_${Date.now()}.csv`, csv);
+}
+
+function exportSamplesCSV() {
+  if (!cachedSamples.length) return alert('No samples to export');
+  let csv = 'Claim Code,Flavour,Mode,Status,Linked Order,Created At\n';
+  cachedSamples.forEach(s => {
+    csv += `"${s.claim_code}","${s.flavour}","${s.mode}","${s.status}","${s.order_id||''}","${s.created_at}"\n`;
+  });
+  downloadCSV(`broski_samples_${Date.now()}.csv`, csv);
+}
+
+function exportWaitlistCSV() {
+  if (!cachedWaitlist.length) return alert('No waitlist signups to export');
+  let csv = 'Pincode,Name,Phone,Created At\n';
+  cachedWaitlist.forEach(w => {
+    csv += `"${w.pincode}","${(w.name||'').replace(/"/g, '""')}","${w.phone}","${w.created_at}"\n`;
+  });
+  downloadCSV(`broski_waitlist_${Date.now()}.csv`, csv);
+}
+
+function exportFeedbackCSV() {
+  if (!cachedFeedback.length) return alert('No feedback to export');
+  let csv = 'Flavour,Rating,Comments,Batch,Created At\n';
+  cachedFeedback.forEach(f => {
+    csv += `"${f.flavour}",${f.rating},"${(f.comments||'').replace(/"/g, '""')}","${f.batch_no}","${f.created_at}"\n`;
+  });
+  downloadCSV(`broski_feedback_${Date.now()}.csv`, csv);
+}
+
+function formatItems(items) {
+  if (Array.isArray(items)) {
+    return items.map(it => `<strong>${escapeHtml(it.name)}</strong> × ${it.qty}`).join('<br>');
+  }
+  return '-';
+}
+
 function escapeHtml(str) {
   if (!str) return '';
-  return String(str).replace(/[&<>"']/g, function (m) {
-    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+  return str.toString().replace(/[&<>"']/g, function(m) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
   });
 }
 </script>

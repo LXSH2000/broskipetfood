@@ -79,6 +79,12 @@
           <label class="bk-label" for="custPincode">Delhi Pincode (6 Digits)</label>
           <input class="bk-input" type="text" id="custPincode" name="pincode" placeholder="110041" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required>
           <span class="bk-small" style="display:block; margin-top:4px;">Enter your 6-digit Delhi pincode.</span>
+          <div id="routeDropWrap" style="display:none; margin-top:10px; padding:10px 12px; background:#f5ede2; border-radius:10px;">
+            <label class="bk-check-label" style="font-size:13.5px; color:var(--brown); font-weight:600; cursor:pointer;">
+              <input class="bk-checkbox" type="checkbox" id="routeDropCheckbox">
+              <span>I live in Nangloi (110041) – drop it on your next delivery run without an order</span>
+            </label>
+          </div>
         </div>
 
         <div class="bk-form-group">
@@ -116,9 +122,9 @@
 
     <!-- Success View -->
     <div class="bk-card" id="successCard" style="display:none; text-align:center;">
-      <span class="bk-badge bk-badge--handed">🎉 Sample Code Generated</span>
-      <h2 style="margin-top:14px;">Your Free 50 g Sample is Reserved</h2>
-      <p>Show this code when collecting your sample pouch at a partner pet shop or with your home delivery order.</p>
+      <span class="bk-badge bk-badge--handed">🎉 Taste Pack Reserved</span>
+      <h2 style="margin-top:14px;" id="successHeading">Your Free 50 g Taste Pack is Reserved</h2>
+      <p id="successMessage" class="bk-lead">Your free 50 g taste pack is reserved! It will be added automatically to your first order.</p>
 
       <div style="margin: 20px auto 22px auto;">
         <img id="sampleReservedImg" src="/broski-sample-bites.webp" alt="Your Reserved 50g Sample Pouch" width="220" height="220" style="width:190px; height:190px; object-fit:cover; border-radius:20px; border:2px solid var(--brown); box-shadow:0 10px 26px rgba(53,32,22,0.12); display:inline-block;">
@@ -141,11 +147,16 @@
         <p style="margin:0; font-size:13px;">Forgot it? <a id="forgotCodeWaBtn" href="#" style="color:inherit; font-weight:700; text-decoration:underline;">WhatsApp us</a> and we'll look it up for you.</p>
       </div>
 
-      <a id="waConfirmBtn" href="#" class="bk-btn bk-btn--wa bk-btn--big" target="_blank" rel="noopener noreferrer">
-        Send on WhatsApp to confirm
-      </a>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+        <a href="/#shop" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%;">
+          Order Now to Get It Delivered →
+        </a>
+        <a id="waConfirmBtn" href="#" class="bk-btn bk-btn--ghost" target="_blank" rel="noopener noreferrer">
+          Questions? Message us on WhatsApp
+        </a>
+      </div>
       <p class="bk-small" style="text-align:center; margin-top:12px; color:var(--brown-2);">
-        Show this code when you collect your sample. One free sample per number.
+        One free sample pouch per phone number. Automatically ships with your first order.
       </p>
 
       <div style="margin-top:24px; text-align:center;">
@@ -224,6 +235,10 @@ window.addEventListener('DOMContentLoaded', function () {
   if (pinEl) {
     pinEl.addEventListener('input', function() {
       this.value = this.value.replace(/\D/g, '').slice(0, 6);
+      const dropWrap = document.getElementById('routeDropWrap');
+      if (dropWrap) {
+        dropWrap.style.display = this.value === '110041' ? 'block' : 'none';
+      }
     });
   }
 
@@ -237,6 +252,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const rawPin = document.getElementById('custPincode').value.trim();
     const flavour = document.querySelector('input[name="flavour"]:checked')?.value || 'bites';
     const consent = document.getElementById('custConsent').checked;
+    const isRouteDrop = document.getElementById('routeDropCheckbox')?.checked || false;
 
     if (!name || name.length < 2) {
       showAlert('Please enter your name.');
@@ -263,7 +279,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Generating Claim Code...';
+    submitBtn.textContent = 'Reserving Taste Pack...';
 
     const deviceId = window.BroskiPortal ? window.BroskiPortal.getDeviceId() : 'browser-dev';
     const source = window.BroskiPortal ? window.BroskiPortal.getSource() : 'direct';
@@ -278,6 +294,7 @@ window.addEventListener('DOMContentLoaded', function () {
         p_pincode: pincode,
         p_flavour: flavour,
         p_consent: true,
+        p_mode: isRouteDrop && pincode === '110041' ? 'route_drop' : 'with_order',
         p_device: deviceId,
         p_source: source
       });
@@ -306,8 +323,18 @@ window.addEventListener('DOMContentLoaded', function () {
           if (forgotLink) {
             const cfg = window.BROSKI_CONFIG || {};
             const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
-            const msg = encodeURIComponent(`Hi BROSKI! I claimed my free sample for +91${phone} but forgot my BROSKI code.`);
+            const msg = encodeURIComponent(`Hi BROSKI! I claimed my free sample for +91${phoneDigits} but forgot my BROSKI code.`);
             forgotLink.href = waNum ? `https://wa.me/${waNum}?text=${msg}` : `mailto:${cfg.EMAIL || 'support@broskipetfood.com'}`;
+          }
+        }
+
+        // Custom description based on mode
+        const msgEl = document.getElementById('successMessage');
+        if (msgEl) {
+          if (data.mode === 'route_drop' || (isRouteDrop && pincode === '110041')) {
+            msgEl.textContent = `Your free 50 g ${flavour === 'mix' ? 'Bro Mix' : 'Bro Bites'} taste pack is reserved! We will drop it on our next Nangloi (110041) delivery run.`;
+          } else {
+            msgEl.textContent = `Your free 50 g ${flavour === 'mix' ? 'Bro Mix' : 'Bro Bites'} taste pack is reserved! It will be added automatically to your first order to ${pincode}.`;
           }
         }
 
@@ -322,16 +349,14 @@ window.addEventListener('DOMContentLoaded', function () {
           if (sampleBadge) sampleBadge.textContent = '50 g Complimentary Pouch Reserved: Bro Bites (Classic Crunch)';
         }
 
-        // Configure WhatsApp button:
-        // "Hi BROSKI! I claimed my free sample. My BROSKI code is XXXXXX."
+        // Optional WhatsApp contact button
         const confirmMsg = code
           ? `Hi BROSKI! I claimed my free sample. My BROSKI code is ${code}.`
-          : `Hi BROSKI! I claimed my free sample for +91${phone}.`;
+          : `Hi BROSKI! I claimed my free sample for +91${phoneDigits}.`;
         const act = window.BroskiPortal ? window.BroskiPortal.getContactAction(confirmMsg, 'BROSKI Free Sample') : null;
         const confirmBtn = document.getElementById('waConfirmBtn');
         if (confirmBtn && act) {
           confirmBtn.href = act.url;
-          confirmBtn.textContent = act.type === 'whatsapp' ? 'Send on WhatsApp to confirm' : 'Send via Email to confirm';
         }
 
         claimCard.style.display = 'none';
@@ -343,10 +368,14 @@ window.addEventListener('DOMContentLoaded', function () {
           window.BroskiPortal.trackGA('sample_claim_duplicate');
         }
         const statusMap = {
-          'pending': 'Pending Collection / Verification',
-          'verified': 'Verified (Ready for Pickup / Dispatch)',
-          'handed': 'Handed Over / Delivered',
-          'rejected': 'Not Approved'
+          'reserved': 'Reserved – will ship with your first order',
+          'added': 'Added to your order',
+          'given': 'Delivered / Handed over',
+          'expired': 'Expired',
+          'rejected': 'Not approved',
+          'pending': 'Reserved – will ship with your first order',
+          'verified': 'Reserved – ready for dispatch',
+          'handed': 'Delivered / Handed over'
         };
         document.getElementById('existingStatusText').textContent = statusMap[data.claim_status] || data.claim_status || 'Active';
         claimCard.style.display = 'none';
