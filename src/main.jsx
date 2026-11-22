@@ -425,7 +425,7 @@ function App() {
           </div>
           <div className="questions">
             {[
-              ['When can I buy Broski?', "Available now in Nangloi (110041) – tap Order now on any pack for fresh delivery today or tomorrow with Cash/UPI on delivery."],
+              ['When can I buy Broski?', "Available now in Nangloi (110041) – tap Order now on any pack for delivery today or tomorrow with Cash/UPI on delivery."],
               ['How do I order?', 'Tap "Order now" on any pack to checkout online. Enter your delivery details in Nangloi (110041) and pay Cash or UPI at your door.'],
               ["What's in the treats?", 'Every ingredient is printed transparently on our back label: Bro Bites (Classic Crunch) contains Real Chicken, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Permitted Colours. Bro Mix (Happy Mix) contains Chicken Powder, Egg Powder, Whole Wheat Flour, Rice Flour, Corn Flour, Fish Oil, Vegetable Oil, Sodium Bicarbonate, Flavours, and Colour. Both contain chicken and egg. Complementary pet treat – break into pieces for smaller dogs and always keep fresh water nearby.'],
               ['How does delivery work?', 'We deliver via Nangloi Express (110041). Free delivery on all orders, arriving today or tomorrow in your selected slot (11 am – 2 pm or 4 pm – 8 pm). Other areas can join our waitlist.'],

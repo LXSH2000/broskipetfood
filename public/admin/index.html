@@ -781,7 +781,7 @@ async function loadTodayData() {
   const sb = getSupabase();
   try {
     // Auto consolidate previous days
-    await sb.rpc('issue_daily_consolidated', { p_date: new Date(Date.now() - 86400000).toISOString().slice(0, 10) }).catch(() => {});
+    await sb.rpc('admin_close_day', { p_date: new Date(Date.now() - 86400000).toISOString().slice(0, 10) }).catch(() => {});
 
     const todayStr = new Date().toISOString().slice(0, 10);
     const { data: orders } = await sb.from('orders').select('*').order('created_at', { ascending: false });
@@ -1634,7 +1634,7 @@ async function handleCloseDay() {
   if (!dateStr) return;
 
   try {
-    const { data, error } = await sb.rpc('issue_daily_consolidated', { p_date: dateStr });
+    const { data, error } = await sb.rpc('admin_close_day', { p_date: dateStr });
     if (error) throw error;
     if (data.status === 'ok') {
       alert(`Day closed! Consolidated bill ${data.doc_no} generated for ${data.count} orders totalling ₹${data.total}.`);

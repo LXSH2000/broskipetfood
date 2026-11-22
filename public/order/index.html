@@ -441,7 +441,7 @@ function renderOrder(order) {
 
   document.getElementById('slipCustomerName').textContent = order.customer_name || 'Customer';
   document.getElementById('slipCustomerPhone').textContent = order.masked_phone || '••••••••';
-  document.getElementById('slipAddress').textContent = `${order.address}${order.landmark ? ', Near ' + order.landmark : ''}, Nangloi – ${order.pincode}`;
+  document.getElementById('slipAddress').textContent = `${order.address}${order.landmark ? ', ' + order.landmark : ''}, Nangloi – ${order.pincode}`;
   document.getElementById('slipSlot').textContent = `Slot: ${order.slot || '11 am – 2 pm'}`;
 
   // Render items table

@@ -316,9 +316,9 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
         {/* Header */}
         <div className="bk-gateway-header">
           <div>
-            <span className="bk-gateway-badge">Direct Nangloi Bakery</span>
+            <span className="bk-gateway-badge">BROSKI · NANGLOI</span>
             <h2 id="bk-checkout-title">
-              {step === 5 ? 'Order Confirmed ✅' : 'Order Fresh Crunch'}
+              {step === 5 ? 'Order Confirmed ✅' : "Order your Bro's crunch"}
             </h2>
           </div>
           <button
@@ -356,7 +356,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
           {step === 1 && (
             <div className="bk-gateway-step">
               <p className="bk-gateway-step-desc">
-                Choose crunchy dog biscuits baked fresh in Nangloi. Free delivery across Nangloi (110041).
+                Choose your crunchy dog biscuits. Free delivery across Nangloi (110041).
               </p>
 
               <div className="bk-pack-selector">
@@ -434,7 +434,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
               </div>
 
               <div className="bk-notice-card">
-                🐶 <strong>Fresh Nangloi Delivery:</strong> Pay Cash or UPI to the delivery bro when received.
+                🐶 <strong>Nangloi Delivery:</strong> Pay Cash or UPI to the delivery bro when received.
               </div>
             </div>
           )}
@@ -636,7 +636,7 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                   checked={consent}
                   onChange={(e) => setConsent(e.target.checked)}
                 />
-                <span>I agree to receive order and delivery updates on WhatsApp/SMS.</span>
+                <span>I agree that BROSKI saves my name, phone and address to deliver my order and send updates. I can ask for deletion at support@broskipetfood.com.</span>
               </label>
             </div>
           )}
