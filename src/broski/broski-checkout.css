@@ -567,6 +567,23 @@
 }
 
 /* Primary and Action Buttons */
+/* Loading UI Spinner (from turbostarter/loading-ui) */
+@keyframes bk-spin {
+  to { transform: rotate(360deg); }
+}
+.bk-spinner {
+  animation: bk-spin 0.8s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bk-spinner {
+    animation: none !important;
+    opacity: 0.7;
+  }
+}
+
 .bk-btn-primary {
   background: var(--bk-text-main);
   color: #fff8ed;

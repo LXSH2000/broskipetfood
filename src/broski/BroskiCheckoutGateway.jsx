@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { LoadingSpinner } from './LoadingSpinner';
 
 const C = () => window.BROSKI_CONFIG || {};
 
@@ -521,7 +522,13 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                           className="bk-btn-primary"
                           disabled={waitlistLoading}
                         >
-                          {waitlistLoading ? 'Joining…' : `Join ${pincode} Waitlist`}
+                          {waitlistLoading ? (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                              <LoadingSpinner size={16} /> Joining…
+                            </span>
+                          ) : (
+                            `Join ${pincode} Waitlist`
+                          )}
                         </button>
                       </form>
                     )}
@@ -813,7 +820,13 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                   disabled={quoteLoading}
                   onClick={proceedToReview}
                 >
-                  {quoteLoading ? 'Verifying…' : 'Review Order →'}
+                  {quoteLoading ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                      <LoadingSpinner size={16} /> Verifying…
+                    </span>
+                  ) : (
+                    'Review Order →'
+                  )}
                 </button>
               </div>
             )}
@@ -829,7 +842,13 @@ export default function BroskiCheckoutGateway({ initialProduct, onClose }) {
                   disabled={loading}
                   onClick={handlePlaceOrder}
                 >
-                  {loading ? 'Placing Order…' : `Place Order (₹${quoteData?.total || estimatedSubtotal})`}
+                  {loading ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                      <LoadingSpinner size={18} /> Placing Order…
+                    </span>
+                  ) : (
+                    `Place Order (₹${quoteData?.total || estimatedSubtotal})`
+                  )}
                 </button>
               </div>
             )}
