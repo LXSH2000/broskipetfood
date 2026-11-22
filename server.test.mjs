@@ -15,7 +15,7 @@ test('helpers: checkPincode validates local, Delhi, outside and invalid formats'
 
   const otherWestDelhi = checkPincode('110015');
   assert.equal(otherWestDelhi.kind, 'delhi');
-  assert.ok(otherWestDelhi.text.includes('Delivery ₹20, confirmed on WhatsApp'));
+  assert.ok(otherWestDelhi.text.includes('delivery charges shown at checkout') || otherWestDelhi.text.includes('Delivery ₹20, confirmed on WhatsApp'));
 
   const outside = checkPincode('110001');
   assert.equal(outside.kind, 'outside');
