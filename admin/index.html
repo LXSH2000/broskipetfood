@@ -134,7 +134,7 @@
     <form id="loginForm" style="margin-top:20px;">
       <div class="bk-form-group">
         <label class="bk-label" for="loginUsername">Username</label>
-        <input class="bk-input" type="text" id="loginUsername" placeholder="itslxshay" autocomplete="username" required>
+        <input class="bk-input" type="text" id="loginUsername" placeholder="xxxxxxx" autocomplete="username" required>
       </div>
 
       <div class="bk-form-group">
@@ -698,8 +698,7 @@ async function verifyAdmin(user) {
     }
 
     currentUser = user;
-    const displayUser = user.email ? user.email.replace('@broskipetfood.com', '') : 'Admin';
-    document.getElementById('adminUserEmail').textContent = displayUser;
+    document.getElementById('adminUserEmail').textContent = 'xxxxxxx';
     document.getElementById('adminLogoutBtn').style.display = 'inline-block';
     document.getElementById('loginCard').style.display = 'none';
     document.getElementById('dashboardWrap').style.display = 'block';
