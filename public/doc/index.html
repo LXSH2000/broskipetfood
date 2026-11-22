@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#ffffff">
+<title>Document Viewer · BROSKI</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+  :root {
+    --text: #1a1512;
+    --muted: #5e4f45;
+    --border: #ddd2c4;
+    --bg-page: #f6f1ea;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background: var(--bg-page);
+    line-height: 1.45;
+    padding: 24px 16px 60px;
+  }
+  .doc-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .doc-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+  .btn-print {
+    background: #352016;
+    color: #fff8ed;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .doc-paper {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    color: #000000;
+  }
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #000;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+  }
+  .brand-logo {
+    height: 32px;
+    width: auto;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .business-info {
+    font-size: 12.5px;
+    color: #333;
+    line-height: 1.4;
+  }
+  .doc-meta {
+    text-align: right;
+  }
+  .doc-type-badge {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+  .doc-subtitle {
+    font-size: 12px;
+    color: #555;
+    font-style: italic;
+    margin: 2px 0 8px;
+  }
+  .doc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    color: #111;
+  }
+  .party-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background: #faf8f5;
+    border: 1px solid #ebdccb;
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .party-block dt {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #777;
+    margin-bottom: 2px;
+  }
+  .party-block dd {
+    margin: 0 0 4px 0;
+    font-weight: 600;
+  }
+  .doc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 13.5px;
+  }
+  .doc-table th {
+    background: #f0e9df;
+    border: 1px solid #d4c8b8;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: left;
+  }
+  .doc-table td {
+    border: 1px solid #e0d5c5;
+    padding: 8px 10px;
+  }
+  .totals-table {
+    width: 320px;
+    margin-left: auto;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-bottom: 20px;
+  }
+  .totals-table td {
+    padding: 6px 10px;
+  }
+  .totals-table tr.grand {
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+    font-weight: 800;
+    font-size: 15px;
+  }
+  .amount-words {
+    background: #f8f6f0;
+    border-left: 3px solid #352016;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+  .doc-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #ddd;
+    font-size: 12px;
+  }
+  .signatory-box {
+    text-align: right;
+    min-width: 220px;
+  }
+  .sign-line {
+    border-top: 1px solid #000;
+    margin-top: 48px;
+    padding-top: 4px;
+    font-weight: 700;
+  }
+  .cancelled-banner {
+    background: #fee2e2;
+    border: 2px solid #ef4444;
+    color: #991b1b;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  @media print {
+    body {
+      background: #ffffff !important;
+      padding: 0 !important;
+    }
+    .doc-toolbar, .no-print {
+      display: none !important;
+    }
+    .doc-container {
+      max-width: 100% !important;
+    }
+    .doc-paper {
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+    @page {
+      size: A4 portrait;
+      margin: 15mm;
+    }
+  }
+</style>
+<script src="/config.js"></script>
+<script src="/portal-shared.js"></script>
+</head>
+<body>
+<div class="doc-container">
+  <!-- Toolbar -->
+  <div class="doc-toolbar no-print">
+    <a href="/" style="color:#5e4f45; text-decoration:none; font-weight:700; font-size:14px;">
+      ← Return to BROSKI
+    </a>
+    <button type="button" class="btn-print" onclick="window.print()">
+      🖨️ Download / Print Document (PDF)
+    </button>
+  </div>
+
+  <div id="loadingBox" style="text-align:center; padding:60px 0;">
+    <p>Loading document…</p>
+  </div>
+
+  <div id="notFoundBox" style="display:none; text-align:center; padding:60px 20px; background:#fff; border-radius:12px;">
+    <h2>Document Not Found</h2>
+    <p>The document number or security token is invalid.</p>
+    <a href="/" style="display:inline-block; margin-top:12px; font-weight:700;">Go to Home</a>
+  </div>
+
+  <article id="docPaper" class="doc-paper" style="display:none;">
+    <div id="cancelledBanner" class="cancelled-banner" style="display:none;">
+      CANCELLED DOCUMENT · <span id="cancelReason"></span>
+    </div>
+
+    <!-- Header -->
+    <header class="doc-header">
+      <div>
+        <img src="/broski-wordmark-brown.svg" alt="BROSKI" class="brand-logo">
+        <div class="business-info">
+          <strong id="bizName">BROSKI</strong><br>
+          <span id="bizAddress">Nangloi, West Delhi – 110041</span><br>
+          <span id="bizGstin">GSTIN: [set in Settings]</span><br>
+          State: <span id="bizState">Delhi (07)</span> · HSN: <span id="bizHsn">2309</span>
+        </div>
+      </div>
+      <div class="doc-meta">
+        <h1 class="doc-type-badge" id="docTypeTitle">BILL OF SUPPLY</h1>
+        <div class="doc-subtitle" id="docTypeSubtitle"></div>
+        <div class="doc-num" id="docNumber">BRK/26-27/0001</div>
+        <div style="font-size:12.5px; margin-top:4px;">Date: <span id="docDate">23 Nov 2026</span></div>
+        <div id="docDueDateWrap" style="font-size:12.5px; color:#b8452b; display:none;">
+          Due Date: <span id="docDueDate"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Party / Buyer Details -->
+    <section class="party-grid">
+      <div class="party-block">
+        <dt>Details of Receiver / Billed To:</dt>
+        <dd style="font-size:15px; font-weight:700;" id="partyName">Walk-in Customer</dd>
+        <dd id="partyAddress">Nangloi, West Delhi</dd>
+        <dd id="partyPhone" style="font-family:'JetBrains Mono',monospace;">+91 98XXXXXXXX</dd>
+        <dd id="partyGstin" style="display:none;">GSTIN: <span></span></dd>
+      </div>
+      <div class="party-block">
+        <dt>Payment & Transaction Details:</dt>
+        <dd>Payment Method: <span id="partyPayMethod" style="text-transform:uppercase;">Cash</span></dd>
+        <dd>Payment Status: <span id="partyPayStatus" style="font-weight:700;">Unpaid</span></dd>
+        <dd id="upiQrWrap" style="display:none; margin-top:8px;">
+          <div style="font-size:11px; font-weight:700; color:#555;">Scan Business UPI:</div>
+          <img id="upiQrImg" src="" alt="UPI QR" width="100" height="100" style="border:1px solid #ccc; margin-top:2px;">
+        </dd>
+      </div>
+    </section>
+
+    <!-- Items Table -->
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th style="width:36px; text-align:center;">#</th>
+          <th>Item Description</th>
+          <th style="width:70px; text-align:center;">HSN</th>
+          <th style="width:60px; text-align:center;">Qty</th>
+          <th style="width:60px; text-align:center;" id="thFreeQty">Free</th>
+          <th style="width:80px; text-align:right;">Rate (₹)</th>
+          <th style="width:70px; text-align:right;" id="thDisc">Disc</th>
+          <th style="width:90px; text-align:right;">Amount (₹)</th>
+        </tr>
+      </thead>
+      <tbody id="docItemsBody">
+        <!-- Populated via JS -->
+      </tbody>
+    </table>
+
+    <!-- Totals -->
+    <table class="totals-table">
+      <tr>
+        <td>Subtotal:</td>
+        <td style="text-align:right;" id="tblSubtotal">₹0</td>
+      </tr>
+      <tr id="trDiscount" style="display:none;">
+        <td>Discount:</td>
+        <td style="text-align:right; color:#b8452b;" id="tblDiscount">-₹0</td>
+      </tr>
+      <tr class="grand">
+        <td>Total Amount:</td>
+        <td style="text-align:right;" id="tblTotal">₹0</td>
+      </tr>
+    </table>
+
+    <!-- Total in Words -->
+    <div class="amount-words" id="amountWordsBox">
+      <strong>Amount in words:</strong> <span id="amountInWordsText">Zero Rupees Only</span>
+    </div>
+
+    <!-- Notes if any -->
+    <div id="docNotesBox" style="font-size:12.5px; color:#555; margin-bottom:20px; display:none;">
+      <strong>Notes:</strong> <span id="docNotesText"></span>
+    </div>
+
+    <!-- Statutory Footer & Signatory -->
+    <footer class="doc-footer">
+      <div style="max-width:440px; color:#444;" id="statutoryDeclaration">
+        Composition taxable person, not eligible to collect tax on supplies.
+      </div>
+      <div class="signatory-box">
+        <div class="sign-line">Authorised Signatory – BROSKI</div>
+      </div>
+    </footer>
+  </article>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', async function () {
+  const params = new URLSearchParams(window.location.search);
+  const docNo = (params.get('no') || '').trim();
+  const token = (params.get('t') || params.get('token') || '').trim();
+
+  if (!docNo || !token) {
+    showNotFound();
+    return;
+  }
+
+  try {
+    const portal = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
+    if (!portal) throw new Error('Portal client not available');
+
+    const { data, error } = await portal.rpc('get_document', {
+      p_no: docNo,
+      p_token: token
+    });
+
+    if (error || !data || data.status === 'not_found') {
+      showNotFound();
+      return;
+    }
+
+    renderDoc(data);
+  } catch (e) {
+    console.error('[get_document error]', e);
+    showNotFound();
+  }
+});
+
+function showNotFound() {
+  document.getElementById('loadingBox').style.display = 'none';
+  document.getElementById('notFoundBox').style.display = 'block';
+  document.getElementById('docPaper').style.display = 'none';
+}
+
+function renderDoc(doc) {
+  document.getElementById('loadingBox').style.display = 'none';
+  document.getElementById('docPaper').style.display = 'block';
+
+  // Check cancelled
+  if (doc.doc_status === 'cancelled') {
+    const b = document.getElementById('cancelledBanner');
+    b.style.display = 'block';
+    document.getElementById('cancelReason').textContent = doc.cancel_reason || 'Cancelled';
+  }
+
+  // Business settings
+  const biz = doc.business || {};
+  document.getElementById('bizName').textContent = biz.name || 'BROSKI';
+  document.getElementById('bizAddress').textContent = biz.bill_address || 'Nangloi, West Delhi – 110041';
+  document.getElementById('bizGstin').textContent = biz.gstin ? `GSTIN: ${biz.gstin}` : 'GSTIN: [set in Settings]';
+  document.getElementById('bizState').textContent = biz.state || 'Delhi (07)';
+  document.getElementById('bizHsn').textContent = biz.hsn || '2309';
+
+  // Document Type Header
+  const titleEl = document.getElementById('docTypeTitle');
+  const subEl = document.getElementById('docTypeSubtitle');
+  const statEl = document.getElementById('statutoryDeclaration');
+
+  switch (doc.doc_type) {
+    case 'quotation':
+      titleEl.textContent = 'QUOTATION';
+      subEl.textContent = 'Valid for 7 days · Prices inclusive of all taxes';
+      statEl.textContent = 'This is a quotation and not an invoice. Goods will be dispatched after order confirmation.';
+      break;
+    case 'estimate':
+      titleEl.textContent = 'ESTIMATE / CASH MEMO';
+      subEl.textContent = 'Not a tax invoice. GST bill available on request.';
+      statEl.textContent = 'Not a tax invoice. Composition GST bill available on request.';
+      break;
+    case 'bill':
+      titleEl.textContent = 'BILL OF SUPPLY';
+      subEl.textContent = '';
+      statEl.textContent = 'Composition taxable person, not eligible to collect tax on supplies.';
+      break;
+    case 'challan':
+      titleEl.textContent = 'DELIVERY CHALLAN';
+      subEl.textContent = 'Not a sale · Stock transfer / Samples';
+      statEl.textContent = 'Goods sent for supply / approval / samples. Not a sale invoice.';
+      break;
+    case 'daily':
+      titleEl.textContent = 'DAILY CONSOLIDATED BILL';
+      subEl.textContent = 'Consolidated bill of supply for online orders under ₹200';
+      statEl.textContent = 'Composition taxable person, not eligible to collect tax on supplies.';
+      break;
+  }
+
+  document.getElementById('docNumber').textContent = doc.doc_no;
+  document.getElementById('docDate').textContent = new Date(doc.doc_date).toLocaleDateString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric'
+  });
+
+  if (doc.due_date && doc.payment_status === 'unpaid') {
+    document.getElementById('docDueDateWrap').style.display = 'block';
+    document.getElementById('docDueDate').textContent = new Date(doc.due_date).toLocaleDateString('en-IN', {
+      day: 'numeric', month: 'short', year: 'numeric'
+    });
+  }
+
+  // Party Details
+  const party = doc.party || {};
+  document.getElementById('partyName').textContent = party.name || party.customer_name || 'Walk-in Customer';
+  document.getElementById('partyAddress').textContent = party.address ? `${party.address}${party.area ? ', ' + party.area : ''}` : 'Nangloi, West Delhi';
+  document.getElementById('partyPhone').textContent = party.phone || party.customer_phone || '';
+  if (party.gstin) {
+    const gEl = document.getElementById('partyGstin');
+    gEl.style.display = 'block';
+    gEl.querySelector('span').textContent = party.gstin;
+  }
+
+  document.getElementById('partyPayMethod').textContent = doc.payment_method || 'Cash';
+  document.getElementById('partyPayStatus').textContent = (doc.payment_status || 'unpaid').toUpperCase();
+  document.getElementById('partyPayStatus').style.color = doc.payment_status === 'paid' ? '#166534' : '#b8452b';
+
+  // Business UPI QR (only if upi_vpa is set)
+  if (doc.upi_vpa && doc.payment_status === 'unpaid') {
+    const vpa = doc.upi_vpa;
+    const upiUri = `upi://pay?pa=${encodeURIComponent(vpa)}&pn=BROSKI&am=${doc.total}&cu=INR&tn=${encodeURIComponent(doc.doc_no)}`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(upiUri)}`;
+    document.getElementById('upiQrImg').src = qrUrl;
+    document.getElementById('upiQrWrap').style.display = 'block';
+  }
+
+  // Items Table
+  const tbody = document.getElementById('docItemsBody');
+  tbody.innerHTML = '';
+  let hasFree = false;
+  let hasDisc = false;
+
+  (doc.items || []).forEach((it, idx) => {
+    if (it.free_qty && it.free_qty > 0) hasFree = true;
+    if (it.discount && it.discount > 0) hasDisc = true;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="text-align:center;">${idx + 1}</td>
+      <td><strong>${escapeHtml(it.name)}</strong></td>
+      <td style="text-align:center;">${it.hsn || '2309'}</td>
+      <td style="text-align:center;">${it.qty}</td>
+      <td style="text-align:center;">${it.free_qty || '-'}</td>
+      <td style="text-align:right;">₹${it.rate}</td>
+      <td style="text-align:right;">${it.discount ? '₹' + it.discount : '-'}</td>
+      <td style="text-align:right; font-weight:700;">₹${it.amount !== undefined ? it.amount : (it.rate * it.qty)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  if (!hasFree) {
+    document.getElementById('thFreeQty').style.display = 'none';
+  }
+  if (!hasDisc) {
+    document.getElementById('thDisc').style.display = 'none';
+  }
+
+  document.getElementById('tblSubtotal').textContent = `₹${doc.subtotal || doc.total}`;
+  if (doc.discount && doc.discount > 0) {
+    document.getElementById('trDiscount').style.display = 'table-row';
+    document.getElementById('tblDiscount').textContent = `-₹${doc.discount}`;
+  }
+  document.getElementById('tblTotal').textContent = `₹${doc.total}`;
+
+  // Amount in words
+  document.getElementById('amountInWordsText').textContent = numToWords(doc.total);
+
+  // Notes
+  if (doc.notes && doc.notes.trim()) {
+    document.getElementById('docNotesBox').style.display = 'block';
+    document.getElementById('docNotesText').textContent = doc.notes;
+  }
+}
+
+function numToWords(n) {
+  if (n === 0) return 'Zero Rupees Only';
+  const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+    'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+  const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+  function inWords(num) {
+    if (num === 0) return '';
+    if (num < 20) return a[num] + ' ';
+    if (num < 100) return b[Math.floor(num / 10)] + ' ' + inWords(num % 10);
+    if (num < 1000) return a[Math.floor(num / 100)] + ' Hundred ' + inWords(num % 100);
+    if (num < 100000) return inWords(Math.floor(num / 1000)) + 'Thousand ' + inWords(num % 1000);
+    if (num < 10000000) return inWords(Math.floor(num / 100000)) + 'Lakh ' + inWords(num % 100000);
+    return inWords(Math.floor(num / 10000000)) + 'Crore ' + inWords(num % 10000000);
+  }
+
+  return (inWords(Math.floor(n)).trim() + ' Rupees Only').replace(/\s+/g, ' ');
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.toString().replace(/[&<>"']/g, function(m) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+  });
+}
+</script>
+</body>
+</html>

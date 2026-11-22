@@ -53,6 +53,12 @@
     <h1>My BROSKI</h1>
     <p class="bk-lead">Track your loyalty points balance, free sample status and past orders.</p>
 
+    <!-- Recent Orders from localStorage (if any) -->
+    <div id="recentOrdersCard" class="bk-card" style="display:none; margin-bottom:20px; background:#fffdf8; border:1.5px solid var(--line);">
+      <h3 style="font-size:17px; margin:0 0 10px;">Recent Orders on This Device</h3>
+      <div id="recentOrdersList" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+
     <!-- Login / Lookup Card -->
     <div class="bk-card" id="lookupCard">
       <h2 style="font-size:22px; margin-top:0;">Look Up Your Account</h2>
@@ -185,6 +191,34 @@ window.addEventListener('DOMContentLoaded', function () {
     footContactLink.textContent = act.type === 'whatsapp' ? 'WhatsApp' : 'support@broskipetfood.com';
     if (act.type === 'whatsapp') footContactLink.target = '_blank';
   }
+
+  // Check recent orders in localStorage
+  try {
+    const recents = JSON.parse(localStorage.getItem('broski_recent_orders') || '[]');
+    if (recents && recents.length > 0) {
+      const card = document.getElementById('recentOrdersCard');
+      const list = document.getElementById('recentOrdersList');
+      if (card && list) {
+        list.innerHTML = '';
+        recents.slice(0, 3).forEach(r => {
+          const item = document.createElement('div');
+          item.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:#fff; border:1px solid var(--line); border-radius:10px; font-size:13.5px;';
+          item.innerHTML = `
+            <div>
+              <strong>${escapeHtml(r.no)}</strong>
+              <span style="color:var(--brown-2); margin-left:6px;">₹${r.total}</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <a href="/order/?no=${encodeURIComponent(r.no)}&t=${encodeURIComponent(r.t)}" class="bk-btn bk-btn--ghost" style="min-height:34px; padding:4px 10px; font-size:12px;">Track / Slip →</a>
+              <a href="/#shop" class="bk-btn bk-btn--primary" style="min-height:34px; padding:4px 10px; font-size:12px;">Order Again</a>
+            </div>
+          `;
+          list.appendChild(item);
+        });
+        card.style.display = 'block';
+      }
+    }
+  } catch (_) {}
 
   const phoneInputEl = document.getElementById('phoneInput');
   const codeInputEl = document.getElementById('codeInput');
@@ -331,18 +365,21 @@ window.addEventListener('DOMContentLoaded', function () {
     const textEl = document.getElementById('dispSampleText');
     const s = data.sample;
 
-    if (s === 'pending') {
-      badgeEl.innerHTML = '<span class="bk-badge bk-badge--pending">Pending</span>';
-      textEl.textContent = 'Sample requested · Pending collection or dispatch';
-    } else if (s === 'verified') {
-      badgeEl.innerHTML = '<span class="bk-badge bk-badge--verified">Verified</span>';
-      textEl.textContent = 'Sample verified · Ready for pickup / dispatch';
-    } else if (s === 'handed') {
-      badgeEl.innerHTML = '<span class="bk-badge bk-badge--handed">Collected</span>';
-      textEl.textContent = 'Sample handed over · Enjoy the crunch!';
+    if (s === 'reserved' || s === 'pending' || s === 'verified') {
+      badgeEl.innerHTML = '<span class="bk-badge bk-badge--pending">Reserved</span>';
+      textEl.textContent = 'Reserved · Will ship automatically with your first order';
+    } else if (s === 'added') {
+      badgeEl.innerHTML = '<span class="bk-badge bk-badge--verified">Added to Order</span>';
+      textEl.textContent = 'Added to order · Ships with your delivery';
+    } else if (s === 'given' || s === 'handed') {
+      badgeEl.innerHTML = '<span class="bk-badge bk-badge--handed">Delivered</span>';
+      textEl.textContent = 'Sample delivered / handed over · Enjoy the crunch!';
+    } else if (s === 'expired') {
+      badgeEl.innerHTML = '<span class="bk-badge bk-badge--rejected">Expired</span>';
+      textEl.textContent = 'Claim expired after 60 days';
     } else if (s === 'rejected') {
       badgeEl.innerHTML = '<span class="bk-badge bk-badge--rejected">Not Approved</span>';
-      textEl.textContent = 'Sample request declined';
+      textEl.textContent = 'Sample request not approved';
     } else {
       badgeEl.innerHTML = '<span class="bk-badge bk-badge--pending">Not Claimed</span>';
       textEl.innerHTML = '<a href="/sample/" style="color:var(--rust-dark); font-weight:700;">Claim your free 50g sample →</a>';
@@ -352,13 +389,15 @@ window.addEventListener('DOMContentLoaded', function () {
     const ordContainer = document.getElementById('ordersContainer');
     const orders = data.orders || [];
     if (orders.length === 0) {
-      ordContainer.innerHTML = '<p class="bk-small" style="color:var(--brown-2); margin:0;">No orders found yet. <a href="/" style="color:var(--rust-dark); font-weight:700;">Order your first box today!</a></p>';
+      ordContainer.innerHTML = '<p class="bk-small" style="color:var(--brown-2); margin:0;">No orders found yet. <a href="/#shop" style="color:var(--rust-dark); font-weight:700;">Order fresh crunch today!</a></p>';
     } else {
-      let html = '<div class="bk-table-wrap"><table class="bk-table"><thead><tr><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead><tbody>';
+      let html = '<div class="bk-table-wrap"><table class="bk-table"><thead><tr><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr></thead><tbody>';
       orders.forEach(function (o) {
         const d = o.date ? new Date(o.date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : '-';
         let itemsDesc = '';
-        if (typeof o.items === 'object' && o.items !== null) {
+        if (Array.isArray(o.items)) {
+          itemsDesc = o.items.map(it => `${it.name || it.id} ×${it.qty}`).join(', ');
+        } else if (typeof o.items === 'object' && o.items !== null) {
           const parts = [];
           if (o.items.bites) parts.push(`Bites ×${o.items.bites}`);
           if (o.items.mix) parts.push(`Mix ×${o.items.mix}`);
@@ -368,7 +407,13 @@ window.addEventListener('DOMContentLoaded', function () {
           itemsDesc = String(o.items || '-');
         }
         const badgeClass = `bk-badge--${o.status || 'requested'}`;
-        html += `<tr><td>${d}</td><td>${escapeHtml(itemsDesc)}</td><td style="font-weight:700;">₹${o.total}</td><td><span class="bk-badge ${badgeClass}">${escapeHtml(o.status || 'requested')}</span></td></tr>`;
+        html += `<tr>
+          <td>${d}</td>
+          <td>${escapeHtml(itemsDesc)}</td>
+          <td style="font-weight:700;">₹${o.total}</td>
+          <td><span class="bk-badge ${badgeClass}">${escapeHtml(o.status || 'requested')}</span></td>
+          <td><a href="/#shop" class="bk-btn bk-btn--primary" style="min-height:30px; padding:3px 8px; font-size:11.5px; text-decoration:none;">Order Again</a></td>
+        </tr>`;
       });
       html += '</tbody></table></div>';
       ordContainer.innerHTML = html;
