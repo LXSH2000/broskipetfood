@@ -133,8 +133,8 @@
 
     <form id="loginForm" style="margin-top:20px;">
       <div class="bk-form-group">
-        <label class="bk-label" for="loginEmail">Username or Email</label>
-        <input class="bk-input" type="text" id="loginEmail" placeholder="itslxshay" autocomplete="username" required>
+        <label class="bk-label" for="loginUsername">Username</label>
+        <input class="bk-input" type="text" id="loginUsername" placeholder="itslxshay" autocomplete="username" required>
       </div>
 
       <div class="bk-form-group">
@@ -653,8 +653,9 @@ async function initAuth() {
     const alertEl = document.getElementById('loginAlert');
     alertEl.style.display = 'none';
 
-    const rawLogin = document.getElementById('loginEmail').value.trim();
-    const email = rawLogin.includes('@') ? rawLogin : (rawLogin + '@broskipetfood.com');
+    const usernameInput = document.getElementById('loginUsername') || document.getElementById('loginEmail');
+    const rawUsername = usernameInput.value.trim().toLowerCase();
+    const email = rawUsername.includes('@') ? rawUsername : (rawUsername + '@broskipetfood.com');
     const password = document.getElementById('loginPassword').value;
     const btn = document.getElementById('loginSubmitBtn');
     btn.disabled = true;
