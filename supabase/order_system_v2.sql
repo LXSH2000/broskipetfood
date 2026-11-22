@@ -343,16 +343,17 @@ begin
   NEW.updated_at := now();
 
   -- When status changes to delivered
-  if NEW.status = 'delivered' and (OLD.status is null or OLD.status <> 'delivered') then
+  if NEW.status = 'delivered' and (OLD.status is distinct from 'delivered') then
     -- 1. Auto-award points (1 per Rs 10 of total)
     select v into v_pts_setting from public.settings where k = 'points';
-    if v_pts_setting ? 'per_rupees' then
+    if v_pts_setting ? 'per_rupees' and (v_pts_setting->>'per_rupees')::int > 0 then
       v_per_rs := (v_pts_setting->>'per_rupees')::int;
-      if v_per_rs <= 0 then v_per_rs := 10; end if;
     end if;
 
     v_points := floor(NEW.total / v_per_rs);
-    if v_points > 0 then
+    -- Award points only once per order
+    if v_points > 0 and not exists (
+      select 1 from public.points_ledger where ref = NEW.id and reason like 'Delivered order%') then
       insert into public.points_ledger (customer_id, delta, reason, ref)
       values (NEW.customer_id, v_points, 'Delivered order ' || coalesce(NEW.public_no, ''), NEW.id);
     end if;
@@ -363,30 +364,37 @@ begin
       set status = 'given', given_at = now()
       where id = NEW.sample_claim_id and status = 'added';
     end if;
-
-    -- 3. Auto-issue bill if total >= 200
-    if NEW.total >= 200 and NEW.bill_no is null then
-      perform public.issue_bill_for_order(NEW.id);
-    end if;
   end if;
 
-  -- When order is paid and total >= 200, auto-issue bill
-  if NEW.payment_status = 'paid' and (OLD.payment_status is null or OLD.payment_status <> 'paid') then
-    if NEW.paid_at is null then
-      NEW.paid_at := now();
-    end if;
-    if NEW.total >= 200 and NEW.bill_no is null then
-      perform public.issue_bill_for_order(NEW.id);
-    end if;
+  -- Record paid_at timestamp
+  if NEW.payment_status = 'paid' and (OLD.payment_status is distinct from 'paid') and NEW.paid_at is null then
+    NEW.paid_at := now();
   end if;
 
   return NEW;
+end $$;
+
+create or replace function public.on_order_after_update() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  -- Auto-issue bill in AFTER UPDATE trigger to avoid tuple lock
+  if NEW.total >= 200 and NEW.bill_no is null and (
+       (NEW.status = 'delivered' and OLD.status is distinct from 'delivered')
+    or (NEW.payment_status = 'paid' and OLD.payment_status is distinct from 'paid')) then
+    perform public.issue_bill_for_order(NEW.id);
+  end if;
+  return null;
 end $$;
 
 drop trigger if exists trg_order_status_update on public.orders;
 create trigger trg_order_status_update
   before update on public.orders
   for each row execute function public.on_order_status_update();
+
+drop trigger if exists trg_order_after_update on public.orders;
+create trigger trg_order_after_update
+  after update on public.orders
+  for each row execute function public.on_order_after_update();
 
 -- 12. Public RPC: get_shop_settings()
 create or replace function public.get_shop_settings() returns json
@@ -534,7 +542,7 @@ create or replace function public.place_order(
   p_items jsonb,
   p_consent boolean
 ) returns json
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare
   v_phone text := public.norm_phone(p_phone);
   v_pin text := trim(p_pincode);
@@ -1244,14 +1252,23 @@ begin
   return json_build_object('status', 'ok', 'claim_id', p_claim_id, 'new_status', p_status);
 end $$;
 
+-- 22b. Admin RPC: admin_close_day(p_date)
+create or replace function public.admin_close_day(p_date date default current_date) returns json
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public.is_admin() then return json_build_object('error', 'unauthorized'); end if;
+  return public.issue_daily_consolidated(p_date);
+end $$;
+
 -- 23. Permissions Configuration
-revoke all on function public.current_fy from public;
-revoke all on function public.clean_address_key from public;
-revoke all on function public.next_doc_no from public;
-revoke all on function public.next_order_public_no from public;
-revoke all on function public.expire_old_sample_claims from public;
-revoke all on function public.issue_bill_for_order from public;
-revoke all on function public.issue_daily_consolidated from public;
+revoke all on function public.current_fy from public, anon, authenticated;
+revoke all on function public.clean_address_key from public, anon, authenticated;
+revoke all on function public.next_doc_no from public, anon, authenticated;
+revoke all on function public.next_order_public_no from public, anon, authenticated;
+revoke all on function public.expire_old_sample_claims from public, anon, authenticated;
+revoke all on function public.issue_bill_for_order from public, anon, authenticated;
+revoke all on function public.issue_daily_consolidated from public, anon, authenticated;
+revoke all on function public.admin_close_day from public, anon;
 
 revoke all on function public.get_shop_settings from public;
 revoke all on function public.check_pincode from public;
@@ -1285,7 +1302,7 @@ grant execute on function public.admin_cancel_document to anon, authenticated;
 grant execute on function public.admin_mark_doc_paid to anon, authenticated;
 grant execute on function public.admin_update_settings to anon, authenticated;
 grant execute on function public.admin_mark_sample to anon, authenticated;
-grant execute on function public.issue_daily_consolidated to anon, authenticated;
+grant execute on function public.admin_close_day to authenticated;
 grant execute on function public.expire_old_sample_claims to anon, authenticated;
 
 -- ==============================================================================

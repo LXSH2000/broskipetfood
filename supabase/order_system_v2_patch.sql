@@ -1,5 +1,13 @@
--- BROSKI Order System v2 – PATCH (23 Nov 2026) – run AFTER supabase/order_system_v2.sql
+-- BROSKI Order System v2 – PATCH (23 Nov 2026) – run in Supabase SQL Editor
 -- Safe to run more than once. Supabase → SQL Editor → paste all → Run.
+
+-- 0) Ensure sample_claims status constraint is cleanly updated without violating old checks
+alter table public.sample_claims drop constraint if exists sample_claims_status_check;
+update public.sample_claims set status = 'reserved' where status in ('pending','verified');
+update public.sample_claims set status = 'given' where status = 'handed';
+alter table public.sample_claims alter column status set default 'reserved';
+alter table public.sample_claims add constraint sample_claims_status_check
+  check (status in ('reserved','added','given','expired','rejected'));
 
 -- 1) place_order uses gen_random_bytes (pgcrypto lives in the "extensions" schema on Supabase).
 --    Its search_path is only "public", so placing an order can fail. Let it see "extensions".
