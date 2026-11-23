@@ -377,15 +377,125 @@ body.print-a5 .d-foot { margin-top: 20px !important; }
   .parties { grid-template-columns: 1fr; gap: 16px; }
   .sum { grid-template-columns: 1fr; }
 }
+
+.m-line-calc { display: none; }
+
+@media (max-width: 600px) {
+  .docwrap { padding: 0 8px 48px; }
+  .doc {
+    padding: 24px 14px 24px;
+    border-radius: 12px;
+  }
+  .brand-box img { height: 28px; }
+  .d-title .t { font-size: 20px; }
+  
+  /* Stacked Items Table */
+  table.lines thead {
+    display: none;
+  }
+  table.lines, table.lines tbody, table.lines tr.line-row {
+    display: block;
+    width: 100%;
+  }
+  table.lines tr.line-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0e8db;
+  }
+  table.lines td.col-num,
+  table.lines td.col-hsn,
+  table.lines td.col-qty,
+  table.lines td.col-rate,
+  table.lines td.col-disc,
+  table.lines td.col-amt {
+    display: none !important;
+  }
+  table.lines td.col-item {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+    box-sizing: border-box;
+  }
+  table.lines td.col-item b {
+    font-size: 14px;
+    display: block;
+  }
+  table.lines td.col-item small {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .m-line-calc {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+    padding-top: 4px;
+    font-size: 13px;
+    color: #5d4a3d;
+  }
+  .m-line-calc .m-calc-expr {
+    font-weight: 500;
+  }
+  .m-line-calc .m-amt {
+    font-weight: 700;
+    font-size: 14px;
+    color: #2a1a12;
+  }
+  
+  .totals .grand {
+    font-size: 18px;
+    padding: 12px 14px;
+  }
+  .doc-toolbar {
+    padding: 0 10px;
+    gap: 8px;
+  }
+  .tool-btns {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* Ensure print restores standard table layout */
+@media print {
+  .m-line-calc { display: none !important; }
+  table.lines { display: table !important; width: 100% !important; }
+  table.lines thead { display: table-header-group !important; }
+  table.lines tbody { display: table-row-group !important; }
+  table.lines tr.line-row { display: table-row !important; border-bottom: none !important; padding: 0 !important; }
+  table.lines td.col-num,
+  table.lines td.col-hsn,
+  table.lines td.col-qty,
+  table.lines td.col-rate,
+  table.lines td.col-disc,
+  table.lines td.col-amt {
+    display: table-cell !important;
+  }
+  table.lines td.col-item {
+    display: table-cell !important;
+    width: auto !important;
+    padding: 13px 12px !important;
+  }
+}
 </style>
 <script src="/config.js"></script>
+<script src="/supabase.js"></script>
 <script src="/portal-shared.js"></script>
 </head>
 <body>
 
 <!-- Toolbar -->
 <div class="doc-toolbar no-print">
-  <a href="/" class="tool-link">← Return to BROSKI</a>
+  <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <a href="/" class="tool-link">← Return to BROSKI</a>
+    <div id="sampleSwitcher" style="display:none; align-items:center; gap:4px; flex-wrap:wrap; background:rgba(53,32,22,.06); padding:4px 8px; border-radius:12px;">
+      <span style="font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-right:2px;">Preview:</span>
+      <button type="button" class="tbtn" id="pillEst" onclick="switchSampleType('estimate')" style="padding:3px 8px; font-size:11px;">Estimate</button>
+      <button type="button" class="tbtn" id="pillBill" onclick="switchSampleType('bill')" style="padding:3px 8px; font-size:11px;">GST Bill</button>
+      <button type="button" class="tbtn" id="pillQuote" onclick="switchSampleType('quotation')" style="padding:3px 8px; font-size:11px;">Quotation</button>
+      <button type="button" class="tbtn" id="pillChallan" onclick="switchSampleType('challan')" style="padding:3px 8px; font-size:11px;">Challan</button>
+    </div>
+  </div>
   <div class="tool-btns">
     <button type="button" class="tbtn" onclick="printDocument('a4')">🖨️ Print A4</button>
     <button type="button" class="tbtn" onclick="printDocument('a5')">📄 Print A5</button>
@@ -457,13 +567,13 @@ body.print-a5 .d-foot { margin-top: 20px !important; }
     <table class="lines">
       <thead>
         <tr>
-          <th style="width:36px">#</th>
-          <th>Item</th>
-          <th>HSN</th>
-          <th class="r">Qty</th>
-          <th class="r">Rate</th>
-          <th class="r">Disc</th>
-          <th class="r">Amount</th>
+          <th class="col-num" style="width:36px">#</th>
+          <th class="col-item">Item</th>
+          <th class="col-hsn">HSN</th>
+          <th class="col-qty r">Qty</th>
+          <th class="col-rate r">Rate</th>
+          <th class="col-disc r">Disc</th>
+          <th class="col-amt r">Amount</th>
         </tr>
       </thead>
       <tbody id="linesTableBody">
@@ -510,32 +620,142 @@ body.print-a5 .d-foot { margin-top: 20px !important; }
 <script>
 let currentDoc = null;
 
+function getSampleDoc(type) {
+  const normType = ['quotation', 'estimate', 'bill', 'challan'].includes(type) ? type : 'estimate';
+  const prefixMap = {
+    estimate: 'EST/26-27/0001',
+    bill: 'BRK/26-27/0001',
+    quotation: 'QT/26-27/0001',
+    challan: 'DC/26-27/0001'
+  };
+  return {
+    status: 'ok',
+    doc_type: normType,
+    doc_no: prefixMap[normType] || 'EST/26-27/0001',
+    fy: '26-27',
+    doc_date: '2026-11-23',
+    subtotal: 850,
+    discount: 0,
+    total: normType === 'challan' ? 0 : 850,
+    payment_method: normType === 'quotation' ? 'credit' : 'cash',
+    payment_status: normType === 'quotation' ? 'unpaid' : 'paid',
+    due_date: normType === 'quotation' ? '2026-11-30' : null,
+    notes: normType === 'challan' ? 'Goods sent for display/sample. Not for sale.' : 'Delivered 10 packs to counter',
+    items: [
+      { name: 'Bro Bites – Classic Crunch', hsn: '2309', qty: 5, free_qty: 1, rate: 80, discount: 0, amount: normType === 'challan' ? 0 : 400 },
+      { name: 'Bro Mix – Happy Mix', hsn: '2309', qty: 5, free_qty: 0, rate: 90, discount: 0, amount: normType === 'challan' ? 0 : 450 }
+    ],
+    party: {
+      name: 'Durga Medicos',
+      area: 'Dharam Colony',
+      phone: '+91 92129 44321',
+      address: 'Dharam Colony, West Delhi',
+      gstin: normType === 'bill' ? '07AAAAA0000A1Z5' : ''
+    },
+    business: {
+      name: 'BROSKI',
+      bill_address: 'Nangloi, West Delhi – 110041',
+      gstin: '07AABCU9603R1ZM',
+      state: 'Delhi (07)',
+      hsn: '2309',
+      email: 'support@broskipetfood.com'
+    },
+    upi_vpa: 'broski@axisbank'
+  };
+}
+
+function switchSampleType(type) {
+  const doc = getSampleDoc(type);
+  currentDoc = doc;
+  renderDoc(doc);
+  ['pillEst', 'pillBill', 'pillQuote', 'pillChallan'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('dark');
+  });
+  const activeId = type === 'bill' ? 'pillBill' : (type === 'quotation' ? 'pillQuote' : (type === 'challan' ? 'pillChallan' : 'pillEst'));
+  const activeEl = document.getElementById(activeId);
+  if (activeEl) activeEl.classList.add('dark');
+}
+
 window.addEventListener('DOMContentLoaded', async function () {
   const params = new URLSearchParams(window.location.search);
   const docNo = (params.get('no') || '').trim();
   const token = (params.get('t') || params.get('token') || '').trim();
+  const typeParam = (params.get('type') || '').trim().toLowerCase();
 
-  if (!docNo || !token) {
-    showNotFound();
+  // If no document number is provided, render reference Tab 2 document preview!
+  if (!docNo) {
+    const defaultType = typeParam || 'estimate';
+    const sample = getSampleDoc(defaultType);
+    currentDoc = sample;
+    renderDoc(sample);
+    const sw = document.getElementById('sampleSwitcher');
+    if (sw) sw.style.display = 'inline-flex';
+    switchSampleType(defaultType);
     return;
   }
 
   try {
     const portal = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
-    if (!portal) throw new Error('Portal client not available');
+    let docData = null;
 
-    const { data, error } = await portal.rpc('get_document', {
-      p_no: docNo,
-      p_token: token
-    });
+    if (portal && token) {
+      const { data, error } = await portal.rpc('get_document', {
+        p_no: docNo,
+        p_token: token
+      });
+      if (data && data.status !== 'not_found' && !error) {
+        docData = data;
+      }
+    }
 
-    if (error || !data || data.status === 'not_found') {
+    // Direct admin session fallback
+    if (!docData) {
+      const cfg = window.BROSKI_CONFIG || {};
+      if (window.supabase && cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY) {
+        try {
+          const client = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+          const { data: directDoc } = await client.from('documents').select('*').eq('doc_no', docNo).maybeSingle();
+          if (directDoc) {
+            docData = {
+              status: 'ok',
+              doc_type: directDoc.doc_type,
+              doc_no: directDoc.doc_no,
+              fy: directDoc.fy,
+              doc_date: directDoc.doc_date,
+              items: directDoc.items,
+              subtotal: directDoc.subtotal,
+              discount: directDoc.discount,
+              total: directDoc.total,
+              payment_method: directDoc.payment_method,
+              payment_status: directDoc.payment_status,
+              due_date: directDoc.due_date,
+              notes: directDoc.notes,
+              doc_status: directDoc.status,
+              cancel_reason: directDoc.cancel_reason,
+              party: directDoc.meta,
+              business: {
+                name: 'BROSKI',
+                bill_address: 'Nangloi, West Delhi – 110041',
+                gstin: '07AABCU9603R1ZM',
+                state: 'Delhi (07)',
+                hsn: '2309',
+                email: 'support@broskipetfood.com'
+              },
+              upi_vpa: 'broski@axisbank'
+            };
+          }
+        } catch (authErr) {}
+      }
+    }
+
+    if (!docData) {
       showNotFound();
       return;
     }
 
-    currentDoc = data;
-    renderDoc(data);
+    currentDoc = docData;
+    renderDoc(docData);
   } catch (e) {
     console.error('[get_document error]', e);
     showNotFound();
@@ -669,14 +889,23 @@ function renderDoc(doc) {
     }
 
     const tr = document.createElement('tr');
+    tr.className = 'line-row';
+    const discPart = disc > 0 ? ` (-₹${disc.toFixed(2)})` : '';
     tr.innerHTML = `
-      <td>${idx + 1}</td>
-      <td><b>${escapeHtml(it.name)}</b><small>${escapeHtml(subText)}</small></td>
-      <td>${escapeHtml(it.hsn || '2309')}</td>
-      <td class="r">${qty}</td>
-      <td class="r">₹${rate.toFixed(2)}</td>
-      <td class="r">${disc > 0 ? `₹${disc.toFixed(2)}` : '–'}</td>
-      <td class="r"><b>₹${amount.toFixed(2)}</b></td>
+      <td class="col-num">${idx + 1}</td>
+      <td class="col-item">
+        <b>${escapeHtml(it.name)}</b>
+        <small>${escapeHtml(subText)}</small>
+        <div class="m-line-calc">
+          <span class="m-calc-expr">${qty} × ₹${rate.toFixed(2)}${discPart}</span>
+          <b class="m-amt">₹${amount.toFixed(2)}</b>
+        </div>
+      </td>
+      <td class="col-hsn">${escapeHtml(it.hsn || '2309')}</td>
+      <td class="col-qty r">${qty}</td>
+      <td class="col-rate r">₹${rate.toFixed(2)}</td>
+      <td class="col-disc r">${disc > 0 ? `₹${disc.toFixed(2)}` : '–'}</td>
+      <td class="col-amt r"><b>₹${amount.toFixed(2)}</b></td>
     `;
     tbody.appendChild(tr);
   });
