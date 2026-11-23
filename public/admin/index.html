@@ -163,6 +163,12 @@
   .sign { text-align: right; }
   .sign .line { border-top: 1px solid #bfae9a; margin-top: 44px; padding-top: 6px; font-weight: 700; color: #3a271c; }
   .legal { margin-top: 16px; text-align: center; font: 600 11px var(--sans); letter-spacing: .04em; color: #8a7565; }
+  .m-lbl { display: none; font: 600 10px var(--sans); color: var(--muted); text-transform: uppercase; margin-bottom: 2px; }
+
+  .billing-subtabs {
+    display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--adm-border); padding-bottom: 8px; flex-wrap: wrap;
+    max-width: 100%;
+  }
 
   @media (max-width: 1000px) {
     .grid { grid-template-columns: 1fr; }
@@ -172,14 +178,80 @@
     .pay { grid-template-columns: 1fr; }
     .adm-billing-wrap h1 { font-size: 28px; }
   }
+
+  @media (max-width: 600px) {
+    .adm-wrap { padding: 12px 10px 100px !important; }
+    .card { padding: 16px 12px !important; }
+    .adm-billing-wrap h1 { font-size: 24px !important; }
+    .seg { width: 100%; display: flex; justify-content: space-between; }
+    .seg button { flex: 1; padding: 7px 4px; font-size: 11.5px; text-align: center; }
+
+    .billing-subtabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .billing-subtabs .adm-tab-btn {
+      width: 100%;
+      justify-content: center;
+      font-size: 12px;
+      padding: 8px 6px;
+      min-height: 38px;
+    }
+
+    .items, .items tbody, .items tr.item-row { display: block; width: 100%; box-sizing: border-box; }
+    .items thead { display: none; }
+    .items tr.item-row {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--r-md);
+      padding: 12px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px 6px;
+      align-items: center;
+    }
+    .items td { padding: 0 !important; border: 0 !important; }
+    .items .m-lbl { display: block; }
+    .items td.name { grid-column: 1 / 3; }
+    .items td.td-del { grid-column: 3 / 4; justify-self: end; }
+    .items td.td-rate { grid-column: 1 / 2; }
+    .items td.td-qty { grid-column: 2 / 3; justify-self: center; }
+    .items td.td-free { grid-column: 3 / 4; justify-self: end; }
+    .items td.td-disc { grid-column: 1 / 2; padding-top: 6px !important; border-top: 1px dashed var(--line) !important; }
+    .items td.td-amount { grid-column: 2 / 4; justify-self: end; text-align: right; padding-top: 6px !important; border-top: 1px dashed var(--line) !important; }
+    .rate-input, .disc-input { width: 76px !important; min-width: 72px !important; text-align: center; padding: 6px 8px; font-size: 13px; }
+    .stepper button { width: 26px; height: 32px; font-size: 14px; }
+    .stepper span { min-width: 22px; font-size: 13px; }
+
+    .bar { padding: 10px 12px; width: 100%; box-sizing: border-box; }
+    .bar .in { width: 100%; gap: 8px; }
+    .tot small { font-size: 10px; }
+    .tot b { font-size: 18px; }
+    .btns { gap: 6px; }
+    .btns .btn { padding: 10px 12px; font-size: 13px; white-space: nowrap; }
+  }
+
   .adm-header {
     display: flex; justify-content: space-between; align-items: center;
     padding-bottom: 16px; border-bottom: 1.5px solid var(--adm-border); margin-bottom: 20px;
     flex-wrap: wrap; gap: 12px;
   }
   .adm-nav-tabs {
-    display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    display: flex; gap: 8px; flex-wrap: wrap;
     padding: 6px 0 16px; border-bottom: 2px solid var(--adm-border); margin-bottom: 20px;
+    max-width: 100%;
+  }
+  @media (max-width: 768px) {
+    .adm-nav-tabs {
+      flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      padding-bottom: 10px;
+      scrollbar-width: none;
+      mask-image: linear-gradient(to right, black 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    }
+    .adm-nav-tabs::-webkit-scrollbar { display: none; }
   }
   .adm-tab-btn {
     flex: none; min-height: 42px; padding: 8px 16px; border-radius: 10px;
@@ -464,7 +536,7 @@
 
     <!-- TAB 7: BILLING & DOCUMENTS -->
     <section id="tab-billing" class="adm-tab-content" style="display:none;">
-      <div style="display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--adm-border); padding-bottom:8px;">
+      <div class="billing-subtabs">
         <button type="button" class="adm-tab-btn active" id="btnSubDocs" onclick="switchBillingSubTab('docs')">📄 All Documents</button>
         <button type="button" class="adm-tab-btn" id="btnSubNewDoc" onclick="switchBillingSubTab('new')">+ New Document</button>
         <button type="button" class="adm-tab-btn" id="btnSubDues" onclick="switchBillingSubTab('dues')">💰 Dues / Credit</button>
@@ -514,19 +586,38 @@
               <div class="card">
                 <h2><span class="step">1</span>Customer</h2>
                 <div class="party-pick">
-                  <span class="chip" id="chipWalkin" onclick="selectPartyKind('walkin')">Walk-in</span>
-                  <span class="chip on" id="chipShop" onclick="selectPartyKind('shop')">Pet shop</span>
+                  <span class="chip on" id="chipWalkin" onclick="selectPartyKind('walkin')">Walk-in</span>
+                  <span class="chip" id="chipShop" onclick="selectPartyKind('shop')">Pet shop</span>
                 </div>
-                <div id="shopSearchGroup" class="f" style="margin-bottom:14px; position:relative;">
+
+                <div id="walkinFields" style="margin-bottom:14px;">
+                  <div class="row">
+                    <div class="f">
+                      <label>Customer Name (optional)</label>
+                      <input id="walkinNameInput" placeholder="Walk-in Customer" oninput="handleWalkinName(this.value)">
+                    </div>
+                    <div class="f">
+                      <label>Customer Phone (optional)</label>
+                      <input id="walkinPhoneInput" placeholder="10-digit mobile number" oninput="handleWalkinPhone(this.value)">
+                    </div>
+                  </div>
+                </div>
+
+                <div id="shopSearchGroup" class="f" style="margin-bottom:14px; position:relative; display:none;">
                   <label>Search saved shops</label>
-                  <input id="shopSearchInput" value="durga" placeholder="Search saved shops" aria-label="Search saved shops" autocomplete="off" oninput="handleShopSearch(this.value)">
+                  <input id="shopSearchInput" value="" placeholder="Type shop name to search or add…" aria-label="Search saved shops" autocomplete="off" oninput="handleShopSearch(this.value)">
+                  <div id="noShopsNotice" style="display:none; font-size:12px; color:var(--muted); margin-top:6px; line-height:1.4;">
+                    No saved shops yet – type the shop name below. It will be saved when you issue the document.
+                  </div>
                   <div id="shopSearchResults" class="shop-dropdown" style="display:none;"></div>
                 </div>
-                <div class="found" id="foundShopBox">
-                  <div><b id="foundShopName">Durga Medicos</b> <span id="foundShopInfo">· Dharam Colony · +91 92129 44321</span></div>
-                  <span id="foundShopRate">Last rate: Bites ₹80 · Mix ₹90</span>
+
+                <div class="found" id="foundShopBox" style="display:none;">
+                  <div><b id="foundShopName"></b> <span id="foundShopInfo"></span></div>
+                  <span id="foundShopRate" style="display:none;"></span>
                 </div>
-                <div class="row">
+
+                <div id="shopExtraFields" class="row" style="display:none;">
                   <div class="f">
                     <label>Shop GSTIN (optional)</label>
                     <input id="partyGstinInput" placeholder="07AAAAA0000A1Z5" maxlength="15" oninput="handleGstinInput(this.value)">
@@ -534,7 +625,7 @@
                   </div>
                   <div class="f">
                     <label>Address (optional)</label>
-                    <input id="partyAddressInput" placeholder="Shop no., street" value="Dharam Colony, West Delhi" oninput="handlePartyAddressInput(this.value)">
+                    <input id="partyAddressInput" placeholder="Shop no., street" oninput="handlePartyAddressInput(this.value)">
                   </div>
                 </div>
               </div>
@@ -1305,6 +1396,22 @@ async function adminIssueBill(id) {
   }
 }
 
+async function openBillDoc(billNo) {
+  const sb = getSupabase();
+  let token = '';
+  const cached = cachedDocuments.find(d => d.doc_no === billNo);
+  if (cached && cached.token) {
+    token = cached.token;
+  } else if (sb) {
+    try {
+      const { data } = await sb.from('documents').select('token').eq('doc_no', billNo).maybeSingle();
+      if (data?.token) token = data.token;
+    } catch (e) {}
+  }
+  const url = token ? `/doc/?no=${encodeURIComponent(billNo)}&t=${encodeURIComponent(token)}` : `/doc/?no=${encodeURIComponent(billNo)}`;
+  window.open(url, '_blank');
+}
+
 function openPackingSlipModal(id) {
   const o = cachedOrders.find(x => x.id === id);
   if (!o) return;
@@ -1621,15 +1728,23 @@ function renderWaitlist() {
 }
 
 // 10. Billing & Documents Tab
+let cachedParties = [];
+
 async function loadDocuments() {
   const sb = getSupabase();
   try {
-    const { data } = await sb.from('documents').select('*').order('created_at', { ascending: false });
-    if (data) {
-      cachedDocuments = data;
+    const [docsRes, partiesRes] = await Promise.all([
+      sb.from('documents').select('*').order('created_at', { ascending: false }),
+      sb.from('parties').select('*').order('name')
+    ]);
+    if (docsRes.data) {
+      cachedDocuments = docsRes.data;
       renderDocumentsTable();
       renderDuesTable();
       renderCmpSummary();
+    }
+    if (partiesRes.data) {
+      cachedParties = partiesRes.data;
     }
   } catch (e) {
     console.warn('[loadDocuments]', e);
@@ -1801,49 +1916,11 @@ async function cancelDocPrompt(id) {
 }
 
 // ================= NEW DOCUMENT STATE & TAB 1 HANDLERS =================
-const defaultSavedShops = [
-  {
-    name: 'Durga Medicos',
-    area: 'Dharam Colony',
-    phone: '+91 92129 44321',
-    address: 'Dharam Colony, West Delhi',
-    gstin: '',
-    rates: { bites: 80, mix: 90, combo: 295, taste: 0, custom: 100 }
-  },
-  {
-    name: 'Scoobee Pet Salon',
-    area: 'Paschim Vihar',
-    phone: '+91 98111 22334',
-    address: 'B-2 Market, Paschim Vihar, West Delhi',
-    gstin: '07AAAAA0000A1Z5',
-    rates: { bites: 80, mix: 90, combo: 295, taste: 0, custom: 100 }
-  },
-  {
-    name: 'Pet Zone & Clinic',
-    area: 'Punjabi Bagh',
-    phone: '+91 98733 55667',
-    address: 'Central Market, Punjabi Bagh, West Delhi',
-    gstin: '07BBBBB1111B2Z6',
-    rates: { bites: 85, mix: 95, combo: 295, taste: 0, custom: 100 }
-  },
-  {
-    name: 'Heads Up Partner',
-    area: 'Rajouri Garden',
-    phone: '+91 99999 88888',
-    address: 'Main Market, Rajouri Garden, West Delhi',
-    gstin: '',
-    rates: { bites: 85, mix: 95, combo: 295, taste: 0, custom: 100 }
-  }
-];
-
 let newDocState = {
   docType: 'estimate',
-  partyKind: 'shop',
-  party: { ...defaultSavedShops[0] },
-  items: [
-    { id: 'bites', name: 'Bro Bites – Classic Crunch', subtitle: '400 g · HSN 2309', rate: 80, qty: 5, free_qty: 1, discount: 0, hsn: '2309' },
-    { id: 'mix', name: 'Bro Mix – Happy Mix', subtitle: '400 g · HSN 2309', rate: 90, qty: 5, free_qty: 0, discount: 0, hsn: '2309' }
-  ],
+  partyKind: 'walkin',
+  party: { name: 'Walk-in Customer', phone: '', area: 'Nangloi', address: 'Nangloi, West Delhi', gstin: '' },
+  items: [],
   paymentMethod: 'cash',
   dueDate: '',
   notes: ''
@@ -1851,12 +1928,8 @@ let newDocState = {
 
 function initNewDocState() {
   setDocType(newDocState.docType || 'estimate');
-  if (newDocState.partyKind === 'shop') {
-    selectPartyKind('shop');
-    selectShop(newDocState.party || defaultSavedShops[0]);
-  } else {
-    selectPartyKind('walkin');
-  }
+  selectPartyKind('walkin');
+  newDocState.items = [];
   renderNewDocItems();
   updateSummaryBar();
   updateLivePreview();
@@ -1871,38 +1944,74 @@ function setDocType(type) {
   updateLivePreview();
 }
 
+function handleWalkinName(val) {
+  newDocState.party.name = (val || '').trim() || 'Walk-in Customer';
+  updateLivePreview();
+}
+
+function handleWalkinPhone(val) {
+  newDocState.party.phone = (val || '').trim();
+  updateLivePreview();
+}
+
+function getShopLastRates(shopName) {
+  if (!shopName || !cachedDocuments || !cachedDocuments.length) return null;
+  const match = cachedDocuments.find(d => {
+    const name = d.party?.name || d.meta?.name || '';
+    return name.toLowerCase() === shopName.toLowerCase() && d.items && d.items.length > 0;
+  });
+  if (!match || !match.items) return null;
+  const rates = {};
+  match.items.forEach(it => {
+    const lower = (it.name || '').toLowerCase();
+    if (lower.includes('bites') || it.id === 'bites') rates.bites = it.rate;
+    if (lower.includes('mix') || it.id === 'mix') rates.mix = it.rate;
+    if (lower.includes('combo') || it.id === 'combo') rates.combo = it.rate;
+  });
+  return rates;
+}
+
 function selectPartyKind(kind) {
   newDocState.partyKind = kind;
   const chipW = document.getElementById('chipWalkin');
   const chipS = document.getElementById('chipShop');
+  const walkinFields = document.getElementById('walkinFields');
   const searchGrp = document.getElementById('shopSearchGroup');
   const foundBox = document.getElementById('foundShopBox');
-  const addrInput = document.getElementById('partyAddressInput');
+  const shopExtra = document.getElementById('shopExtraFields');
+  const notice = document.getElementById('noShopsNotice');
 
   if (kind === 'walkin') {
     if (chipW) chipW.classList.add('on');
     if (chipS) chipS.classList.remove('on');
+    if (walkinFields) walkinFields.style.display = 'block';
     if (searchGrp) searchGrp.style.display = 'none';
     if (foundBox) foundBox.style.display = 'none';
-    if (addrInput) addrInput.placeholder = 'Customer address (optional)';
+    if (shopExtra) shopExtra.style.display = 'none';
+    const wName = (document.getElementById('walkinNameInput')?.value || '').trim();
+    const wPhone = (document.getElementById('walkinPhoneInput')?.value || '').trim();
     newDocState.party = {
-      name: 'Walk-in Customer',
+      name: wName || 'Walk-in Customer',
       area: 'Nangloi',
-      phone: '',
+      phone: wPhone,
       address: 'Nangloi, West Delhi',
-      gstin: '',
-      rates: { bites: 149, mix: 179, combo: 295, taste: 0, custom: 100 }
+      gstin: ''
     };
   } else {
     if (chipS) chipS.classList.add('on');
     if (chipW) chipW.classList.remove('on');
+    if (walkinFields) walkinFields.style.display = 'none';
     if (searchGrp) searchGrp.style.display = 'block';
-    if (foundBox) foundBox.style.display = 'flex';
-    if (addrInput) addrInput.placeholder = 'Shop no., street';
-    if (!newDocState.party || newDocState.party.name === 'Walk-in Customer') {
-      newDocState.party = { ...defaultSavedShops[0] };
+    if (shopExtra) shopExtra.style.display = 'grid';
+    if (notice) {
+      notice.style.display = (!cachedParties || cachedParties.length === 0) ? 'block' : 'none';
     }
-    selectShop(newDocState.party);
+    if (!newDocState.party || newDocState.party.name === 'Walk-in Customer' || !newDocState.party.name) {
+      if (foundBox) foundBox.style.display = 'none';
+      newDocState.party = { name: '', area: '', phone: '', address: '', gstin: '' };
+    } else {
+      if (foundBox) foundBox.style.display = 'flex';
+    }
   }
   updateSummaryBar();
   updateLivePreview();
@@ -1911,101 +2020,135 @@ function selectPartyKind(kind) {
 function handleShopSearch(query) {
   const q = (query || '').toLowerCase().trim();
   const dropdown = document.getElementById('shopSearchResults');
+  const notice = document.getElementById('noShopsNotice');
   if (!dropdown) return;
+
+  if ((!cachedParties || cachedParties.length === 0) && notice) {
+    notice.style.display = 'block';
+  } else if (notice) {
+    notice.style.display = 'none';
+  }
 
   if (!q) {
     dropdown.style.display = 'none';
     return;
   }
 
-  // Combine default shops with any distinct shops from past documents
-  const allShops = [...defaultSavedShops];
-  if (cachedDocuments && cachedDocuments.length) {
-    cachedDocuments.forEach(d => {
-      const p = d.party || d.meta || {};
-      if (p.name && !allShops.some(s => s.name.toLowerCase() === p.name.toLowerCase())) {
-        allShops.push({
-          name: p.name,
-          area: p.area || 'West Delhi',
-          phone: p.phone || '',
-          address: p.address || '',
-          gstin: p.gstin || '',
-          rates: { bites: 80, mix: 90, combo: 295, taste: 0, custom: 100 }
-        });
-      }
-    });
-  }
-
-  const matches = allShops.filter(s =>
-    s.name.toLowerCase().includes(q) ||
+  const matches = (cachedParties || []).filter(s =>
+    (s.name && s.name.toLowerCase().includes(q)) ||
     (s.area && s.area.toLowerCase().includes(q)) ||
     (s.phone && s.phone.includes(q))
   );
 
-  if (matches.length === 0) {
-    dropdown.innerHTML = '<div style="padding:10px 14px; font-size:13px; color:var(--muted);">No matching shops found</div>';
-    dropdown.style.display = 'block';
-    return;
+  let html = '';
+  if (matches.length > 0) {
+    html += matches.map(s => {
+      const lastRates = getShopLastRates(s.name);
+      const rateSnippet = lastRates ? `Last rate: Bites ₹${lastRates.bites || 149} · Mix ₹${lastRates.mix || 179}` : '';
+      return `
+        <div class="shop-item" onclick="selectSavedShop('${escapeHtml(s.id)}')">
+          <div>
+            <strong style="color:var(--brown);">${escapeHtml(s.name)}</strong>
+            <div style="font-size:12px; color:var(--muted);">${escapeHtml(s.area || '')} ${s.phone ? '· ' + escapeHtml(s.phone) : ''}</div>
+          </div>
+          ${rateSnippet ? `<span style="font-size:12px; color:var(--rust); font-weight:600;">${rateSnippet}</span>` : ''}
+        </div>
+      `;
+    }).join('');
   }
 
-  dropdown.innerHTML = matches.map(s => `
-    <div class="shop-item" onclick="selectShopByName('${escapeHtml(s.name)}')">
+  html += `
+    <div class="shop-item" onclick="selectNewTypedShop('${escapeHtml(query.trim())}')" style="background:#fefbf6;">
       <div>
-        <strong style="color:var(--brown);">${escapeHtml(s.name)}</strong>
-        <div style="font-size:12px; color:var(--muted);">${escapeHtml(s.area || '')} · ${escapeHtml(s.phone || '')}</div>
+        <strong style="color:var(--rust);">+ Use "${escapeHtml(query.trim())}"</strong>
+        <div style="font-size:12px; color:var(--muted);">Create as new shop (will be saved when issued)</div>
       </div>
-      <span style="font-size:12px; color:var(--rust); font-weight:600;">Last rate: ₹${s.rates?.bites || 80} / ₹${s.rates?.mix || 90}</span>
     </div>
-  `).join('');
+  `;
+
+  dropdown.innerHTML = html;
   dropdown.style.display = 'block';
 }
 
-function selectShopByName(name) {
-  const shop = defaultSavedShops.find(s => s.name === name) || {
-    name: name,
-    area: 'West Delhi',
-    phone: '',
-    address: '',
-    gstin: '',
-    rates: { bites: 80, mix: 90, combo: 295, taste: 0, custom: 100 }
-  };
-  selectShop(shop);
-  const dropdown = document.getElementById('shopSearchResults');
-  if (dropdown) dropdown.style.display = 'none';
-}
-
-function selectShop(shop) {
+function selectSavedShop(id) {
+  const shop = (cachedParties || []).find(p => p.id === id);
+  if (!shop) return;
   newDocState.party = { ...shop };
   const nameEl = document.getElementById('foundShopName');
   const infoEl = document.getElementById('foundShopInfo');
   const rateEl = document.getElementById('foundShopRate');
   const gstinInput = document.getElementById('partyGstinInput');
   const addrInput = document.getElementById('partyAddressInput');
+  const foundBox = document.getElementById('foundShopBox');
   const searchInput = document.getElementById('shopSearchInput');
 
   if (nameEl) nameEl.textContent = shop.name;
-  if (infoEl) infoEl.textContent = `· ${shop.area || 'West Delhi'} · ${shop.phone || ''}`;
+  if (infoEl) infoEl.textContent = `· ${shop.area || 'West Delhi'} ${shop.phone ? '· ' + shop.phone : ''}`;
+
+  const lastRates = getShopLastRates(shop.name);
   if (rateEl) {
-    const bRate = shop.rates?.bites || 80;
-    const mRate = shop.rates?.mix || 90;
-    rateEl.textContent = `Last rate: Bites ₹${bRate} · Mix ₹${mRate}`;
+    if (lastRates && (lastRates.bites || lastRates.mix)) {
+      rateEl.textContent = `Last rate: Bites ₹${lastRates.bites || 149} · Mix ₹${lastRates.mix || 179}`;
+      rateEl.style.display = 'inline';
+    } else {
+      rateEl.style.display = 'none';
+    }
   }
+
   if (gstinInput) {
     gstinInput.value = shop.gstin || '';
     handleGstinInput(shop.gstin || '');
   }
-  if (addrInput) addrInput.value = shop.address || (shop.area ? `${shop.area}, West Delhi` : '');
-  if (searchInput && searchInput.value !== shop.name) {
-    searchInput.value = shop.name;
+  if (addrInput) addrInput.value = shop.address || '';
+  if (foundBox) foundBox.style.display = 'flex';
+  if (searchInput) searchInput.value = shop.name;
+
+  const dropdown = document.getElementById('shopSearchResults');
+  if (dropdown) dropdown.style.display = 'none';
+
+  if (lastRates) {
+    newDocState.items.forEach(it => {
+      if (it.id === 'bites' && lastRates.bites) it.rate = lastRates.bites;
+      if (it.id === 'mix' && lastRates.mix) it.rate = lastRates.mix;
+      if (it.id === 'combo' && lastRates.combo) it.rate = lastRates.combo;
+    });
   }
 
-  // Auto-apply shop's last rates to existing items in list
-  newDocState.items.forEach(it => {
-    if (it.id === 'bites' && shop.rates?.bites) it.rate = shop.rates.bites;
-    if (it.id === 'mix' && shop.rates?.mix) it.rate = shop.rates.mix;
-  });
-
   renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
+}
+
+function selectNewTypedShop(name) {
+  newDocState.party = {
+    name: name,
+    area: '',
+    phone: '',
+    address: '',
+    gstin: ''
+  };
+  const nameEl = document.getElementById('foundShopName');
+  const infoEl = document.getElementById('foundShopInfo');
+  const rateEl = document.getElementById('foundShopRate');
+  const gstinInput = document.getElementById('partyGstinInput');
+  const addrInput = document.getElementById('partyAddressInput');
+  const foundBox = document.getElementById('foundShopBox');
+  const searchInput = document.getElementById('shopSearchInput');
+
+  if (nameEl) nameEl.textContent = name;
+  if (infoEl) infoEl.textContent = '· New Shop';
+  if (rateEl) rateEl.style.display = 'none';
+  if (gstinInput) {
+    gstinInput.value = '';
+    handleGstinInput('');
+  }
+  if (addrInput) addrInput.value = '';
+  if (foundBox) foundBox.style.display = 'flex';
+  if (searchInput) searchInput.value = name;
+
+  const dropdown = document.getElementById('shopSearchResults');
+  if (dropdown) dropdown.style.display = 'none';
+
   updateSummaryBar();
   updateLivePreview();
 }
@@ -2054,7 +2197,7 @@ function handleTileClick(prodId) {
   }
 
   let newItem = null;
-  const rates = newDocState.party?.rates || {};
+  const lastRates = getShopLastRates(newDocState.party?.name) || {};
 
   if (prodId === 'bites') {
     newItem = {
@@ -2062,7 +2205,7 @@ function handleTileClick(prodId) {
       name: 'Bro Bites – Classic Crunch',
       subtitle: '400 g · HSN 2309',
       hsn: '2309',
-      rate: rates.bites || 149,
+      rate: lastRates.bites || 149,
       qty: 1,
       free_qty: 0,
       discount: 0
@@ -2073,7 +2216,7 @@ function handleTileClick(prodId) {
       name: 'Bro Mix – Happy Mix',
       subtitle: '400 g · HSN 2309',
       hsn: '2309',
-      rate: rates.mix || 179,
+      rate: lastRates.mix || 179,
       qty: 1,
       free_qty: 0,
       discount: 0
@@ -2084,7 +2227,7 @@ function handleTileClick(prodId) {
       name: 'Bro Combo',
       subtitle: '2 × 400 g · ₹295',
       hsn: '2309',
-      rate: rates.combo || 295,
+      rate: lastRates.combo || 295,
       qty: 1,
       free_qty: 0,
       discount: 0
@@ -2140,6 +2283,11 @@ function renderNewDocItems() {
   if (!tbody) return;
   tbody.innerHTML = '';
 
+  if (!newDocState.items || newDocState.items.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px 12px; color:var(--muted); font-size:13.5px;">No items added yet. Tap a product tile above to add.</td></tr>`;
+    return;
+  }
+
   newDocState.items.forEach((it, idx) => {
     const qty = it.qty || 1;
     const rate = it.rate || 0;
@@ -2147,36 +2295,41 @@ function renderNewDocItems() {
     const lineAmt = Math.max(0, (rate * qty) - disc);
 
     const tr = document.createElement('tr');
+    tr.className = 'item-row';
     tr.innerHTML = `
       <td class="name">
         <b>${escapeHtml(it.name)}</b>
         <small>${escapeHtml(it.subtitle || '400 g · HSN 2309')}</small>
       </td>
-      <td>
-        <input type="number" class="cell" value="${rate}" min="0" oninput="updateItemRate(${idx}, this.value)">
+      <td class="td-rate">
+        <span class="m-lbl">Rate ₹</span>
+        <input type="number" class="cell rate-input" value="${rate}" min="0" oninput="updateItemRate(${idx}, this.value)">
       </td>
-      <td>
+      <td class="td-qty">
+        <span class="m-lbl">Qty</span>
         <span class="stepper">
           <button type="button" onclick="updateItemQty(${idx}, -1)">−</button>
           <span>${qty}</span>
           <button type="button" onclick="updateItemQty(${idx}, 1)">+</button>
         </span>
       </td>
-      <td>
+      <td class="td-free">
+        <span class="m-lbl">Free</span>
         <span class="stepper">
           <button type="button" onclick="updateItemFree(${idx}, -1)">−</button>
           <span>${it.free_qty || 0}</span>
           <button type="button" onclick="updateItemFree(${idx}, 1)">+</button>
         </span>
       </td>
-      <td>
-        <input type="number" class="cell" value="${disc}" min="0" oninput="updateItemDisc(${idx}, this.value)">
+      <td class="td-disc">
+        <span class="m-lbl">Disc ₹</span>
+        <input type="number" class="cell disc-input" value="${disc}" min="0" oninput="updateItemDisc(${idx}, this.value)">
       </td>
-      <td class="n">
+      <td class="n td-amount">
         <span class="amount">₹${lineAmt}</span>
         ${it.free_qty > 0 ? `<br><span class="free-tag">+${it.free_qty} free</span>` : ''}
       </td>
-      <td>
+      <td class="td-del">
         <button type="button" class="del" onclick="removeItem(${idx})" aria-label="Remove">×</button>
       </td>
     `;
@@ -2256,7 +2409,7 @@ function updateSummaryBar() {
   let packCount = 0;
   let freeCount = 0;
 
-  newDocState.items.forEach(it => {
+  (newDocState.items || []).forEach(it => {
     const qty = it.qty || 1;
     const rate = it.rate || 0;
     const disc = it.discount || 0;
@@ -2279,13 +2432,20 @@ function updateSummaryBar() {
   else if (newDocState.docType === 'quotation') typeTitle = 'Quotation';
   else if (newDocState.docType === 'challan') typeTitle = 'Delivery Challan';
 
-  const packSummaryText = `${typeTitle} · ${packCount} packs${freeCount > 0 ? ` + ${freeCount} free` : ''}`;
+  const packSummaryText = `${typeTitle} · ${packCount} pack${packCount === 1 ? '' : 's'}${freeCount > 0 ? ` + ${freeCount} free` : ''}`;
 
   const barSummaryEl = document.getElementById('barDocSummary');
   const barTotalEl = document.getElementById('barGrandTotal');
+  const saveBtn = document.getElementById('btnSaveIssueDoc');
 
   if (barSummaryEl) barSummaryEl.textContent = packSummaryText;
   if (barTotalEl) barTotalEl.textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
+
+  // Disable "Save & issue" until at least 1 item with qty >= 1
+  if (saveBtn) {
+    const hasItems = newDocState.items && newDocState.items.some(i => (i.qty || 0) >= 1);
+    saveBtn.disabled = !hasItems;
+  }
 
   return { subtotal, totalDisc, grandTotal, packCount, freeCount };
 }
@@ -2564,14 +2724,11 @@ async function handleSaveAndIssueDocument() {
     const docNo = res.data?.doc_no || 'Document';
     const token = res.data?.token || '';
 
-    // REQUIREMENT 3: if ok show a success toast with the number and open /doc/?no=…&t=… plus Print / PDF / WhatsApp
+    // REQUIREMENT 3 & Fix 4: show success toast with number and Open/Print/WhatsApp buttons (no automatic window.open to prevent popup blocking)
     showAdminToast(`Document ${docNo} created & issued successfully!`, {
       docNo: docNo,
       token: token
     });
-
-    // Open document in new window
-    window.open(`/doc/?no=${encodeURIComponent(docNo)}&t=${encodeURIComponent(token)}`, '_blank');
 
     await loadDocuments();
     switchBillingSubTab('docs');
