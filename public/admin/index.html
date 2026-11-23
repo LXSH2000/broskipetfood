@@ -9,7 +9,7 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
 <link rel="stylesheet" href="/broski-pages.css">
 <style>
   :root {
@@ -19,9 +19,159 @@
     --adm-dark: #352016;
     --adm-rust: #b8452b;
     --adm-green: #166534;
+
+    /* BROSKI Design Reference Tokens */
+    --cream: #f5efe4;
+    --paper: #fbf7ef;
+    --white: #fffdf9;
+    --brown: #352016;
+    --brown-2: #5a4033;
+    --muted: #8a7565;
+    --rust: #b8452b;
+    --mustard: #e2a72e;
+    --line: #e6dccb;
+    --line-2: #efe7d9;
+    --ok: #1f8f4e;
+    --r-lg: 20px;
+    --r-md: 14px;
+    --r-sm: 10px;
+    --shadow: 0 1px 2px rgba(53,32,22,.05), 0 8px 24px rgba(53,32,22,.06);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
   }
-  body { background: var(--adm-bg); color: var(--adm-dark); }
-  .adm-wrap { max-width: 1100px; padding: 20px 16px 80px; margin: 0 auto; }
+  body { background: var(--adm-bg); color: var(--adm-dark); font-family: var(--sans); }
+  .adm-wrap { max-width: 1280px; padding: 20px 16px 100px; margin: 0 auto; }
+
+  /* Design Reference Tab 1 & Tab 2 Styles */
+  .adm-billing-wrap { max-width: 1280px; margin: 0 auto; padding: 12px 0 60px; }
+  .adm-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+  .eyebrow { font: 600 11px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--rust); }
+  .adm-billing-wrap h1 { font: 600 34px/1.1 var(--serif); margin: 8px 0 0; letter-spacing: -.01em; color: var(--brown); }
+  .seg { display: inline-flex; background: var(--white); border: 1px solid var(--line); border-radius: 999px; padding: 4px; }
+  .seg button { font: 600 13px var(--sans); border: 0; background: transparent; color: var(--brown-2); padding: 9px 14px; border-radius: 999px; cursor: pointer; transition: all .15s ease; }
+  .seg button.on { background: var(--brown); color: var(--paper); }
+
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) 440px; gap: 24px; align-items: start; }
+  .card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 22px 24px; margin-bottom: 18px; }
+  .card h2 { display: flex; align-items: center; gap: 10px; font: 600 16px var(--sans); margin: 0 0 18px; color: var(--brown); }
+  .step { width: 24px; height: 24px; border-radius: 50%; background: var(--brown); color: var(--paper); display: grid; place-items: center; font: 700 12px var(--sans); flex-shrink: 0; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .f label { display: block; font: 600 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .f input, .f select, .f textarea { width: 100%; min-height: 46px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--paper); padding: 11px 14px; font: 500 15px var(--sans); color: var(--brown); outline: none; transition: border-color .15s, box-shadow .15s; box-sizing: border-box; }
+  .f input:focus, .f select:focus, .f textarea:focus { border-color: var(--brown-2); box-shadow: 0 0 0 3px rgba(90,64,51,.12); background: var(--white); }
+  .f .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  .party-pick { display: flex; gap: 10px; margin-bottom: 14px; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 8px 14px; font: 600 13px var(--sans); color: var(--brown-2); cursor: pointer; transition: all .15s ease; user-select: none; }
+  .chip.on { border-color: var(--brown); background: var(--brown); color: var(--paper); }
+  .found { display: flex; justify-content: space-between; align-items: center; background: #f3ead9; border: 1px dashed #d9c9ad; border-radius: var(--r-md); padding: 12px 14px; margin-bottom: 14px; font-size: 14px; flex-wrap: wrap; gap: 6px; }
+  .found b { font-weight: 700; color: var(--brown); }
+  .found span { color: var(--muted); }
+
+  .shop-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--white); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: 0 8px 24px rgba(53,32,22,.12); z-index: 50; max-height: 220px; overflow-y: auto; margin-top: 4px; }
+  .shop-item { padding: 10px 14px; border-bottom: 1px solid var(--line-2); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .shop-item:last-child { border-bottom: 0; }
+  .shop-item:hover { background: var(--paper); }
+
+  /* Product Picker Tiles */
+  .picker { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+  .prod { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--paper); padding: 12px 10px; text-align: left; cursor: pointer; transition: transform .12s, border-color .12s; font-family: var(--sans); }
+  .prod:hover { transform: translateY(-1px); border-color: var(--brown-2); }
+  .prod .sw { height: 40px; border-radius: 8px; margin-bottom: 10px; display: grid; place-items: center; font: 700 11px var(--sans); letter-spacing: .06em; }
+  .sw.y { background: #f6d45e; color: #5a3d07; }
+  .sw.w { background: #f4efe6; color: var(--brown-2); border: 1px solid var(--line); }
+  .sw.c { background: linear-gradient(90deg, #f6d45e 50%, #f4efe6 50%); color: var(--brown); }
+  .sw.s { background: #efe2cf; color: var(--brown-2); }
+  .sw.x { background: transparent; border: 1px dashed var(--line); color: var(--muted); }
+  .prod b { display: block; font: 700 13px/1.25 var(--sans); color: var(--brown); }
+  .prod small { color: var(--muted); font-size: 12px; }
+
+  /* Items Table */
+  .items { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .items th { font: 600 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0 8px 10px; border-bottom: 1px solid var(--line); }
+  .items th.n, .items td.n { text-align: right; }
+  .items td { padding: 12px 8px; border-bottom: 1px solid var(--line-2); vertical-align: middle; font-size: 14px; }
+  .items .name b { display: block; font-weight: 700; color: var(--brown); }
+  .items .name small { color: var(--muted); }
+  .cell { width: 100%; min-height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); text-align: right; padding: 8px 10px; font: 600 14px var(--sans); color: var(--brown); outline: none; box-sizing: border-box; }
+  .cell:focus { border-color: var(--brown-2); background: var(--white); }
+  .stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
+  .stepper button { width: 30px; height: 34px; border: 0; background: transparent; font: 700 16px var(--sans); color: var(--brown-2); cursor: pointer; display: grid; place-items: center; }
+  .stepper span { min-width: 28px; text-align: center; font: 700 14px var(--sans); }
+  .del { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--white); color: var(--muted); cursor: pointer; display: inline-grid; place-items: center; font-size: 16px; line-height: 1; }
+  .del:hover { color: var(--rust); border-color: var(--rust); }
+  .amount { font: 700 15px var(--sans); color: var(--brown); }
+  .free-tag { display: inline-block; margin-top: 4px; font: 700 11px var(--sans); color: var(--ok); background: #e6f4ea; border-radius: 999px; padding: 2px 8px; }
+
+  /* Payment & Notes */
+  .pay { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .pay label { display: flex; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 14px; background: var(--paper); font: 600 14px var(--sans); cursor: pointer; color: var(--brown); }
+  .pay label.on { border-color: var(--brown); box-shadow: 0 0 0 3px rgba(53,32,22,.08); background: var(--white); }
+  .pay input { accent-color: var(--brown); }
+
+  /* Sticky Preview Column */
+  .side { position: sticky; top: 84px; }
+  .side .label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .side .label span { font: 600 12px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .mini { transform-origin: top left; width: 794px; transform: scale(.554); height: calc(1123px * .554); overflow: hidden; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--line); }
+  .mini-wrap { height: calc(1123px * .554); overflow: hidden; }
+
+  /* Sticky Bottom Bar */
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(255,253,249,.96); backdrop-filter: blur(8px); border-top: 1px solid var(--line); padding: 14px 24px; z-index: 9000; box-shadow: 0 -4px 16px rgba(53,32,22,.06); }
+  .bar .in { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .tot small { display: block; font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .tot b { font: 600 28px var(--serif); color: var(--brown); }
+  .btn { font: 700 15px var(--sans); border-radius: 999px; padding: 14px 24px; border: 1px solid var(--brown); cursor: pointer; transition: all .15s ease; }
+  .btn.dark { background: var(--brown); color: var(--paper); }
+  .btn.ghost { background: var(--white); color: var(--brown); }
+  .btn.dark:hover { opacity: .92; }
+  .btn.ghost:hover { background: var(--paper); }
+  .btns { display: flex; gap: 10px; }
+
+  /* Document Inside Preview */
+  .doc { width: 794px; min-height: 1123px; background: #fff; color: #2a1a12; box-shadow: 0 10px 40px rgba(53,32,22,.12); padding: 56px 60px 48px; position: relative; font-family: var(--sans); box-sizing: border-box; }
+  .doc::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 6px; background: linear-gradient(90deg, var(--brown) 0 70%, var(--mustard) 70% 85%, var(--rust) 85%); }
+  .d-head { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 28px; border-bottom: 1px solid #eadfcd; }
+  .brand-box img { height: 34px; width: auto; display: block; }
+  .brand-box small { display: block; font: 500 12px/1.5 var(--sans); letter-spacing: 0; color: #7a6556; margin-top: 10px; }
+  .d-title { text-align: right; }
+  .d-title .t { font: 600 26px var(--serif); letter-spacing: .02em; color: #2a1a12; }
+  .d-title .badge { display: inline-block; margin-top: 8px; font: 700 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--rust); border: 1px solid #e8c4b8; border-radius: 999px; padding: 4px 10px; }
+  .meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 24px 0; border: 1px solid #eadfcd; border-radius: 12px; overflow: hidden; }
+  .meta > div { padding: 12px 16px; border-right: 1px solid #eadfcd; }
+  .meta > div:last-child { border-right: 0; }
+  .k { font: 700 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: #9a8574; margin-bottom: 5px; }
+  .v { font: 600 14px var(--sans); color: #2a1a12; }
+  .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 26px; }
+  .parties .v { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .parties p { margin: 0; font-size: 13px; line-height: 1.6; color: #5d4a3d; }
+  table.lines { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .lines thead th { background: #f6efe3; color: #6b5546; font: 700 10px var(--sans); letter-spacing: .1em; text-transform: uppercase; text-align: left; padding: 11px 12px; }
+  .lines thead th:first-child { border-radius: 8px 0 0 8px; }
+  .lines thead th:last-child { border-radius: 0 8px 8px 0; }
+  .lines td { padding: 13px 12px; border-bottom: 1px solid #f0e8db; vertical-align: top; }
+  .lines .r { text-align: right; }
+  .lines td b { font-weight: 700; color: #2a1a12; }
+  .lines td small { color: #8a7565; display: block; margin-top: 2px; }
+  .sum { display: grid; grid-template-columns: 1fr 280px; gap: 28px; margin-top: 22px; align-items: start; }
+  .words { font-size: 12.5px; line-height: 1.6; color: #5d4a3d; background: #fbf7ef; border: 1px solid #eee3d2; border-radius: 10px; padding: 12px 14px; }
+  .totals div { display: flex; justify-content: space-between; padding: 7px 0; font-size: 13.5px; color: #5d4a3d; }
+  .totals .grand { margin-top: 6px; padding: 14px 16px; background: var(--brown); color: #fbf7ef; border-radius: 10px; font: 600 20px var(--serif); }
+  .totals .grand span:first-child { font: 600 12px var(--sans); letter-spacing: .1em; text-transform: uppercase; align-self: center; }
+  .d-foot { position: absolute; left: 60px; right: 60px; bottom: 48px; }
+  .foot-grid { display: grid; grid-template-columns: 1fr 1fr 180px; gap: 20px; padding-top: 18px; border-top: 1px solid #eadfcd; font-size: 12px; line-height: 1.6; color: #6b5546; }
+  .sign { text-align: right; }
+  .sign .line { border-top: 1px solid #bfae9a; margin-top: 44px; padding-top: 6px; font-weight: 700; color: #3a271c; }
+  .legal { margin-top: 16px; text-align: center; font: 600 11px var(--sans); letter-spacing: .04em; color: #8a7565; }
+
+  @media (max-width: 1000px) {
+    .grid { grid-template-columns: 1fr; }
+    .side { display: none; }
+    .picker { grid-template-columns: repeat(2, 1fr); }
+    .row { grid-template-columns: 1fr; }
+    .pay { grid-template-columns: 1fr; }
+    .adm-billing-wrap h1 { font-size: 28px; }
+  }
   .adm-header {
     display: flex; justify-content: space-between; align-items: center;
     padding-bottom: 16px; border-bottom: 1.5px solid var(--adm-border); margin-bottom: 20px;
@@ -152,6 +302,17 @@
 
   <!-- Dashboard Container (Authenticated) -->
   <main id="dashboardWrap" style="display:none;">
+    <!-- Global Admin RPC Error Banner -->
+    <div id="adminErrorBanner" class="adm-warning-banner" style="display:none; background:#fee2e2; border:1.5px solid #ef4444; color:#991b1b; padding:14px 18px; border-radius:12px; font-size:14px; font-weight:700; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:18px;">⚠️</span>
+          <span id="adminErrorBannerText">Error reason</span>
+        </div>
+        <button type="button" onclick="hideAdminError()" style="border:none; background:transparent; font-size:20px; font-weight:700; color:#991b1b; cursor:pointer; line-height:1;">×</button>
+      </div>
+    </div>
+
     <!-- System Warning if GSTIN / Address not set -->
     <div id="settingsNotice" class="adm-warning-banner" style="display:none;">
       ⚠️ <strong>Notice:</strong> Business GSTIN or Bill Address is not set in Settings. GST bills will display <em>"GSTIN: [set in Settings]"</em>. Update under the <strong>Settings</strong> tab.
@@ -331,109 +492,125 @@
         </div>
       </div>
 
-      <!-- Sub-Tab 2: New Document Form -->
+      <!-- Sub-Tab 2: New Document Form (Matches Tab 1 exactly) -->
       <div id="subtab-new" style="display:none;">
-        <div class="bk-card" style="max-width:760px; margin:0 auto; padding:24px;">
-          <h2 style="margin-top:0;">Create Offline Document</h2>
-          <form id="newDocForm" onsubmit="handleCreateDocument(event)">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
-              <div>
-                <label class="bk-label" for="docTypeSelect">Document Type *</label>
-                <select id="docTypeSelect" class="bk-input" required onchange="onDocTypeChange()">
-                  <option value="estimate">Estimate / Cash Memo (EST/)</option>
-                  <option value="bill">Bill of Supply (BRK/)</option>
-                  <option value="quotation">Quotation (QT/)</option>
-                  <option value="challan">Delivery Challan (DC/)</option>
-                </select>
+        <div class="adm-billing-wrap">
+          <div class="adm-head">
+            <div>
+              <div class="eyebrow">Billing · New</div>
+              <h1>Create document</h1>
+            </div>
+            <div class="seg" role="tablist" aria-label="Document type" id="docTypeSwitch">
+              <button type="button" data-type="quotation" onclick="setDocType('quotation')">Quotation</button>
+              <button type="button" class="on" data-type="estimate" onclick="setDocType('estimate')">Estimate</button>
+              <button type="button" data-type="bill" onclick="setDocType('bill')">GST Bill</button>
+              <button type="button" data-type="challan" onclick="setDocType('challan')">Challan</button>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div>
+              <!-- Card 1: Customer -->
+              <div class="card">
+                <h2><span class="step">1</span>Customer</h2>
+                <div class="party-pick">
+                  <span class="chip" id="chipWalkin" onclick="selectPartyKind('walkin')">Walk-in</span>
+                  <span class="chip on" id="chipShop" onclick="selectPartyKind('shop')">Pet shop</span>
+                </div>
+                <div id="shopSearchGroup" class="f" style="margin-bottom:14px; position:relative;">
+                  <label>Search saved shops</label>
+                  <input id="shopSearchInput" value="durga" placeholder="Search saved shops" aria-label="Search saved shops" autocomplete="off" oninput="handleShopSearch(this.value)">
+                  <div id="shopSearchResults" class="shop-dropdown" style="display:none;"></div>
+                </div>
+                <div class="found" id="foundShopBox">
+                  <div><b id="foundShopName">Durga Medicos</b> <span id="foundShopInfo">· Dharam Colony · +91 92129 44321</span></div>
+                  <span id="foundShopRate">Last rate: Bites ₹80 · Mix ₹90</span>
+                </div>
+                <div class="row">
+                  <div class="f">
+                    <label>Shop GSTIN (optional)</label>
+                    <input id="partyGstinInput" placeholder="07AAAAA0000A1Z5" maxlength="15" oninput="handleGstinInput(this.value)">
+                    <div class="hint" id="gstinHint">15 characters – checked automatically</div>
+                  </div>
+                  <div class="f">
+                    <label>Address (optional)</label>
+                    <input id="partyAddressInput" placeholder="Shop no., street" value="Dharam Colony, West Delhi" oninput="handlePartyAddressInput(this.value)">
+                  </div>
+                </div>
               </div>
-              <div>
-                <label class="bk-label" for="partyTypeSelect">Party Kind *</label>
-                <select id="partyTypeSelect" class="bk-input" onchange="onPartyKindChange()">
-                  <option value="walkin">Walk-in Customer</option>
-                  <option value="shop">Saved / New Pet Shop</option>
-                </select>
+
+              <!-- Card 2: Items -->
+              <div class="card">
+                <h2><span class="step">2</span>Items</h2>
+                <div class="picker">
+                  <button type="button" class="prod" onclick="handleTileClick('bites')">
+                    <div class="sw y">BITES</div>
+                    <b>Bro Bites – Classic Crunch</b>
+                    <small>400 g · MRP ₹149</small>
+                  </button>
+                  <button type="button" class="prod" onclick="handleTileClick('mix')">
+                    <div class="sw w">MIX</div>
+                    <b>Bro Mix – Happy Mix</b>
+                    <small>400 g · MRP ₹179</small>
+                  </button>
+                  <button type="button" class="prod" onclick="handleTileClick('combo')">
+                    <div class="sw c">COMBO</div>
+                    <b>Bro Combo</b>
+                    <small>2 × 400 g · ₹295</small>
+                  </button>
+                  <button type="button" class="prod" onclick="handleTileClick('taste')">
+                    <div class="sw s">50 g</div>
+                    <b>Taste pack</b>
+                    <small>Sample · ₹0</small>
+                  </button>
+                  <button type="button" class="prod" onclick="handleTileClick('custom')">
+                    <div class="sw x">+</div>
+                    <b>Custom item</b>
+                    <small>Any name &amp; rate</small>
+                  </button>
+                </div>
+                <table class="items" id="newDocItemsTable">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th class="n" style="width:104px">Rate ₹</th>
+                      <th style="width:112px">Qty</th>
+                      <th style="width:96px">Free</th>
+                      <th class="n" style="width:96px">Disc ₹</th>
+                      <th class="n" style="width:96px">Amount</th>
+                      <th style="width:40px"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="newDocItemsBody">
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Card 3: Payment & notes -->
+              <div class="card">
+                <h2><span class="step">3</span>Payment &amp; notes</h2>
+                <div class="pay">
+                  <label class="on" id="payLabelCash"><input type="radio" name="payRadio" value="cash" checked onchange="setPaymentMethod('cash')"> Cash</label>
+                  <label id="payLabelUpi"><input type="radio" name="payRadio" value="upi" onchange="setPaymentMethod('upi')"> UPI</label>
+                  <label id="payLabelCredit"><input type="radio" name="payRadio" value="credit" onchange="setPaymentMethod('credit')"> Credit (pay later)</label>
+                </div>
+                <div id="creditDueDateRow" class="f" style="display:none; margin-bottom:14px;">
+                  <label>Due Date</label>
+                  <input type="date" id="creditDueDateInput" onchange="setDueDate(this.value)">
+                </div>
+                <div class="f">
+                  <label>Notes (optional – printed on the document)</label>
+                  <textarea id="docNotesInput" rows="2" placeholder="e.g. Delivered 10 packs to counter" oninput="setDocNotes(this.value)"></textarea>
+                </div>
               </div>
             </div>
 
-            <!-- Party Details -->
-            <div id="partyFields" style="background:#f7efe2; padding:16px; border-radius:12px; margin-bottom:16px;">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                <div>
-                  <label class="bk-label" for="partyName">Party Name *</label>
-                  <input type="text" id="partyName" class="bk-input" placeholder="Shop Name / Customer Name" required>
-                </div>
-                <div>
-                  <label class="bk-label" for="partyPhone">Phone Number</label>
-                  <input type="tel" id="partyPhone" class="bk-input" placeholder="10-digit mobile">
-                </div>
-                <div>
-                  <label class="bk-label" for="partyArea">Area / Colony</label>
-                  <input type="text" id="partyArea" class="bk-input" placeholder="e.g. Nangloi / Paschim Vihar">
-                </div>
-                <div>
-                  <label class="bk-label" for="partyGstin">Party GSTIN (Optional)</label>
-                  <input type="text" id="partyGstin" class="bk-input" placeholder="07AAAAA0000A1Z5">
-                </div>
-              </div>
-            </div>
-
-            <!-- Items Repeater -->
-            <div style="margin-bottom:16px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <label class="bk-label" style="margin:0;">Items / Products</label>
-                <button type="button" class="adm-action-btn" onclick="addDocItemRow()">+ Add Item</button>
-              </div>
-              <table class="adm-table" id="newDocItemsTable">
-                <thead>
-                  <tr>
-                    <th>Item Description</th>
-                    <th style="width:70px;">Rate (₹)</th>
-                    <th style="width:60px;">Qty</th>
-                    <th style="width:60px;">Free</th>
-                    <th style="width:70px;">Disc (₹)</th>
-                    <th style="width:80px; text-align:right;">Amount</th>
-                    <th style="width:40px;"></th>
-                  </tr>
-                </thead>
-                <tbody id="newDocItemsBody">
-                  <!-- Rows added dynamically -->
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Totals & Payment -->
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
-              <div>
-                <label class="bk-label" for="docPayMethod">Payment Method</label>
-                <select id="docPayMethod" class="bk-input" onchange="onDocPaymentMethodChange()">
-                  <option value="cash">Cash</option>
-                  <option value="upi">UPI (Business Account)</option>
-                  <option value="credit">Credit (Pay Later)</option>
-                </select>
-                <div id="creditDueWrap" style="margin-top:8px; display:none;">
-                  <label class="bk-label" for="docDueDate">Due Date</label>
-                  <input type="date" id="docDueDate" class="bk-input">
-                </div>
-              </div>
-              <div style="text-align:right; font-size:14px; display:flex; flex-direction:column; justify-content:center; gap:4px;">
-                <div>Subtotal: <strong id="newDocSubtotal">₹0</strong></div>
-                <div>Discount: <strong id="newDocDiscount" style="color:var(--adm-rust);">-₹0</strong></div>
-                <div style="font-size:18px; font-weight:800; border-top:1px dashed var(--adm-border); padding-top:4px;">
-                  Grand Total: <span id="newDocTotal">₹0</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Notes (Empty by default, no auto text) -->
-            <div class="bk-form-group">
-              <label class="bk-label" for="docNotes">Notes (Optional)</label>
-              <textarea id="docNotes" class="bk-input" rows="2" placeholder="Leave blank unless special custom terms are agreed"></textarea>
-            </div>
-
-            <button type="submit" id="btnSaveDoc" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%;">
-              Save & Issue Document
-            </button>
-          </form>
+            <!-- Sticky Preview Column (Desktop) -->
+            <aside class="side">
+              <div class="label"><span>Live preview</span><span>A4</span></div>
+              <div class="mini-wrap"><div class="mini" id="miniHost"></div></div>
+            </aside>
+          </div>
         </div>
       </div>
 
@@ -581,6 +758,46 @@
   </footer>
 </div>
 
+<!-- Sticky Bottom Bar for Billing (Matches Tab 1 exactly) -->
+<div class="bar" id="newDocBottomBar" style="display:none;">
+  <div class="in">
+    <div class="tot">
+      <small id="barDocSummary">Estimate · 10 packs + 1 free</small>
+      <b id="barGrandTotal">₹850</b>
+    </div>
+    <div class="btns">
+      <button type="button" class="btn ghost" onclick="openDocPreviewModal()">Preview</button>
+      <button type="button" class="btn dark" id="btnSaveIssueDoc" onclick="handleSaveAndIssueDocument()">Save &amp; issue</button>
+    </div>
+  </div>
+</div>
+
+<!-- Live Document Preview Modal (Mobile / Fullscreen) -->
+<div id="docPreviewModal" class="adm-modal-backdrop" style="display:none;">
+  <div class="adm-modal" style="max-width:860px; padding:20px; width:95vw; max-height:92vh; display:flex; flex-direction:column; background:var(--cream);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--line); padding-bottom:8px;">
+      <h3 style="margin:0; font-family:var(--serif); font-size:18px; color:var(--brown);">Live Document Preview</h3>
+      <button type="button" class="del" onclick="closeDocPreviewModal()" style="font-size:20px; line-height:1;">×</button>
+    </div>
+    <div style="overflow-y:auto; flex:1; display:flex; justify-content:center; background:#ebe3d5; padding:16px; border-radius:12px;">
+      <div id="modalPreviewContainer" style="transform-origin:top center; width:794px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Success Toast Notification -->
+<div id="adminSuccessToast" style="display:none; position:fixed; bottom:96px; right:24px; z-index:99999; background:var(--white); border:2px solid var(--ok); border-radius:14px; box-shadow:0 12px 32px rgba(53,32,22,0.18); padding:16px 20px; max-width:440px; font-family:var(--sans);">
+  <div style="display:flex; align-items:flex-start; gap:12px;">
+    <span style="font-size:22px; line-height:1;">✅</span>
+    <div style="flex:1;">
+      <div style="font-weight:700; font-size:14px; color:#1a1512;" id="adminToastTitle">Document Saved &amp; Issued!</div>
+      <div style="font-size:13px; color:#5e4f45; margin-top:3px;" id="adminToastMsg">EST/26-27/0001 created</div>
+      <div id="adminToastActions" style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;"></div>
+    </div>
+    <button type="button" onclick="hideAdminToast()" style="border:none; background:transparent; color:#888; font-size:18px; cursor:pointer; line-height:1; padding:0 4px;">×</button>
+  </div>
+</div>
+
 <!-- Modal Host -->
 <div id="modalHost" style="display:none;"></div>
 
@@ -606,6 +823,59 @@ function getSupabase() {
     adminClient = supabaseBundle.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
   }
   return adminClient;
+}
+
+// Global RPC Error Checker & Alert System
+function checkRpcError(result) {
+  if (!result) return 'Network or server error';
+  if (result.error) return result.error.message || String(result.error);
+  if (result.data) {
+    if (result.data.error) return result.data.error;
+    if (result.data.status === 'error') return result.data.message || 'Operation failed';
+  }
+  return null;
+}
+
+function showAdminError(msg) {
+  const banner = document.getElementById('adminErrorBanner');
+  const bannerText = document.getElementById('adminErrorBannerText');
+  if (banner && bannerText) {
+    bannerText.textContent = msg || 'An error occurred';
+    banner.style.display = 'block';
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    alert(msg || 'An error occurred');
+  }
+}
+
+function hideAdminError() {
+  const banner = document.getElementById('adminErrorBanner');
+  if (banner) banner.style.display = 'none';
+}
+
+function showAdminToast(msg, actions = null) {
+  const toast = document.getElementById('adminSuccessToast');
+  if (!toast) return;
+  document.getElementById('adminToastTitle').textContent = 'Document Saved & Issued!';
+  document.getElementById('adminToastMsg').textContent = msg;
+  const actionsEl = document.getElementById('adminToastActions');
+  actionsEl.innerHTML = '';
+  if (actions) {
+    const docUrl = `/doc/?no=${encodeURIComponent(actions.docNo)}&t=${encodeURIComponent(actions.token)}`;
+    const waText = encodeURIComponent(`Hi! Here is your BROSKI document ${actions.docNo}: ${window.location.origin}${docUrl}`);
+    actionsEl.innerHTML = `
+      <a href="${docUrl}" target="_blank" class="adm-action-btn adm-action-btn--primary" style="text-decoration:none; font-size:12px;">🔗 Open</a>
+      <a href="${docUrl}" target="_blank" class="adm-action-btn" style="text-decoration:none; font-size:12px;">🖨️ Print / PDF</a>
+      <a href="https://wa.me/?text=${waText}" target="_blank" class="adm-action-btn adm-action-btn--green" style="font-size:12px;">💬 WhatsApp</a>
+    `;
+  }
+  toast.style.display = 'block';
+  setTimeout(() => { if (toast) toast.style.display = 'none'; }, 10000);
+}
+
+function hideAdminToast() {
+  const toast = document.getElementById('adminSuccessToast');
+  if (toast) toast.style.display = 'none';
 }
 
 // 1. Audio Beep Synthesizer for new orders
@@ -734,6 +1004,11 @@ function initTabs() {
       document.querySelectorAll('.adm-tab-content').forEach(c => c.style.display = 'none');
       const target = document.getElementById('tab-' + activeTab);
       if (target) target.style.display = 'block';
+
+      const bar = document.getElementById('newDocBottomBar');
+      if (bar) {
+        bar.style.display = (activeTab === 'billing' && billingSubTab === 'new') ? 'block' : 'none';
+      }
 
       if (activeTab === 'packing') renderPackingList();
       if (activeTab === 'reports') renderReports();
@@ -958,12 +1233,17 @@ function renderOrderActionButtons(o) {
 async function setOrderStatus(id, newStatus) {
   const sb = getSupabase();
   try {
-    const { data, error } = await sb.rpc('admin_set_status', { p_order_id: id, p_status: newStatus });
-    if (error) throw error;
+    const res = await sb.rpc('admin_set_status', { p_order_id: id, p_status: newStatus });
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error updating order status: ${err}`);
+      return;
+    }
+    hideAdminError();
     await loadOrders();
     await loadTodayData();
   } catch (e) {
-    alert(e.message || 'Error updating order status');
+    showAdminError(`Error updating order status: ${e.message || e}`);
   }
 }
 
@@ -971,12 +1251,17 @@ async function markOrderPaid(id, method) {
   const sb = getSupabase();
   const utr = method === 'upi' ? prompt('Enter UPI UTR / Reference Number (optional):') : null;
   try {
-    const { error } = await sb.rpc('admin_mark_paid', { p_order_id: id, p_method: method, p_utr: utr });
-    if (error) throw error;
+    const res = await sb.rpc('admin_mark_paid', { p_order_id: id, p_method: method, p_utr: utr });
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error marking order as paid: ${err}`);
+      return;
+    }
+    hideAdminError();
     await loadOrders();
     await loadTodayData();
   } catch (e) {
-    alert(e.message || 'Error marking order as paid');
+    showAdminError(`Error marking order as paid: ${e.message || e}`);
   }
 }
 
@@ -985,25 +1270,38 @@ async function cancelOrderPrompt(id) {
   if (!reason) return;
   const sb = getSupabase();
   try {
-    const { error } = await sb.rpc('admin_cancel_order', { p_order_id: id, p_reason: reason });
-    if (error) throw error;
+    const res = await sb.rpc('admin_cancel_order', { p_order_id: id, p_reason: reason });
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error cancelling order: ${err}`);
+      return;
+    }
+    hideAdminError();
     await loadOrders();
     await loadTodayData();
   } catch (e) {
-    alert(e.message || 'Error cancelling order');
+    showAdminError(`Error cancelling order: ${e.message || e}`);
   }
 }
 
 async function adminIssueBill(id) {
   const sb = getSupabase();
   try {
-    const { data, error } = await sb.rpc('admin_issue_bill', { p_order_id: id });
-    if (error) throw error;
-    alert(`Bill ${data.doc_no} issued successfully!`);
+    const res = await sb.rpc('admin_issue_bill', { p_order_id: id });
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error issuing bill: ${err}`);
+      return;
+    }
+    hideAdminError();
+    showAdminToast(`Bill ${res.data?.doc_no || ''} issued successfully!`, {
+      docNo: res.data?.doc_no,
+      token: res.data?.token
+    });
     await loadOrders();
     await loadDocuments();
   } catch (e) {
-    alert(e.message || 'Error issuing bill');
+    showAdminError(`Error issuing bill: ${e.message || e}`);
   }
 }
 
@@ -1180,23 +1478,33 @@ function renderSamplesTable() {
 async function markSampleStatus(id, st) {
   const sb = getSupabase();
   try {
-    const { error } = await sb.rpc('admin_mark_sample', { p_claim_id: id, p_status: st });
-    if (error) throw error;
+    const res = await sb.rpc('admin_mark_sample', { p_claim_id: id, p_status: st });
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error updating sample: ${err}`);
+      return;
+    }
+    hideAdminError();
     await loadSamples();
   } catch (e) {
-    alert(e.message || 'Error updating sample');
+    showAdminError(`Error updating sample: ${e.message || e}`);
   }
 }
 
 async function handleExpireOldClaims() {
   const sb = getSupabase();
   try {
-    const { data, error } = await sb.rpc('expire_old_sample_claims');
-    if (error) throw error;
-    alert(`Expired ${data} old reserved claims older than 60 days.`);
+    const res = await sb.rpc('expire_old_sample_claims');
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error expiring claims: ${err}`);
+      return;
+    }
+    hideAdminError();
+    alert(`Expired ${res.data} old reserved claims older than 60 days.`);
     await loadSamples();
   } catch (e) {
-    alert(e.message || 'Error expiring claims');
+    showAdminError(`Error expiring claims: ${e.message || e}`);
   }
 }
 
@@ -1333,9 +1641,21 @@ function switchBillingSubTab(sub) {
   ['docs', 'new', 'dues', 'cmp'].forEach(s => {
     const el = document.getElementById('subtab-' + s);
     if (el) el.style.display = s === sub ? 'block' : 'none';
+    const btn = document.getElementById(
+      s === 'docs' ? 'btnSubDocs' :
+      s === 'new' ? 'btnSubNewDoc' :
+      s === 'dues' ? 'btnSubDues' : 'btnSubCmp'
+    );
+    if (btn) btn.classList.toggle('active', s === sub);
   });
-  if (sub === 'new' && newDocItems.length === 0) {
-    addDocItemRow('Bro Bites (Classic Crunch)', 149, 1);
+
+  const bar = document.getElementById('newDocBottomBar');
+  if (bar) {
+    bar.style.display = (activeTab === 'billing' && sub === 'new') ? 'block' : 'none';
+  }
+
+  if (sub === 'new') {
+    initNewDocState();
   }
 }
 
@@ -1429,23 +1749,36 @@ function renderDuesTable() {
 async function markDocPaid(id) {
   const sb = getSupabase();
   try {
-    const { error } = await sb.rpc('admin_mark_doc_paid', { p_id: id, p_method: 'cash' });
-    if (error) throw error;
+    const res = await sb.rpc('admin_mark_doc_paid', { p_id: id, p_method: 'cash' });
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error marking document paid: ${err}`);
+      return;
+    }
+    hideAdminError();
     await loadDocuments();
   } catch (e) {
-    alert(e.message || 'Error marking document paid');
+    showAdminError(`Error marking document paid: ${e.message || e}`);
   }
 }
 
 async function convertDoc(id, toType) {
   const sb = getSupabase();
   try {
-    const { data, error } = await sb.rpc('admin_convert_document', { p_id: id, p_to_type: toType });
-    if (error) throw error;
-    alert(`Document converted to ${toType.toUpperCase()} ${data.doc_no}`);
+    const res = await sb.rpc('admin_convert_document', { p_id: id, p_to_type: toType });
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error converting document: ${err}`);
+      return;
+    }
+    hideAdminError();
+    showAdminToast(`Document converted to ${toType.toUpperCase()} ${res.data?.doc_no || ''}`, {
+      docNo: res.data?.doc_no,
+      token: res.data?.token
+    });
     await loadDocuments();
   } catch (e) {
-    alert(e.message || 'Error converting document');
+    showAdminError(`Error converting document: ${e.message || e}`);
   }
 }
 
@@ -1454,105 +1787,739 @@ async function cancelDocPrompt(id) {
   if (!reason) return;
   const sb = getSupabase();
   try {
-    const { error } = await sb.rpc('admin_cancel_document', { p_id: id, p_reason: reason });
-    if (error) throw error;
+    const res = await sb.rpc('admin_cancel_document', { p_id: id, p_reason: reason });
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error cancelling document: ${err}`);
+      return;
+    }
+    hideAdminError();
     await loadDocuments();
   } catch (e) {
-    alert(e.message || 'Error cancelling document');
+    showAdminError(`Error cancelling document: ${e.message || e}`);
   }
 }
 
-// New Document Form Helpers
-let newDocItems = [];
-function addDocItemRow(name = 'Bro Bites (Classic Crunch)', rate = 149, qty = 1, free = 0, disc = 0) {
-  newDocItems.push({ name, rate, qty, free_qty: free, discount: disc });
-  renderDocItemsRows();
+// ================= NEW DOCUMENT STATE & TAB 1 HANDLERS =================
+const defaultSavedShops = [
+  {
+    name: 'Durga Medicos',
+    area: 'Dharam Colony',
+    phone: '+91 92129 44321',
+    address: 'Dharam Colony, West Delhi',
+    gstin: '',
+    rates: { bites: 80, mix: 90, combo: 295, taste: 0, custom: 100 }
+  },
+  {
+    name: 'Scoobee Pet Salon',
+    area: 'Paschim Vihar',
+    phone: '+91 98111 22334',
+    address: 'B-2 Market, Paschim Vihar, West Delhi',
+    gstin: '07AAAAA0000A1Z5',
+    rates: { bites: 80, mix: 90, combo: 295, taste: 0, custom: 100 }
+  },
+  {
+    name: 'Pet Zone & Clinic',
+    area: 'Punjabi Bagh',
+    phone: '+91 98733 55667',
+    address: 'Central Market, Punjabi Bagh, West Delhi',
+    gstin: '07BBBBB1111B2Z6',
+    rates: { bites: 85, mix: 95, combo: 295, taste: 0, custom: 100 }
+  },
+  {
+    name: 'Heads Up Partner',
+    area: 'Rajouri Garden',
+    phone: '+91 99999 88888',
+    address: 'Main Market, Rajouri Garden, West Delhi',
+    gstin: '',
+    rates: { bites: 85, mix: 95, combo: 295, taste: 0, custom: 100 }
+  }
+];
+
+let newDocState = {
+  docType: 'estimate',
+  partyKind: 'shop',
+  party: { ...defaultSavedShops[0] },
+  items: [
+    { id: 'bites', name: 'Bro Bites – Classic Crunch', subtitle: '400 g · HSN 2309', rate: 80, qty: 5, free_qty: 1, discount: 0, hsn: '2309' },
+    { id: 'mix', name: 'Bro Mix – Happy Mix', subtitle: '400 g · HSN 2309', rate: 90, qty: 5, free_qty: 0, discount: 0, hsn: '2309' }
+  ],
+  paymentMethod: 'cash',
+  dueDate: '',
+  notes: ''
+};
+
+function initNewDocState() {
+  setDocType(newDocState.docType || 'estimate');
+  if (newDocState.partyKind === 'shop') {
+    selectPartyKind('shop');
+    selectShop(newDocState.party || defaultSavedShops[0]);
+  } else {
+    selectPartyKind('walkin');
+  }
+  renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
 }
 
-function renderDocItemsRows() {
-  const tbody = document.getElementById('newDocItemsBody');
-  tbody.innerHTML = '';
-  let subtotal = 0, totalDisc = 0;
+function setDocType(type) {
+  newDocState.docType = type;
+  document.querySelectorAll('#docTypeSwitch button').forEach(btn => {
+    btn.classList.toggle('on', btn.dataset.type === type);
+  });
+  updateSummaryBar();
+  updateLivePreview();
+}
 
-  newDocItems.forEach((it, idx) => {
-    const amt = Math.max(0, (it.rate * it.qty) - (it.discount || 0));
-    subtotal += (it.rate * it.qty);
-    totalDisc += (it.discount || 0);
+function selectPartyKind(kind) {
+  newDocState.partyKind = kind;
+  const chipW = document.getElementById('chipWalkin');
+  const chipS = document.getElementById('chipShop');
+  const searchGrp = document.getElementById('shopSearchGroup');
+  const foundBox = document.getElementById('foundShopBox');
+  const addrInput = document.getElementById('partyAddressInput');
+
+  if (kind === 'walkin') {
+    if (chipW) chipW.classList.add('on');
+    if (chipS) chipS.classList.remove('on');
+    if (searchGrp) searchGrp.style.display = 'none';
+    if (foundBox) foundBox.style.display = 'none';
+    if (addrInput) addrInput.placeholder = 'Customer address (optional)';
+    newDocState.party = {
+      name: 'Walk-in Customer',
+      area: 'Nangloi',
+      phone: '',
+      address: 'Nangloi, West Delhi',
+      gstin: '',
+      rates: { bites: 149, mix: 179, combo: 295, taste: 0, custom: 100 }
+    };
+  } else {
+    if (chipS) chipS.classList.add('on');
+    if (chipW) chipW.classList.remove('on');
+    if (searchGrp) searchGrp.style.display = 'block';
+    if (foundBox) foundBox.style.display = 'flex';
+    if (addrInput) addrInput.placeholder = 'Shop no., street';
+    if (!newDocState.party || newDocState.party.name === 'Walk-in Customer') {
+      newDocState.party = { ...defaultSavedShops[0] };
+    }
+    selectShop(newDocState.party);
+  }
+  updateSummaryBar();
+  updateLivePreview();
+}
+
+function handleShopSearch(query) {
+  const q = (query || '').toLowerCase().trim();
+  const dropdown = document.getElementById('shopSearchResults');
+  if (!dropdown) return;
+
+  if (!q) {
+    dropdown.style.display = 'none';
+    return;
+  }
+
+  // Combine default shops with any distinct shops from past documents
+  const allShops = [...defaultSavedShops];
+  if (cachedDocuments && cachedDocuments.length) {
+    cachedDocuments.forEach(d => {
+      const p = d.party || d.meta || {};
+      if (p.name && !allShops.some(s => s.name.toLowerCase() === p.name.toLowerCase())) {
+        allShops.push({
+          name: p.name,
+          area: p.area || 'West Delhi',
+          phone: p.phone || '',
+          address: p.address || '',
+          gstin: p.gstin || '',
+          rates: { bites: 80, mix: 90, combo: 295, taste: 0, custom: 100 }
+        });
+      }
+    });
+  }
+
+  const matches = allShops.filter(s =>
+    s.name.toLowerCase().includes(q) ||
+    (s.area && s.area.toLowerCase().includes(q)) ||
+    (s.phone && s.phone.includes(q))
+  );
+
+  if (matches.length === 0) {
+    dropdown.innerHTML = '<div style="padding:10px 14px; font-size:13px; color:var(--muted);">No matching shops found</div>';
+    dropdown.style.display = 'block';
+    return;
+  }
+
+  dropdown.innerHTML = matches.map(s => `
+    <div class="shop-item" onclick="selectShopByName('${escapeHtml(s.name)}')">
+      <div>
+        <strong style="color:var(--brown);">${escapeHtml(s.name)}</strong>
+        <div style="font-size:12px; color:var(--muted);">${escapeHtml(s.area || '')} · ${escapeHtml(s.phone || '')}</div>
+      </div>
+      <span style="font-size:12px; color:var(--rust); font-weight:600;">Last rate: ₹${s.rates?.bites || 80} / ₹${s.rates?.mix || 90}</span>
+    </div>
+  `).join('');
+  dropdown.style.display = 'block';
+}
+
+function selectShopByName(name) {
+  const shop = defaultSavedShops.find(s => s.name === name) || {
+    name: name,
+    area: 'West Delhi',
+    phone: '',
+    address: '',
+    gstin: '',
+    rates: { bites: 80, mix: 90, combo: 295, taste: 0, custom: 100 }
+  };
+  selectShop(shop);
+  const dropdown = document.getElementById('shopSearchResults');
+  if (dropdown) dropdown.style.display = 'none';
+}
+
+function selectShop(shop) {
+  newDocState.party = { ...shop };
+  const nameEl = document.getElementById('foundShopName');
+  const infoEl = document.getElementById('foundShopInfo');
+  const rateEl = document.getElementById('foundShopRate');
+  const gstinInput = document.getElementById('partyGstinInput');
+  const addrInput = document.getElementById('partyAddressInput');
+  const searchInput = document.getElementById('shopSearchInput');
+
+  if (nameEl) nameEl.textContent = shop.name;
+  if (infoEl) infoEl.textContent = `· ${shop.area || 'West Delhi'} · ${shop.phone || ''}`;
+  if (rateEl) {
+    const bRate = shop.rates?.bites || 80;
+    const mRate = shop.rates?.mix || 90;
+    rateEl.textContent = `Last rate: Bites ₹${bRate} · Mix ₹${mRate}`;
+  }
+  if (gstinInput) {
+    gstinInput.value = shop.gstin || '';
+    handleGstinInput(shop.gstin || '');
+  }
+  if (addrInput) addrInput.value = shop.address || (shop.area ? `${shop.area}, West Delhi` : '');
+  if (searchInput && searchInput.value !== shop.name) {
+    searchInput.value = shop.name;
+  }
+
+  // Auto-apply shop's last rates to existing items in list
+  newDocState.items.forEach(it => {
+    if (it.id === 'bites' && shop.rates?.bites) it.rate = shop.rates.bites;
+    if (it.id === 'mix' && shop.rates?.mix) it.rate = shop.rates.mix;
+  });
+
+  renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
+}
+
+function handleGstinInput(val) {
+  const gstin = (val || '').trim().toUpperCase();
+  newDocState.party.gstin = gstin;
+  const hintEl = document.getElementById('gstinHint');
+  if (!hintEl) return;
+
+  if (!gstin) {
+    hintEl.innerHTML = '15 characters – checked automatically';
+    hintEl.style.color = 'var(--muted)';
+    updateLivePreview();
+    return;
+  }
+
+  const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+  if (gstin.length === 15) {
+    if (gstinRegex.test(gstin)) {
+      hintEl.innerHTML = '<span style="color:var(--ok); font-weight:700;">✓ Valid 15-character GSTIN</span>';
+    } else {
+      hintEl.innerHTML = '<span style="color:var(--rust); font-weight:700;">Invalid GSTIN pattern (e.g. 07AAAAA0000A1Z5)</span>';
+    }
+  } else {
+    hintEl.innerHTML = `15 characters – checked automatically (${gstin.length}/15)`;
+    hintEl.style.color = 'var(--muted)';
+  }
+  updateLivePreview();
+}
+
+function handlePartyAddressInput(val) {
+  newDocState.party.address = (val || '').trim();
+  updateLivePreview();
+}
+
+// Product Tiles & Item Management
+function handleTileClick(prodId) {
+  const existing = newDocState.items.find(i => i.id === prodId);
+  if (existing) {
+    existing.qty += 1;
+    renderNewDocItems();
+    updateSummaryBar();
+    updateLivePreview();
+    return;
+  }
+
+  let newItem = null;
+  const rates = newDocState.party?.rates || {};
+
+  if (prodId === 'bites') {
+    newItem = {
+      id: 'bites',
+      name: 'Bro Bites – Classic Crunch',
+      subtitle: '400 g · HSN 2309',
+      hsn: '2309',
+      rate: rates.bites || 149,
+      qty: 1,
+      free_qty: 0,
+      discount: 0
+    };
+  } else if (prodId === 'mix') {
+    newItem = {
+      id: 'mix',
+      name: 'Bro Mix – Happy Mix',
+      subtitle: '400 g · HSN 2309',
+      hsn: '2309',
+      rate: rates.mix || 179,
+      qty: 1,
+      free_qty: 0,
+      discount: 0
+    };
+  } else if (prodId === 'combo') {
+    newItem = {
+      id: 'combo',
+      name: 'Bro Combo',
+      subtitle: '2 × 400 g · ₹295',
+      hsn: '2309',
+      rate: rates.combo || 295,
+      qty: 1,
+      free_qty: 0,
+      discount: 0
+    };
+  } else if (prodId === 'taste') {
+    newItem = {
+      id: 'taste',
+      name: 'Taste pack',
+      subtitle: 'Sample · 50 g',
+      hsn: '2309',
+      rate: 0,
+      qty: 1,
+      free_qty: 0,
+      discount: 0
+    };
+  } else if (prodId === 'custom') {
+    addCustomItem();
+    return;
+  }
+
+  if (newItem) {
+    newDocState.items.push(newItem);
+    renderNewDocItems();
+    updateSummaryBar();
+    updateLivePreview();
+  }
+}
+
+function addCustomItem() {
+  const name = prompt('Custom item name:', 'Custom Item');
+  if (!name) return;
+  const rateInput = prompt('Rate per item (₹):', '100');
+  const rate = Math.max(0, parseInt(rateInput, 10) || 0);
+
+  newDocState.items.push({
+    id: 'custom-' + Date.now(),
+    name: name.trim(),
+    subtitle: 'Custom item · HSN 2309',
+    hsn: '2309',
+    rate: rate,
+    qty: 1,
+    free_qty: 0,
+    discount: 0
+  });
+
+  renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
+}
+
+function renderNewDocItems() {
+  const tbody = document.getElementById('newDocItemsBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  newDocState.items.forEach((it, idx) => {
+    const qty = it.qty || 1;
+    const rate = it.rate || 0;
+    const disc = it.discount || 0;
+    const lineAmt = Math.max(0, (rate * qty) - disc);
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><input type="text" class="bk-input" value="${escapeHtml(it.name)}" oninput="updateDocItem(${idx}, 'name', this.value)" style="padding:4px 8px; font-size:12.5px;"></td>
-      <td><input type="number" class="bk-input" value="${it.rate}" oninput="updateDocItem(${idx}, 'rate', parseInt(this.value)||0)" style="padding:4px 8px; font-size:12.5px;"></td>
-      <td><input type="number" class="bk-input" value="${it.qty}" oninput="updateDocItem(${idx}, 'qty', parseInt(this.value)||1)" style="padding:4px 8px; font-size:12.5px;"></td>
-      <td><input type="number" class="bk-input" value="${it.free_qty||0}" oninput="updateDocItem(${idx}, 'free_qty', parseInt(this.value)||0)" style="padding:4px 8px; font-size:12.5px;"></td>
-      <td><input type="number" class="bk-input" value="${it.discount||0}" oninput="updateDocItem(${idx}, 'discount', parseInt(this.value)||0)" style="padding:4px 8px; font-size:12.5px;"></td>
-      <td style="text-align:right; font-weight:700;">₹${amt}</td>
-      <td style="text-align:center;"><button type="button" class="adm-action-btn" onclick="removeDocItem(${idx})" style="min-height:26px; padding:2px 6px;">✕</button></td>
+      <td class="name">
+        <b>${escapeHtml(it.name)}</b>
+        <small>${escapeHtml(it.subtitle || '400 g · HSN 2309')}</small>
+      </td>
+      <td>
+        <input type="number" class="cell" value="${rate}" min="0" oninput="updateItemRate(${idx}, this.value)">
+      </td>
+      <td>
+        <span class="stepper">
+          <button type="button" onclick="updateItemQty(${idx}, -1)">−</button>
+          <span>${qty}</span>
+          <button type="button" onclick="updateItemQty(${idx}, 1)">+</button>
+        </span>
+      </td>
+      <td>
+        <span class="stepper">
+          <button type="button" onclick="updateItemFree(${idx}, -1)">−</button>
+          <span>${it.free_qty || 0}</span>
+          <button type="button" onclick="updateItemFree(${idx}, 1)">+</button>
+        </span>
+      </td>
+      <td>
+        <input type="number" class="cell" value="${disc}" min="0" oninput="updateItemDisc(${idx}, this.value)">
+      </td>
+      <td class="n">
+        <span class="amount">₹${lineAmt}</span>
+        ${it.free_qty > 0 ? `<br><span class="free-tag">+${it.free_qty} free</span>` : ''}
+      </td>
+      <td>
+        <button type="button" class="del" onclick="removeItem(${idx})" aria-label="Remove">×</button>
+      </td>
     `;
     tbody.appendChild(tr);
   });
-
-  const grand = Math.max(0, subtotal - totalDisc);
-  document.getElementById('newDocSubtotal').textContent = `₹${subtotal}`;
-  document.getElementById('newDocDiscount').textContent = `-₹${totalDisc}`;
-  document.getElementById('newDocTotal').textContent = `₹${grand}`;
 }
 
-function updateDocItem(idx, field, val) {
-  if (newDocItems[idx]) {
-    newDocItems[idx][field] = val;
-    renderDocItemsRows();
+function updateItemQty(idx, delta) {
+  if (!newDocState.items[idx]) return;
+  newDocState.items[idx].qty = Math.max(1, (newDocState.items[idx].qty || 1) + delta);
+  renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
+}
+
+function updateItemFree(idx, delta) {
+  if (!newDocState.items[idx]) return;
+  newDocState.items[idx].free_qty = Math.max(0, (newDocState.items[idx].free_qty || 0) + delta);
+  renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
+}
+
+function updateItemRate(idx, val) {
+  if (!newDocState.items[idx]) return;
+  newDocState.items[idx].rate = Math.max(0, parseInt(val, 10) || 0);
+  renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
+}
+
+function updateItemDisc(idx, val) {
+  if (!newDocState.items[idx]) return;
+  newDocState.items[idx].discount = Math.max(0, parseInt(val, 10) || 0);
+  renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
+}
+
+function removeItem(idx) {
+  newDocState.items.splice(idx, 1);
+  renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
+}
+
+// Payment & Notes
+function setPaymentMethod(m) {
+  newDocState.paymentMethod = m;
+  const lblCash = document.getElementById('payLabelCash');
+  const lblUpi = document.getElementById('payLabelUpi');
+  const lblCredit = document.getElementById('payLabelCredit');
+  const dueRow = document.getElementById('creditDueDateRow');
+
+  if (lblCash) lblCash.classList.toggle('on', m === 'cash');
+  if (lblUpi) lblUpi.classList.toggle('on', m === 'upi');
+  if (lblCredit) lblCredit.classList.toggle('on', m === 'credit');
+  if (dueRow) dueRow.style.display = m === 'credit' ? 'block' : 'none';
+
+  updateLivePreview();
+}
+
+function setDueDate(val) {
+  newDocState.dueDate = val;
+  updateLivePreview();
+}
+
+function setDocNotes(val) {
+  newDocState.notes = val;
+  updateLivePreview();
+}
+
+// Summary and Calculations
+function updateSummaryBar() {
+  let subtotal = 0;
+  let totalDisc = 0;
+  let packCount = 0;
+  let freeCount = 0;
+
+  newDocState.items.forEach(it => {
+    const qty = it.qty || 1;
+    const rate = it.rate || 0;
+    const disc = it.discount || 0;
+    const free = it.free_qty || 0;
+
+    subtotal += (rate * qty);
+    totalDisc += disc;
+    freeCount += free;
+
+    // Pack count: Combo counts as 2 packs, others as 1
+    const mult = (it.id === 'combo' || it.name.includes('Combo')) ? 2 : 1;
+    packCount += (qty * mult);
+  });
+
+  const grandTotal = Math.max(0, subtotal - totalDisc);
+
+  // Type title
+  let typeTitle = 'Estimate';
+  if (newDocState.docType === 'bill') typeTitle = 'Bill of Supply';
+  else if (newDocState.docType === 'quotation') typeTitle = 'Quotation';
+  else if (newDocState.docType === 'challan') typeTitle = 'Delivery Challan';
+
+  const packSummaryText = `${typeTitle} · ${packCount} packs${freeCount > 0 ? ` + ${freeCount} free` : ''}`;
+
+  const barSummaryEl = document.getElementById('barDocSummary');
+  const barTotalEl = document.getElementById('barGrandTotal');
+
+  if (barSummaryEl) barSummaryEl.textContent = packSummaryText;
+  if (barTotalEl) barTotalEl.textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
+
+  return { subtotal, totalDisc, grandTotal, packCount, freeCount };
+}
+
+// Document HTML Generator (Generates live A4 document identical to Tab 2)
+function buildDocumentHtml(state) {
+  const { subtotal, totalDisc, grandTotal } = updateSummaryBar();
+  const party = state.party || {};
+  const biz = cachedSettings.business || {};
+  const bizAddress = biz.bill_address || 'Nangloi, West Delhi – 110041';
+  const bizGstin = biz.gstin || '';
+  const bizEmail = biz.email || 'support@broskipetfood.com';
+
+  let title = 'Estimate';
+  let badge = 'Not a tax invoice';
+  let legal = 'This is an estimate / cash memo, not a tax invoice. A GST bill is available on request.';
+  let numberPrefix = 'EST';
+  let toPartyLabel = 'Bill to';
+  let fromHtml = `${escapeHtml(bizAddress)}<br>${escapeHtml(bizEmail)}`;
+
+  if (state.docType === 'bill') {
+    title = 'Bill of Supply';
+    badge = 'Composition';
+    legal = 'Composition taxable person, not eligible to collect tax on supplies.';
+    numberPrefix = 'BRK';
+    fromHtml = `${escapeHtml(bizAddress)}<br>${bizGstin ? `GSTIN: ${escapeHtml(bizGstin)} · ` : ''}State: Delhi (07)<br>${escapeHtml(bizEmail)}`;
+  } else if (state.docType === 'quotation') {
+    title = 'Quotation';
+    badge = 'Valid 7 days';
+    legal = 'Quotation valid for 7 days from the date of issue. Prices inclusive of all taxes.';
+    numberPrefix = 'QT';
+    toPartyLabel = 'Quote for';
+  } else if (state.docType === 'challan') {
+    title = 'Delivery Challan';
+    badge = 'Not a sale';
+    legal = 'Goods sent for delivery / display / sample. Not for sale / not a tax invoice.';
+    numberPrefix = 'DC';
+    toPartyLabel = 'Consignee';
   }
-}
 
-function removeDocItem(idx) {
-  newDocItems.splice(idx, 1);
-  renderDocItemsRows();
-}
+  // Doc number display (simulated or real)
+  const docNo = `${numberPrefix}/26-27/0001`;
+  const dateFormatted = new Date().toLocaleDateString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric'
+  });
 
-function onDocPaymentMethodChange() {
-  const m = document.getElementById('docPayMethod').value;
-  document.getElementById('creditDueWrap').style.display = m === 'credit' ? 'block' : 'none';
-}
-
-function onPartyKindChange() {
-  const k = document.getElementById('partyTypeSelect').value;
-  document.getElementById('partyFields').style.display = 'block';
-  if (k === 'walkin') {
-    document.getElementById('partyName').placeholder = 'Walk-in Customer';
-  } else {
-    document.getElementById('partyName').placeholder = 'e.g. Scoobee Pet Salon, Paschim Vihar';
+  // Payment method format
+  let payMethodText = 'Cash · Paid';
+  if (state.paymentMethod === 'credit') {
+    if (state.dueDate) {
+      const dueFormatted = new Date(state.dueDate).toLocaleDateString('en-IN', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      });
+      payMethodText = `Credit · Due ${dueFormatted}`;
+    } else {
+      payMethodText = 'Credit · Pay later';
+    }
+  } else if (state.paymentMethod === 'upi') {
+    payMethodText = 'UPI · Paid';
   }
+
+  // Lines table rows
+  const rowsHtml = state.items.map((it, idx) => {
+    const qty = it.qty || 1;
+    const rate = Number(it.rate || 0);
+    const disc = Number(it.discount || 0);
+    const amount = Math.max(0, (rate * qty) - disc);
+
+    let subText = it.subtitle || (it.id === 'combo' ? '2 × 400 g pouches' : '400 g pouch');
+    if (it.free_qty && it.free_qty > 0) {
+      subText += ` · + ${it.free_qty} free`;
+    }
+
+    return `
+      <tr>
+        <td>${idx + 1}</td>
+        <td><b>${escapeHtml(it.name)}</b><small>${escapeHtml(subText)}</small></td>
+        <td>${escapeHtml(it.hsn || '2309')}</td>
+        <td class="r">${qty}</td>
+        <td class="r">₹${rate.toFixed(2)}</td>
+        <td class="r">${disc > 0 ? `₹${disc.toFixed(2)}` : '–'}</td>
+        <td class="r"><b>₹${amount.toFixed(2)}</b></td>
+      </tr>
+    `;
+  }).join('');
+
+  let partyDetailsHtml = '';
+  if (party.address) partyDetailsHtml += escapeHtml(party.address);
+  if (party.area && !partyDetailsHtml.includes(party.area)) partyDetailsHtml += (partyDetailsHtml ? ', ' : '') + escapeHtml(party.area);
+  if (!partyDetailsHtml) partyDetailsHtml = 'West Delhi';
+  if (party.phone) partyDetailsHtml += `<br>${escapeHtml(party.phone)}`;
+  if (party.gstin) partyDetailsHtml += `<br>GSTIN: ${escapeHtml(party.gstin)}`;
+
+  const notesText = state.notes && state.notes.trim() ? escapeHtml(state.notes.trim()) : 'Thank you for stocking BROSKI.';
+
+  return `
+    <article class="doc">
+      <header class="d-head">
+        <div class="brand-box">
+          <img src="/broski-wordmark-brown.svg" alt="BROSKI">
+          <small>Good Boy Snacks · Nangloi, West Delhi – 110041<br>support@broskipetfood.com · broskipetfood.com</small>
+        </div>
+        <div class="d-title">
+          <div class="t">${title}</div>
+          <span class="badge">${badge}</span>
+        </div>
+      </header>
+
+      <div class="meta">
+        <div><div class="k">Number</div><div class="v">${docNo}</div></div>
+        <div><div class="k">Date</div><div class="v">${dateFormatted}</div></div>
+        <div><div class="k">Payment</div><div class="v">${payMethodText}</div></div>
+      </div>
+
+      <div class="parties">
+        <div>
+          <div class="k">From</div>
+          <div class="v">BROSKI</div>
+          <p>${fromHtml}</p>
+        </div>
+        <div>
+          <div class="k">${toPartyLabel}</div>
+          <div class="v">${escapeHtml(party.name || 'Walk-in Customer')}</div>
+          <p>${partyDetailsHtml}</p>
+        </div>
+      </div>
+
+      <table class="lines">
+        <thead>
+          <tr>
+            <th style="width:36px">#</th>
+            <th>Item</th>
+            <th>HSN</th>
+            <th class="r">Qty</th>
+            <th class="r">Rate</th>
+            <th class="r">Disc</th>
+            <th class="r">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+
+      <div class="sum">
+        <div class="words">
+          <div class="k">Amount in words</div>
+          ${numToWords(grandTotal)}
+        </div>
+        <div class="totals">
+          <div><span>Subtotal</span><span>₹${subtotal.toFixed(2)}</span></div>
+          <div><span>Discount</span><span>₹${totalDisc.toFixed(2)}</span></div>
+          <div class="grand"><span>Grand total</span><span>₹${grandTotal.toLocaleString('en-IN')}</span></div>
+        </div>
+      </div>
+
+      <footer class="d-foot">
+        <div class="foot-grid">
+          <div><div class="k">Notes</div>${notesText}</div>
+          <div><div class="k">Contact</div>support@broskipetfood.com<br>broskipetfood.com</div>
+          <div class="sign"><div class="line">For BROSKI<br><span style="font-weight:500;color:#8a7565">Authorised signatory</span></div></div>
+        </div>
+        <div class="legal">${legal}</div>
+      </footer>
+    </article>
+  `;
 }
 
-function onDocTypeChange() {}
+function updateLivePreview() {
+  const host = document.getElementById('miniHost');
+  const modalHost = document.getElementById('modalPreviewContainer');
+  const docHtml = buildDocumentHtml(newDocState);
 
-async function handleCreateDocument(e) {
-  e.preventDefault();
+  if (host) host.innerHTML = docHtml;
+  if (modalHost) modalHost.innerHTML = docHtml;
+}
+
+function openDocPreviewModal() {
+  const modal = document.getElementById('docPreviewModal');
+  const container = document.getElementById('modalPreviewContainer');
+  if (!modal) return;
+  updateLivePreview();
+
+  // Adjust scale on small screens
+  if (container) {
+    const modalWidth = Math.min(window.innerWidth * 0.95, 820);
+    const scale = Math.min(1, (modalWidth - 40) / 794);
+    container.style.transform = `scale(${scale})`;
+    container.style.transformOrigin = 'top center';
+    container.parentElement.style.height = `${1123 * scale + 40}px`;
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeDocPreviewModal() {
+  const modal = document.getElementById('docPreviewModal');
+  if (modal) modal.style.display = 'none';
+}
+
+// Universal Save and Issue Handler
+async function handleSaveAndIssueDocument() {
   const sb = getSupabase();
-  const btn = document.getElementById('btnSaveDoc');
-  btn.disabled = true;
-  btn.textContent = 'Generating document…';
+  const btn = document.getElementById('btnSaveIssueDoc');
+  if (!sb) {
+    showAdminError('Database connection not available.');
+    return;
+  }
+
+  if (!newDocState.items || newDocState.items.length === 0) {
+    showAdminError('Please add at least one item to the document.');
+    return;
+  }
+
+  if (newDocState.party.gstin && newDocState.party.gstin.length !== 15) {
+    showAdminError('GSTIN must be exactly 15 characters or left blank.');
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+  }
 
   try {
-    const docType = document.getElementById('docTypeSelect').value;
-    const partyName = document.getElementById('partyName').value.trim();
-    const partyPhone = document.getElementById('partyPhone').value.trim();
-    const partyArea = document.getElementById('partyArea').value.trim();
-    const partyGstin = document.getElementById('partyGstin').value.trim();
-    const payMethod = document.getElementById('docPayMethod').value;
-    const dueDate = payMethod === 'credit' ? document.getElementById('docDueDate').value || null : null;
-    const notes = document.getElementById('docNotes').value.trim();
-
     let subtotal = 0, totalDisc = 0;
-    const formattedItems = newDocItems.map((it, idx) => {
+    const formattedItems = newDocState.items.map((it, idx) => {
       const amt = Math.max(0, (it.rate * it.qty) - (it.discount || 0));
       subtotal += (it.rate * it.qty);
       totalDisc += (it.discount || 0);
       return {
         id: `item-${idx+1}`,
         name: it.name,
-        hsn: '2309',
+        hsn: it.hsn || '2309',
         qty: it.qty,
         free_qty: it.free_qty || 0,
         rate: it.rate,
@@ -1564,40 +2531,77 @@ async function handleCreateDocument(e) {
     const total = Math.max(0, subtotal - totalDisc);
 
     const partyData = {
-      kind: document.getElementById('partyTypeSelect').value,
-      name: partyName,
-      phone: partyPhone,
-      area: partyArea,
-      gstin: partyGstin
+      kind: newDocState.partyKind,
+      name: newDocState.party.name || (newDocState.partyKind === 'walkin' ? 'Walk-in Customer' : 'Pet Shop'),
+      phone: newDocState.party.phone || '',
+      area: newDocState.party.area || '',
+      address: newDocState.party.address || '',
+      gstin: newDocState.party.gstin || ''
     };
 
-    const { data, error } = await sb.rpc('admin_create_document', {
-      p_doc_type: docType,
+    const res = await sb.rpc('admin_create_document', {
+      p_doc_type: newDocState.docType,
       p_party_id: null,
       p_items: formattedItems,
       p_subtotal: subtotal,
       p_discount: totalDisc,
       p_total: total,
-      p_payment_method: payMethod,
-      p_payment_status: payMethod === 'credit' ? 'unpaid' : 'paid',
-      p_due_date: dueDate,
-      p_notes: notes,
+      p_payment_method: newDocState.paymentMethod,
+      p_payment_status: newDocState.paymentMethod === 'credit' ? 'unpaid' : 'paid',
+      p_due_date: newDocState.paymentMethod === 'credit' ? (newDocState.dueDate || null) : null,
+      p_notes: newDocState.notes || '',
       p_party_data: partyData
     });
 
-    if (error) throw error;
+    const err = checkRpcError(res);
+    if (err) {
+      // REQUIREMENT 3: if data.error show a red banner with the reason and open nothing
+      showAdminError(`Error creating document: ${err}`);
+      return;
+    }
 
-    alert(`Document ${data.doc_no} created successfully!`);
+    hideAdminError();
+    const docNo = res.data?.doc_no || 'Document';
+    const token = res.data?.token || '';
+
+    // REQUIREMENT 3: if ok show a success toast with the number and open /doc/?no=…&t=… plus Print / PDF / WhatsApp
+    showAdminToast(`Document ${docNo} created & issued successfully!`, {
+      docNo: docNo,
+      token: token
+    });
+
+    // Open document in new window
+    window.open(`/doc/?no=${encodeURIComponent(docNo)}&t=${encodeURIComponent(token)}`, '_blank');
+
     await loadDocuments();
     switchBillingSubTab('docs');
-    // Open in new tab
-    window.open(`/doc/?no=${encodeURIComponent(data.doc_no)}&t=${encodeURIComponent(data.token)}`, '_blank');
   } catch (err) {
-    alert(err.message || 'Error creating document');
+    showAdminError(`Error creating document: ${err.message || err}`);
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Save & Issue Document';
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Save & issue';
+    }
   }
+}
+
+function numToWords(n) {
+  if (!n || n === 0) return 'Zero Rupees only';
+  const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+    'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+  const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+  function inWords(num) {
+    if (num === 0) return '';
+    if (num < 20) return a[num] + ' ';
+    if (num < 100) return b[Math.floor(num / 10)] + ' ' + inWords(num % 10);
+    if (num < 1000) return a[Math.floor(num / 100)] + ' Hundred ' + inWords(num % 100);
+    if (num < 100000) return inWords(Math.floor(num / 1000)) + 'Thousand ' + inWords(num % 1000);
+    if (num < 10000000) return inWords(Math.floor(num / 100000)) + 'Lakh ' + inWords(num % 100000);
+    return inWords(Math.floor(num / 10000000)) + 'Crore ' + inWords(num % 10000000);
+  }
+
+  return 'Rupees ' + inWords(Math.floor(n)).trim() + ' only';
 }
 
 // CMP-08 Monthly Summary
@@ -1636,8 +2640,14 @@ async function handleCloseDay() {
   if (!dateStr) return;
 
   try {
-    const { data, error } = await sb.rpc('admin_close_day', { p_date: dateStr });
-    if (error) throw error;
+    const res = await sb.rpc('admin_close_day', { p_date: dateStr });
+    const err = checkRpcError(res);
+    if (err) {
+      showAdminError(`Error closing day: ${err}`);
+      return;
+    }
+    hideAdminError();
+    const data = res.data;
     if (data.status === 'ok') {
       alert(`Day closed! Consolidated bill ${data.doc_no} generated for ${data.count} orders totalling ₹${data.total}.`);
     } else if (data.status === 'already_issued') {
@@ -1647,7 +2657,7 @@ async function handleCloseDay() {
     }
     await loadDocuments();
   } catch (e) {
-    alert(e.message || 'Error closing day');
+    showAdminError(`Error closing day: ${e.message || e}`);
   }
 }
 
@@ -1737,14 +2747,27 @@ async function handleSaveSettings(e) {
       name: 'BROSKI'
     };
 
-    await sb.rpc('admin_update_settings', { p_key: 'prices', p_val: prices });
-    await sb.rpc('admin_update_settings', { p_key: 'business', p_val: business });
-    await sb.rpc('admin_update_settings', { p_key: 'upi', p_val: upi });
+    const res1 = await sb.rpc('admin_update_settings', { p_key: 'prices', p_val: prices });
+    let err = checkRpcError(res1);
+    if (!err) {
+      const res2 = await sb.rpc('admin_update_settings', { p_key: 'business', p_val: business });
+      err = checkRpcError(res2);
+    }
+    if (!err) {
+      const res3 = await sb.rpc('admin_update_settings', { p_key: 'upi', p_val: upi });
+      err = checkRpcError(res3);
+    }
 
+    if (err) {
+      showAdminError(`Error saving settings: ${err}`);
+      return;
+    }
+
+    hideAdminError();
     alert('Settings saved successfully!');
     await loadSettings();
   } catch (err) {
-    alert(err.message || 'Error saving settings');
+    showAdminError(`Error saving settings: ${err.message || err}`);
   } finally {
     btn.disabled = false;
     btn.textContent = 'Save All Settings';

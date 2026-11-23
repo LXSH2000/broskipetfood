@@ -4,351 +4,512 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#ffffff">
-<title>Document Viewer · BROSKI</title>
+<meta name="theme-color" content="#352016">
+<title>Document · BROSKI</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --text: #1a1512;
-    --muted: #5e4f45;
-    --border: #ddd2c4;
-    --bg-page: #f6f1ea;
-    --card: #ffffff;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: var(--text);
-    background: var(--bg-page);
-    line-height: 1.45;
-    padding: 24px 16px 60px;
-  }
-  .doc-container {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  .doc-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    gap: 12px;
-  }
-  .btn-print {
-    background: #352016;
-    color: #fff8ed;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .doc-paper {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 40px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-    color: #000000;
-  }
-  .doc-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border-bottom: 2px solid #000;
-    padding-bottom: 16px;
-    margin-bottom: 20px;
-  }
-  .brand-logo {
-    height: 32px;
-    width: auto;
-    display: block;
-    margin-bottom: 6px;
-  }
-  .business-info {
-    font-size: 12.5px;
-    color: #333;
-    line-height: 1.4;
-  }
-  .doc-meta {
-    text-align: right;
-  }
-  .doc-type-badge {
-    font-family: 'Outfit', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0;
-  }
-  .doc-subtitle {
-    font-size: 12px;
-    color: #555;
-    font-style: italic;
-    margin: 2px 0 8px;
-  }
-  .doc-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: 15px;
-    color: #111;
-  }
-  .party-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    background: #faf8f5;
-    border: 1px solid #ebdccb;
-    border-radius: 6px;
-    padding: 14px 18px;
-    font-size: 13px;
-    margin-bottom: 20px;
-  }
-  .party-block dt {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #777;
-    margin-bottom: 2px;
-  }
-  .party-block dd {
-    margin: 0 0 4px 0;
-    font-weight: 600;
-  }
-  .doc-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    font-size: 13.5px;
-  }
-  .doc-table th {
-    background: #f0e9df;
-    border: 1px solid #d4c8b8;
-    padding: 8px 10px;
-    font-size: 11.5px;
-    text-transform: uppercase;
-    font-weight: 700;
-    text-align: left;
-  }
-  .doc-table td {
-    border: 1px solid #e0d5c5;
-    padding: 8px 10px;
-  }
-  .totals-table {
-    width: 320px;
-    margin-left: auto;
-    border-collapse: collapse;
-    font-size: 13.5px;
-    margin-bottom: 20px;
-  }
-  .totals-table td {
-    padding: 6px 10px;
-  }
-  .totals-table tr.grand {
-    border-top: 2px solid #000;
-    border-bottom: 2px solid #000;
-    font-weight: 800;
-    font-size: 15px;
-  }
-  .amount-words {
-    background: #f8f6f0;
-    border-left: 3px solid #352016;
-    padding: 10px 14px;
-    font-size: 12.5px;
-    font-style: italic;
-    margin-bottom: 24px;
-  }
-  .doc-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-top: 32px;
-    padding-top: 16px;
-    border-top: 1px solid #ddd;
-    font-size: 12px;
-  }
-  .signatory-box {
-    text-align: right;
-    min-width: 220px;
-  }
-  .sign-line {
-    border-top: 1px solid #000;
-    margin-top: 48px;
-    padding-top: 4px;
-    font-weight: 700;
-  }
-  .cancelled-banner {
-    background: #fee2e2;
-    border: 2px solid #ef4444;
-    color: #991b1b;
-    padding: 12px;
-    border-radius: 6px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 16px;
-  }
+/* ====== BROSKI tokens (same as the site) ====== */
+:root {
+  --cream: #f5efe4;
+  --paper: #fbf7ef;
+  --white: #fffdf9;
+  --brown: #352016;
+  --brown-2: #5a4033;
+  --muted: #8a7565;
+  --rust: #b8452b;
+  --mustard: #e2a72e;
+  --line: #e6dccb;
+  --line-2: #efe7d9;
+  --ok: #1f8f4e;
+  --r-lg: 20px;
+  --r-md: 14px;
+  --r-sm: 10px;
+  --shadow: 0 1px 2px rgba(53,32,22,.05), 0 8px 24px rgba(53,32,22,.06);
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--sans);
+  color: var(--brown);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.45;
+}
 
-  @media print {
-    body {
-      background: #ffffff !important;
-      padding: 0 !important;
-    }
-    .doc-toolbar, .no-print {
-      display: none !important;
-    }
-    .doc-container {
-      max-width: 100% !important;
-    }
-    .doc-paper {
-      border: none !important;
-      box-shadow: none !important;
-      padding: 0 !important;
-    }
-    @page {
-      size: A4 portrait;
-      margin: 15mm;
-    }
+/* Toolbar */
+.doc-toolbar {
+  max-width: 794px;
+  margin: 20px auto 14px;
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.tool-link {
+  font: 600 13px var(--sans);
+  color: var(--brown-2);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.tool-link:hover { text-decoration: underline; }
+.tool-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tbtn {
+  font: 700 13px var(--sans);
+  border-radius: 999px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--brown);
+  cursor: pointer;
+  transition: all .15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.tbtn:hover { border-color: var(--brown); }
+.tbtn.dark { background: var(--brown); color: var(--paper); border-color: var(--brown); }
+.tbtn.wa { color: #166534; border-color: #bbf7d0; background: #f0fdf4; }
+.tbtn.wa:hover { border-color: #166534; }
+
+/* States */
+.state-box {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 32px 24px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  text-align: center;
+}
+
+/* ====== DOCUMENT (A4) ====== */
+.docwrap {
+  padding: 0 16px 64px;
+  display: flex;
+  justify-content: center;
+}
+.doc {
+  width: 794px;
+  min-height: 1123px;
+  background: #fff;
+  color: #2a1a12;
+  box-shadow: 0 10px 40px rgba(53,32,22,.12);
+  padding: 56px 60px 48px;
+  position: relative;
+  font-family: var(--sans);
+  box-sizing: border-box;
+}
+.doc::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--brown) 0 70%, var(--mustard) 70% 85%, var(--rust) 85%);
+}
+.cancelled-banner {
+  background: #fee2e2;
+  border: 1.5px solid #ef4444;
+  color: #991b1b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.d-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 28px;
+  border-bottom: 1px solid #eadfcd;
+}
+.brand-box img {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+.brand-box small {
+  display: block;
+  font: 500 12px/1.5 var(--sans);
+  letter-spacing: 0;
+  color: #7a6556;
+  margin-top: 10px;
+}
+.d-title { text-align: right; }
+.d-title .t {
+  font: 600 26px var(--serif);
+  letter-spacing: .02em;
+  color: #2a1a12;
+}
+.d-title .badge {
+  display: inline-block;
+  margin-top: 8px;
+  font: 700 10px var(--sans);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--rust);
+  border: 1px solid #e8c4b8;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin: 24px 0;
+  border: 1px solid #eadfcd;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.meta > div {
+  padding: 12px 16px;
+  border-right: 1px solid #eadfcd;
+}
+.meta > div:last-child { border-right: 0; }
+.k {
+  font: 700 10px var(--sans);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #9a8574;
+  margin-bottom: 5px;
+}
+.v {
+  font: 600 14px var(--sans);
+  color: #2a1a12;
+}
+.parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 26px;
+}
+.parties .v {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.parties p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #5d4a3d;
+}
+table.lines {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.lines thead th {
+  background: #f6efe3;
+  color: #6b5546;
+  font: 700 10px var(--sans);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 11px 12px;
+}
+.lines thead th:first-child { border-radius: 8px 0 0 8px; }
+.lines thead th:last-child { border-radius: 0 8px 8px 0; }
+.lines td {
+  padding: 13px 12px;
+  border-bottom: 1px solid #f0e8db;
+  vertical-align: top;
+}
+.lines .r { text-align: right; }
+.lines td b { font-weight: 700; color: #2a1a12; }
+.lines td small {
+  color: #8a7565;
+  display: block;
+  margin-top: 2px;
+}
+.sum {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 28px;
+  margin-top: 22px;
+  align-items: start;
+}
+.words {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #5d4a3d;
+  background: #fbf7ef;
+  border: 1px solid #eee3d2;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.totals div {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 0;
+  font-size: 13.5px;
+  color: #5d4a3d;
+}
+.totals .grand {
+  margin-top: 6px;
+  padding: 14px 16px;
+  background: var(--brown);
+  color: #fbf7ef;
+  border-radius: 10px;
+  font: 600 20px var(--serif);
+}
+.totals .grand span:first-child {
+  font: 600 12px var(--sans);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  align-self: center;
+}
+.d-foot {
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  bottom: 48px;
+}
+.foot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 180px;
+  gap: 20px;
+  padding-top: 18px;
+  border-top: 1px solid #eadfcd;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #6b5546;
+}
+.sign { text-align: right; }
+.sign .line {
+  border-top: 1px solid #bfae9a;
+  margin-top: 44px;
+  padding-top: 6px;
+  font-weight: 700;
+  color: #3a271c;
+}
+.legal {
+  margin-top: 16px;
+  text-align: center;
+  font: 600 11px var(--sans);
+  letter-spacing: .04em;
+  color: #8a7565;
+}
+
+/* Print Styling */
+@media print {
+  body {
+    background: #fff !important;
+    color: #2a1a12 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
+  .doc-toolbar, .no-print { display: none !important; }
+  .docwrap { padding: 0 !important; display: block !important; }
+  .doc {
+    box-shadow: none !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 24px 28px !important;
+    position: relative !important;
+  }
+  .d-foot {
+    position: static !important;
+    margin-top: 40px !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+}
+
+/* A5 Print Mode */
+body.print-a5 @page {
+  size: A5 portrait;
+  margin: 8mm;
+}
+body.print-a5 .doc {
+  padding: 16px 20px !important;
+  font-size: 11px !important;
+}
+body.print-a5 .d-title .t { font-size: 20px !important; }
+body.print-a5 .brand-box img { height: 28px !important; }
+body.print-a5 .meta, body.print-a5 .parties, body.print-a5 .sum {
+  margin: 14px 0 !important;
+  gap: 14px !important;
+}
+body.print-a5 .d-foot { margin-top: 20px !important; }
+
+@media (max-width: 840px) {
+  .doc {
+    width: 100%;
+    min-height: auto;
+    padding: 36px 20px 32px;
+  }
+  .d-foot {
+    position: static;
+    margin-top: 36px;
+    left: auto;
+    right: auto;
+    bottom: auto;
+  }
+  .foot-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .sign { text-align: left; }
+  .sign .line { margin-top: 20px; }
+  .meta { grid-template-columns: 1fr; }
+  .meta > div { border-right: 0; border-bottom: 1px solid #eadfcd; }
+  .meta > div:last-child { border-bottom: 0; }
+  .parties { grid-template-columns: 1fr; gap: 16px; }
+  .sum { grid-template-columns: 1fr; }
+}
 </style>
 <script src="/config.js"></script>
 <script src="/portal-shared.js"></script>
 </head>
 <body>
-<div class="doc-container">
-  <!-- Toolbar -->
-  <div class="doc-toolbar no-print">
-    <a href="/" style="color:#5e4f45; text-decoration:none; font-weight:700; font-size:14px;">
-      ← Return to BROSKI
-    </a>
-    <button type="button" class="btn-print" onclick="window.print()">
-      🖨️ Download / Print Document (PDF)
-    </button>
-  </div>
 
-  <div id="loadingBox" style="text-align:center; padding:60px 0;">
-    <p>Loading document…</p>
+<!-- Toolbar -->
+<div class="doc-toolbar no-print">
+  <a href="/" class="tool-link">← Return to BROSKI</a>
+  <div class="tool-btns">
+    <button type="button" class="tbtn" onclick="printDocument('a4')">🖨️ Print A4</button>
+    <button type="button" class="tbtn" onclick="printDocument('a5')">📄 Print A5</button>
+    <button type="button" class="tbtn dark" onclick="printDocument('a4')">📥 Download PDF</button>
+    <button type="button" class="tbtn wa" id="btnShareWa" onclick="shareWhatsApp()">💬 WhatsApp</button>
   </div>
+</div>
 
-  <div id="notFoundBox" style="display:none; text-align:center; padding:60px 20px; background:#fff; border-radius:12px;">
-    <h2>Document Not Found</h2>
-    <p>The document number or security token is invalid.</p>
-    <a href="/" style="display:inline-block; margin-top:12px; font-weight:700;">Go to Home</a>
-  </div>
+<div id="loadingBox" class="state-box">
+  <p style="font-weight:600; margin:0;">Loading document…</p>
+</div>
 
-  <article id="docPaper" class="doc-paper" style="display:none;">
+<div id="notFoundBox" class="state-box" style="display:none;">
+  <h2 style="font-family:var(--serif); margin:0 0 10px;">Document Not Found</h2>
+  <p style="color:var(--muted); margin:0 0 16px;">The document number or security token is invalid.</p>
+  <a href="/" class="tbtn dark" style="text-decoration:none;">Go to Home</a>
+</div>
+
+<!-- Main Document View -->
+<div class="docwrap">
+  <article class="doc" id="docPaper" style="display:none;">
     <div id="cancelledBanner" class="cancelled-banner" style="display:none;">
-      CANCELLED DOCUMENT · <span id="cancelReason"></span>
+      CANCELLED DOCUMENT · <span id="cancelReason">Cancelled</span>
     </div>
 
     <!-- Header -->
-    <header class="doc-header">
-      <div>
-        <img src="/broski-wordmark-brown.svg" alt="BROSKI" class="brand-logo">
-        <div class="business-info">
-          <strong id="bizName">BROSKI</strong><br>
-          <span id="bizAddress">Nangloi, West Delhi – 110041</span><br>
-          <span id="bizGstin">GSTIN: [set in Settings]</span><br>
-          State: <span id="bizState">Delhi (07)</span> · HSN: <span id="bizHsn">2309</span>
-        </div>
+    <header class="d-head">
+      <div class="brand-box">
+        <img src="/broski-wordmark-brown.svg" alt="BROSKI">
+        <small id="bizInfo">Good Boy Snacks · Nangloi, West Delhi – 110041<br>support@broskipetfood.com · broskipetfood.com</small>
       </div>
-      <div class="doc-meta">
-        <h1 class="doc-type-badge" id="docTypeTitle">BILL OF SUPPLY</h1>
-        <div class="doc-subtitle" id="docTypeSubtitle"></div>
-        <div class="doc-num" id="docNumber">BRK/26-27/0001</div>
-        <div style="font-size:12.5px; margin-top:4px;">Date: <span id="docDate">23 Nov 2026</span></div>
-        <div id="docDueDateWrap" style="font-size:12.5px; color:#b8452b; display:none;">
-          Due Date: <span id="docDueDate"></span>
-        </div>
+      <div class="d-title">
+        <div class="t" id="docTypeTitle">Estimate</div>
+        <span class="badge" id="docTypeBadge">Not a tax invoice</span>
       </div>
     </header>
 
-    <!-- Party / Buyer Details -->
-    <section class="party-grid">
-      <div class="party-block">
-        <dt>Details of Receiver / Billed To:</dt>
-        <dd style="font-size:15px; font-weight:700;" id="partyName">Walk-in Customer</dd>
-        <dd id="partyAddress">Nangloi, West Delhi</dd>
-        <dd id="partyPhone" style="font-family:'JetBrains Mono',monospace;">+91 98XXXXXXXX</dd>
-        <dd id="partyGstin" style="display:none;">GSTIN: <span></span></dd>
+    <!-- Meta Details -->
+    <div class="meta">
+      <div>
+        <div class="k">Number</div>
+        <div class="v" id="metaDocNo">EST/26-27/0001</div>
       </div>
-      <div class="party-block">
-        <dt>Payment & Transaction Details:</dt>
-        <dd>Payment Method: <span id="partyPayMethod" style="text-transform:uppercase;">Cash</span></dd>
-        <dd>Payment Status: <span id="partyPayStatus" style="font-weight:700;">Unpaid</span></dd>
-        <dd id="upiQrWrap" style="display:none; margin-top:8px;">
-          <div style="font-size:11px; font-weight:700; color:#555;">Scan Business UPI:</div>
-          <img id="upiQrImg" src="" alt="UPI QR" width="100" height="100" style="border:1px solid #ccc; margin-top:2px;">
-        </dd>
+      <div>
+        <div class="k">Date</div>
+        <div class="v" id="metaDocDate">23 Nov 2026</div>
       </div>
-    </section>
+      <div>
+        <div class="k">Payment</div>
+        <div class="v" id="metaPayment">Cash · Paid</div>
+      </div>
+    </div>
 
-    <!-- Items Table -->
-    <table class="doc-table">
+    <!-- Parties Grid -->
+    <div class="parties">
+      <div>
+        <div class="k">From</div>
+        <div class="v" id="fromPartyName">BROSKI</div>
+        <p id="fromPartyDetails">Nangloi, West Delhi – 110041<br>support@broskipetfood.com</p>
+      </div>
+      <div>
+        <div class="k" id="toPartyLabel">Bill to</div>
+        <div class="v" id="toPartyName">Walk-in Customer</div>
+        <p id="toPartyDetails">Nangloi, West Delhi</p>
+      </div>
+    </div>
+
+    <!-- Lines Table -->
+    <table class="lines">
       <thead>
         <tr>
-          <th style="width:36px; text-align:center;">#</th>
-          <th>Item Description</th>
-          <th style="width:70px; text-align:center;">HSN</th>
-          <th style="width:60px; text-align:center;">Qty</th>
-          <th style="width:60px; text-align:center;" id="thFreeQty">Free</th>
-          <th style="width:80px; text-align:right;">Rate (₹)</th>
-          <th style="width:70px; text-align:right;" id="thDisc">Disc</th>
-          <th style="width:90px; text-align:right;">Amount (₹)</th>
+          <th style="width:36px">#</th>
+          <th>Item</th>
+          <th>HSN</th>
+          <th class="r">Qty</th>
+          <th class="r">Rate</th>
+          <th class="r">Disc</th>
+          <th class="r">Amount</th>
         </tr>
       </thead>
-      <tbody id="docItemsBody">
-        <!-- Populated via JS -->
+      <tbody id="linesTableBody">
       </tbody>
     </table>
 
-    <!-- Totals -->
-    <table class="totals-table">
-      <tr>
-        <td>Subtotal:</td>
-        <td style="text-align:right;" id="tblSubtotal">₹0</td>
-      </tr>
-      <tr id="trDiscount" style="display:none;">
-        <td>Discount:</td>
-        <td style="text-align:right; color:#b8452b;" id="tblDiscount">-₹0</td>
-      </tr>
-      <tr class="grand">
-        <td>Total Amount:</td>
-        <td style="text-align:right;" id="tblTotal">₹0</td>
-      </tr>
-    </table>
-
-    <!-- Total in Words -->
-    <div class="amount-words" id="amountWordsBox">
-      <strong>Amount in words:</strong> <span id="amountInWordsText">Zero Rupees Only</span>
+    <!-- Totals and Words -->
+    <div class="sum">
+      <div class="words">
+        <div class="k">Amount in words</div>
+        <span id="amountInWords">Zero Rupees only</span>
+      </div>
+      <div class="totals">
+        <div><span>Subtotal</span><span id="sumSubtotal">₹0.00</span></div>
+        <div id="rowDiscount" style="display:none;"><span>Discount</span><span id="sumDiscount">₹0.00</span></div>
+        <div class="grand"><span>Grand total</span><span id="sumGrandTotal">₹0</span></div>
+      </div>
     </div>
 
-    <!-- Notes if any -->
-    <div id="docNotesBox" style="font-size:12.5px; color:#555; margin-bottom:20px; display:none;">
-      <strong>Notes:</strong> <span id="docNotesText"></span>
-    </div>
-
-    <!-- Statutory Footer & Signatory -->
-    <footer class="doc-footer">
-      <div style="max-width:440px; color:#444;" id="statutoryDeclaration">
-        Composition taxable person, not eligible to collect tax on supplies.
+    <!-- Footer -->
+    <footer class="d-foot">
+      <div class="foot-grid">
+        <div>
+          <div class="k">Notes</div>
+          <span id="footNotes">Thank you for stocking BROSKI.</span>
+          <div id="upiQrWrap" style="display:none; margin-top:8px;">
+            <img id="upiQrImg" src="" alt="UPI QR" width="88" height="88" style="border:1px solid #eadfcd; border-radius:6px; display:block; margin-top:4px;">
+            <span style="font-size:10px; color:#7a6556; display:block; margin-top:2px;">Scan to pay UPI</span>
+          </div>
+        </div>
+        <div>
+          <div class="k">Contact</div>
+          support@broskipetfood.com<br>broskipetfood.com
+        </div>
+        <div class="sign">
+          <div class="line">For BROSKI<br><span style="font-weight:500;color:#8a7565">Authorised signatory</span></div>
+        </div>
       </div>
-      <div class="signatory-box">
-        <div class="sign-line">Authorised Signatory – BROSKI</div>
-      </div>
+      <div class="legal" id="legalNotice">This is an estimate / cash memo, not a tax invoice. A GST bill is available on request.</div>
     </footer>
   </article>
 </div>
 
 <script>
+let currentDoc = null;
+
 window.addEventListener('DOMContentLoaded', async function () {
   const params = new URLSearchParams(window.location.search);
   const docNo = (params.get('no') || '').trim();
@@ -373,6 +534,7 @@ window.addEventListener('DOMContentLoaded', async function () {
       return;
     }
 
+    currentDoc = data;
     renderDoc(data);
   } catch (e) {
     console.error('[get_document error]', e);
@@ -390,140 +552,191 @@ function renderDoc(doc) {
   document.getElementById('loadingBox').style.display = 'none';
   document.getElementById('docPaper').style.display = 'block';
 
-  // Check cancelled
+  // Title tag update
+  document.title = `${doc.doc_no} · ${doc.party?.name || 'Document'} · BROSKI`;
+
+  // Cancelled Banner
   if (doc.doc_status === 'cancelled') {
     const b = document.getElementById('cancelledBanner');
     b.style.display = 'block';
     document.getElementById('cancelReason').textContent = doc.cancel_reason || 'Cancelled';
   }
 
-  // Business settings
+  // Business Details
   const biz = doc.business || {};
-  document.getElementById('bizName').textContent = biz.name || 'BROSKI';
-  document.getElementById('bizAddress').textContent = biz.bill_address || 'Nangloi, West Delhi – 110041';
-  document.getElementById('bizGstin').textContent = biz.gstin ? `GSTIN: ${biz.gstin}` : 'GSTIN: [set in Settings]';
-  document.getElementById('bizState').textContent = biz.state || 'Delhi (07)';
-  document.getElementById('bizHsn').textContent = biz.hsn || '2309';
+  const bizAddress = biz.bill_address || 'Nangloi, West Delhi – 110041';
+  const bizGstin = biz.gstin || '';
+  const bizEmail = biz.email || 'support@broskipetfood.com';
 
-  // Document Type Header
   const titleEl = document.getElementById('docTypeTitle');
-  const subEl = document.getElementById('docTypeSubtitle');
-  const statEl = document.getElementById('statutoryDeclaration');
+  const badgeEl = document.getElementById('docTypeBadge');
+  const legalEl = document.getElementById('legalNotice');
+  const fromDetailsEl = document.getElementById('fromPartyDetails');
+  const toPartyLabelEl = document.getElementById('toPartyLabel');
 
   switch (doc.doc_type) {
-    case 'quotation':
-      titleEl.textContent = 'QUOTATION';
-      subEl.textContent = 'Valid for 7 days · Prices inclusive of all taxes';
-      statEl.textContent = 'This is a quotation and not an invoice. Goods will be dispatched after order confirmation.';
-      break;
-    case 'estimate':
-      titleEl.textContent = 'ESTIMATE / CASH MEMO';
-      subEl.textContent = 'Not a tax invoice. GST bill available on request.';
-      statEl.textContent = 'Not a tax invoice. Composition GST bill available on request.';
-      break;
     case 'bill':
-      titleEl.textContent = 'BILL OF SUPPLY';
-      subEl.textContent = '';
-      statEl.textContent = 'Composition taxable person, not eligible to collect tax on supplies.';
+      titleEl.textContent = 'Bill of Supply';
+      badgeEl.textContent = 'Composition';
+      legalEl.textContent = 'Composition taxable person, not eligible to collect tax on supplies.';
+      toPartyLabelEl.textContent = 'Bill to';
+      fromDetailsEl.innerHTML = `${escapeHtml(bizAddress)}<br>${bizGstin ? `GSTIN: ${escapeHtml(bizGstin)} · ` : ''}State: Delhi (07)<br>${escapeHtml(bizEmail)}`;
+      break;
+    case 'quotation':
+      titleEl.textContent = 'Quotation';
+      badgeEl.textContent = 'Valid 7 days';
+      legalEl.textContent = 'Quotation valid for 7 days from the date of issue. Prices inclusive of all taxes.';
+      toPartyLabelEl.textContent = 'Quote for';
+      fromDetailsEl.innerHTML = `${escapeHtml(bizAddress)}<br>${escapeHtml(bizEmail)}`;
       break;
     case 'challan':
-      titleEl.textContent = 'DELIVERY CHALLAN';
-      subEl.textContent = 'Not a sale · Stock transfer / Samples';
-      statEl.textContent = 'Goods sent for supply / approval / samples. Not a sale invoice.';
+      titleEl.textContent = 'Delivery Challan';
+      badgeEl.textContent = 'Not a sale';
+      legalEl.textContent = 'Goods sent for delivery / display / sample. Not for sale / not a tax invoice.';
+      toPartyLabelEl.textContent = 'Consignee';
+      fromDetailsEl.innerHTML = `${escapeHtml(bizAddress)}<br>${escapeHtml(bizEmail)}`;
       break;
     case 'daily':
-      titleEl.textContent = 'DAILY CONSOLIDATED BILL';
-      subEl.textContent = 'Consolidated bill of supply for online orders under ₹200';
-      statEl.textContent = 'Composition taxable person, not eligible to collect tax on supplies.';
+      titleEl.textContent = 'Bill of Supply';
+      badgeEl.textContent = 'Daily Consolidated';
+      legalEl.textContent = 'Composition taxable person, not eligible to collect tax on supplies.';
+      toPartyLabelEl.textContent = 'Recipient';
+      fromDetailsEl.innerHTML = `${escapeHtml(bizAddress)}<br>${bizGstin ? `GSTIN: ${escapeHtml(bizGstin)} · ` : ''}State: Delhi (07)<br>${escapeHtml(bizEmail)}`;
+      break;
+    case 'estimate':
+    default:
+      titleEl.textContent = 'Estimate';
+      badgeEl.textContent = 'Not a tax invoice';
+      legalEl.textContent = 'This is an estimate / cash memo, not a tax invoice. A GST bill is available on request.';
+      toPartyLabelEl.textContent = 'Bill to';
+      fromDetailsEl.innerHTML = `${escapeHtml(bizAddress)}<br>${escapeHtml(bizEmail)}`;
       break;
   }
 
-  document.getElementById('docNumber').textContent = doc.doc_no;
-  document.getElementById('docDate').textContent = new Date(doc.doc_date).toLocaleDateString('en-IN', {
+  // Meta Box
+  document.getElementById('metaDocNo').textContent = doc.doc_no;
+  const docDateFormatted = new Date(doc.doc_date).toLocaleDateString('en-IN', {
     day: 'numeric', month: 'short', year: 'numeric'
   });
+  document.getElementById('metaDocDate').textContent = docDateFormatted;
 
-  if (doc.due_date && doc.payment_status === 'unpaid') {
-    document.getElementById('docDueDateWrap').style.display = 'block';
-    document.getElementById('docDueDate').textContent = new Date(doc.due_date).toLocaleDateString('en-IN', {
-      day: 'numeric', month: 'short', year: 'numeric'
-    });
+  let payText = 'Cash · Paid';
+  const payMethod = (doc.payment_method || 'cash').toLowerCase();
+  const payStatus = (doc.payment_status || 'paid').toLowerCase();
+
+  if (payMethod === 'credit' || payStatus === 'unpaid') {
+    if (doc.due_date) {
+      const dueFormatted = new Date(doc.due_date).toLocaleDateString('en-IN', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      });
+      payText = `Credit · Due ${dueFormatted}`;
+    } else {
+      payText = `Credit · Unpaid`;
+    }
+  } else if (payMethod === 'upi') {
+    payText = 'UPI · Paid';
+  } else {
+    payText = 'Cash · Paid';
   }
+  document.getElementById('metaPayment').textContent = payText;
 
   // Party Details
   const party = doc.party || {};
-  document.getElementById('partyName').textContent = party.name || party.customer_name || 'Walk-in Customer';
-  document.getElementById('partyAddress').textContent = party.address ? `${party.address}${party.area ? ', ' + party.area : ''}` : 'Nangloi, West Delhi';
-  document.getElementById('partyPhone').textContent = party.phone || party.customer_phone || '';
-  if (party.gstin) {
-    const gEl = document.getElementById('partyGstin');
-    gEl.style.display = 'block';
-    gEl.querySelector('span').textContent = party.gstin;
-  }
+  const partyName = party.name || party.customer_name || 'Walk-in Customer';
+  document.getElementById('toPartyName').textContent = partyName;
 
-  document.getElementById('partyPayMethod').textContent = doc.payment_method || 'Cash';
-  document.getElementById('partyPayStatus').textContent = (doc.payment_status || 'unpaid').toUpperCase();
-  document.getElementById('partyPayStatus').style.color = doc.payment_status === 'paid' ? '#166534' : '#b8452b';
+  let partyDetailsHtml = '';
+  if (party.address) partyDetailsHtml += escapeHtml(party.address);
+  if (party.area) partyDetailsHtml += (partyDetailsHtml ? ', ' : '') + escapeHtml(party.area);
+  if (!partyDetailsHtml) partyDetailsHtml = 'Nangloi, West Delhi';
+  if (party.phone) partyDetailsHtml += `<br>${escapeHtml(party.phone)}`;
+  if (party.gstin) partyDetailsHtml += `<br>GSTIN: ${escapeHtml(party.gstin)}`;
+  document.getElementById('toPartyDetails').innerHTML = partyDetailsHtml;
 
-  // Business UPI QR (only if upi_vpa is set)
-  if (doc.upi_vpa && doc.payment_status === 'unpaid') {
-    const vpa = doc.upi_vpa;
-    const upiUri = `upi://pay?pa=${encodeURIComponent(vpa)}&pn=BROSKI&am=${doc.total}&cu=INR&tn=${encodeURIComponent(doc.doc_no)}`;
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(upiUri)}`;
-    document.getElementById('upiQrImg').src = qrUrl;
-    document.getElementById('upiQrWrap').style.display = 'block';
-  }
-
-  // Items Table
-  const tbody = document.getElementById('docItemsBody');
+  // Lines Table
+  const tbody = document.getElementById('linesTableBody');
   tbody.innerHTML = '';
-  let hasFree = false;
-  let hasDisc = false;
 
   (doc.items || []).forEach((it, idx) => {
-    if (it.free_qty && it.free_qty > 0) hasFree = true;
-    if (it.discount && it.discount > 0) hasDisc = true;
+    const qty = it.qty || 1;
+    const rate = Number(it.rate || 0);
+    const disc = Number(it.discount || 0);
+    const amount = Number(it.amount !== undefined ? it.amount : ((rate * qty) - disc));
+
+    let subText = it.subtitle || it.note || (it.name && it.name.includes('Combo') ? '2 × 400 g pouches' : '400 g pouch');
+    if (it.free_qty && it.free_qty > 0) {
+      subText += ` · + ${it.free_qty} free`;
+    }
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="text-align:center;">${idx + 1}</td>
-      <td><strong>${escapeHtml(it.name)}</strong></td>
-      <td style="text-align:center;">${it.hsn || '2309'}</td>
-      <td style="text-align:center;">${it.qty}</td>
-      <td style="text-align:center;">${it.free_qty || '-'}</td>
-      <td style="text-align:right;">₹${it.rate}</td>
-      <td style="text-align:right;">${it.discount ? '₹' + it.discount : '-'}</td>
-      <td style="text-align:right; font-weight:700;">₹${it.amount !== undefined ? it.amount : (it.rate * it.qty)}</td>
+      <td>${idx + 1}</td>
+      <td><b>${escapeHtml(it.name)}</b><small>${escapeHtml(subText)}</small></td>
+      <td>${escapeHtml(it.hsn || '2309')}</td>
+      <td class="r">${qty}</td>
+      <td class="r">₹${rate.toFixed(2)}</td>
+      <td class="r">${disc > 0 ? `₹${disc.toFixed(2)}` : '–'}</td>
+      <td class="r"><b>₹${amount.toFixed(2)}</b></td>
     `;
     tbody.appendChild(tr);
   });
 
-  if (!hasFree) {
-    document.getElementById('thFreeQty').style.display = 'none';
-  }
-  if (!hasDisc) {
-    document.getElementById('thDisc').style.display = 'none';
-  }
+  // Summary & Totals
+  const subtotal = Number(doc.subtotal || doc.total || 0);
+  const discount = Number(doc.discount || 0);
+  const grandTotal = Number(doc.total || 0);
 
-  document.getElementById('tblSubtotal').textContent = `₹${doc.subtotal || doc.total}`;
-  if (doc.discount && doc.discount > 0) {
-    document.getElementById('trDiscount').style.display = 'table-row';
-    document.getElementById('tblDiscount').textContent = `-₹${doc.discount}`;
+  document.getElementById('sumSubtotal').textContent = `₹${subtotal.toFixed(2)}`;
+  if (discount > 0) {
+    document.getElementById('rowDiscount').style.display = 'flex';
+    document.getElementById('sumDiscount').textContent = `-₹${discount.toFixed(2)}`;
+  } else {
+    document.getElementById('rowDiscount').style.display = 'none';
   }
-  document.getElementById('tblTotal').textContent = `₹${doc.total}`;
+  document.getElementById('sumGrandTotal').textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
 
   // Amount in words
-  document.getElementById('amountInWordsText').textContent = numToWords(doc.total);
+  document.getElementById('amountInWords').textContent = numToWords(grandTotal);
 
   // Notes
+  const footNotesEl = document.getElementById('footNotes');
   if (doc.notes && doc.notes.trim()) {
-    document.getElementById('docNotesBox').style.display = 'block';
-    document.getElementById('docNotesText').textContent = doc.notes;
+    footNotesEl.textContent = doc.notes.trim();
+  } else {
+    footNotesEl.textContent = 'Thank you for stocking BROSKI.';
+  }
+
+  // Business UPI QR (only if upi_vpa is set and payment is unpaid or UPI)
+  const upiVpa = doc.upi_vpa || (doc.business && doc.business.upi && doc.business.upi.vpa);
+  if (upiVpa && (payStatus === 'unpaid' || payMethod === 'upi')) {
+    const upiUri = `upi://pay?pa=${encodeURIComponent(upiVpa)}&pn=BROSKI&am=${grandTotal}&cu=INR&tn=${encodeURIComponent(doc.doc_no)}`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=0&data=${encodeURIComponent(upiUri)}`;
+    document.getElementById('upiQrImg').src = qrUrl;
+    document.getElementById('upiQrWrap').style.display = 'block';
+  } else {
+    document.getElementById('upiQrWrap').style.display = 'none';
   }
 }
 
+function printDocument(mode) {
+  if (mode === 'a5') {
+    document.body.classList.add('print-a5');
+  } else {
+    document.body.classList.remove('print-a5');
+  }
+  window.print();
+}
+
+function shareWhatsApp() {
+  if (!currentDoc) return;
+  const partyName = currentDoc.party?.name || 'Customer';
+  const url = window.location.href;
+  const msg = `Hi ${partyName}! Here is your BROSKI ${currentDoc.doc_type ? currentDoc.doc_type.toUpperCase() : 'document'} (${currentDoc.doc_no}) for ₹${currentDoc.total}:\n${url}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
 function numToWords(n) {
-  if (n === 0) return 'Zero Rupees Only';
+  if (!n || n === 0) return 'Zero Rupees only';
   const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
     'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
   const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
@@ -538,7 +751,7 @@ function numToWords(n) {
     return inWords(Math.floor(num / 10000000)) + 'Crore ' + inWords(num % 10000000);
   }
 
-  return (inWords(Math.floor(n)).trim() + ' Rupees Only').replace(/\s+/g, ' ');
+  return 'Rupees ' + inWords(Math.floor(n)).trim() + ' only';
 }
 
 function escapeHtml(str) {
