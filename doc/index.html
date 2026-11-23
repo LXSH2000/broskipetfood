@@ -630,11 +630,17 @@ table.lines {
     padding: 12px 14px !important;
   }
   .totals div {
-    display: flex !important;
-    justify-content: space-between !important;
+    display: flex;
+    justify-content: space-between;
     padding: 6px 0 !important;
     font-size: 13.5px !important;
     color: #5d4a3d !important;
+  }
+  .totals div#rowDiscount {
+    display: none !important;
+  }
+  .totals div#rowDiscount.has-discount {
+    display: flex !important;
   }
   .totals .grand {
     margin-top: 6px !important;
@@ -1132,11 +1138,18 @@ function renderDoc(doc) {
   const grandTotal = Number(doc.total || 0);
 
   document.getElementById('sumSubtotal').textContent = `₹${subtotal.toFixed(2)}`;
+  const rowDiscount = document.getElementById('rowDiscount');
   if (discount > 0) {
-    document.getElementById('rowDiscount').style.display = 'flex';
+    if (rowDiscount) {
+      rowDiscount.classList.add('has-discount');
+      rowDiscount.style.display = 'flex';
+    }
     document.getElementById('sumDiscount').textContent = `-₹${discount.toFixed(2)}`;
   } else {
-    document.getElementById('rowDiscount').style.display = 'none';
+    if (rowDiscount) {
+      rowDiscount.classList.remove('has-discount');
+      rowDiscount.style.display = 'none';
+    }
   }
   document.getElementById('sumGrandTotal').textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
 

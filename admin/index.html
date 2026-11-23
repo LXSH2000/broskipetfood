@@ -2597,7 +2597,7 @@ function buildDocumentHtml(state) {
         </div>
         <div class="totals">
           <div><span>Subtotal</span><span>₹${subtotal.toFixed(2)}</span></div>
-          <div><span>Discount</span><span>₹${totalDisc.toFixed(2)}</span></div>
+          ${totalDisc > 0 ? `<div><span>Discount</span><span>-₹${totalDisc.toFixed(2)}</span></div>` : ''}
           <div class="grand"><span>Grand total</span><span>₹${grandTotal.toLocaleString('en-IN')}</span></div>
         </div>
       </div>
