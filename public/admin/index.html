@@ -2539,7 +2539,7 @@ function buildDocumentHtml(state) {
   if (party.phone) partyDetailsHtml += `<br>${escapeHtml(party.phone)}`;
   if (party.gstin) partyDetailsHtml += `<br>GSTIN: ${escapeHtml(party.gstin)}`;
 
-  const notesText = state.notes && state.notes.trim() ? escapeHtml(state.notes.trim()) : 'Thank you for stocking BROSKI.';
+  const notesText = state.notes && state.notes.trim() ? escapeHtml(state.notes.trim()) : '';
 
   return `
     <article class="doc">
@@ -2604,7 +2604,7 @@ function buildDocumentHtml(state) {
 
       <footer class="d-foot">
         <div class="foot-grid">
-          <div><div class="k">Notes</div>${notesText}</div>
+          <div>${notesText ? `<div class="k">Notes</div>${notesText}` : ''}</div>
           <div><div class="k">Contact</div>support@broskipetfood.com<br>broskipetfood.com</div>
           <div class="sign"><div class="line">For BROSKI<br><span style="font-weight:500;color:#8a7565">Authorised signatory</span></div></div>
         </div>
@@ -2690,7 +2690,9 @@ async function handleSaveAndIssueDocument() {
 
     const total = Math.max(0, subtotal - totalDisc);
 
-    const partyData = {
+    const isSavedShop = newDocState.partyKind === 'shop' && !!newDocState.party?.id;
+    const partyId = isSavedShop ? newDocState.party.id : null;
+    const partyData = isSavedShop ? null : {
       kind: newDocState.partyKind,
       name: newDocState.party.name || (newDocState.partyKind === 'walkin' ? 'Walk-in Customer' : 'Pet Shop'),
       phone: newDocState.party.phone || '',
@@ -2701,7 +2703,7 @@ async function handleSaveAndIssueDocument() {
 
     const res = await sb.rpc('admin_create_document', {
       p_doc_type: newDocState.docType,
-      p_party_id: null,
+      p_party_id: partyId,
       p_items: formattedItems,
       p_subtotal: subtotal,
       p_discount: totalDisc,
