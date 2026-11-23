@@ -67,7 +67,7 @@ window.BROSKI_CONFIG = {
       msg: 'Hi BROSKI! I want the Bro Combo (₹295)'
     }
   ],
-  UNIT_PRICE_LINE: 'Unit price: Bro Bites – Classic Crunch ₹0.37/g · Bro Mix – Happy Mix ₹0.45/g. Free delivery within 5 km of Nangloi on orders from ₹295; otherwise applicable delivery charges apply (shown at checkout).',
+  UNIT_PRICE_LINE: 'Unit price: Bro Bites – Classic Crunch ₹0.37/g · Bro Mix – Happy Mix ₹0.45/g. Free delivery in Nangloi (110041) on every order.',
 
   MSG: {
     combo: 'Hi BROSKI! I want the Bro Combo (₹295)',
