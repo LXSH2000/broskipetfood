@@ -36,6 +36,7 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
   const [landmark, setLandmark] = useState('');
   const [slot, setSlot] = useState('11 am – 2 pm');
   const [consent, setConsent] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('online'); // 'online' | 'cod'
 
   // Quote state from database RPC
   const [quoteData, setQuoteData] = useState(null);
@@ -273,6 +274,70 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
       const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
       const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}` : '#';
 
+      if (paymentMethod === 'online') {
+        // Create Cashfree Payment Session via Supabase RPC
+        const cfRes = await portalClient.rpc('create_cashfree_session', {
+          p_public_no: publicNo,
+          p_token: token
+        });
+
+        if (cfRes.error || !cfRes.data || cfRes.data.status !== 'ok' || !cfRes.data.payment_session_id) {
+          console.warn('[Cashfree create session error]', cfRes);
+          throw new Error((cfRes.data && cfRes.data.message) || 'Could not initiate online payment. Please try again or choose Cash on Delivery.');
+        }
+
+        const sessionId = cfRes.data.payment_session_id;
+
+        if (!window.Cashfree) {
+          throw new Error('Payment gateway SDK is still loading. Please try again in 5 seconds.');
+        }
+
+        const cf = window.Cashfree({ mode: 'production' });
+
+        cf.checkout({
+          paymentSessionId: sessionId,
+          redirectTarget: '_modal'
+        }).then(async (result) => {
+          if (result && result.error) {
+            console.warn('[Cashfree checkout cancelled/failed]', result.error);
+            setErrorMsg(result.error.message || 'Payment was cancelled or closed. You can retry or switch to Cash on Delivery.');
+            setLoading(false);
+            return;
+          }
+
+          // Payment completed: verify on Supabase backend
+          try {
+            await portalClient.rpc('verify_cashfree_payment', {
+              p_public_no: publicNo,
+              p_token: token
+            });
+          } catch (_) {}
+
+          setOrderConfirmed({
+            publicNo,
+            token,
+            customerCode,
+            total: orderTotal,
+            subtotal: data?.subtotal || estimatedSubtotal,
+            sampleAdded: data?.sample_added || false,
+            slot,
+            address: address.trim(),
+            pincode: pincode.trim(),
+            waUrl,
+            paidOnline: true
+          });
+
+          setStep(5); // Done screen
+          setLoading(false);
+        }).catch((cfErr) => {
+          console.warn('[Cashfree modal error]', cfErr);
+          setErrorMsg('Payment modal closed. You can retry or switch to Cash on Delivery.');
+          setLoading(false);
+        });
+
+        return; // wait for modal outcome
+      }
+
       setOrderConfirmed({
         publicNo,
         token,
@@ -283,7 +348,8 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
         slot,
         address: address.trim(),
         pincode: pincode.trim(),
-        waUrl
+        waUrl,
+        paidOnline: false
       });
 
       setStep(5); // Done screen
@@ -291,7 +357,9 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
       console.error('[place_order failed]', err);
       setErrorMsg(err.message || "Couldn't save your order. Please try again or WhatsApp us.");
     } finally {
-      setLoading(false);
+      if (paymentMethod !== 'online') {
+        setLoading(false);
+      }
     }
   };
 
@@ -625,15 +693,51 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
                 </div>
               </div>
 
-              <div className="bk-payment-method-box">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '20px' }}>💵</span>
-                  <div>
-                    <strong>Payment: Cash/UPI on delivery</strong>
-                    <div style={{ fontSize: '12.5px', color: '#6e5443' }}>
-                      Pay at your doorstep via Cash or any UPI app (GPay, PhonePe, Paytm).
+              <div className="bk-form-field">
+                <label className="bk-input-label">Payment Option</label>
+                <div className="bk-payment-options-group">
+                  <label className={`bk-payment-card ${paymentMethod === 'online' ? 'active' : ''}`}>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="online"
+                      checked={paymentMethod === 'online'}
+                      onChange={() => setPaymentMethod('online')}
+                    />
+                    <div className="bk-payment-card-body">
+                      <div className="bk-payment-card-title">
+                        <span>⚡ Pay Online</span>
+                        <span className="bk-payment-card-badge">Instant & Free</span>
+                      </div>
+                      <div className="bk-payment-card-desc">
+                        UPI (PhonePe, Google Pay, Paytm), Debit/Credit Cards & NetBanking via Cashfree.
+                      </div>
+                      <div className="bk-online-icons">
+                        <span className="bk-online-pill">PhonePe</span>
+                        <span className="bk-online-pill">GPay</span>
+                        <span className="bk-online-pill">Paytm</span>
+                        <span className="bk-online-pill">Cards</span>
+                      </div>
                     </div>
-                  </div>
+                  </label>
+
+                  <label className={`bk-payment-card ${paymentMethod === 'cod' ? 'active' : ''}`}>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="cod"
+                      checked={paymentMethod === 'cod'}
+                      onChange={() => setPaymentMethod('cod')}
+                    />
+                    <div className="bk-payment-card-body">
+                      <div className="bk-payment-card-title">
+                        <span>💵 Cash / UPI on Delivery</span>
+                      </div>
+                      <div className="bk-payment-card-desc">
+                        Pay our delivery bro at your doorstep in Nangloi via Cash or scan any UPI QR.
+                      </div>
+                    </div>
+                  </label>
                 </div>
               </div>
 
@@ -700,7 +804,7 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
                   <div><strong>Deliver to:</strong> {customerName} · +91 {phone}</div>
                   <div><strong>Address:</strong> {address}{landmark ? `, Near ${landmark}` : ''}, Nangloi – {pincode}</div>
                   <div><strong>Slot:</strong> {slot}</div>
-                  <div><strong>Payment:</strong> Cash / UPI on delivery</div>
+                  <div><strong>Payment:</strong> {paymentMethod === 'online' ? '⚡ Pay Online (Instant UPI / Cards via Cashfree)' : '💵 Cash / UPI on delivery'}</div>
                 </div>
               </div>
             </div>
@@ -735,7 +839,13 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
 
               <div className="bk-done-summary">
                 <p>We are packing your order in Nangloi. It will arrive during your selected slot: <strong>{orderConfirmed.slot}</strong>.</p>
-                <p>Payment of <strong>₹{orderConfirmed.total}</strong> is payable on delivery via Cash or UPI.</p>
+                {orderConfirmed.paidOnline ? (
+                  <p style={{ color: '#166534', fontWeight: '600' }}>
+                    ✅ Payment of ₹{orderConfirmed.total} received online via Cashfree.
+                  </p>
+                ) : (
+                  <p>Payment of <strong>₹{orderConfirmed.total}</strong> is payable on delivery via Cash or UPI.</p>
+                )}
               </div>
 
               <div className="bk-done-cta-group">
@@ -844,10 +954,12 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
                 >
                   {loading ? (
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                      <LoadingSpinner size={18} /> Placing Order…
+                      <LoadingSpinner size={18} /> {paymentMethod === 'online' ? 'Opening Payment…' : 'Placing Order…'}
                     </span>
                   ) : (
-                    `Place Order (₹${quoteData?.total || estimatedSubtotal})`
+                    paymentMethod === 'online'
+                      ? `Pay Online Now (₹${quoteData?.total || estimatedSubtotal}) →`
+                      : `Place Order (₹${quoteData?.total || estimatedSubtotal})`
                   )}
                 </button>
               </div>

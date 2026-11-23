@@ -405,6 +405,14 @@ window.addEventListener('DOMContentLoaded', async function () {
     const portal = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
     if (!portal) throw new Error('Portal client not available');
 
+    // Auto-verify Cashfree payment if returning from gateway
+    try {
+      await portal.rpc('verify_cashfree_payment', {
+        p_public_no: currentPublicNo,
+        p_token: currentToken
+      });
+    } catch (_) {}
+
     const { data, error } = await portal.rpc('get_order', {
       p_no: currentPublicNo,
       p_token: currentToken
@@ -462,7 +470,8 @@ function renderOrder(order) {
   document.getElementById('slipTotal').textContent = `₹${order.total}`;
 
   const payStatus = order.payment_status === 'paid' ? 'Paid' : 'Unpaid';
-  document.getElementById('slipPayment').textContent = `Cash/UPI on delivery (${payStatus})`;
+  const payMethod = order.payment_method === 'upi' ? 'Online (UPI / Card)' : 'Cash/UPI on delivery';
+  document.getElementById('slipPayment').textContent = `${payMethod} (${payStatus})`;
 
   // Render Status Timeline
   updateTimeline(order.order_status);

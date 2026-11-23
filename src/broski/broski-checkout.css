@@ -339,6 +339,91 @@
   padding: 14px;
 }
 
+.bk-payment-options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.bk-payment-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #fff;
+  border: 1.5px solid #e2d7c7;
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.bk-payment-card:hover {
+  border-color: #c4b09b;
+}
+
+.bk-payment-card.active {
+  border-color: var(--bk-rust-accent, #c85a32);
+  background: #fff9f6;
+  box-shadow: 0 2px 10px rgba(200, 90, 50, 0.08);
+}
+
+.bk-payment-card input[type="radio"] {
+  margin-top: 3px;
+  accent-color: var(--bk-rust-accent, #c85a32);
+  cursor: pointer;
+}
+
+.bk-payment-card-body {
+  flex: 1;
+}
+
+.bk-payment-card-title {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #352016;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bk-payment-card-badge {
+  font-size: 10px;
+  background: #e8f5e9;
+  color: #1b5e20;
+  padding: 1px 7px;
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.bk-payment-card-desc {
+  font-size: 12px;
+  color: #725845;
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+.bk-online-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8c7362;
+}
+
+.bk-online-pill {
+  background: #f4ecdf;
+  border: 1px solid #e0d2c0;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 10.5px;
+}
+
 .bk-consent-label {
   display: flex;
   align-items: flex-start;
