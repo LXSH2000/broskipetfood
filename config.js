@@ -4,6 +4,8 @@ window.BROSKI_CONFIG = {
   EMAIL: 'support@broskipetfood.com',
   GA_MEASUREMENT_ID: 'G-YJ89P0X3QH',   // Live verified GA4 ID
   GSTIN: '',                           // Empty if not issued
+  CASHFREE_APP_ID: '1542128bb6bb9cb1eb8767ccad48212451',
+  CASHFREE_MODE: 'production',
 
   // Supabase Portal Config (Only public anon/publishable key in frontend, never service_role)
   SUPABASE_URL: window.__BROSKI_SUPABASE_URL__ || 'https://gnunhiqahhnrkroqtxib.supabase.co',
