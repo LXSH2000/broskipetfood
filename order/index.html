@@ -242,12 +242,27 @@
       <p class="bk-lead">Looking up your order details…</p>
     </div>
 
+    <!-- State: Direct Visit / Track Guide -->
+    <div id="lookupGuideState" class="bk-card" style="display:none; text-align:center; padding:40px 24px;">
+      <span class="bk-badge" style="background:#f2e9dc; color:var(--brown);">Order Tracking</span>
+      <h1 style="font-size:24px; margin:14px 0 8px;">Track Your BROSKI Order</h1>
+      <p class="bk-lead" style="max-width:460px; margin:0 auto 20px;">Open the private tracking link shown at checkout or in your order confirmation, or view all your orders and points inside <strong>My BROSKI</strong>.</p>
+      <div style="display:flex; flex-direction:column; gap:10px; max-width:300px; margin:18px auto 0;">
+        <a href="/points/" class="bk-btn bk-btn--primary">View My Orders &amp; Points →</a>
+        <a id="lookupWaLink" href="#" target="_blank" rel="noopener noreferrer" class="bk-btn bk-btn--wa" style="display:none;">💬 WhatsApp Support</a>
+        <a href="/#shop" class="bk-btn bk-btn--ghost">Browse BROSKI Treats</a>
+      </div>
+    </div>
+
     <!-- State: Not Found -->
     <div id="notFoundState" class="bk-card" style="display:none; text-align:center; padding:40px 20px;">
       <span class="bk-badge bk-badge--rejected">Not Found</span>
       <h1 style="font-size:24px; margin:14px 0 8px;">Order Not Found</h1>
       <p class="bk-lead">The requested order number or security link is invalid or expired.</p>
-      <a href="/#shop" class="bk-btn bk-btn--primary" style="margin-top:16px;">Browse BROSKI Treats</a>
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:16px;">
+        <a href="/points/" class="bk-btn bk-btn--primary">View My Orders &amp; Points</a>
+        <a href="/#shop" class="bk-btn bk-btn--secondary">Browse BROSKI Treats</a>
+      </div>
     </div>
 
     <!-- State: Order Loaded -->
@@ -381,7 +396,7 @@
 
   <footer class="bk-foot no-print">
     <p class="bk-small">
-      BROSKI · Nangloi, West Delhi – 110041 · <a href="mailto:support@broskipetfood.com">support@broskipetfood.com</a>
+      BROSKI · Nangloi, West Delhi – 110041 · <a id="footWaLink" href="#">WhatsApp us</a> · <a href="mailto:support@broskipetfood.com">support@broskipetfood.com</a> · <span style="white-space:nowrap;">Mon–Sat, 10 am – 7 pm</span>
     </p>
   </footer>
 </div>
@@ -392,12 +407,28 @@ let currentPublicNo = '';
 let currentToken = '';
 
 window.addEventListener('DOMContentLoaded', async function () {
+  const cfgWa = window.BROSKI_CONFIG || {};
+  const waNumFoot = (cfgWa.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
+  if (waNumFoot) {
+    const fWa = document.getElementById('footWaLink');
+    if (fWa) {
+      fWa.href = `https://wa.me/${waNumFoot}?text=${encodeURIComponent('Hi BROSKI!')}`;
+      fWa.target = '_blank';
+      fWa.rel = 'noopener noreferrer';
+    }
+    const lWa = document.getElementById('lookupWaLink');
+    if (lWa) {
+      lWa.href = `https://wa.me/${waNumFoot}?text=${encodeURIComponent('Hi BROSKI! I want to check my order status.')}`;
+      lWa.style.display = 'inline-flex';
+    }
+  }
+
   const params = new URLSearchParams(window.location.search);
   currentPublicNo = (params.get('no') || '').trim();
   currentToken = (params.get('t') || params.get('token') || '').trim();
 
   if (!currentPublicNo || !currentToken) {
-    showNotFound();
+    showLookupGuide();
     return;
   }
 
@@ -431,14 +462,23 @@ window.addEventListener('DOMContentLoaded', async function () {
   }
 });
 
+function showLookupGuide() {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('lookupGuideState').style.display = 'block';
+  document.getElementById('notFoundState').style.display = 'none';
+  document.getElementById('orderContent').style.display = 'none';
+}
+
 function showNotFound() {
   document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('lookupGuideState').style.display = 'none';
   document.getElementById('notFoundState').style.display = 'block';
   document.getElementById('orderContent').style.display = 'none';
 }
 
 function renderOrder(order) {
   document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('lookupGuideState').style.display = 'none';
   document.getElementById('orderContent').style.display = 'block';
 
   document.getElementById('orderHeading').textContent = `Order ${order.public_no}`;
@@ -449,7 +489,7 @@ function renderOrder(order) {
 
   document.getElementById('slipCustomerName').textContent = order.customer_name || 'Customer';
   document.getElementById('slipCustomerPhone').textContent = order.masked_phone || '••••••••';
-  document.getElementById('slipAddress').textContent = `${order.address}${order.landmark ? ', ' + order.landmark : ''}, Nangloi – ${order.pincode}`;
+  document.getElementById('slipAddress').textContent = `${order.address}${order.landmark ? ', ' + order.landmark : ''}, ${order.pincode === '110041' ? 'Nangloi' : 'West Delhi'} – ${order.pincode}`;
   document.getElementById('slipSlot').textContent = `Slot: ${order.slot || '11 am – 2 pm'}`;
 
   // Render items table

@@ -1623,7 +1623,7 @@ function openPackingSlipModal(id) {
           <strong>Deliver To:</strong><br>
           ${escapeHtml(o.address || '')}<br>
           ${o.landmark ? 'Landmark: ' + escapeHtml(o.landmark) + '<br>' : ''}
-          Nangloi – <strong>${escapeHtml(o.pincode || '110041')}</strong><br>
+          ${o.pincode === '110041' ? 'Nangloi' : 'West Delhi'} – <strong>${escapeHtml(o.pincode || '110041')}</strong><br>
           Delivery Slot: <strong>${escapeHtml(o.slot || '')}</strong>
         </div>
 
@@ -1695,7 +1695,7 @@ function renderPackingList() {
       <td><strong>${escapeHtml(o.public_no || '')}</strong></td>
       <td><strong>${escapeHtml(o.slot || '')}</strong></td>
       <td>${formatItems(o.items)}</td>
-      <td>${escapeHtml(o.address || '')}, Nangloi – ${escapeHtml(o.pincode || '')}</td>
+      <td>${escapeHtml(o.address || '')}, ${o.pincode === '110041' ? 'Nangloi' : 'West Delhi'} – ${escapeHtml(o.pincode || '')}</td>
       <td style="font-weight:700; color:var(--adm-rust);">₹${o.total}</td>
     </tr>`;
   });
