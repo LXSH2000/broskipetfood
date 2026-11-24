@@ -2,10 +2,13 @@
 -- 1) Secret key is read from the admin-only secrets table (never typed into code or git).
 -- 2) No fake fallback phone. 3) Retry of the same order reuses the Cashfree order (no 409 error).
 -- 4) Order is marked "online/upi" only after Cashfree says PAID, and the paid amount must match.
+-- 5) online_attempt_at = customer opened online payment (admin can call before delivering if still unpaid).
 -- Supabase → SQL Editor → paste all → Run. Safe to run twice.
 -- AFTER running, add your secret key yourself in a SEPARATE query (never in chat, never in git):
 --   insert into public.secrets (k, v) values ('cashfree_secret', 'PASTE_SECRET_HERE')
 --   on conflict (k) do update set v = excluded.v;
+
+alter table public.orders add column if not exists online_attempt_at timestamptz;
 
 create or replace function public.create_cashfree_session(p_public_no text, p_token text)
 returns json
@@ -80,6 +83,7 @@ begin
   if v_cf->>'order_status' = 'PAID' then
     return json_build_object('status','error','message','This order is already paid.');
   end if;
+  update public.orders set online_attempt_at = coalesce(online_attempt_at, now()) where id = v_order.id;
   if coalesce(v_cf->>'payment_session_id','') = '' then
     return json_build_object('status','error','message','Could not start online payment. Please choose Cash / UPI on delivery.');
   end if;

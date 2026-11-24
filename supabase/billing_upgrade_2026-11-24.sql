@@ -16,6 +16,11 @@ where payment_status = 'paid' and paid_amount = 0;
 create or replace function public.documents_sync_paid() returns trigger
 language plpgsql set search_path = public as $$
 begin
+  -- Estimate converted to Bill: carry over the money already received
+  if TG_OP = 'INSERT' and NEW.converted_from is not null and NEW.paid_amount = 0 then
+    select paid_amount into NEW.paid_amount from public.documents where id = NEW.converted_from;
+    NEW.paid_amount := coalesce(NEW.paid_amount, 0);
+  end if;
   if NEW.payment_status = 'paid' and NEW.paid_amount < NEW.total then
     NEW.paid_amount := NEW.total;
   end if;
@@ -55,6 +60,9 @@ begin
   if not found then return json_build_object('error','not_found'); end if;
   if v_doc.status = 'cancelled' then return json_build_object('error','cancelled'); end if;
   if v_doc.doc_type not in ('estimate','bill') then return json_build_object('error','not_a_sale'); end if;
+  if exists (select 1 from public.documents where converted_from = p_document_id and status <> 'cancelled') then
+    return json_build_object('error','converted');  -- record the payment on the new bill instead
+  end if;
   if p_amount is null or p_amount <= 0 then return json_build_object('error','bad_amount'); end if;
   if p_amount > v_doc.total - v_doc.paid_amount then
     return json_build_object('error','more_than_balance','balance', v_doc.total - v_doc.paid_amount);
