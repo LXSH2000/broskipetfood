@@ -469,9 +469,8 @@ function renderOrder(order) {
   document.getElementById('slipSubtotal').textContent = `₹${order.subtotal || order.total}`;
   document.getElementById('slipTotal').textContent = `₹${order.total}`;
 
-  const payStatus = order.payment_status === 'paid' ? 'Paid' : 'Unpaid';
-  const payMethod = order.payment_method === 'upi' ? 'Online (UPI / Card)' : 'Cash/UPI on delivery';
-  document.getElementById('slipPayment').textContent = `${payMethod} (${payStatus})`;
+  const paymentText = order.payment_status === 'paid' ? 'Online – Paid' : 'Unpaid – pay at door';
+  document.getElementById('slipPayment').textContent = paymentText;
 
   // Render Status Timeline
   updateTimeline(order.order_status);

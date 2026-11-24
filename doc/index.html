@@ -1186,22 +1186,22 @@ function renderDoc(doc) {
 
     const tr = document.createElement('tr');
     tr.className = 'line-row';
-    const discPart = disc > 0 ? ` (-₹${disc.toFixed(2)})` : '';
+    const discPart = disc > 0 ? ` (-₹${Math.round(disc).toLocaleString('en-IN')})` : '';
     tr.innerHTML = `
       <td class="col-num">${idx + 1}</td>
       <td class="col-item">
         <b>${escapeHtml(it.name)}</b>
         <small>${escapeHtml(subText)}</small>
         <div class="m-line-calc">
-          <span class="m-calc-expr">${qty} × ₹${rate.toFixed(2)}${discPart}</span>
-          <b class="m-amt">₹${amount.toFixed(2)}</b>
+          <span class="m-calc-expr">${qty} × ₹${Math.round(rate).toLocaleString('en-IN')}${discPart}</span>
+          <b class="m-amt">₹${Math.round(amount).toLocaleString('en-IN')}</b>
         </div>
       </td>
       <td class="col-hsn">${escapeHtml(it.hsn || '2309')}</td>
       <td class="col-qty r">${qty}</td>
-      <td class="col-rate r">₹${rate.toFixed(2)}</td>
-      <td class="col-disc r">${disc > 0 ? `₹${disc.toFixed(2)}` : '–'}</td>
-      <td class="col-amt r"><b>₹${amount.toFixed(2)}</b></td>
+      <td class="col-rate r">₹${Math.round(rate).toLocaleString('en-IN')}</td>
+      <td class="col-disc r">${disc > 0 ? `₹${Math.round(disc).toLocaleString('en-IN')}` : '–'}</td>
+      <td class="col-amt r"><b>₹${Math.round(amount).toLocaleString('en-IN')}</b></td>
     `;
     tbody.appendChild(tr);
   });
@@ -1213,14 +1213,14 @@ function renderDoc(doc) {
   const paidAmount = Number(doc.paid_amount || 0);
   const balance = Number(doc.balance !== undefined ? doc.balance : Math.max(0, grandTotal - paidAmount));
 
-  document.getElementById('sumSubtotal').textContent = `₹${subtotal.toFixed(2)}`;
+  document.getElementById('sumSubtotal').textContent = `₹${Math.round(subtotal).toLocaleString('en-IN')}`;
   const rowDiscount = document.getElementById('rowDiscount');
   if (discount > 0) {
     if (rowDiscount) {
       rowDiscount.classList.add('has-discount');
       rowDiscount.style.display = 'flex';
     }
-    document.getElementById('sumDiscount').textContent = `-₹${discount.toFixed(2)}`;
+    document.getElementById('sumDiscount').textContent = `-₹${Math.round(discount).toLocaleString('en-IN')}`;
   } else {
     if (rowDiscount) {
       rowDiscount.classList.remove('has-discount');
@@ -1233,7 +1233,7 @@ function renderDoc(doc) {
     const deliv = Number(doc.delivery || 0);
     if (deliv > 0) {
       rowDelivery.style.display = 'flex';
-      document.getElementById('sumDelivery').textContent = `₹${deliv.toFixed(2)}`;
+      document.getElementById('sumDelivery').textContent = `₹${Math.round(deliv).toLocaleString('en-IN')}`;
     } else {
       rowDelivery.style.display = 'none';
     }
@@ -1263,7 +1263,17 @@ function renderDoc(doc) {
 
     if (doc.due_date) {
       rowDueDate.style.display = 'flex';
-      document.getElementById('sumDueDate').textContent = doc.due_date;
+      let formattedDueDate = doc.due_date;
+      try {
+        const parts = doc.due_date.split('-');
+        if (parts.length === 3) {
+          const dObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+          formattedDueDate = dObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        } else {
+          formattedDueDate = new Date(doc.due_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+      } catch (_) {}
+      document.getElementById('sumDueDate').textContent = formattedDueDate;
     } else {
       rowDueDate.style.display = 'none';
     }
