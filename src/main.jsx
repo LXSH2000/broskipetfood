@@ -399,7 +399,7 @@ function App() {
           </div>
         </section>
 
-        {C().REVIEWS && C().REVIEWS.length > 0 && (
+        {C().REVIEWS && C().REVIEWS.length > 0 ? (
           <section className="ritual section reviews-section">
             <div className="eyebrow">FROM REAL BROS</div>
             <h2>Happy tails,<br /><span className="serif">in their words.</span></h2>
@@ -413,7 +413,25 @@ function App() {
                 </article>
               ))}
             </div>
-            <p style={{ marginTop: '16px', fontSize: '13px', color: 'var(--bk-brown-2)', textAlign: 'center' }}>Shared with permission.</p>
+            <p style={{ marginTop: '16px', fontSize: '13px', color: 'var(--bk-brown-2)', textAlign: 'center' }}>
+              Shared with permission · <a className="text-link" href="/r/" style={{ display: 'inline', padding: 0, minHeight: 'auto' }}>Share your review →</a>
+            </p>
+          </section>
+        ) : (
+          <section className="ritual section reviews-section" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="eyebrow" style={{ justifyContent: 'center' }}>FROM REAL BROS · FIRST BATCH IN NANGLOI</div>
+            <h2>Honest reviews,<br /><span className="serif">straight from real dogs.</span></h2>
+            <p style={{ maxWidth: '620px', color: 'var(--bk-brown-2)', lineHeight: 1.65, marginInline: 'auto' }}>
+              We only publish real reviews with permission — zero paid or made-up testimonials. Tried Broski from a pack or sample? Tell us honestly how your bro liked it and get a complimentary 50 g taste pack on your next order.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', marginTop: '20px', alignItems: 'center' }}>
+              <a className="button primary" href="/r/">Share Honest Review →</a>
+              {C().INSTAGRAM_URL ? (
+                <a className="button light" href={C().INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+                  Follow @broskipetfood ↗
+                </a>
+              ) : null}
+            </div>
           </section>
         )}
 
