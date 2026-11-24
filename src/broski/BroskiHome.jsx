@@ -284,7 +284,10 @@ export function ProductCards() {
           </div>
           <div className="bk-details-row">
             <dt>Consumer care:</dt>
-            <dd><a href="mailto:support@broskipetfood.com" className="bk-details-email">support@broskipetfood.com</a></dd>
+            <dd>
+              <a href="tel:+919821563468" style={{ color: 'inherit', textDecoration: 'none', marginRight: '6px' }}>+91 9821563468</a>
+              · <a href="mailto:support@broskipetfood.com" className="bk-details-email">support@broskipetfood.com</a>
+            </dd>
           </div>
         </dl>
       </div>
@@ -408,7 +411,8 @@ export function SiteFooter() {
           {C().INSTAGRAM_URL ? (
             <a href={C().INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Instagram</a>
           ) : null}
-          <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp (+91 9821563468)</a>
+          <a href="tel:+919821563468">Call: +91 9821563468</a>
         </div>
       </div>
       <div className="footer-word">
@@ -418,7 +422,7 @@ export function SiteFooter() {
         </svg>
       </div>
       <div className="footer-bottom">
-        <span>© 2026 Broski · Nangloi, West Delhi – 110041 · <a href={`mailto:${EMAIL}`} style={{ color: 'inherit' }}>{EMAIL}</a> · Udyam UDYAM-DL-11-0177908{GSTIN ? ` · GSTIN: ${GSTIN}` : ''}</span>
+        <span>© 2026 Broski · Nangloi, West Delhi – 110041 · Phone: <a href="tel:+919821563468" style={{ color: 'inherit' }}>+91 9821563468</a> · <a href={`mailto:${EMAIL}`} style={{ color: 'inherit' }}>{EMAIL}</a> · Udyam: UDYAM-DL-11-0177908{GSTIN ? ` · GSTIN: ${GSTIN}` : ''}</span>
         <span>Made for the ones with paws. ♡</span>
         <span>IN / INR ₹</span>
       </div>

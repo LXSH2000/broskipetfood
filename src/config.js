@@ -7,11 +7,12 @@ export const CONFIG = {
   SUPPORT_EMAIL: 'support@broskipetfood.com',
   GA_MEASUREMENT_ID: 'G-YJ89P0X3QH',
   WHATSAPP_NUMBER: '919821563468',
+  PHONE: '+91 9821563468',
   LAUNCH_STATUS: 'live',
   LAUNCH_DATE: 'November 2026',
   LAUNCH_LOCATION: 'West Delhi (Nangloi)',
   UDYAM_REGISTRATION: 'UDYAM-DL-11-0177908',
-  GSTIN: '',
+  GSTIN: '07BONPL7742A1ZW',
 
   // West Delhi delivery coverage
   WEST_DELHI_PINCODES: ['110041', '110087', '110063', '110027', '110058', '110015', '110026', '110034', '110056'],
