@@ -109,6 +109,7 @@ body {
   box-shadow: 0 10px 40px rgba(53,32,22,.12);
   padding: 56px 60px 48px;
   position: relative;
+  overflow: hidden;
   font-family: var(--sans);
   box-sizing: border-box;
 }
@@ -129,6 +130,34 @@ body {
   font-size: 13px;
   margin-bottom: 20px;
   text-align: center;
+}
+.doc-watermark {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: 110px;
+  letter-spacing: .15em;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  white-space: nowrap;
+  text-transform: uppercase;
+  display: none;
+}
+.doc-watermark.cancelled {
+  color: rgba(220, 38, 38, 0.08);
+  border: 10px solid rgba(220, 38, 38, 0.08);
+  padding: 10px 40px;
+  border-radius: 20px;
+}
+.doc-watermark.paid {
+  color: rgba(22, 101, 52, 0.08);
+  border: 10px solid rgba(22, 101, 52, 0.08);
+  padding: 10px 40px;
+  border-radius: 20px;
 }
 .d-head {
   display: flex;
@@ -334,10 +363,17 @@ table.lines {
 .m-line-calc { display: none; }
 
 @media (max-width: 600px) {
-  .docwrap { padding: 0 8px 48px; }
+  .docwrap { padding: 0 8px 48px; overflow-x: hidden; }
   .doc {
     padding: 24px 14px 24px;
     border-radius: 12px;
+  }
+  .doc-watermark {
+    font-size: 52px;
+    padding: 6px 16px;
+  }
+  .doc-watermark.cancelled, .doc-watermark.paid {
+    border-width: 5px !important;
   }
   .brand-box img { height: 28px; }
   .d-title .t { font-size: 20px; }
@@ -739,6 +775,7 @@ table.lines {
 <!-- Main Document View -->
 <div class="docwrap">
   <article class="doc" id="docPaper" style="display:none;">
+    <div id="docWatermark" class="doc-watermark" style="display:none;"></div>
     <div id="cancelledBanner" class="cancelled-banner" style="display:none;">
       CANCELLED DOCUMENT · <span id="cancelReason">Cancelled</span>
     </div>
@@ -811,16 +848,22 @@ table.lines {
       <div class="totals">
         <div><span>Subtotal</span><span id="sumSubtotal">₹0.00</span></div>
         <div id="rowDiscount" style="display:none;"><span>Discount</span><span id="sumDiscount">₹0.00</span></div>
+        <div id="rowDelivery" style="display:none;"><span>Delivery</span><span id="sumDelivery">₹0.00</span></div>
         <div class="grand"><span>Grand total</span><span id="sumGrandTotal">₹0</span></div>
+        <div id="rowPaid" style="display:none; color:#166534; font-weight:600; padding-top:6px;"><span>Paid</span><span id="sumPaid">₹0</span></div>
+        <div id="rowBalance" style="display:none; color:#b8452b; font-weight:700;"><span>Balance due</span><span id="sumBalance">₹0</span></div>
+        <div id="rowDueDate" style="display:none; color:#8a7565; font-size:12px;"><span>Due by</span><span id="sumDueDate">-</span></div>
       </div>
     </div>
 
     <!-- Footer -->
     <footer class="d-foot">
+      <div id="docThankYouLine" style="font-size:12px; font-weight:600; color:var(--brown); margin-bottom:10px;"></div>
+      <div id="docQuotationTerms" style="font-size:12px; color:var(--muted); margin-bottom:10px; display:none;"></div>
       <div class="foot-grid">
         <div>
           <div class="k">Notes</div>
-          <span id="footNotes">Thank you for stocking BROSKI.</span>
+          <span id="footNotes"></span>
           <div id="upiQrWrap" style="display:none; margin-top:8px;">
             <img id="upiQrImg" src="" alt="UPI QR" width="88" height="88" style="border:1px solid #eadfcd; border-radius:6px; display:block; margin-top:4px;">
             <span style="font-size:10px; color:#7a6556; display:block; margin-top:2px;">Scan to pay UPI</span>
@@ -831,6 +874,9 @@ table.lines {
           support@broskipetfood.com<br>broskipetfood.com
         </div>
         <div class="sign">
+          <div id="authorSignImgWrap" style="display:none; margin-bottom:4px;">
+            <img id="authorSignImg" src="" alt="Authorised Signature" style="max-height:55px; max-width:160px; display:block; margin:0 0 2px auto; object-fit:contain;">
+          </div>
           <div class="line">For BROSKI<br><span style="font-weight:500;color:#8a7565">Authorised signatory</span></div>
         </div>
       </div>
@@ -859,10 +905,12 @@ function getSampleDoc(type) {
     subtotal: 850,
     discount: 0,
     total: normType === 'challan' ? 0 : 850,
+    paid_amount: normType === 'quotation' || normType === 'challan' ? 0 : 850,
+    balance: 0,
     payment_method: normType === 'quotation' ? 'credit' : 'cash',
     payment_status: normType === 'quotation' ? 'unpaid' : 'paid',
     due_date: normType === 'quotation' ? '2026-11-30' : null,
-    notes: normType === 'challan' ? 'Goods sent for display/sample. Not for sale.' : 'Delivered 10 packs to counter',
+    notes: normType === 'challan' ? 'Goods sent for display/sample. Not for sale.' : '',
     items: [
       { name: 'Bro Bites – Classic Crunch', hsn: '2309', qty: 5, free_qty: 1, rate: 80, discount: 0, amount: normType === 'challan' ? 0 : 400 },
       { name: 'Bro Mix – Happy Mix', hsn: '2309', qty: 5, free_qty: 0, rate: 90, discount: 0, amount: normType === 'challan' ? 0 : 450 }
@@ -880,7 +928,9 @@ function getSampleDoc(type) {
       gstin: '07AABCU9603R1ZM',
       state: 'Delhi (07)',
       hsn: '2309',
-      email: 'support@broskipetfood.com'
+      email: 'support@broskipetfood.com',
+      thank_you_line: 'Thank you for choosing BROSKI.',
+      quotation_terms: 'Prices include all taxes. Valid for 7 days.'
     },
     upi_vpa: 'broski@axisbank'
   };
@@ -949,6 +999,8 @@ window.addEventListener('DOMContentLoaded', async function () {
               subtotal: directDoc.subtotal,
               discount: directDoc.discount,
               total: directDoc.total,
+              paid_amount: directDoc.paid_amount || 0,
+              balance: Math.max(0, (directDoc.total || 0) - (directDoc.paid_amount || 0)),
               payment_method: directDoc.payment_method,
               payment_status: directDoc.payment_status,
               due_date: directDoc.due_date,
@@ -997,11 +1049,33 @@ function renderDoc(doc) {
   // Title tag update
   document.title = `${doc.doc_no} · ${doc.party?.name || 'Document'} · BROSKI`;
 
-  // Cancelled Banner
-  if (doc.doc_status === 'cancelled') {
+  // Watermarks & Cancelled Banner
+  const wm = document.getElementById('docWatermark');
+  const isCancelled = doc.doc_status === 'cancelled';
+  const totalAmt = Number(doc.total || 0);
+  const paidAmt = Number(doc.paid_amount || 0);
+  const isPaid = doc.payment_status === 'paid' || (totalAmt > 0 && paidAmt >= totalAmt);
+
+  if (isCancelled) {
     const b = document.getElementById('cancelledBanner');
     b.style.display = 'block';
     document.getElementById('cancelReason').textContent = doc.cancel_reason || 'Cancelled';
+    if (wm) {
+      wm.className = 'doc-watermark cancelled';
+      wm.textContent = 'CANCELLED';
+      wm.style.display = 'block';
+    }
+  } else {
+    document.getElementById('cancelledBanner').style.display = 'none';
+    if (wm) {
+      if (isPaid) {
+        wm.className = 'doc-watermark paid';
+        wm.textContent = 'PAID';
+        wm.style.display = 'block';
+      } else {
+        wm.style.display = 'none';
+      }
+    }
   }
 
   // Business Details
@@ -1136,6 +1210,8 @@ function renderDoc(doc) {
   const subtotal = Number(doc.subtotal || doc.total || 0);
   const discount = Number(doc.discount || 0);
   const grandTotal = Number(doc.total || 0);
+  const paidAmount = Number(doc.paid_amount || 0);
+  const balance = Number(doc.balance !== undefined ? doc.balance : Math.max(0, grandTotal - paidAmount));
 
   document.getElementById('sumSubtotal').textContent = `₹${subtotal.toFixed(2)}`;
   const rowDiscount = document.getElementById('rowDiscount');
@@ -1151,23 +1227,101 @@ function renderDoc(doc) {
       rowDiscount.style.display = 'none';
     }
   }
+
+  const rowDelivery = document.getElementById('rowDelivery');
+  if (rowDelivery) {
+    const deliv = Number(doc.delivery || 0);
+    if (deliv > 0) {
+      rowDelivery.style.display = 'flex';
+      document.getElementById('sumDelivery').textContent = `₹${deliv.toFixed(2)}`;
+    } else {
+      rowDelivery.style.display = 'none';
+    }
+  }
+
   document.getElementById('sumGrandTotal').textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
+
+  // Part-paid rows under Grand Total:
+  // "When the bill is part-paid, show 3 rows under Grand Total: 'Paid ₹X', 'Balance due ₹Y' (bold) and 'Due by <date>' if a due date is set."
+  // "Hide any row that is 0: discount (already done), delivery, paid."
+  const rowPaid = document.getElementById('rowPaid');
+  const rowBalance = document.getElementById('rowBalance');
+  const rowDueDate = document.getElementById('rowDueDate');
+
+  const isPartPaid = (paidAmount > 0 && balance > 0) || doc.payment_status === 'partial';
+
+  if (isPartPaid) {
+    if (paidAmount > 0) {
+      rowPaid.style.display = 'flex';
+      document.getElementById('sumPaid').textContent = `₹${paidAmount.toLocaleString('en-IN')}`;
+    } else {
+      rowPaid.style.display = 'none';
+    }
+
+    rowBalance.style.display = 'flex';
+    document.getElementById('sumBalance').textContent = `₹${balance.toLocaleString('en-IN')}`;
+
+    if (doc.due_date) {
+      rowDueDate.style.display = 'flex';
+      document.getElementById('sumDueDate').textContent = doc.due_date;
+    } else {
+      rowDueDate.style.display = 'none';
+    }
+  } else {
+    rowPaid.style.display = 'none';
+    rowBalance.style.display = 'none';
+    rowDueDate.style.display = 'none';
+  }
 
   // Amount in words
   document.getElementById('amountInWords').textContent = numToWords(grandTotal);
 
-  // Notes
+  // Notes:
+  // "These lines are not notes. The notes field stays empty by default."
   const footNotesEl = document.getElementById('footNotes');
   if (doc.notes && doc.notes.trim()) {
     footNotesEl.textContent = doc.notes.trim();
   } else {
-    footNotesEl.textContent = 'Thank you for stocking BROSKI.';
+    footNotesEl.textContent = '';
   }
 
-  // Business UPI QR (only if upi_vpa is set and payment is unpaid or UPI)
+  // Fixed footer lines:
+  // "Thank-you line", default "Thank you for choosing BROSKI."
+  // "Quotation terms", default "Prices include all taxes. Valid for 7 days."
+  // /doc prints the thank-you line on every document and the quotation terms on quotations only.
+  const thankYouText = doc.business?.thank_you_line || 'Thank you for choosing BROSKI.';
+  const thankYouEl = document.getElementById('docThankYouLine');
+  if (thankYouEl) {
+    thankYouEl.textContent = thankYouText;
+    thankYouEl.style.display = 'block';
+  }
+
+  const quoteTermsEl = document.getElementById('docQuotationTerms');
+  if (quoteTermsEl) {
+    if (doc.doc_type === 'quotation') {
+      quoteTermsEl.textContent = doc.business?.quotation_terms || 'Prices include all taxes. Valid for 7 days.';
+      quoteTermsEl.style.display = 'block';
+    } else {
+      quoteTermsEl.style.display = 'none';
+    }
+  }
+
+  // Signature:
+  // /doc: show the signature image above "Authorised signatory" on the Bill of Supply only.
+  const signWrap = document.getElementById('authorSignImgWrap');
+  const signImg = document.getElementById('authorSignImg');
+  if (doc.doc_type === 'bill' && doc.business?.signature) {
+    signImg.src = doc.business.signature;
+    signWrap.style.display = 'block';
+  } else {
+    signWrap.style.display = 'none';
+  }
+
+  // Business UPI QR (only if upi_vpa is set and payment is unpaid or UPI and balance > 0)
   const upiVpa = doc.upi_vpa || (doc.business && doc.business.upi && doc.business.upi.vpa);
-  if (upiVpa && (payStatus === 'unpaid' || payMethod === 'upi')) {
-    const upiUri = `upi://pay?pa=${encodeURIComponent(upiVpa)}&pn=BROSKI&am=${grandTotal}&cu=INR&tn=${encodeURIComponent(doc.doc_no)}`;
+  if (upiVpa && (payStatus === 'unpaid' || payStatus === 'partial' || payMethod === 'upi') && balance > 0 && !isCancelled) {
+    const qrAmt = balance > 0 ? balance : grandTotal;
+    const upiUri = `upi://pay?pa=${encodeURIComponent(upiVpa)}&pn=BROSKI&am=${qrAmt}&cu=INR&tn=${encodeURIComponent(doc.doc_no)}`;
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=0&data=${encodeURIComponent(upiUri)}`;
     document.getElementById('upiQrImg').src = qrUrl;
     document.getElementById('upiQrWrap').style.display = 'block';
@@ -1177,7 +1331,27 @@ function renderDoc(doc) {
 }
 
 function printDocument() {
+  const oldTitle = document.title;
+  let newTitle = 'BROSKI_Document';
+  if (currentDoc) {
+    const cleanDocNo = (currentDoc.doc_no || 'DOC').replace(/\//g, '-');
+    const rawParty = currentDoc.party?.name || 'Customer';
+    const cleanParty = rawParty.trim().replace(/\s+/g, '-').replace(/[^a-zA-Z0-9_-]/g, '');
+    newTitle = `BROSKI_${cleanDocNo}_${cleanParty}`;
+  }
+  document.title = newTitle;
+
+  const restoreTitle = () => {
+    document.title = oldTitle;
+    window.removeEventListener('afterprint', restoreTitle);
+  };
+  window.addEventListener('afterprint', restoreTitle);
+
   window.print();
+
+  setTimeout(() => {
+    document.title = oldTitle;
+  }, 2500);
 }
 
 function shareWhatsApp() {

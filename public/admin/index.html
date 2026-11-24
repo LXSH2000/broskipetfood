@@ -836,6 +836,69 @@
             </div>
           </div>
 
+          <!-- Signature for bills -->
+          <div style="border-top:1px solid var(--line); padding-top:16px;">
+            <h4 style="margin:0 0 4px; color:var(--adm-rust);">Signature for Bills (Authorised Signatory)</h4>
+            <p class="bk-small" style="margin-top:0;">Draw on the canvas or upload a signature image (max 400×150 px). Appears above "Authorised signatory" on Bills of Supply only.</p>
+            
+            <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap; margin-top:10px;">
+              <!-- Draw Box -->
+              <div style="background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px;">
+                <div style="font-size:12px; font-weight:700; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+                  <span>Draw signature (touch / mouse)</span>
+                  <button type="button" class="adm-action-btn" onclick="clearSignatureCanvas()" style="font-size:11px; padding:3px 8px;">Clear</button>
+                </div>
+                <canvas id="sigCanvas" width="360" height="120" style="border:1px dashed #d5c8b5; border-radius:6px; background:#fff; cursor:crosshair; touch-action:none; display:block;"></canvas>
+                <button type="button" class="adm-action-btn" onclick="applyDrawnSignature()" style="margin-top:8px; width:100%; font-weight:700;">Use Drawn Signature</button>
+              </div>
+
+              <!-- Upload Box & Preview -->
+              <div style="flex:1; min-width:240px;">
+                <label class="bk-label" for="sigFileInput">Or upload signature image (PNG / JPG)</label>
+                <input type="file" id="sigFileInput" accept="image/png,image/jpeg" class="bk-input" onchange="handleSignatureFileUpload(event)">
+                
+                <div id="sigPreviewWrap" style="margin-top:14px; display:none; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px;">
+                  <div style="font-size:12px; font-weight:700; color:var(--brown); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>Active Signature Preview</span>
+                    <button type="button" class="adm-action-btn adm-action-btn--danger" onclick="removeActiveSignature()" style="font-size:11px; padding:3px 8px;">Remove</button>
+                  </div>
+                  <img id="sigPreviewImg" src="" alt="Signature Preview" style="max-height:75px; max-width:240px; display:block; border:1px solid #efe7d9; border-radius:6px; padding:4px; background:#faf7f2;">
+                  <span id="sigSizeIndicator" style="font-size:11px; color:var(--muted); margin-top:4px; display:block;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fixed Footer Lines -->
+          <div style="border-top:1px solid var(--line); padding-top:16px;">
+            <h4 style="margin:0 0 4px; color:var(--adm-rust);">Fixed Footer Lines for Documents</h4>
+            <p class="bk-small" style="margin-top:0;">These lines are automatically printed on documents. Notes field stays empty by default.</p>
+            <div style="display:grid; grid-template-columns:1fr; gap:12px; margin-top:10px;">
+              <div>
+                <label class="bk-label" for="setThankYouLine">Thank-you line (printed on every document)</label>
+                <input type="text" id="setThankYouLine" class="bk-input" value="Thank you for choosing BROSKI.">
+              </div>
+              <div>
+                <label class="bk-label" for="setQuotationTerms">Quotation terms (printed on quotations only)</label>
+                <input type="text" id="setQuotationTerms" class="bk-input" value="Prices include all taxes. Valid for 7 days.">
+              </div>
+            </div>
+          </div>
+
+          <!-- Full Data Backup -->
+          <div style="border-top:1px solid var(--line); padding-top:16px;">
+            <h4 style="margin:0 0 4px; color:var(--adm-rust);">Database Backup</h4>
+            <p class="bk-small" style="margin-top:0;">Download a complete JSON backup of documents, payments, parties, orders, and settings.</p>
+            <div style="margin-top:10px;">
+              <button type="button" id="btnDownloadBackup" class="adm-action-btn" onclick="downloadBackupJSON()" style="font-size:13px; font-weight:700; padding:10px 16px;">
+                📥 Download backup (.json)
+              </button>
+              <div style="font-size:12px; color:var(--muted); margin-top:6px; font-style:italic;">
+                Download once a week and keep it on Google Drive.
+              </div>
+            </div>
+          </div>
+
           <button type="submit" id="btnSaveSettings" class="bk-btn bk-btn--primary bk-btn--big" style="width:100%; margin-top:8px;">
             Save All Settings
           </button>
@@ -872,6 +935,63 @@
     </div>
     <div style="overflow-y:auto; flex:1; display:flex; justify-content:center; background:#ebe3d5; padding:16px; border-radius:12px;">
       <div id="modalPreviewContainer" style="transform-origin:top center; width:794px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Record Payment Modal (Full or Part) -->
+<div id="recordPaymentModal" class="adm-modal-backdrop" style="display:none; z-index:9999;">
+  <div class="adm-modal" style="max-width:440px; padding:24px; background:var(--cream); border-radius:14px; box-shadow:0 12px 40px rgba(53,32,22,0.25);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--line); padding-bottom:10px;">
+      <h3 style="margin:0; font-family:var(--serif); font-size:18px; color:var(--brown);">Record Payment</h3>
+      <button type="button" class="del" onclick="closeRecordPaymentModal()" style="font-size:20px; line-height:1; cursor:pointer;">×</button>
+    </div>
+    <div id="recordPaymentDocSummary" style="font-size:13px; color:var(--muted); margin-bottom:14px; background:#fbf7ef; border:1px solid var(--line); padding:10px 12px; border-radius:8px;"></div>
+    
+    <div id="recordPaymentError" style="display:none; color:#b91c1c; background:#fee2e2; border:1.5px solid #f87171; padding:8px 12px; border-radius:6px; font-size:13px; font-weight:600; margin-bottom:14px;"></div>
+    
+    <form id="recordPaymentForm" onsubmit="handleSavePayment(event)">
+      <input type="hidden" id="payDocId">
+      <div style="margin-bottom:14px;">
+        <label class="bk-label" for="payAmountInput" style="font-weight:700;">Amount (₹) *</label>
+        <input type="number" id="payAmountInput" class="bk-input" required min="1" style="font-size:16px; font-weight:700;">
+      </div>
+      <div style="margin-bottom:14px;">
+        <label class="bk-label" style="font-weight:700; margin-bottom:6px; display:block;">Payment Method *</label>
+        <div style="display:flex; gap:16px;">
+          <label style="display:inline-flex; align-items:center; gap:6px; font-weight:600; cursor:pointer;">
+            <input type="radio" name="payModalMethod" value="cash" checked> Cash
+          </label>
+          <label style="display:inline-flex; align-items:center; gap:6px; font-weight:600; cursor:pointer;">
+            <input type="radio" name="payModalMethod" value="upi"> UPI
+          </label>
+        </div>
+      </div>
+      <div style="margin-bottom:18px;">
+        <label class="bk-label" for="payNoteInput">Note (optional)</label>
+        <input type="text" id="payNoteInput" class="bk-input" placeholder="e.g. Part payment cash from owner">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button type="button" class="btn ghost" onclick="closeRecordPaymentModal()">Cancel</button>
+        <button type="submit" id="btnSubmitPayment" class="btn dark">Save Payment</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Payment History Modal -->
+<div id="docHistoryModal" class="adm-modal-backdrop" style="display:none; z-index:9999;">
+  <div class="adm-modal" style="max-width:580px; padding:24px; background:var(--cream); border-radius:14px; box-shadow:0 12px 40px rgba(53,32,22,0.25);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--line); padding-bottom:10px;">
+      <h3 style="margin:0; font-family:var(--serif); font-size:18px; color:var(--brown);" id="historyDocTitle">Document Payment History</h3>
+      <button type="button" class="del" onclick="closeDocHistoryModal()" style="font-size:20px; line-height:1; cursor:pointer;">×</button>
+    </div>
+    <div id="historyDocSummary" style="font-size:13px; color:var(--muted); margin-bottom:16px; background:#fbf7ef; border:1px solid var(--line); padding:10px 12px; border-radius:8px;"></div>
+    <div id="historyPaymentsList" style="max-height:300px; overflow-y:auto;">
+      <p class="bk-small">Loading payment history…</p>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+      <button type="button" class="btn dark" onclick="closeDocHistoryModal()">Close</button>
     </div>
   </div>
 </div>
@@ -990,6 +1110,7 @@ function playNewOrderSound() {
 window.addEventListener('DOMContentLoaded', async function () {
   initTabs();
   initAuth();
+  initSignatureCanvas();
   if ('Notification' in window && Notification.permission === 'default') {
     Notification.requestPermission().catch(() => {});
   }
@@ -1128,6 +1249,28 @@ async function loadSettings() {
       document.getElementById('setBizAddress').value = b.bill_address || '';
       document.getElementById('setBizState').value = b.state || 'Delhi (07)';
       document.getElementById('setBizHsn').value = b.hsn || '2309';
+
+      const setThankYou = document.getElementById('setThankYouLine');
+      if (setThankYou) setThankYou.value = b.thank_you_line || 'Thank you for choosing BROSKI.';
+
+      const setQuotation = document.getElementById('setQuotationTerms');
+      if (setQuotation) setQuotation.value = b.quotation_terms || 'Prices include all taxes. Valid for 7 days.';
+
+      if (b.signature) {
+        activeSignatureDataUrl = b.signature;
+        const prevWrap = document.getElementById('sigPreviewWrap');
+        const prevImg = document.getElementById('sigPreviewImg');
+        const sizeInd = document.getElementById('sigSizeIndicator');
+        if (prevWrap && prevImg) {
+          prevImg.src = activeSignatureDataUrl;
+          prevWrap.style.display = 'block';
+          if (sizeInd) sizeInd.textContent = `Active signature loaded (${Math.round(activeSignatureDataUrl.length * 0.75 / 1024)} KB)`;
+        }
+      } else {
+        activeSignatureDataUrl = '';
+        const prevWrap = document.getElementById('sigPreviewWrap');
+        if (prevWrap) prevWrap.style.display = 'none';
+      }
 
       const u = cachedSettings.upi || {};
       document.getElementById('setUpiVpa').value = u.vpa || '';
@@ -1751,7 +1894,7 @@ async function loadDocuments() {
   }
 }
 
-function switchBillingSubTab(sub) {
+function switchBillingSubTab(sub, skipInit = false) {
   billingSubTab = sub;
   ['docs', 'new', 'dues', 'cmp'].forEach(s => {
     const el = document.getElementById('subtab-' + s);
@@ -1769,7 +1912,11 @@ function switchBillingSubTab(sub) {
     bar.style.display = (activeTab === 'billing' && sub === 'new') ? 'block' : 'none';
   }
 
-  if (sub === 'new') {
+  if (sub === 'docs') renderDocumentsTable();
+  if (sub === 'dues') renderDuesTable();
+  if (sub === 'cmp') renderCmpSummary();
+
+  if (sub === 'new' && !skipInit) {
     initNewDocState();
   }
 }
@@ -1782,7 +1929,9 @@ function renderDocumentsTable() {
   let list = cachedDocuments.filter(d => {
     if (typeFilter !== 'all' && d.doc_type !== typeFilter) return false;
     if (!query) return true;
-    const txt = `${d.doc_no || ''} ${d.doc_type || ''} ${d.status || ''}`.toLowerCase();
+    const partyName = d.party?.name || d.meta?.customer_name || d.meta?.name || '';
+    const phone = d.party?.phone || d.meta?.phone || '';
+    const txt = `${d.doc_no || ''} ${d.doc_type || ''} ${d.status || ''} ${partyName} ${phone}`.toLowerCase();
     return txt.includes(query);
   });
 
@@ -1795,25 +1944,55 @@ function renderDocumentsTable() {
     <th>Doc #</th><th>Type</th><th>Date</th><th>Party / Billed To</th><th>Total</th><th>Payment</th><th>Status</th><th>Actions</th>
   </tr></thead><tbody>`;
 
+  const todayStr = new Date().toISOString().slice(0, 10);
+
   list.forEach(d => {
-    const partyName = d.meta?.customer_name || d.meta?.name || 'Customer';
+    const partyName = d.party?.name || d.meta?.customer_name || d.meta?.name || 'Customer';
+    const total = Number(d.total || 0);
+    const paid = Number(d.paid_amount || (d.payment_status === 'paid' ? total : 0));
+    const balance = Math.max(0, total - paid);
+    const isCancelled = d.status === 'cancelled';
+    const isOverdue = d.due_date && d.due_date < todayStr && balance > 0;
+
+    let chipHtml = '';
+    if (balance === 0 && (total > 0 || d.payment_status === 'paid')) {
+      chipHtml = '<span class="bk-badge" style="background:#dcfce7; color:#166534; font-weight:700;">Paid</span>';
+    } else if (isOverdue) {
+      chipHtml = `<span class="bk-badge" style="background:#fee2e2; color:#b91c1c; font-weight:700;">Overdue</span>`;
+      if (paid > 0) {
+        chipHtml += `<div style="font-size:11px; color:#b91c1c; margin-top:2px; font-weight:600;">₹${paid} / ₹${total}</div>`;
+      }
+    } else if (paid > 0 && balance > 0) {
+      chipHtml = `<span class="bk-badge" style="background:#fef3c7; color:#92400e; font-weight:700;">Part-paid ₹${paid} / ₹${total}</span>`;
+    } else {
+      chipHtml = '<span class="bk-badge" style="background:#f3f4f6; color:#4b5563; font-weight:600;">Unpaid</span>';
+    }
+
+    const canRecordPayment = !isCancelled && ['estimate', 'bill'].includes(d.doc_type) && balance > 0;
+
     html += `<tr>
-      <td><strong style="font-family:'JetBrains Mono',monospace;">${escapeHtml(d.doc_no)}</strong></td>
+      <td>
+        <a href="javascript:void(0)" onclick="openDocHistoryModal('${d.id}')" title="Click to view payment history" style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--brown); text-decoration:underline; cursor:pointer;">
+          ${escapeHtml(d.doc_no)}
+        </a>
+      </td>
       <td><span class="bk-badge">${d.doc_type.toUpperCase()}</span></td>
       <td>${d.doc_date}</td>
       <td>${escapeHtml(partyName)}</td>
-      <td><strong>₹${d.total}</strong></td>
+      <td><strong>₹${total}</strong>${balance > 0 && paid > 0 ? `<br><span style="font-size:11px; color:#b8452b;">Due: ₹${balance}</span>` : ''}</td>
       <td>
-        <span style="color:${d.payment_status === 'paid' ? '#166534' : '#b8452b'}; font-weight:700;">${(d.payment_status || 'unpaid').toUpperCase()}</span><br>
-        <span style="font-size:11px;">${d.payment_method || 'cash'}</span>
+        ${chipHtml}
+        <div style="font-size:11px; color:var(--muted); margin-top:2px;">${d.payment_method || 'cash'}</div>
       </td>
       <td><span class="bk-badge bk-badge--${d.status}">${d.status}</span></td>
       <td>
         <div style="display:flex; flex-direction:column; gap:4px;">
           <a href="/doc/?no=${encodeURIComponent(d.doc_no)}&t=${encodeURIComponent(d.token)}" target="_blank" class="adm-action-btn">📄 View</a>
-          ${d.status === 'active' && d.doc_type === 'quotation' ? `<button type="button" class="adm-action-btn" onclick="convertDoc('${d.id}', 'bill')">Convert to Bill</button>` : ''}
-          ${d.status === 'active' && d.doc_type === 'estimate' ? `<button type="button" class="adm-action-btn" onclick="convertDoc('${d.id}', 'bill')">Convert to Bill</button>` : ''}
+          <button type="button" class="adm-action-btn" onclick="repeatDoc('${d.id}')">🔁 Repeat</button>
+          ${canRecordPayment ? `<button type="button" class="adm-action-btn adm-action-btn--green" onclick="openRecordPaymentModal('${d.id}')">💵 Record payment</button>` : ''}
+          ${d.status === 'active' && (d.doc_type === 'quotation' || d.doc_type === 'estimate') ? `<button type="button" class="adm-action-btn" onclick="convertDoc('${d.id}', 'bill')">Convert to Bill</button>` : ''}
           ${d.status === 'active' ? `<button type="button" class="adm-action-btn adm-action-btn--danger" onclick="cancelDocPrompt('${d.id}')">Cancel</button>` : ''}
+          <button type="button" class="adm-action-btn" onclick="openDocHistoryModal('${d.id}')" style="font-size:11px;">📜 History</button>
         </div>
       </td>
     </tr>`;
@@ -1825,32 +2004,70 @@ function renderDocumentsTable() {
 
 function renderDuesTable() {
   const wrap = document.getElementById('duesTableWrap');
-  const dues = cachedDocuments.filter(d => d.payment_method === 'credit' && d.payment_status === 'unpaid' && d.status === 'active');
+  
+  // Dues: shows every document with balance > 0, oldest first
+  const dues = cachedDocuments.filter(d => {
+    if (d.status === 'cancelled') return false;
+    const total = Number(d.total || 0);
+    const paid = Number(d.paid_amount || (d.payment_status === 'paid' ? total : 0));
+    const balance = total - paid;
+    return balance > 0 && ['estimate', 'bill', 'quotation'].includes(d.doc_type);
+  });
+
+  // Sort oldest first (by doc_date, then created_at)
+  dues.sort((a, b) => (a.doc_date || '').localeCompare(b.doc_date || '') || (a.created_at || '').localeCompare(b.created_at || ''));
 
   if (dues.length === 0) {
-    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No unpaid credit balances found. All clear!</p>';
+    wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No unpaid or pending balances found. All clear!</p>';
     return;
   }
 
-  let html = `<table class="adm-table"><thead><tr>
-    <th>Doc #</th><th>Party</th><th>Phone</th><th>Due Date</th><th>Amount</th><th>Actions</th>
-  </tr></thead><tbody>`;
+  // Total balance at the top
+  const totalBalance = dues.reduce((sum, d) => {
+    const tot = Number(d.total || 0);
+    const pd = Number(d.paid_amount || (d.payment_status === 'paid' ? tot : 0));
+    return sum + Math.max(0, tot - pd);
+  }, 0);
+
+  let html = `
+    <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:14px 18px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#991b1b; text-transform:uppercase; letter-spacing:0.05em;">Total Pending Balance</div>
+        <div style="font-size:26px; font-weight:900; color:#b91c1c; font-family:var(--serif);">₹${totalBalance.toLocaleString('en-IN')}</div>
+      </div>
+      <div style="font-size:13px; color:#7f1d1d; font-weight:600;">
+        ${dues.length} document${dues.length === 1 ? '' : 's'} with pending balance
+      </div>
+    </div>
+    <table class="adm-table"><thead><tr>
+      <th>Doc #</th><th>Party</th><th>Phone</th><th>Due Date</th><th>Total</th><th>Balance Due</th><th>Actions</th>
+    </tr></thead><tbody>
+  `;
 
   dues.forEach(d => {
-    const partyName = d.meta?.name || d.meta?.customer_name || 'Shop';
-    const phone = d.meta?.phone || '';
+    const partyName = d.party?.name || d.meta?.name || d.meta?.customer_name || 'Shop';
+    const phone = d.party?.phone || d.meta?.phone || '';
     const cleanPhone = phone.replace(/\D/g, '');
-    const waText = encodeURIComponent(`Hi ${partyName}! A friendly reminder from BROSKI regarding pending invoice ${d.doc_no} for ₹${d.total} (Due date: ${d.due_date || 'immediate'}). Link: https://broskipetfood.com/doc/?no=${d.doc_no}&t=${d.token}`);
+    const total = Number(d.total || 0);
+    const paid = Number(d.paid_amount || (d.payment_status === 'paid' ? total : 0));
+    const balance = Math.max(0, total - paid);
+
+    const waText = encodeURIComponent(`Hi ${partyName}! A friendly reminder from BROSKI regarding pending balance of ₹${balance} on invoice ${d.doc_no} (Total: ₹${total}, Due date: ${d.due_date || 'immediate'}). View document: https://broskipetfood.com/doc/?no=${d.doc_no}&t=${d.token}`);
 
     html += `<tr>
-      <td><strong>${escapeHtml(d.doc_no)}</strong></td>
-      <td>${escapeHtml(partyName)}</td>
-      <td style="font-family:'JetBrains Mono',monospace;">${escapeHtml(phone)}</td>
-      <td style="color:var(--adm-rust); font-weight:700;">${d.due_date || '-'}</td>
-      <td><strong style="font-size:15px;">₹${d.total}</strong></td>
       <td>
-        <div style="display:flex; gap:6px;">
-          <button type="button" class="adm-action-btn adm-action-btn--green" onclick="markDocPaid('${d.id}')">Mark Received</button>
+        <a href="javascript:void(0)" onclick="openDocHistoryModal('${d.id}')" title="View payment history" style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--brown); text-decoration:underline;">
+          ${escapeHtml(d.doc_no)}
+        </a>
+      </td>
+      <td>${escapeHtml(partyName)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;">${escapeHtml(phone || '-')}</td>
+      <td style="color:var(--adm-rust); font-weight:700;">${d.due_date || '-'}</td>
+      <td>₹${total}</td>
+      <td><strong style="font-size:15px; color:#b8452b;">₹${balance}</strong>${paid > 0 ? `<div style="font-size:11px; color:#166534;">(Paid: ₹${paid})</div>` : ''}</td>
+      <td>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button type="button" class="adm-action-btn adm-action-btn--green" onclick="openRecordPaymentModal('${d.id}')">💵 Record payment</button>
           ${cleanPhone ? `<a href="https://wa.me/91${cleanPhone}?text=${waText}" target="_blank" class="adm-action-btn">WhatsApp Reminder</a>` : ''}
         </div>
       </td>
@@ -1861,20 +2078,296 @@ function renderDuesTable() {
   wrap.innerHTML = html;
 }
 
-async function markDocPaid(id) {
+function markDocPaid(id) {
+  openRecordPaymentModal(id);
+}
+
+// ================= PAYMENT (FULL OR PART) MODAL & HANDLERS =================
+function openRecordPaymentModal(docId) {
+  const d = cachedDocuments.find(x => x.id === docId);
+  if (!d) return;
+
+  const total = Number(d.total || 0);
+  const paid = Number(d.paid_amount || (d.payment_status === 'paid' ? total : 0));
+  const balance = Math.max(0, total - paid);
+
+  const docIdInput = document.getElementById('payDocId');
+  const amountInput = document.getElementById('payAmountInput');
+  const noteInput = document.getElementById('payNoteInput');
+  const summaryEl = document.getElementById('recordPaymentDocSummary');
+  const errEl = document.getElementById('recordPaymentError');
+  const modal = document.getElementById('recordPaymentModal');
+
+  docIdInput.value = d.id;
+  amountInput.value = balance;
+  amountInput.max = balance;
+  if (noteInput) noteInput.value = '';
+  if (errEl) {
+    errEl.style.display = 'none';
+    errEl.textContent = '';
+  }
+
+  const partyName = d.party?.name || d.meta?.name || d.meta?.customer_name || 'Customer';
+  summaryEl.innerHTML = `
+    <strong>Doc #${escapeHtml(d.doc_no)}</strong> · ${escapeHtml(partyName)}<br>
+    Grand Total: <strong>₹${total}</strong> · Already Paid: <strong>₹${paid}</strong> · <span style="color:#b8452b; font-weight:700;">Balance Due: ₹${balance}</span>
+  `;
+
+  // Default to Cash
+  const cashRadio = document.querySelector('input[name="payModalMethod"][value="cash"]');
+  if (cashRadio) cashRadio.checked = true;
+
+  modal.style.display = 'flex';
+}
+
+function closeRecordPaymentModal() {
+  const modal = document.getElementById('recordPaymentModal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function handleSavePayment(e) {
+  e.preventDefault();
   const sb = getSupabase();
+  const docId = document.getElementById('payDocId').value;
+  const amount = parseInt(document.getElementById('payAmountInput').value, 10);
+  const method = document.querySelector('input[name="payModalMethod"]:checked')?.value || 'cash';
+  const note = (document.getElementById('payNoteInput').value || '').trim();
+  const errEl = document.getElementById('recordPaymentError');
+  const submitBtn = document.getElementById('btnSubmitPayment');
+
+  if (!amount || amount <= 0) {
+    errEl.textContent = 'Please enter a valid payment amount greater than ₹0.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Recording…';
+  errEl.style.display = 'none';
+
   try {
-    const res = await sb.rpc('admin_mark_doc_paid', { p_id: id, p_method: 'cash' });
-    const err = checkRpcError(res);
-    if (err) {
-      showAdminError(`Error marking document paid: ${err}`);
+    const res = await sb.rpc('admin_add_payment', {
+      p_document_id: docId,
+      p_amount: amount,
+      p_method: method,
+      p_note: note || null
+    });
+
+    if (res.error || (res.data && res.data.error)) {
+      const errCode = res.error?.message || res.data?.error;
+      let errMsg = errCode;
+      if (errCode === 'more_than_balance') {
+        const bal = res.data?.balance !== undefined ? res.data.balance : '';
+        errMsg = `Amount is more than the balance ₹${bal}`;
+      } else if (errCode === 'unauthorized') {
+        errMsg = 'Unauthorized admin session.';
+      } else if (errCode === 'cancelled') {
+        errMsg = 'Cannot record payment on a cancelled document.';
+      }
+      errEl.textContent = errMsg;
+      errEl.style.display = 'block';
       return;
     }
-    hideAdminError();
+
+    closeRecordPaymentModal();
+    showAdminToast(`Payment of ₹${amount} recorded successfully!`);
     await loadDocuments();
-  } catch (e) {
-    showAdminError(`Error marking document paid: ${e.message || e}`);
+  } catch (err) {
+    errEl.textContent = err.message || String(err);
+    errEl.style.display = 'block';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Save Payment';
   }
+}
+
+// ================= PAYMENT HISTORY MODAL =================
+async function openDocHistoryModal(docId) {
+  const d = cachedDocuments.find(x => x.id === docId);
+  if (!d) return;
+
+  const modal = document.getElementById('docHistoryModal');
+  const titleEl = document.getElementById('historyDocTitle');
+  const summaryEl = document.getElementById('historyDocSummary');
+  const listEl = document.getElementById('historyPaymentsList');
+
+  titleEl.textContent = `Payment History · ${d.doc_no}`;
+  const total = Number(d.total || 0);
+  const paid = Number(d.paid_amount || (d.payment_status === 'paid' ? total : 0));
+  const balance = Math.max(0, total - paid);
+  const partyName = d.party?.name || d.meta?.name || d.meta?.customer_name || 'Customer';
+
+  summaryEl.innerHTML = `
+    Party: <strong>${escapeHtml(partyName)}</strong> · Total: <strong>₹${total}</strong> · Paid: <strong>₹${paid}</strong> · Balance: <strong>₹${balance}</strong>
+  `;
+
+  listEl.innerHTML = '<p class="bk-small">Loading payment records…</p>';
+  modal.style.display = 'flex';
+
+  const sb = getSupabase();
+  try {
+    const { data, error } = await sb.from('document_payments')
+      .select('*')
+      .eq('document_id', docId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      listEl.innerHTML = `<p class="bk-small" style="color:#b91c1c;">Error loading payments: ${escapeHtml(error.message)}</p>`;
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      listEl.innerHTML = `
+        <div style="text-align:center; padding:20px; color:var(--muted);">
+          No individual payment receipts recorded yet.<br>
+          ${d.payment_status === 'paid' ? '<span style="font-size:12px; color:#166534; font-weight:700;">Document is marked as fully paid.</span>' : ''}
+        </div>
+      `;
+      return;
+    }
+
+    let html = `<table class="adm-table" style="font-size:13px;">
+      <thead><tr>
+        <th>Date</th><th>Amount</th><th>Method</th><th>Note</th>
+      </tr></thead><tbody>`;
+
+    data.forEach(p => {
+      const pDate = p.paid_on || (p.created_at ? p.created_at.slice(0, 10) : '-');
+      html += `<tr>
+        <td>${pDate}</td>
+        <td><strong style="color:#166534;">₹${p.amount}</strong></td>
+        <td><span class="bk-badge">${(p.method || 'cash').toUpperCase()}</span></td>
+        <td>${p.note ? escapeHtml(p.note) : '<span style="color:var(--muted);">-</span>'}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    listEl.innerHTML = html;
+  } catch (err) {
+    listEl.innerHTML = `<p class="bk-small" style="color:#b91c1c;">Error: ${escapeHtml(err.message || String(err))}</p>`;
+  }
+}
+
+function closeDocHistoryModal() {
+  const modal = document.getElementById('docHistoryModal');
+  if (modal) modal.style.display = 'none';
+}
+
+// ================= REPEAT DOCUMENT =================
+function repeatDoc(docId) {
+  const d = cachedDocuments.find(x => x.id === docId);
+  if (!d) return;
+
+  // 1. Doc Type
+  const targetType = d.doc_type || 'estimate';
+
+  // 2. Party Kind & Details
+  let targetKind = 'walkin';
+  const partyObj = {
+    name: d.party?.name || d.meta?.name || d.meta?.customer_name || 'Walk-in Customer',
+    phone: d.party?.phone || d.meta?.phone || '',
+    area: d.party?.area || d.meta?.area || 'Nangloi',
+    address: d.party?.address || d.meta?.address || 'Nangloi, West Delhi',
+    gstin: d.party?.gstin || d.meta?.gstin || ''
+  };
+
+  if (d.party_id) {
+    const existingParty = (cachedParties || []).find(p => p.id === d.party_id);
+    if (existingParty) {
+      targetKind = 'shop';
+      Object.assign(partyObj, existingParty);
+    } else {
+      targetKind = 'shop';
+    }
+  } else if (partyObj.name && partyObj.name !== 'Walk-in Customer') {
+    const existingByName = (cachedParties || []).find(p => p.name.toLowerCase() === partyObj.name.toLowerCase());
+    if (existingByName) {
+      targetKind = 'shop';
+      Object.assign(partyObj, existingByName);
+    } else {
+      targetKind = 'shop';
+    }
+  }
+
+  // 3. Items (same items, rates, free qty, discount)
+  const targetItems = (d.items || []).map(it => {
+    let id = it.id;
+    if (!id) {
+      const lower = (it.name || '').toLowerCase();
+      if (lower.includes('bites')) id = 'bites';
+      else if (lower.includes('mix')) id = 'mix';
+      else if (lower.includes('combo')) id = 'combo';
+      else id = 'custom';
+    }
+    return {
+      id: id,
+      name: it.name || 'Product',
+      subtitle: it.subtitle || '',
+      hsn: it.hsn || '2309',
+      rate: Number(it.rate || 0),
+      qty: Number(it.qty || 1),
+      free_qty: Number(it.free_qty || 0),
+      discount: Number(it.discount || 0)
+    };
+  });
+
+  // 4. Payment method & Due date
+  const targetPaymentMethod = d.payment_method || 'cash';
+  const targetDueDate = d.due_date || '';
+
+  // 5. Update newDocState with copied fields; notes are empty
+  newDocState = {
+    docType: targetType,
+    partyKind: targetKind,
+    party: partyObj,
+    items: targetItems,
+    paymentMethod: targetPaymentMethod,
+    dueDate: targetDueDate,
+    notes: '' // Notes are empty by default
+  };
+
+  // Switch to New Document subtab without re-initializing empty newDocState
+  switchBillingSubTab('new', true);
+
+  // Sync DOM elements with newDocState
+  setDocType(targetType);
+  selectPartyKind(targetKind);
+
+  if (targetKind === 'walkin') {
+    const wName = document.getElementById('walkinNameInput');
+    const wPhone = document.getElementById('walkinPhoneInput');
+    if (wName) wName.value = partyObj.name;
+    if (wPhone) wPhone.value = partyObj.phone;
+  } else {
+    const sInput = document.getElementById('shopSearchInput');
+    const fName = document.getElementById('foundShopName');
+    const fInfo = document.getElementById('foundShopInfo');
+    const fBox = document.getElementById('foundShopBox');
+    const gstinInput = document.getElementById('partyGstinInput');
+    const addrInput = document.getElementById('partyAddressInput');
+
+    if (sInput) sInput.value = partyObj.name;
+    if (fName) fName.textContent = partyObj.name;
+    if (fInfo) fInfo.textContent = `· ${partyObj.area || 'West Delhi'} ${partyObj.phone ? '· ' + partyObj.phone : ''}`;
+    if (fBox) fBox.style.display = 'flex';
+    if (gstinInput) {
+      gstinInput.value = partyObj.gstin || '';
+      handleGstinInput(partyObj.gstin || '');
+    }
+    if (addrInput) addrInput.value = partyObj.address || '';
+  }
+
+  setPaymentMethod(targetPaymentMethod);
+  const dueInput = document.getElementById('creditDueDateInput');
+  if (dueInput) dueInput.value = targetDueDate;
+
+  const notesInput = document.getElementById('docNotesInput');
+  if (notesInput) notesInput.value = '';
+
+  renderNewDocItems();
+  updateSummaryBar();
+  updateLivePreview();
+
+  showAdminToast(`Document ${d.doc_no} copied to New Document.`);
 }
 
 async function convertDoc(id, toType) {
@@ -1930,6 +2423,9 @@ function initNewDocState() {
   setDocType(newDocState.docType || 'estimate');
   selectPartyKind('walkin');
   newDocState.items = [];
+  newDocState.notes = '';
+  const notesInput = document.getElementById('docNotesInput');
+  if (notesInput) notesInput.value = '';
   renderNewDocItems();
   updateSummaryBar();
   updateLivePreview();
@@ -2899,7 +3395,10 @@ async function handleSaveSettings(e) {
       gstin: document.getElementById('setBizGstin').value.trim(),
       bill_address: document.getElementById('setBizAddress').value.trim(),
       state: document.getElementById('setBizState').value.trim() || 'Delhi (07)',
-      hsn: document.getElementById('setBizHsn').value.trim() || '2309'
+      hsn: document.getElementById('setBizHsn').value.trim() || '2309',
+      thank_you_line: document.getElementById('setThankYouLine')?.value.trim() || 'Thank you for choosing BROSKI.',
+      quotation_terms: document.getElementById('setQuotationTerms')?.value.trim() || 'Prices include all taxes. Valid for 7 days.',
+      signature: activeSignatureDataUrl || null
     };
     const upi = {
       vpa: document.getElementById('setUpiVpa').value.trim(),
@@ -2930,6 +3429,240 @@ async function handleSaveSettings(e) {
   } finally {
     btn.disabled = false;
     btn.textContent = 'Save All Settings';
+  }
+}
+
+// ================= SIGNATURE LOGIC (DRAW / UPLOAD / RESIZE) =================
+let activeSignatureDataUrl = '';
+let isDrawingSig = false;
+let sigCanvas = null;
+let sigCtx = null;
+
+function initSignatureCanvas() {
+  sigCanvas = document.getElementById('sigCanvas');
+  if (!sigCanvas) return;
+  sigCtx = sigCanvas.getContext('2d');
+  sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+  sigCtx.strokeStyle = '#1e140d';
+
+  const getPos = (e) => {
+    const rect = sigCanvas.getBoundingClientRect();
+    const scaleX = sigCanvas.width / rect.width;
+    const scaleY = sigCanvas.height / rect.height;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
+  const startDraw = (e) => {
+    e.preventDefault();
+    isDrawingSig = true;
+    const pos = getPos(e);
+    sigCtx.beginPath();
+    sigCtx.moveTo(pos.x, pos.y);
+  };
+
+  const moveDraw = (e) => {
+    if (!isDrawingSig) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    sigCtx.lineTo(pos.x, pos.y);
+    sigCtx.stroke();
+  };
+
+  const stopDraw = (e) => {
+    if (!isDrawingSig) return;
+    e.preventDefault();
+    isDrawingSig = false;
+    sigCtx.closePath();
+  };
+
+  sigCanvas.addEventListener('mousedown', startDraw);
+  sigCanvas.addEventListener('mousemove', moveDraw);
+  window.addEventListener('mouseup', stopDraw);
+  sigCanvas.addEventListener('touchstart', startDraw, { passive: false });
+  sigCanvas.addEventListener('touchmove', moveDraw, { passive: false });
+  window.addEventListener('touchend', stopDraw);
+}
+
+function clearSignatureCanvas() {
+  if (!sigCanvas || !sigCtx) {
+    sigCanvas = document.getElementById('sigCanvas');
+    if (sigCanvas) sigCtx = sigCanvas.getContext('2d');
+  }
+  if (sigCanvas && sigCtx) {
+    sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+  }
+}
+
+function applyDrawnSignature() {
+  if (!sigCanvas) sigCanvas = document.getElementById('sigCanvas');
+  if (!sigCanvas || !sigCtx) return;
+
+  // Verify that something was actually drawn
+  const imgData = sigCtx.getImageData(0, 0, sigCanvas.width, sigCanvas.height);
+  let hasPixels = false;
+  for (let i = 3; i < imgData.data.length; i += 4) {
+    if (imgData.data[i] > 20) {
+      hasPixels = true;
+      break;
+    }
+  }
+  if (!hasPixels) {
+    alert('Please draw your signature on the box first.');
+    return;
+  }
+
+  // Ensure dimensions do not exceed 400x150
+  const maxW = 400;
+  const maxH = 150;
+  let targetW = sigCanvas.width;
+  let targetH = sigCanvas.height;
+  if (targetW > maxW || targetH > maxH) {
+    const ratio = Math.min(maxW / targetW, maxH / targetH);
+    targetW = Math.round(targetW * ratio);
+    targetH = Math.round(targetH * ratio);
+  }
+
+  const off = document.createElement('canvas');
+  off.width = targetW;
+  off.height = targetH;
+  const offCtx = off.getContext('2d');
+  offCtx.drawImage(sigCanvas, 0, 0, targetW, targetH);
+
+  const dataUrl = off.toDataURL('image/png');
+  const sizeKb = Math.round(dataUrl.length * 0.75 / 1024);
+  if (sizeKb > 100) {
+    alert(`Signature size (${sizeKb} KB) exceeds the 100 KB limit. Please redraw.`);
+    return;
+  }
+
+  activeSignatureDataUrl = dataUrl;
+  const prevWrap = document.getElementById('sigPreviewWrap');
+  const prevImg = document.getElementById('sigPreviewImg');
+  const sizeInd = document.getElementById('sigSizeIndicator');
+  if (prevWrap && prevImg) {
+    prevImg.src = dataUrl;
+    prevWrap.style.display = 'block';
+    if (sizeInd) sizeInd.textContent = `Drawn signature active (${sizeKb} KB) · Click "Save All Settings" below to persist.`;
+  }
+  showAdminToast('Signature applied! Remember to click "Save All Settings".');
+}
+
+function handleSignatureFileUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const maxW = 400;
+      const maxH = 150;
+      let w = img.width;
+      let h = img.height;
+      if (w > maxW || h > maxH) {
+        const ratio = Math.min(maxW / w, maxH / h);
+        w = Math.round(w * ratio);
+        h = Math.round(h * ratio);
+      }
+
+      const off = document.createElement('canvas');
+      off.width = w;
+      off.height = h;
+      const offCtx = off.getContext('2d');
+      offCtx.drawImage(img, 0, 0, w, h);
+
+      const dataUrl = off.toDataURL('image/png');
+      const sizeKb = Math.round(dataUrl.length * 0.75 / 1024);
+      if (sizeKb > 100) {
+        alert(`Image signature is ${sizeKb} KB, which exceeds 100 KB. Please upload a smaller image.`);
+        return;
+      }
+
+      activeSignatureDataUrl = dataUrl;
+      const prevWrap = document.getElementById('sigPreviewWrap');
+      const prevImg = document.getElementById('sigPreviewImg');
+      const sizeInd = document.getElementById('sigSizeIndicator');
+      if (prevWrap && prevImg) {
+        prevImg.src = dataUrl;
+        prevWrap.style.display = 'block';
+        if (sizeInd) sizeInd.textContent = `Uploaded signature active (${sizeKb} KB, ${w}×${h} px) · Click "Save All Settings" below to persist.`;
+      }
+      showAdminToast('Signature image loaded! Remember to click "Save All Settings".');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeActiveSignature() {
+  activeSignatureDataUrl = '';
+  clearSignatureCanvas();
+  const fileInput = document.getElementById('sigFileInput');
+  if (fileInput) fileInput.value = '';
+  const prevWrap = document.getElementById('sigPreviewWrap');
+  if (prevWrap) prevWrap.style.display = 'none';
+  const sizeInd = document.getElementById('sigSizeIndicator');
+  if (sizeInd) sizeInd.textContent = '';
+  showAdminToast('Signature removed. Remember to click "Save All Settings".');
+}
+
+// ================= BACKUP DOWNLOAD (.JSON) =================
+async function downloadBackupJSON() {
+  const sb = getSupabase();
+  const btn = document.getElementById('btnDownloadBackup');
+  const origText = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Preparing backup…';
+  }
+
+  try {
+    const [docsRes, paymentsRes, partiesRes, ordersRes, settingsRes] = await Promise.all([
+      sb.from('documents').select('*'),
+      sb.from('document_payments').select('*').catch(() => ({ data: [] })),
+      sb.from('parties').select('*'),
+      sb.from('orders').select('*'),
+      sb.from('settings').select('*')
+    ]);
+
+    const backupPayload = {
+      exported_at: new Date().toISOString(),
+      app: 'BROSKI Billing & Order System',
+      backup_version: '1.0',
+      documents: docsRes.data || [],
+      document_payments: paymentsRes.data || [],
+      parties: partiesRes.data || [],
+      orders: ordersRes.data || [],
+      settings: settingsRes.data || []
+    };
+
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const filename = `BROSKI_backup_${dateStr}.json`;
+    const jsonStr = JSON.stringify(backupPayload, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showAdminToast(`Backup downloaded successfully: ${filename}`);
+  } catch (err) {
+    showAdminError(`Error downloading backup: ${err.message || err}`);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = origText;
+    }
   }
 }
 
