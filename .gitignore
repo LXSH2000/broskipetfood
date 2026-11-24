@@ -25,3 +25,7 @@ test_results.json
 lighthouse_*.json
 lh-*.json
 inspect_video.py
+
+# Supabase temporary files
+supabase/.temp/
+

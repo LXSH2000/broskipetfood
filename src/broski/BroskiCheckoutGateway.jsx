@@ -46,6 +46,8 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [orderConfirmed, setOrderConfirmed] = useState(null);
+  const [placedOrder, setPlacedOrder] = useState(null);
+  const [paymentFailedOrClosed, setPaymentFailedOrClosed] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -68,6 +70,9 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
+      if (step === 5) {
+        setPlacedOrder(null);
+      }
       onClose();
     }, 240);
   };
@@ -216,10 +221,108 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
     }
   };
 
-  // Submit Order
+  // Launch or retry Cashfree session for an existing order
+  const launchCashfree = async (orderToPay) => {
+    setErrorMsg('');
+    setLoading(true);
+    setPaymentFailedOrClosed(false);
+
+    try {
+      const portalClient = window.BroskiPortal ? window.BroskiPortal.getClient() : null;
+      if (!portalClient) throw new Error('Database connection not available.');
+
+      const cfRes = await portalClient.rpc('create_cashfree_session', {
+        p_public_no: orderToPay.publicNo,
+        p_token: orderToPay.token
+      });
+
+      if (cfRes.error || !cfRes.data || cfRes.data.status !== 'ok' || !cfRes.data.payment_session_id) {
+        console.warn('[Cashfree create session error]', cfRes);
+        const msg = (cfRes.data && cfRes.data.message) || 'Could not initiate online payment. Please try again or choose Cash / UPI on delivery.';
+        setErrorMsg(msg);
+        setPaymentFailedOrClosed(true);
+        setLoading(false);
+        return;
+      }
+
+      const sessionId = cfRes.data.payment_session_id;
+
+      if (!window.Cashfree) {
+        throw new Error('Payment gateway SDK is still loading. Please try again in 5 seconds.');
+      }
+
+      const cf = window.Cashfree({ mode: 'production' });
+
+      const onModalClosed = async () => {
+        // Cashfree window closed - verify payment on Supabase backend
+        let verifyData = null;
+        try {
+          const vRes = await portalClient.rpc('verify_cashfree_payment', {
+            p_public_no: orderToPay.publicNo,
+            p_token: orderToPay.token
+          });
+          verifyData = vRes.data;
+        } catch (vErr) {
+          console.warn('[verify_cashfree_payment error]', vErr);
+        }
+
+        if (verifyData && verifyData.payment_status === 'paid') {
+          // Confirmed paid
+          setOrderConfirmed({
+            ...orderToPay,
+            paidOnline: true,
+            paymentStatus: 'paid'
+          });
+          setStep(5);
+          setLoading(false);
+        } else {
+          // Not confirmed paid
+          setLoading(false);
+          setPaymentFailedOrClosed(true);
+          setErrorMsg('');
+        }
+      };
+
+      cf.checkout({
+        paymentSessionId: sessionId,
+        redirectTarget: '_modal'
+      }).then(onModalClosed).catch(onModalClosed);
+    } catch (err) {
+      console.error('[launchCashfree error]', err);
+      setErrorMsg(err.message || 'Payment initiation failed.');
+      setPaymentFailedOrClosed(true);
+      setLoading(false);
+    }
+  };
+
+  // Switch an already placed order to pay at door without calling place_order again
+  const handlePayAtDoorInstead = () => {
+    if (!placedOrder) return;
+    setErrorMsg('');
+    setPaymentFailedOrClosed(false);
+    setOrderConfirmed({
+      ...placedOrder,
+      paidOnline: false,
+      paymentStatus: 'unpaid'
+    });
+    setStep(5);
+  };
+
+  // Submit Order (never calls place_order again if placedOrder exists)
   const handlePlaceOrder = async () => {
     setErrorMsg('');
     setLoading(true);
+
+    // If order was already placed, never call place_order again
+    if (placedOrder) {
+      if (paymentMethod === 'online') {
+        await launchCashfree(placedOrder);
+      } else {
+        handlePayAtDoorInstead();
+      }
+      return;
+    }
+
     const cleanPhoneDigits = phone.replace(/\D/g, '');
     const cleanPhone = `+91${cleanPhoneDigits}`;
 
@@ -274,71 +377,7 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
       const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
       const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(waMsg)}` : '#';
 
-      if (paymentMethod === 'online') {
-        // Create Cashfree Payment Session via Supabase RPC
-        const cfRes = await portalClient.rpc('create_cashfree_session', {
-          p_public_no: publicNo,
-          p_token: token
-        });
-
-        if (cfRes.error || !cfRes.data || cfRes.data.status !== 'ok' || !cfRes.data.payment_session_id) {
-          console.warn('[Cashfree create session error]', cfRes);
-          throw new Error((cfRes.data && cfRes.data.message) || 'Could not initiate online payment. Please try again or choose Cash on Delivery.');
-        }
-
-        const sessionId = cfRes.data.payment_session_id;
-
-        if (!window.Cashfree) {
-          throw new Error('Payment gateway SDK is still loading. Please try again in 5 seconds.');
-        }
-
-        const cf = window.Cashfree({ mode: 'production' });
-
-        cf.checkout({
-          paymentSessionId: sessionId,
-          redirectTarget: '_modal'
-        }).then(async (result) => {
-          if (result && result.error) {
-            console.warn('[Cashfree checkout cancelled/failed]', result.error);
-            setErrorMsg(result.error.message || 'Payment was cancelled or closed. You can retry or switch to Cash on Delivery.');
-            setLoading(false);
-            return;
-          }
-
-          // Payment completed: verify on Supabase backend
-          try {
-            await portalClient.rpc('verify_cashfree_payment', {
-              p_public_no: publicNo,
-              p_token: token
-            });
-          } catch (_) {}
-
-          setOrderConfirmed({
-            publicNo,
-            token,
-            customerCode,
-            total: orderTotal,
-            subtotal: data?.subtotal || estimatedSubtotal,
-            sampleAdded: data?.sample_added || false,
-            slot,
-            address: address.trim(),
-            pincode: pincode.trim(),
-            waUrl,
-            paidOnline: true
-          });
-
-          setStep(5); // Done screen
-          setLoading(false);
-        }).catch((cfErr) => {
-          console.warn('[Cashfree modal error]', cfErr);
-          setErrorMsg('Payment modal closed. You can retry or switch to Cash on Delivery.');
-          setLoading(false);
-        });
-
-        return; // wait for modal outcome
-      }
-
-      setOrderConfirmed({
+      const newOrder = {
         publicNo,
         token,
         customerCode,
@@ -348,18 +387,26 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
         slot,
         address: address.trim(),
         pincode: pincode.trim(),
-        waUrl,
-        paidOnline: false
-      });
+        waUrl
+      };
 
-      setStep(5); // Done screen
+      setPlacedOrder(newOrder);
+
+      if (paymentMethod === 'online') {
+        await launchCashfree(newOrder);
+      } else {
+        setOrderConfirmed({
+          ...newOrder,
+          paidOnline: false,
+          paymentStatus: 'unpaid'
+        });
+        setStep(5); // Done screen
+        setLoading(false);
+      }
     } catch (err) {
       console.error('[place_order failed]', err);
       setErrorMsg(err.message || "Couldn't save your order. Please try again or WhatsApp us.");
-    } finally {
-      if (paymentMethod !== 'online') {
-        setLoading(false);
-      }
+      setLoading(false);
     }
   };
 
@@ -755,6 +802,21 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
           {/* STEP 4: REVIEW */}
           {step === 4 && (
             <div className="bk-gateway-step">
+              {paymentFailedOrClosed && placedOrder && (
+                <div style={{ background: '#fef3c7', border: '1px solid #f59e0b', borderRadius: '8px', padding: '12px 14px', marginBottom: '16px', color: '#92400e', fontSize: '13px', lineHeight: '1.45' }}>
+                  <div>Payment not confirmed yet. If money was taken, it will show in a few minutes on your order page. If not, you can pay cash / UPI at the door.</div>
+                  <div style={{ marginTop: '8px' }}>
+                    <a
+                      href={`/order/?no=${encodeURIComponent(placedOrder.publicNo)}&t=${encodeURIComponent(placedOrder.token)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#92400e', fontWeight: '700', textDecoration: 'underline' }}
+                    >
+                      Track order #{placedOrder.publicNo} ↗
+                    </a>
+                  </div>
+                </div>
+              )}
               <div className="bk-review-receipt">
                 <div className="bk-review-header">Order Summary</div>
                 {bQty > 0 && (
@@ -839,10 +901,14 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
 
               <div className="bk-done-summary">
                 <p>We are packing your order in Nangloi. It will arrive during your selected slot: <strong>{orderConfirmed.slot}</strong>.</p>
-                {orderConfirmed.paidOnline ? (
+                {orderConfirmed.paidOnline && orderConfirmed.paymentStatus === 'paid' ? (
                   <p style={{ color: '#166534', fontWeight: '600' }}>
-                    ✅ Payment of ₹{orderConfirmed.total} received online via Cashfree.
+                    ✅ Payment of ₹{orderConfirmed.total} received online.
                   </p>
+                ) : orderConfirmed.paidOnline && orderConfirmed.paymentStatus !== 'paid' ? (
+                  <div style={{ background: '#fef3c7', border: '1px solid #f59e0b', borderRadius: '8px', padding: '10px 14px', margin: '10px 0', color: '#92400e', fontSize: '13px', lineHeight: '1.45' }}>
+                    Payment not confirmed yet. If money was taken, it will show in a few minutes on your order page. If not, you can pay cash / UPI at the door.
+                  </div>
                 ) : (
                   <p>Payment of <strong>₹{orderConfirmed.total}</strong> is payable on delivery via Cash or UPI.</p>
                 )}
@@ -942,26 +1008,56 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
             )}
 
             {step === 4 && (
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button type="button" className="bk-btn-back" onClick={() => setStep(3)}>
-                  ← Back
-                </button>
-                <button
-                  type="button"
-                  className="bk-btn-primary bk-btn-place"
-                  disabled={loading}
-                  onClick={handlePlaceOrder}
-                >
-                  {loading ? (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                      <LoadingSpinner size={18} /> {paymentMethod === 'online' ? 'Opening Payment…' : 'Placing Order…'}
-                    </span>
-                  ) : (
-                    paymentMethod === 'online'
-                      ? `Pay Online Now (₹${quoteData?.total || estimatedSubtotal}) →`
-                      : `Place Order (₹${quoteData?.total || estimatedSubtotal})`
-                  )}
-                </button>
+              <div style={{ width: '100%' }}>
+                {paymentFailedOrClosed && placedOrder ? (
+                  <div style={{ display: 'flex', gap: '10px', width: '100%', flexWrap: 'wrap' }}>
+                    <button
+                      type="button"
+                      className="bk-btn-secondary"
+                      style={{ flex: 1, minWidth: '160px', padding: '12px 14px', fontSize: '13px' }}
+                      onClick={handlePayAtDoorInstead}
+                    >
+                      Pay cash / UPI at door instead
+                    </button>
+                    <button
+                      type="button"
+                      className="bk-btn-primary bk-btn-place"
+                      style={{ flex: 1, minWidth: '160px', padding: '12px 14px', fontSize: '13px' }}
+                      disabled={loading}
+                      onClick={() => launchCashfree(placedOrder)}
+                    >
+                      {loading ? (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                          <LoadingSpinner size={16} /> Opening…
+                        </span>
+                      ) : (
+                        'Try paying again →'
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <button type="button" className="bk-btn-back" onClick={() => setStep(3)}>
+                      ← Back
+                    </button>
+                    <button
+                      type="button"
+                      className="bk-btn-primary bk-btn-place"
+                      disabled={loading}
+                      onClick={handlePlaceOrder}
+                    >
+                      {loading ? (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                          <LoadingSpinner size={18} /> {paymentMethod === 'online' ? 'Opening Payment…' : 'Placing Order…'}
+                        </span>
+                      ) : (
+                        paymentMethod === 'online'
+                          ? `Pay Online Now (₹${quoteData?.total || estimatedSubtotal}) →`
+                          : `Place Order (₹${quoteData?.total || estimatedSubtotal})`
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

@@ -1421,8 +1421,7 @@ function renderOrdersTable() {
       <td><strong style="font-size:14px;">₹${o.total}</strong></td>
       <td><span class="bk-badge bk-badge--${o.status}">${o.status}</span></td>
       <td>
-        <strong>${(o.payment_method || 'cod').toUpperCase()}</strong><br>
-        <span style="color:${o.payment_status === 'paid' ? '#166534' : '#b8452b'}; font-weight:700;">${(o.payment_status || 'unpaid').toUpperCase()}</span>
+        ${getOrderPaymentChip(o)}
       </td>
       <td>${renderOrderActionButtons(o)}</td>
     </tr>`;
@@ -1430,6 +1429,16 @@ function renderOrdersTable() {
 
   html += '</tbody></table>';
   wrap.innerHTML = html;
+}
+
+function getOrderPaymentChip(o) {
+  if (o.payment_status === 'paid') {
+    if (o.payment_method === 'upi') {
+      return '<span class="bk-badge" style="background:#dcfce7; color:#166534; font-weight:700;">Paid online</span>';
+    }
+    return '<span class="bk-badge" style="background:#dcfce7; color:#166534; font-weight:700;">Paid</span>';
+  }
+  return `<span class="bk-badge" style="background:#fef3c7; color:#92400e; font-weight:700;">Collect ₹${o.total} at door</span>`;
 }
 
 function renderOrderActionButtons(o) {
@@ -1446,6 +1455,7 @@ function renderOrderActionButtons(o) {
   }
 
   if (o.payment_status !== 'paid' && o.status !== 'cancelled') {
+    btns += `<button type="button" class="adm-action-btn" onclick="checkOrderPayment('${escapeHtml(o.public_no || '')}', '${escapeHtml(o.token || '')}')">🔍 Check payment</button>`;
     btns += `<button type="button" class="adm-action-btn" onclick="markOrderPaid('${o.id}', 'cash')">Mark Paid (Cash)</button>`;
     btns += `<button type="button" class="adm-action-btn" onclick="markOrderPaid('${o.id}', 'upi')">Mark Paid (UPI)</button>`;
   }
@@ -1462,6 +1472,29 @@ function renderOrderActionButtons(o) {
 
   btns += '</div>';
   return btns;
+}
+
+async function checkOrderPayment(publicNo, token) {
+  if (!publicNo || !token) {
+    showAdminError('Missing order public number or token.');
+    return;
+  }
+  const sb = getSupabase();
+  try {
+    const res = await sb.rpc('verify_cashfree_payment', {
+      p_public_no: publicNo,
+      p_token: token
+    });
+    if (res.data?.payment_status === 'paid') {
+      showAdminToast(`Payment of order ${publicNo} confirmed online!`);
+    } else {
+      showAdminToast(`Payment not confirmed yet (${res.data?.payment_status || 'unpaid'}).`);
+    }
+    await loadOrders();
+    await loadTodayData();
+  } catch (e) {
+    showAdminError(`Error checking payment: ${e.message || e}`);
+  }
 }
 
 async function setOrderStatus(id, newStatus) {
@@ -1968,7 +2001,12 @@ function renderDocumentsTable() {
       chipHtml = '<span class="bk-badge" style="background:#f3f4f6; color:#4b5563; font-weight:600;">Unpaid</span>';
     }
 
-    const canRecordPayment = !isCancelled && ['estimate', 'bill'].includes(d.doc_type) && balance > 0;
+    const isConverted = (d.doc_type === 'estimate') && (
+      cachedDocuments.some(other => other.converted_from === d.id && other.doc_type === 'bill' && other.status !== 'cancelled') ||
+      d.status === 'converted' ||
+      d.meta?.converted_to_id
+    );
+    const canRecordPayment = !isCancelled && !isConverted && ['estimate', 'bill'].includes(d.doc_type) && balance > 0;
 
     html += `<tr>
       <td>
@@ -2008,6 +2046,12 @@ function renderDuesTable() {
   // Dues: shows every document with balance > 0, oldest first
   const dues = cachedDocuments.filter(d => {
     if (d.status === 'cancelled') return false;
+    const isConverted = (d.doc_type === 'estimate') && (
+      cachedDocuments.some(other => other.converted_from === d.id && other.doc_type === 'bill' && other.status !== 'cancelled') ||
+      d.status === 'converted' ||
+      d.meta?.converted_to_id
+    );
+    if (isConverted) return false;
     const total = Number(d.total || 0);
     const paid = Number(d.paid_amount || (d.payment_status === 'paid' ? total : 0));
     const balance = total - paid;
@@ -2087,6 +2131,16 @@ function openRecordPaymentModal(docId) {
   const d = cachedDocuments.find(x => x.id === docId);
   if (!d) return;
 
+  const isConverted = (d.doc_type === 'estimate') && (
+    cachedDocuments.some(other => other.converted_from === d.id && other.doc_type === 'bill' && other.status !== 'cancelled') ||
+    d.status === 'converted' ||
+    d.meta?.converted_to_id
+  );
+  if (isConverted) {
+    showAdminError('This estimate is now a bill – record the payment on the bill.');
+    return;
+  }
+
   const total = Number(d.total || 0);
   const paid = Number(d.paid_amount || (d.payment_status === 'paid' ? total : 0));
   const balance = Math.max(0, total - paid);
@@ -2159,6 +2213,8 @@ async function handleSavePayment(e) {
       if (errCode === 'more_than_balance') {
         const bal = res.data?.balance !== undefined ? res.data.balance : '';
         errMsg = `Amount is more than the balance ₹${bal}`;
+      } else if (errCode === 'converted') {
+        errMsg = 'This estimate is now a bill – record the payment on the bill.';
       } else if (errCode === 'unauthorized') {
         errMsg = 'Unauthorized admin session.';
       } else if (errCode === 'cancelled') {
