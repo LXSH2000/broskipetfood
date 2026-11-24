@@ -738,7 +738,7 @@
     <!-- TAB 8: FEEDBACK -->
     <section id="tab-feedback" class="adm-tab-content" style="display:none;">
       <div class="adm-toolbar">
-        <input type="text" id="feedbackSearchInput" class="adm-search" placeholder="Search feedback reviews…">
+        <input type="text" id="feedbackSearchInput" class="adm-search" placeholder="Search feedback reviews…" oninput="renderFeedbackTable()">
         <button type="button" class="adm-action-btn" onclick="loadFeedback()">🔄 Refresh</button>
       </div>
       <div id="feedbackTableWrap" class="bk-table-wrap">
@@ -3390,24 +3390,49 @@ async function loadFeedback() {
   }
 }
 
+function copyReviewSnippet(idx) {
+  const f = cachedFeedback[idx];
+  if (!f) return;
+  const snippet = JSON.stringify({
+    text: (f.comments || '').trim(),
+    name: 'Verified Customer',
+    area: 'Nangloi',
+    dog: f.flavour === 'mix' ? 'Bro Mix Pack' : 'Bro Bites Pack'
+  });
+  navigator.clipboard?.writeText(snippet).then(() => {
+    alert('Copied! Paste into REVIEWS in public/config.js with the customer/dog first name (only with permission).');
+  }).catch(() => prompt('Copy snippet:', snippet));
+}
+
 function renderFeedbackTable() {
   const wrap = document.getElementById('feedbackTableWrap');
-  if (!cachedFeedback || cachedFeedback.length === 0) {
+  const q = (document.getElementById('feedbackSearchInput')?.value || '').trim().toLowerCase();
+  const list = cachedFeedback.filter(f => !q || (`${f.comments || ''} ${f.batch_no || ''} ${f.flavour || ''}`).toLowerCase().includes(q));
+  if (!list || list.length === 0) {
     wrap.innerHTML = '<p class="bk-small" style="padding:16px;">No feedback reviews received.</p>';
     return;
   }
 
   let html = `<table class="adm-table"><thead><tr>
-    <th>Flavour</th><th>Rating</th><th>Comments</th><th>Batch</th><th>Date</th>
+    <th>Flavour</th><th>Rating</th><th>Comments</th><th>Quote OK?</th><th>Batch</th><th>Date</th><th>Site Snippet</th>
   </tr></thead><tbody>`;
 
-  cachedFeedback.forEach(f => {
+  list.forEach(f => {
+    const origIdx = cachedFeedback.indexOf(f);
+    const quoteBadge = f.quote_ok
+      ? '<span class="adm-chip adm-chip--green">Quote OK</span>'
+      : '<span class="adm-chip">Private</span>';
+    const copyBtn = f.quote_ok && (f.comments || '').trim()
+      ? `<button type="button" class="adm-action-btn" onclick="copyReviewSnippet(${origIdx})">Copy for Site</button>`
+      : '—';
     html += `<tr>
       <td><strong>${f.flavour === 'mix' ? 'Bro Mix' : 'Bro Bites'}</strong></td>
       <td><strong>${f.rating || '-'} / 5</strong></td>
       <td>${escapeHtml(f.comments || '')}</td>
+      <td>${quoteBadge}</td>
       <td>${escapeHtml(f.batch_no || '-')}</td>
       <td>${new Date(f.created_at).toLocaleDateString('en-IN')}</td>
+      <td>${copyBtn}</td>
     </tr>`;
   });
 

@@ -18,7 +18,7 @@ window.BROSKI_CONFIG = {
   BANNER_TEXT: '',
   BANNER_HIDE_FROM: '2026-11-23T00:00:00+05:30',
 
-  INSTAGRAM_URL: '',            // e.g. 'https://instagram.com/broskipetfood' – Lakshay fills
+  INSTAGRAM_URL: 'https://www.instagram.com/broskipetfood/', // Official BROSKI Instagram
   FOUNDER_NOTE: '',             // 1–2 lines in Lakshay's words – Lakshay fills
   FOUNDER_PHOTO: '',            // '/lakshay.webp' – optional, real photo only
   REVIEWS: [],                  // [{ text:'…', name:'Riya', area:'Nangloi', dog:'Bruno' }] – only real, with permission
