@@ -86,6 +86,7 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
   const estimatedSubtotal = (bQty * bitesPrice) + (mQty * mixPrice) + (cQty * comboPrice);
 
   const updateQty = (key, delta) => {
+    setQuoteData(null);
     setQuantities(prev => ({
       ...prev,
       [key]: Math.max(0, (prev[key] || 0) + delta)
@@ -550,7 +551,7 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
               </div>
 
               <div className="bk-notice-card">
-                🐶 <strong>Nangloi Delivery:</strong> Pay Cash or UPI to the delivery bro when received.
+                🐶 <strong>Nangloi Express Delivery:</strong> Free delivery — pay Online via Cashfree (UPI, Cards & NetBanking) or Cash/UPI at your door.
               </div>
             </div>
           )}
@@ -571,7 +572,12 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
                   onChange={(e) => {
                     const val = e.target.value.replace(/\D/g, '').slice(0, 6);
                     setPincode(val);
-                    if (val.length === 6) checkDeliveryPincode(val);
+                    setQuoteData(null);
+                    if (val.length === 6) {
+                      checkDeliveryPincode(val);
+                    } else {
+                      setPincodeStatus({ checked: false, deliverable: false, waitlistCount: 0, checking: false });
+                    }
                   }}
                   placeholder="110041"
                 />
@@ -864,7 +870,7 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
 
                 <div className="bk-review-details-box">
                   <div><strong>Deliver to:</strong> {customerName} · +91 {phone}</div>
-                  <div><strong>Address:</strong> {address}{landmark ? `, Near ${landmark}` : ''}, Nangloi – {pincode}</div>
+                  <div><strong>Address:</strong> {address}{landmark ? `, Near ${landmark}` : ''}, {pincode === '110041' ? 'Nangloi' : 'West Delhi'} – {pincode}</div>
                   <div><strong>Slot:</strong> {slot}</div>
                   <div><strong>Payment:</strong> {paymentMethod === 'online' ? '⚡ Pay Online (Instant UPI / Cards via Cashfree)' : '💵 Cash / UPI on delivery'}</div>
                 </div>

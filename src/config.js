@@ -7,7 +7,6 @@ export const CONFIG = {
   SUPPORT_EMAIL: 'support@broskipetfood.com',
   GA_MEASUREMENT_ID: 'G-YJ89P0X3QH',
   WHATSAPP_NUMBER: '919821563468',
-  PHONE: '+91 9821563468',
   LAUNCH_STATUS: 'live',
   LAUNCH_DATE: 'November 2026',
   LAUNCH_LOCATION: 'West Delhi (Nangloi)',

@@ -152,7 +152,7 @@ export function PincodeChecker({ onOpenOrder }) {
 
 /* 1. Product cards with Online Checkout Gateway */
 export function ProductCards() {
-  const { PRODUCTS = [], UNIT_PRICE_LINE } = C();
+  const { PRODUCTS = [], UNIT_PRICE_LINE, MSG = {} } = C();
   const nv = PRODUCTS.find((p) => p.id === 'bro-bites');
   const mx = PRODUCTS.find((p) => p.id === 'bro-mix');
   const [gatewayConfig, setGatewayConfig] = useState(null);
@@ -285,8 +285,8 @@ export function ProductCards() {
           <div className="bk-details-row">
             <dt>Customer support:</dt>
             <dd>
-              <a href="tel:+919821563468" style={{ color: 'inherit', textDecoration: 'none', marginRight: '6px' }}>+91 9821563468</a>
-              · <a href="mailto:support@broskipetfood.com" className="bk-details-email">support@broskipetfood.com</a>
+              <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>WhatsApp us</a>
+              {' '}· <a href="mailto:support@broskipetfood.com" className="bk-details-email">support@broskipetfood.com</a> · Mon–Sat, 10 am – 7 pm
             </dd>
           </div>
         </dl>
@@ -391,8 +391,8 @@ export function SiteFooter() {
   return (
     <footer style={{ paddingBottom: '88px' }}>
       <div className="footer-top">
-        <a className="logo" href="/" style={{ color: '#fcf7ee', textDecoration: 'none', display: 'flex', alignItems: 'center' }} aria-label="Broski home">
-          <BroskiWordmark height={26} style={{ color: '#fcf7ee' }} />
+        <a className="logo" href="/" style={{ color: '#352016', textDecoration: 'none', display: 'flex', alignItems: 'center' }} aria-label="Broski home">
+          <BroskiWordmark height={26} style={{ color: '#352016' }} />
         </a>
         <p>Crunchy dog biscuits packed in Nangloi, West Delhi – 110041.<br />Treats for your best bro.</p>
         <div>
@@ -412,7 +412,6 @@ export function SiteFooter() {
             <a href={C().INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Instagram</a>
           ) : null}
           <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
-          <a href="tel:+919821563468">Customer Support: +91 9821563468</a>
         </div>
       </div>
       <div className="footer-word">
@@ -422,9 +421,9 @@ export function SiteFooter() {
         </svg>
       </div>
       <div className="footer-bottom">
-        <span>© 2026 Broski · Nangloi, West Delhi – 110041 · Customer Support: <a href="tel:+919821563468" style={{ color: 'inherit' }}>+91 9821563468</a> · <a href={`mailto:${EMAIL}`} style={{ color: 'inherit' }}>{EMAIL}</a> · <a href="/terms/#business-identity" style={{ color: 'inherit', textDecoration: 'underline' }}>Statutory & Legal Terms</a></span>
+        <span>© 2026 Broski · Nangloi, West Delhi – 110041 · <a href={waLink(MSG.hello)} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>WhatsApp us</a> · <a href={`mailto:${EMAIL}`} style={{ color: 'inherit' }}>{EMAIL}</a> · <span style={{ whiteSpace: 'nowrap' }}>Mon–Sat, 10 am – 7 pm</span> · <a href="/terms/#business-identity" style={{ color: 'inherit', textDecoration: 'underline' }}>Statutory & Legal Terms</a></span>
         <span>Made for the ones with paws. ♡</span>
-        <span>IN / INR ₹</span>
+        <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>IN / INR ₹</span>
       </div>
     </footer>
   );

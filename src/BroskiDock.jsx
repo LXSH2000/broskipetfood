@@ -7,12 +7,45 @@ export default function BroskiDock() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    let raf = 0;
     const handleScroll = () => {
-      setVisible(window.scrollY > 280);
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const heroCta = document.querySelector('.hero-cta');
+        const footer = document.querySelector('footer');
+        const pastHeroCta = heroCta
+          ? heroCta.getBoundingClientRect().bottom < Math.min(window.innerHeight - 110, 420)
+          : window.scrollY > 460;
+        const nearFooter = footer
+          ? footer.getBoundingClientRect().top < window.innerHeight - 20
+          : false;
+        setVisible(pastHeroCta && !nearFooter);
+
+        const sections = [
+          ['faq', document.querySelector('#faq')],
+          ['story', document.querySelector('#story')],
+          ['shop', document.querySelector('#shop')]
+        ];
+        const mid = window.innerHeight * 0.42;
+        for (const [key, el] of sections) {
+          if (!el) continue;
+          const r = el.getBoundingClientRect();
+          if (r.top <= mid && r.bottom > 120) {
+            setActiveItem(key);
+            break;
+          }
+        }
+      });
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
 
   useEffect(() => {

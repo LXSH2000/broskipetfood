@@ -163,8 +163,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 16px;
   padding-bottom: 28px;
   border-bottom: 1px solid #eadfcd;
+}
+.brand-box {
+  min-width: 0;
 }
 .brand-box img {
   height: 34px;
@@ -178,7 +182,7 @@ body {
   color: #7a6556;
   margin-top: 10px;
 }
-.d-title { text-align: right; }
+.d-title { text-align: right; flex-shrink: 0; }
 .d-title .t {
   font: 600 26px var(--serif);
   letter-spacing: .02em;
@@ -429,6 +433,8 @@ table.lines {
     font-weight: 700;
     font-size: 14px;
     color: #2a1a12;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
   
   .totals .grand {
@@ -916,23 +922,23 @@ function getSampleDoc(type) {
       { name: 'Bro Mix – Happy Mix', hsn: '2309', qty: 5, free_qty: 0, rate: 90, discount: 0, amount: normType === 'challan' ? 0 : 450 }
     ],
     party: {
-      name: 'Durga Medicos',
-      area: 'Dharam Colony',
-      phone: '+91 92129 44321',
-      address: 'Dharam Colony, West Delhi',
-      gstin: normType === 'bill' ? '07AAAAA0000A1Z5' : ''
+      name: 'Sample Pet Store',
+      area: 'West Delhi',
+      phone: '',
+      address: '14 Market Road',
+      gstin: ''
     },
     business: {
       name: 'BROSKI',
       bill_address: 'Nangloi, West Delhi – 110041',
-      gstin: '07AABCU9603R1ZM',
+      gstin: '07BONPL7742A1ZW',
       state: 'Delhi (07)',
       hsn: '2309',
       email: 'support@broskipetfood.com',
       thank_you_line: 'Thank you for choosing BROSKI.',
       quotation_terms: 'Prices include all taxes. Valid for 7 days.'
     },
-    upi_vpa: 'broski@axisbank'
+    upi_vpa: ''
   };
 }
 
@@ -1011,12 +1017,12 @@ window.addEventListener('DOMContentLoaded', async function () {
               business: {
                 name: 'BROSKI',
                 bill_address: 'Nangloi, West Delhi – 110041',
-                gstin: '07AABCU9603R1ZM',
+                gstin: '07BONPL7742A1ZW',
                 state: 'Delhi (07)',
                 hsn: '2309',
                 email: 'support@broskipetfood.com'
               },
-              upi_vpa: 'broski@axisbank'
+              upi_vpa: ''
             };
           }
         } catch (authErr) {}
