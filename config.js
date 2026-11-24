@@ -1,9 +1,10 @@
 /* BROSKI site config: the ONLY place to change numbers, links and offer dates. */
 window.BROSKI_CONFIG = {
   WHATSAPP_NUMBER: '919821563468',     // 91XXXXXXXXXX: country code, no +, no spaces
+  PHONE: '+91 9821563468',
   EMAIL: 'support@broskipetfood.com',
   GA_MEASUREMENT_ID: 'G-YJ89P0X3QH',   // Live verified GA4 ID
-  GSTIN: '',                           // Empty if not issued
+  GSTIN: '07BONPL7742A1ZW',            // Official GSTIN
   CASHFREE_APP_ID: '1542128bb6bb9cb1eb8767ccad48212451',
   CASHFREE_MODE: 'production',
 
