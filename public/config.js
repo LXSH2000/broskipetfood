@@ -21,7 +21,19 @@ window.BROSKI_CONFIG = {
   INSTAGRAM_URL: 'https://www.instagram.com/broskipetfood/', // Official BROSKI Instagram
   FOUNDER_NOTE: '',             // 1–2 lines in Lakshay's words – Lakshay fills
   FOUNDER_PHOTO: '',            // '/lakshay.webp' – optional, real photo only
-  REVIEWS: [],                  // [{ text:'…', name:'Riya', area:'Nangloi', dog:'Bruno' }] – only real, with permission
+  /*
+    REVIEWS format (only real reviews with owner permission, optional rating 1-5 & photo):
+    {
+      name: 'Rohit',
+      area: 'Nangloi',
+      dog: 'Bruno (Labrador)',
+      text: 'Crunchy biscuits my dog actually waits for after evening walks.',
+      rating: 5,
+      photo: '/reviews/bruno.webp'
+    }
+  */
+  REVIEWS: [],
+  DOG_PHOTOS: [],               // [{ src: '/dogs/bruno.webp', caption: 'Bruno, Nangloi' }] – only with owner permission
   SHOPS: [],                    // [{ name:'…', area:'Nangloi', map:'https://maps.app.goo.gl/…' }] – only shops that agreed
 
   PRODUCTS: [
