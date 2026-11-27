@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LoadingSpinner } from './LoadingSpinner';
 
 const C = () => window.BROSKI_CONFIG || {};
@@ -50,6 +50,33 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
   const [paymentFailedOrClosed, setPaymentFailedOrClosed] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const firedPurchaseIdsRef = useRef(new Set());
+
+  const buildAnalyticsItems = () => {
+    const list = [];
+    if (quantities.bites > 0) list.push({ item_id: 'bro-bites', item_name: 'Bro Bites – Classic Crunch', price: bitesPrice, quantity: quantities.bites });
+    if (quantities.mix > 0) list.push({ item_id: 'bro-mix', item_name: 'Bro Mix – Happy Mix', price: mixPrice, quantity: quantities.mix });
+    if (quantities.combo > 0) list.push({ item_id: 'combo', item_name: 'Bro Combo', price: comboPrice, quantity: quantities.combo });
+    return list;
+  };
+
+  const trackPurchaseOnce = (orderObj, payType) => {
+    try {
+      const txId = orderObj?.publicNo || 'BRK-ORDER';
+      if (firedPurchaseIdsRef.current.has(txId)) return;
+      firedPurchaseIdsRef.current.add(txId);
+      const val = Number(orderObj?.total || estimatedSubtotal || 0);
+      window.BroskiPortal?.trackGA('purchase', {
+        transaction_id: txId,
+        value: val,
+        total: val,
+        currency: 'INR',
+        payment_type: payType,
+        items_count: totalItems,
+        items: buildAnalyticsItems()
+      });
+    } catch (_) {}
+  };
 
   // Prevent background scroll
   useEffect(() => {
@@ -269,6 +296,7 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
 
         if (verifyData && verifyData.payment_status === 'paid') {
           // Confirmed paid
+          trackPurchaseOnce(orderToPay, 'online');
           setOrderConfirmed({
             ...orderToPay,
             paidOnline: true,
@@ -301,6 +329,7 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
     if (!placedOrder) return;
     setErrorMsg('');
     setPaymentFailedOrClosed(false);
+    trackPurchaseOnce(placedOrder, 'cod_fallback');
     setOrderConfirmed({
       ...placedOrder,
       paidOnline: false,
@@ -313,6 +342,15 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
   const handlePlaceOrder = async () => {
     setErrorMsg('');
     setLoading(true);
+    try {
+      window.BroskiPortal?.trackGA('add_payment_info', {
+        value: Number(quoteData?.total || estimatedSubtotal || 0),
+        currency: 'INR',
+        payment_type: paymentMethod,
+        items_count: totalItems,
+        items: buildAnalyticsItems()
+      });
+    } catch (_) {}
 
     // If order was already placed, never call place_order again
     if (placedOrder) {
@@ -363,16 +401,6 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
         localStorage.setItem('broski_recent_orders', JSON.stringify(stored.slice(0, 10)));
       } catch (_) {}
 
-      // GA4 Purchase Event (strictly no PII)
-      try {
-        if (window.BroskiPortal) {
-          window.BroskiPortal.trackGA('purchase', {
-            total: orderTotal,
-            items_count: totalItems
-          });
-        }
-      } catch (_) {}
-
       // WhatsApp fallback message for optional button
       const waMsg = `Hi BROSKI! I placed order ${publicNo} for ₹${orderTotal}. Delivery to Nangloi (${slot}).`;
       const waNum = (cfg.WHATSAPP_NUMBER || '').toString().replace(/\D/g, '');
@@ -396,6 +424,7 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
       if (paymentMethod === 'online') {
         await launchCashfree(newOrder);
       } else {
+        trackPurchaseOnce(newOrder, 'cod');
         setOrderConfirmed({
           ...newOrder,
           paidOnline: false,
@@ -966,7 +995,13 @@ export default function BroskiCheckoutGateway({ initialProduct, initialStep = 1,
                 disabled={totalItems === 0}
                 onClick={() => {
                   if (window.BroskiPortal) {
-                    window.BroskiPortal.trackGA('begin_checkout', { total: estimatedSubtotal, items_count: totalItems });
+                    window.BroskiPortal.trackGA('begin_checkout', {
+                      value: estimatedSubtotal,
+                      total: estimatedSubtotal,
+                      currency: 'INR',
+                      items_count: totalItems,
+                      items: buildAnalyticsItems()
+                    });
                   }
                   setStep(2);
                 }}

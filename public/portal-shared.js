@@ -82,23 +82,96 @@
       return 'direct';
     },
 
-    // 4. Safe GA4 event tracking: STRICTLY NO PHONE, NO NAME, NO CODE
+    // 4. Safe GA4 & optional Meta Pixel tracking: STRICTLY NO PHONE, NO NAME, NO CODE
+    _metaInitDone: false,
+    initMetaPixel: function () {
+      try {
+        if (this._metaInitDone) return;
+        const p = (window.location && window.location.pathname) || '';
+        if (/^\/(admin|doc|preview)(\/|$)/i.test(p)) return;
+        const pid = ((window.BROSKI_CONFIG && window.BROSKI_CONFIG.META_PIXEL_ID) || '').toString().trim();
+        if (!/^\d{10,20}$/.test(pid)) return;
+        this._metaInitDone = true;
+        if (typeof window.fbq !== 'function') {
+          !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+              n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+            s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+          }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        }
+        window.fbq('init', pid);
+        window.fbq('track', 'PageView');
+      } catch (_) {}
+    },
+    trackMeta: function (eventName, params) {
+      try {
+        this.initMetaPixel();
+        if (typeof window.fbq !== 'function') return;
+        const std = ['PageView', 'ViewContent', 'Lead', 'InitiateCheckout', 'AddPaymentInfo', 'Purchase'];
+        window.fbq(std.includes(eventName) ? 'track' : 'trackCustom', eventName, params || {});
+      } catch (_) {}
+    },
     trackGA: function (eventName, params) {
       try {
-        if (typeof window.gtag === 'function') {
-          // Whitelist safe parameters only
-          const safeParams = {
-            source: (params && params.source) || this.getSource(),
-            page_location: window.location.href,
-            page_path: window.location.pathname
-          };
-          if (params && params.flavour) safeParams.flavour = params.flavour;
-          if (params && params.channel) safeParams.channel = params.channel;
-          if (params && typeof params.total === 'number') safeParams.total = params.total;
-          if (params && typeof params.rating === 'number') safeParams.rating = params.rating;
-          if (params && typeof params.items_count === 'number') safeParams.items_count = params.items_count;
+        // Whitelist safe parameters only (strictly zero PII)
+        const safeParams = {
+          source: (params && params.source) || this.getSource(),
+          page_location: window.location.href,
+          page_path: window.location.pathname
+        };
+        if (params && params.flavour) safeParams.flavour = String(params.flavour).slice(0, 40);
+        if (params && params.channel) safeParams.channel = String(params.channel).slice(0, 40);
+        if (params && params.payment_type) safeParams.payment_type = String(params.payment_type).slice(0, 30);
+        if (params && params.transaction_id) safeParams.transaction_id = String(params.transaction_id).slice(0, 40);
+        if (params && typeof params.rating === 'number') safeParams.rating = params.rating;
+        if (params && typeof params.items_count === 'number') safeParams.items_count = params.items_count;
+        const numVal = (params && typeof params.value === 'number')
+          ? params.value
+          : (params && typeof params.total === 'number' ? params.total : null);
+        if (numVal !== null) {
+          safeParams.value = numVal;
+          safeParams.total = numVal;
+          safeParams.currency = (params && params.currency) || 'INR';
+        }
+        if (params && Array.isArray(params.items)) {
+          safeParams.items = params.items.slice(0, 10).map((it) => ({
+            item_id: String(it.item_id || '').slice(0, 40),
+            item_name: String(it.item_name || '').slice(0, 80),
+            price: Number(it.price || 0),
+            quantity: Number(it.quantity || 1)
+          }));
+        }
 
+        if (typeof window.gtag === 'function') {
           window.gtag('event', eventName, safeParams);
+        }
+
+        // Mirror commerce & lead signals to Meta Pixel when configured
+        if (eventName === 'begin_checkout') {
+          this.trackMeta('InitiateCheckout', {
+            value: numVal || 0,
+            currency: 'INR',
+            num_items: safeParams.items_count || 1
+          });
+        } else if (eventName === 'add_payment_info') {
+          this.trackMeta('AddPaymentInfo', {
+            value: numVal || 0,
+            currency: 'INR'
+          });
+        } else if (eventName === 'purchase') {
+          this.trackMeta('Purchase', {
+            value: numVal || 0,
+            currency: 'INR',
+            num_items: safeParams.items_count || 1,
+            order_id: safeParams.transaction_id || undefined
+          });
+        } else if (eventName === 'sample_claim_success') {
+          this.trackMeta('Lead', { content_name: safeParams.flavour || '50g-sample' });
+        } else if (eventName === 'feedback_submit') {
+          this.trackMeta('FeedbackSubmit', { rating: safeParams.rating });
         }
       } catch (err) {
         // Analytics failure should never break UI
@@ -183,8 +256,12 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNav);
+    document.addEventListener('DOMContentLoaded', function () {
+      initNav();
+      window.BroskiPortal?.initMetaPixel();
+    });
   } else {
     initNav();
+    window.BroskiPortal?.initMetaPixel();
   }
 })();
